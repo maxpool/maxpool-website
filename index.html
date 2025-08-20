@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent Reliability Techniques - Carousel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .carousel-container {
+            max-width: 1200px;
+            width: 100%;
+            position: relative;
+        }
+        
+        .carousel-wrapper {
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        
+        .slide {
+            min-width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 3px solid #eec759;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .header-left {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 0.95em;
+            opacity: 0.9;
+        }
+        
+        .cta {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(238, 199, 89, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .cta-label {
+            font-size: 0.85em;
+            opacity: 0.8;
+            margin-bottom: 3px;
+            color: #fff;
+        }
+        
+        .cta-link {
+            color: #eec759;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1em;
+            transition: opacity 0.2s ease;
+        }
+        
+        .cta-link:hover {
+            opacity: 0.8;
+        }
+        
+        .content {
+            padding: 40px;
+            min-height: 500px;
+        }
+        
+        .slide-title {
+            font-size: 1.8em;
+            color: #1a1a1a;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eec759;
+            font-weight: 700;
+        }
+        
+        .table-wrapper {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: white;
+        }
+        
+        thead {
+            background: linear-gradient(135deg, #2d2d2d 0%, #3d3d3d 100%);
+            color: white;
+        }
+        
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95em;
+            letter-spacing: 0.5px;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 0.9em;
+        }
+        
+        tbody tr {
+            transition: all 0.3s ease;
+        }
+        
+        tbody tr:hover {
+            background: #f9f9f9;
+        }
+        
+        .technique-name {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .description {
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        .metric {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.85em;
+        }
+        
+        .complexity-low, .cost-low, .latency-low {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .complexity-medium, .cost-medium, .latency-medium {
+            background: #fff3e0;
+            color: #e65100;
+        }
+        
+        .complexity-high, .cost-high, .latency-high {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .insights {
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #eec759;
+            margin-top: 30px;
+        }
+        
+        .insights h3 {
+            color: #1a1a1a;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .insights ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .insights li {
+            padding: 10px 0;
+            padding-left: 25px;
+            position: relative;
+            line-height: 1.6;
+        }
+        
+        .insights li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #eec759;
+            font-weight: bold;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding: 0 20px;
+        }
+        
+        .nav-button {
+            background: linear-gradient(135deg, #2d2d2d 0%, #3d3d3d 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .nav-button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        .pagination {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .page-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .page-dot.active {
+            background: #eec759;
+            transform: scale(1.3);
+        }
+        
+        .page-dot:hover:not(.active) {
+            background: #999;
+        }
+        
+        .legend {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            flex-wrap: wrap;
+            font-size: 0.9em;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .legend-title {
+            font-weight: 600;
+            margin-right: 5px;
+        }
+        
+        .scale-indicator {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+        
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        
+        .low { background: #4caf50; }
+        .medium { background: #ff9800; }
+        .high { background: #f44336; }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 25px;
+            }
+            
+            .slide-title {
+                font-size: 1.4em;
+            }
+            
+            table {
+                font-size: 0.85em;
+            }
+            
+            th, td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="carousel-container">
+        <div class="carousel-wrapper">
+            <div class="carousel-track" id="carouselTrack">
+                <!-- Slide 1: Overview & Prompt Engineering -->
+                <div class="slide">
+                    <div class="header">
+                        <div class="header-content">
+                            <div class="header-left">
+                                <h1>AI Agent Reliability Techniques</h1>
+                                <div class="subtitle">Comprehensive comparison of methods to improve AI agent consistency</div>
+                            </div>
+                            <div class="cta">
+                                <div>
+                                    <div class="cta-label">Data Science Community</div>
+                                    <a href="https://maxpool.dev" target="_blank" class="cta-link">
+                                        maxpool.dev →
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="slide-title">Prompt Engineering Techniques</div>
+                        <div class="legend">
+                            <div class="legend-item">
+                                <span class="legend-title">Scale:</span>
+                                <div class="scale-indicator">
+                                    <span class="dot low"></span><span>Low</span>
+                                    <span class="dot medium"></span><span>Medium</span>
+                                    <span class="dot high"></span><span>High</span>
+                                </div>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-title">Complexity:</span>
+                                <span>Implementation difficulty</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-title">Cost:</span>
+                                <span>Computational & operational expense</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-title">Latency:</span>
+                                <span>Added response time</span>
+                            </div>
+                        </div>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="width: 25%">Technique</th>
+                                        <th style="width: 35%">Description</th>
+                                        <th style="width: 13%">Complexity</th>
+                                        <th style="width: 13%">Cost</th>
+                                        <th style="width: 14%">Latency</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="technique-name">Zero-Shot Prompting</span></td>
+                                        <td class="description">Direct task instructions without examples, relying on model's pre-training</td>
+                                        <td><span class="metric complexity-low">Low</span></td>
+                                        <td><span class="metric cost-low">Low</span></td>
+                                        <td><span class="metric latency-low">~0ms added</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Few-Shot Prompting</span></td>
+                                        <td class="description">Providing 2-5 examples to guide model behavior and output format</td>
+                                        <td><span class="metric complexity-low">Low</span></td>
+                                        <td><span class="metric cost-low">Low</span></td>
+                                        <td><span class="metric latency-low">+5-10ms</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Chain-of-Thought (CoT)</span></td>
+                                        <td class="description">Breaking down reasoning into explicit intermediate steps for complex problems</td>
+                                        <td><span class="metric complexity-medium">Medium</span></td>
+                                        <td><span class="metric cost-low">Low-Med</span></td>
+                                        <td><span class="metric latency-medium">+20-50ms</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Tree-of-Thought (ToT)</span></td>
+                                        <td class="description">Exploring multiple reasoning paths with backtracking capabilities</td>
+                                        <td><span class="metric complexity-high">High</span></td>
+                                        <td><span class="metric cost-medium">Medium</span></td>
+                                        <td><span class="metric latency-high">+100-500ms</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Self-Consistency CoT</span></td>
+                                        <td class="description">Running multiple CoT paths and selecting most consistent answer</td>
+                                        <td><span class="metric complexity-medium">Medium</span></td>
+                                        <td><span class="metric cost-medium">Medium</span></td>
+                                        <td><span class="metric latency-high">+200-1000ms</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="insights">
+                            <h3>Key Insight</h3>
+                            <ul>
+                                <li>Chain-of-Thought prompting improved PaLM model performance on GSM8K benchmark from 17.9% to 58.1%</li>
+                                <li>Start with simple techniques like zero-shot before moving to complex approaches</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 2: Retrieval & Augmentation -->
+                <div class="slide">
+                    <div class="header">
+                        <div class="header-content">
+                            <div class="header-left">
+                                <h1>AI Agent Reliability Techniques</h1>
+                                <div class="subtitle">Comprehensive comparison of methods to improve AI agent consistency</div>
+                            </div>
+                            <div class="cta">
+                                <div>
+                                    <div class="cta-label">Data Science Community</div>
+                                    <a href="https://maxpool.dev" target="_blank" class="cta-link">
+                                        maxpool.dev →
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="slide-title">Retrieval & Augmentation</div>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="width: 25%">Technique</th>
+                                        <th style="width: 35%">Description</th>
+                                        <th style="width: 13%">Complexity</th>
+                                        <th style="width: 13%">Cost</th>
+                                        <th style="width: 14%">Latency</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="technique-name">RAG (Basic)</span></td>
+                                        <td class="description">Retrieving relevant documents to augment prompts with external knowledge</td>
+                                        <td><span class="metric complexity-medium">Medium</span></td>
+                                        <td><span class="metric cost-medium">Medium</span></td>
+                                        <td><span class="metric latency-medium">+50-200ms</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Iterative RAG</span></td>
+                                        <td class="description">Multiple retrieval cycles for depth and relevance refinement</td>
+                                        <td><span class="metric complexity-high">High</span></td>
+                                        <td><span class="metric cost-high">High</span></td>
+                                        <td><span class="metric latency-high">+200-800ms</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Speculative RAG</span></td>
+                                        <td class="description">Using smaller models to draft, then larger models to verify (51% latency reduction)</td>
+                                        <td><span class="metric complexity-high">High</span></td>
+                                        <td><span class="metric cost-medium">Medium</span></td>
+                                        <td><span class="metric latency-low">-50% vs RAG</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Cache-Augmented Generation</span></td>
+                                        <td class="description">Loading entire corpus into context window for smaller datasets</td>
+                                        <td><span class="metric complexity-low">Low</span></td>
+                                        <td><span class="metric cost-high">High</span></td>
+                                        <td><span class="metric latency-low">+10-30ms</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="insights">
+                            <h3>Key Insights</h3>
+                            <ul>
+                                <li>Speculative RAG achieves 12.97% accuracy gains while reducing latency by 51%</li>
+                                <li>As context windows expand, Cache-Augmented Generation becomes viable for smaller knowledge bases</li>
+                                <li>RAG is essential for keeping AI responses current and factually grounded</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 3: Ensemble Methods -->
+                <div class="slide">
+                    <div class="header">
+                        <div class="header-content">
+                            <div class="header-left">
+                                <h1>AI Agent Reliability Techniques</h1>
+                                <div class="subtitle">Comprehensive comparison of methods to improve AI agent consistency</div>
+                            </div>
+                            <div class="cta">
+                                <div>
+                                    <div class="cta-label">Data Science Community</div>
+                                    <a href="https://maxpool.dev" target="_blank" class="cta-link">
+                                        maxpool.dev →
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="slide-title">Ensemble Methods</div>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="width: 25%">Technique</th>
+                                        <th style="width: 35%">Description</th>
+                                        <th style="width: 13%">Complexity</th>
+                                        <th style="width: 13%">Cost</th>
+                                        <th style="width: 14%">Latency</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="technique-name">Majority Voting</span></td>
+                                        <td class="description">Multiple models vote, selecting most common prediction</td>
+                                        <td><span class="metric complexity-low">Low</span></td>
+                                        <td><span class="metric cost-high">High</span></td>
+                                        <td><span class="metric latency-high">+N×base</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Weighted Voting</span></td>
+                                        <td class="description">Assigning different weights based on model performance</td>
+                                        <td><span class="metric complexity-medium">Medium</span></td>
+                                        <td><span class="metric cost-high">High</span></td>
+                                        <td><span class="metric latency-high">+N×base</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Soft Voting</span></td>
+                                        <td class="description">Averaging probability distributions from multiple models</td>
+                                        <td><span class="metric complexity-medium">Medium</span></td>
+                                        <td><span class="metric cost-high">High</span></td>
+                                        <td><span class="metric latency-high">+N×base</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Stacking/Blending</span></td>
+                                        <td class="description">Meta-model learns to combine predictions from base models</td>
+                                        <td><span class="metric complexity-high">High</span></td>
+                                        <td><span class="metric cost-high">High</span></td>
+                                        <td><span class="metric latency-high">+(N+1)×base</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="insights">
+                            <h3>Key Insights</h3>
+                            <ul>
+                                <li>Ensemble methods consistently show 5-15% accuracy improvements over single models</li>
+                                <li>Trade-off: Higher computational cost for increased reliability</li>
+                                <li>Best for critical applications where accuracy outweighs cost concerns</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 4: Technical Parameters & Validation -->
+                <div class="slide">
+                    <div class="header">
+                        <div class="header-content">
+                            <div class="header-left">
+                                <h1>AI Agent Reliability Techniques</h1>
+                                <div class="subtitle">Comprehensive comparison of methods to improve AI agent consistency</div>
+                            </div>
+                            <div class="cta">
+                                <div>
+                                    <div class="cta-label">Data Science Community</div>
+                                    <a href="https://maxpool.dev" target="_blank" class="cta-link">
+                                        maxpool.dev →
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="slide-title">Technical Parameters & Validation</div>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="width: 25%">Technique</th>
+                                        <th style="width: 35%">Description</th>
+                                        <th style="width: 13%">Complexity</th>
+                                        <th style="width: 13%">Cost</th>
+                                        <th style="width: 14%">Latency</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="technique-name">Temperature Control</span></td>
+                                        <td class="description">Adjusting randomness (0.0-0.3 for consistency, 0.7+ for creativity)</td>
+                                        <td><span class="metric complexity-low">Low</span></td>
+                                        <td><span class="metric cost-low">Low</span></td>
+                                        <td><span class="metric latency-low">~0ms added</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Structured Output</span></td>
+                                        <td class="description">Enforcing JSON/XML schemas for predictable formats</td>
+                                        <td><span class="metric complexity-low">Low</span></td>
+                                        <td><span class="metric cost-low">Low</span></td>
+                                        <td><span class="metric latency-low">+5-15ms</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Output Validation Layers</span></td>
+                                        <td class="description">Automated checking against rules, schemas, or classifiers</td>
+                                        <td><span class="metric complexity-medium">Medium</span></td>
+                                        <td><span class="metric cost-low">Low</span></td>
+                                        <td><span class="metric latency-low">+10-30ms</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Confidence Thresholds</span></td>
+                                        <td class="description">Routing low-confidence outputs for additional review</td>
+                                        <td><span class="metric complexity-medium">Medium</span></td>
+                                        <td><span class="metric cost-medium">Medium</span></td>
+                                        <td><span class="metric latency-medium">Variable</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="insights">
+                            <h3>Key Insights</h3>
+                            <ul>
+                                <li>Simple parameter adjustments can yield significant reliability improvements</li>
+                                <li>Temperature control is the easiest win - no added latency, major consistency gains</li>
+                                <li>Validation layers catch errors before they reach users</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 5: Human-in-the-Loop -->
+                <div class="slide">
+                    <div class="header">
+                        <div class="header-content">
+                            <div class="header-left">
+                                <h1>AI Agent Reliability Techniques</h1>
+                                <div class="subtitle">Comprehensive comparison of methods to improve AI agent consistency</div>
+                            </div>
+                            <div class="cta">
+                                <div>
+                                    <div class="cta-label">Data Science Community</div>
+                                    <a href="https://maxpool.dev" target="_blank" class="cta-link">
+                                        maxpool.dev →
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="slide-title">Human-in-the-Loop Systems</div>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="width: 25%">Technique</th>
+                                        <th style="width: 35%">Description</th>
+                                        <th style="width: 13%">Complexity</th>
+                                        <th style="width: 13%">Cost</th>
+                                        <th style="width: 14%">Latency</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="technique-name">Human-in-the-Loop (Async)</span></td>
+                                        <td class="description">Parallel human review without blocking execution</td>
+                                        <td><span class="metric complexity-medium">Medium</span></td>
+                                        <td><span class="metric cost-high">High</span></td>
+                                        <td><span class="metric latency-low">~0ms (async)</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Human-in-the-Loop (Sync)</span></td>
+                                        <td class="description">Blocking execution for human approval on critical decisions</td>
+                                        <td><span class="metric complexity-high">High</span></td>
+                                        <td><span class="metric cost-high">High</span></td>
+                                        <td><span class="metric latency-high">+1-60 sec</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Active Learning</span></td>
+                                        <td class="description">Models identify uncertain cases for targeted improvement</td>
+                                        <td><span class="metric complexity-high">High</span></td>
+                                        <td><span class="metric cost-medium">Medium</span></td>
+                                        <td><span class="metric latency-medium">+50-200ms</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="insights">
+                            <h3>Key Insights</h3>
+                            <ul>
+                                <li>Essential for high-stakes applications (medical, financial, legal)</li>
+                                <li>Async HITL provides quality control without impacting user experience</li>
+                                <li>Active learning can reduce annotation requirements by up to 10x</li>
+                                <li>Trade-off between automation speed and human oversight quality</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 6: Advanced Architectures -->
+                <div class="slide">
+                    <div class="header">
+                        <div class="header-content">
+                            <div class="header-left">
+                                <h1>AI Agent Reliability Techniques</h1>
+                                <div class="subtitle">Comprehensive comparison of methods to improve AI agent consistency</div>
+                            </div>
+                            <div class="cta">
+                                <div>
+                                    <div class="cta-label">Data Science Community</div>
+                                    <a href="https://maxpool.dev" target="_blank" class="cta-link">
+                                        maxpool.dev →
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="slide-title">Advanced Architectures</div>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="width: 25%">Technique</th>
+                                        <th style="width: 35%">Description</th>
+                                        <th style="width: 13%">Complexity</th>
+                                        <th style="width: 13%">Cost</th>
+                                        <th style="width: 14%">Latency</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="technique-name">Agent Memory Systems</span></td>
+                                        <td class="description">Maintaining conversation history and context across interactions</td>
+                                        <td><span class="metric complexity-medium">Medium</span></td>
+                                        <td><span class="metric cost-medium">Medium</span></td>
+                                        <td><span class="metric latency-low">+20-50ms</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Multi-Agent Systems</span></td>
+                                        <td class="description">Specialized agents collaborating on complex tasks</td>
+                                        <td><span class="metric complexity-high">High</span></td>
+                                        <td><span class="metric cost-high">High</span></td>
+                                        <td><span class="metric latency-high">+100-1000ms</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Model-Based Transfer Learning</span></td>
+                                        <td class="description">Training on task subsets for 5-50x efficiency improvement</td>
+                                        <td><span class="metric complexity-high">High</span></td>
+                                        <td><span class="metric cost-low">Low</span></td>
+                                        <td><span class="metric latency-low">~0ms added</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Context Window Management</span></td>
+                                        <td class="description">Optimizing prompt length and relevant information inclusion</td>
+                                        <td><span class="metric complexity-medium">Medium</span></td>
+                                        <td><span class="metric cost-medium">Medium</span></td>
+                                        <td><span class="metric latency-medium">+10-50ms</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="insights">
+                            <h3>Key Insights</h3>
+                            <ul>
+                                <li>Model-Based Transfer Learning achieves 5-50x efficiency improvement</li>
+                                <li>Multi-agent systems excel at complex, multi-step problems</li>
+                                <li>Memory systems crucial for maintaining context in long conversations</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 7: Summary & Best Practices -->
+                <div class="slide">
+                    <div class="header">
+                        <div class="header-content">
+                            <div class="header-left">
+                                <h1>AI Agent Reliability Techniques</h1>
+                                <div class="subtitle">Comprehensive comparison of methods to improve AI agent consistency</div>
+                            </div>
+                            <div class="cta">
+                                <div>
+                                    <div class="cta-label">Data Science Community</div>
+                                    <a href="https://maxpool.dev" target="_blank" class="cta-link">
+                                        maxpool.dev →
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="slide-title">Summary & Best Practices</div>
+                        <div class="insights" style="margin-top: 0;">
+                            <h3>Implementation Strategy</h3>
+                            <ul>
+                                <li><strong>Start Simple:</strong> Begin with low-complexity techniques like temperature control and structured outputs</li>
+                                <li><strong>Layer Techniques:</strong> Combine complementary approaches (e.g., RAG + CoT + low temperature)</li>
+                                <li><strong>Consider Trade-offs:</strong> Balance accuracy, cost, and latency based on your use case</li>
+                                <li><strong>Measure & Iterate:</strong> Track performance metrics and adjust techniques accordingly</li>
+                            </ul>
+                        </div>
+                        <div class="insights">
+                            <h3>Key Performance Improvements</h3>
+                            <ul>
+                                <li><strong>CoT Prompting:</strong> 17.9% → 58.1% accuracy on GSM8K benchmark</li>
+                                <li><strong>Speculative RAG:</strong> 12.97% accuracy gain + 51% latency reduction</li>
+                                <li><strong>MBTL:</strong> 5-50x efficiency improvement over standard approaches</li>
+                                <li><strong>Ensemble Methods:</strong> Consistent 5-15% accuracy improvements</li>
+                            </ul>
+                        </div>
+                        <div class="insights">
+                            <h3>Recommended Combinations by Use Case</h3>
+                            <ul>
+                                <li><strong>Factual Q&A:</strong> RAG + CoT + Temperature 0.1-0.3 + Validation layers</li>
+                                <li><strong>Creative Tasks:</strong> Few-shot + Temperature 0.7-0.9 + Soft voting ensemble</li>
+                                <li><strong>High-Stakes (Medical/Legal):</strong> HITL + Confidence thresholds + Multi-agent verification</li>
+                                <li><strong>Real-time Applications:</strong> Cache-augmented + Structured output + Async validation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <button class="nav-button" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <div class="pagination" id="pagination"></div>
+            <button class="nav-button" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const totalSlides = 7;
+        
+        function initCarousel() {
+            updateSlidePosition();
+            createPagination();
+            updateNavButtons();
+        }
+        
+        function createPagination() {
+            const pagination = document.getElementById('pagination');
+            for (let i = 0; i < totalSlides; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'page-dot';
+                if (i === 0) dot.classList.add('active');
+                dot.onclick = () => goToSlide(i);
+                pagination.appendChild(dot);
+            }
+        }
+        
+        function updateSlidePosition() {
+            const track = document.getElementById('carouselTrack');
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            // Update pagination dots
+            const dots = document.querySelectorAll('.page-dot');
+            dots.forEach((dot, index) => {
+                if (index === currentSlide) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+        
+        function updateNavButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            const newSlide = currentSlide + direction;
+            if (newSlide >= 0 && newSlide < totalSlides) {
+                currentSlide = newSlide;
+                updateSlidePosition();
+                updateNavButtons();
+            }
+        }
+        
+        function goToSlide(slideIndex) {
+            currentSlide = slideIndex;
+            updateSlidePosition();
+            updateNavButtons();
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+        });
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', initCarousel);
+    </script>
+</body>
+</html>
