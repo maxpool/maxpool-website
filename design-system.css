@@ -1,0 +1,644 @@
+/* ==============================================
+   ANTHROPIC DESIGN SYSTEM
+   Reusable CSS components and variables
+   ============================================== */
+
+/* Color Palette - Based on Anthropic's brand colors */
+:root {
+  /* Primary Colors */
+  --anthropic-primary: #D4A574;        /* Warm tan/beige - Anthropic's signature color */
+  --anthropic-primary-light: #E4C5A4;  /* Lighter variant */
+  --anthropic-primary-dark: #B48754;   /* Darker variant */
+  
+  /* Background Colors */
+  --bg-dark: #191817;                  /* Deep charcoal */
+  --bg-dark-secondary: #2A2928;        /* Slightly lighter charcoal */
+  --bg-light: #FEFDFB;                 /* Off-white/cream */
+  --bg-card: #FFFFFF;                  /* Pure white for cards */
+  --bg-card-hover: #FAF9F7;           /* Subtle hover state */
+  
+  /* Text Colors */
+  --text-primary: #191817;             /* Main text on light backgrounds */
+  --text-secondary: #605F5E;           /* Secondary text */
+  --text-light: #FEFDFB;               /* Text on dark backgrounds */
+  --text-muted: #8B8A89;              /* Muted text */
+  
+  /* Accent Colors */
+  --accent-warm: #DC8850;              /* Warm orange accent */
+  --accent-cool: #7C9885;              /* Cool sage green */
+  --accent-neutral: #A8A5A0;           /* Neutral gray-beige */
+  
+  /* Status Colors */
+  --success: #7C9885;                  /* Sage green */
+  --warning: #DC8850;                  /* Warm orange */
+  --error: #C45D5D;                    /* Muted red */
+  --info: #6B8E9F;                     /* Dusty blue */
+  
+  /* Metric Colors */
+  --metric-low: #7C9885;               /* Good/Low - Sage green */
+  --metric-medium: #DC8850;            /* Medium - Warm orange */
+  --metric-high: #C45D5D;              /* High/Alert - Muted red */
+  
+  /* Gradients */
+  --gradient-dark: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-dark-secondary) 100%);
+  --gradient-warm: linear-gradient(135deg, var(--anthropic-primary) 0%, var(--accent-warm) 100%);
+  --gradient-subtle: linear-gradient(135deg, var(--bg-light) 0%, #F5F3F0 100%);
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+  
+  /* Typography */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 20px;
+  --radius-full: 50px;
+  
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(25, 24, 23, 0.05);
+  --shadow-md: 0 4px 15px rgba(25, 24, 23, 0.08);
+  --shadow-lg: 0 10px 40px rgba(25, 24, 23, 0.1);
+  --shadow-xl: 0 20px 60px rgba(25, 24, 23, 0.15);
+  
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 300ms ease;
+  --transition-slow: 500ms ease;
+}
+
+/* ==============================================
+   BASE STYLES
+   ============================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  background: var(--gradient-dark);
+  min-height: 100vh;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+/* ==============================================
+   TYPOGRAPHY COMPONENTS
+   ============================================== */
+
+.heading-1 {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--text-light);
+  margin-bottom: var(--spacing-md);
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.heading-2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--text-light);
+  margin-bottom: var(--spacing-sm);
+}
+
+.heading-3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-light);
+}
+
+.heading-4 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: var(--text-light);
+  opacity: 0.9;
+  font-weight: 300;
+  margin-bottom: var(--spacing-xl);
+}
+
+.subtitle-section {
+  font-size: 0.95rem;
+  opacity: 0.9;
+  margin-top: var(--spacing-sm);
+}
+
+/* ==============================================
+   CONTAINER COMPONENTS
+   ============================================== */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.98);
+}
+
+.container-narrow {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+}
+
+.section {
+  width: 100%;
+  background: var(--bg-card);
+}
+
+.content {
+  padding: var(--spacing-2xl);
+  min-height: 500px;
+}
+
+/* ==============================================
+   HEADER COMPONENTS
+   ============================================== */
+
+.main-header {
+  background: var(--gradient-dark);
+  color: var(--text-light);
+  padding: var(--spacing-xl);
+  text-align: center;
+  border-bottom: 3px solid var(--anthropic-primary);
+}
+
+.section-header {
+  background: linear-gradient(135deg, var(--bg-dark-secondary) 0%, #3A3938 100%);
+  color: var(--text-light);
+  padding: var(--spacing-lg) var(--spacing-2xl);
+  border-bottom: 2px solid var(--anthropic-primary);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
+}
+
+.header-left {
+  flex: 1;
+  min-width: 300px;
+}
+
+/* ==============================================
+   NAVIGATION COMPONENTS
+   ============================================== */
+
+.nav-home {
+  background: rgba(212, 165, 116, 0.1);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(212, 165, 116, 0.3);
+  text-decoration: none;
+  color: var(--anthropic-primary);
+  font-size: 0.9em;
+  font-weight: 500;
+  transition: all var(--transition-base);
+}
+
+.nav-home:hover {
+  background: rgba(212, 165, 116, 0.2);
+  transform: translateY(-1px);
+}
+
+/* ==============================================
+   BUTTON & LINK COMPONENTS
+   ============================================== */
+
+.btn-primary {
+  display: inline-block;
+  background: var(--anthropic-primary);
+  color: var(--bg-dark);
+  padding: 0.75rem 2rem;
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary:hover {
+  background: var(--anthropic-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-outline {
+  display: inline-block;
+  background: transparent;
+  color: var(--anthropic-primary);
+  padding: 10px 20px;
+  border: 2px solid var(--anthropic-primary);
+  border-radius: var(--radius-xl);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all var(--transition-base);
+}
+
+.btn-outline:hover {
+  background: var(--anthropic-primary);
+  color: var(--bg-dark);
+}
+
+.cta {
+  background: rgba(212, 165, 116, 0.08);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(212, 165, 116, 0.3);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.cta-label {
+  font-size: 0.85em;
+  opacity: 0.8;
+  margin-bottom: 3px;
+  color: var(--text-light);
+}
+
+.cta-link {
+  color: var(--anthropic-primary);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1em;
+  transition: opacity var(--transition-fast);
+}
+
+.cta-link:hover {
+  opacity: 0.8;
+}
+
+/* ==============================================
+   CARD COMPONENTS
+   ============================================== */
+
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-lg);
+  transition: all var(--transition-base);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-2px);
+}
+
+.card-list {
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-lg);
+}
+
+.card-item {
+  padding: var(--spacing-xl) 0;
+  border-bottom: 1px solid rgba(168, 165, 160, 0.2);
+  transition: all var(--transition-base);
+}
+
+.card-item:last-child {
+  border-bottom: none;
+}
+
+.card-item:hover {
+  padding-left: var(--spacing-md);
+}
+
+.card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
+  transition: color var(--transition-fast);
+}
+
+.card-item:hover .card-title {
+  color: var(--anthropic-primary-dark);
+}
+
+.card-description {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: var(--spacing-md);
+}
+
+/* ==============================================
+   TABLE COMPONENTS
+   ============================================== */
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--bg-card);
+}
+
+thead {
+  background: linear-gradient(135deg, var(--bg-dark-secondary) 0%, #3A3938 100%);
+  color: var(--text-light);
+}
+
+th {
+  padding: var(--spacing-md);
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.95em;
+  letter-spacing: 0.5px;
+}
+
+td {
+  padding: var(--spacing-md);
+  border-bottom: 1px solid rgba(168, 165, 160, 0.15);
+  font-size: 0.9em;
+}
+
+tbody tr {
+  transition: all var(--transition-base);
+}
+
+tbody tr:hover {
+  background: var(--bg-card-hover);
+}
+
+.technique-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.description {
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ==============================================
+   METRIC COMPONENTS
+   ============================================== */
+
+.metric {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-xl);
+  font-weight: 500;
+  font-size: 0.85em;
+}
+
+.metric.low,
+.complexity-low,
+.cost-low,
+.latency-low,
+.accuracy-high {
+  background: rgba(124, 152, 133, 0.15);
+  color: var(--metric-low);
+}
+
+.metric.medium,
+.complexity-medium,
+.cost-medium,
+.latency-medium,
+.accuracy-medium {
+  background: rgba(220, 136, 80, 0.15);
+  color: var(--metric-medium);
+}
+
+.metric.high,
+.complexity-high,
+.cost-high,
+.latency-high,
+.accuracy-low {
+  background: rgba(196, 93, 93, 0.15);
+  color: var(--metric-high);
+}
+
+/* ==============================================
+   TAG COMPONENTS
+   ============================================== */
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.tag {
+  background: var(--gradient-warm);
+  color: var(--text-light);
+  padding: var(--spacing-xs) 0.75rem;
+  border-radius: var(--radius-xl);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* ==============================================
+   INSIGHT/CALLOUT COMPONENTS
+   ============================================== */
+
+.insights {
+  padding: var(--spacing-lg);
+  background: var(--bg-card-hover);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--anthropic-primary);
+  margin-top: var(--spacing-xl);
+}
+
+.insights h3 {
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-md);
+  font-size: 1.3em;
+}
+
+.insights ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.insights li {
+  padding: var(--spacing-sm) 0;
+  padding-left: var(--spacing-lg);
+  position: relative;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.insights li:before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--anthropic-primary);
+  font-weight: bold;
+}
+
+/* ==============================================
+   CODE BLOCK COMPONENTS
+   ============================================== */
+
+.code-block {
+  background: var(--bg-card-hover);
+  border: 1px solid rgba(168, 165, 160, 0.2);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  margin: var(--spacing-lg) 0;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  overflow-x: auto;
+}
+
+.code-title {
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+  color: var(--text-primary);
+}
+
+/* ==============================================
+   FOOTER COMPONENTS
+   ============================================== */
+
+.footer {
+  background: var(--gradient-dark);
+  color: var(--text-light);
+  padding: var(--spacing-2xl);
+  text-align: center;
+}
+
+.footer h3 {
+  color: var(--anthropic-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+.footer p {
+  opacity: 0.8;
+  margin-bottom: var(--spacing-lg);
+  color: var(--text-light);
+}
+
+.footer a {
+  color: var(--anthropic-primary);
+  text-decoration: none;
+}
+
+/* ==============================================
+   LEGEND COMPONENTS
+   ============================================== */
+
+.legend {
+  display: flex;
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background: var(--bg-card-hover);
+  border-radius: var(--radius-md);
+  flex-wrap: wrap;
+  font-size: 0.9em;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.legend-title {
+  font-weight: 600;
+  margin-right: var(--spacing-xs);
+}
+
+/* ==============================================
+   UTILITY CLASSES
+   ============================================== */
+
+.arrow {
+  display: inline-block;
+  margin-left: var(--spacing-sm);
+  transition: transform var(--transition-fast);
+}
+
+.card-item:hover .arrow {
+  transform: translateX(5px);
+}
+
+/* ==============================================
+   RESPONSIVE DESIGN
+   ============================================== */
+
+@media (max-width: 768px) {
+  .heading-1 {
+    font-size: 2rem;
+  }
+  
+  .heading-2 {
+    font-size: 1.8rem;
+  }
+  
+  .heading-3 {
+    font-size: 1.4rem;
+  }
+  
+  .subtitle {
+    font-size: 1rem;
+  }
+  
+  .container-narrow {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+  
+  .content {
+    padding: var(--spacing-lg);
+  }
+  
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .card-list {
+    padding: var(--spacing-lg);
+  }
+  
+  .card-item {
+    padding: var(--spacing-lg) 0;
+  }
+  
+  .card-title {
+    font-size: 1.25rem;
+  }
+  
+  table {
+    font-size: 0.85em;
+  }
+  
+  th, td {
+    padding: var(--spacing-sm);
+  }
+}

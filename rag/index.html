@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Implementation Patterns - Developer Guide</title>
+    <link rel="stylesheet" href="../design-system.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        /* Page-specific styles */
+        .architecture-diagram {
+            background: var(--bg-card-hover);
+            border: 2px solid var(--anthropic-primary);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            margin: var(--spacing-lg) 0;
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 0.9em;
+            line-height: 1.8;
+        }
+        
+        .mermaid-container {
+            background: var(--bg-card);
+            border: 2px solid var(--anthropic-primary);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            margin: var(--spacing-lg) 0;
+            text-align: center;
+        }
+        
+        .diagram-title {
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+            color: var(--text-primary);
+            font-size: 1.1em;
+        }
+        
+        .diagram-features {
+            background: var(--bg-card-hover);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            margin-top: var(--spacing-lg);
+            text-align: left;
+        }
+        
+        .diagram-features h4 {
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-sm);
+            font-size: 1em;
+        }
+        
+        .diagram-features ul {
+            list-style: none;
+            padding-left: 0;
+            font-size: 0.9em;
+        }
+        
+        .diagram-features li {
+            padding: 6px 0;
+            padding-left: var(--spacing-lg);
+            position: relative;
+            line-height: 1.4;
+        }
+        
+        .diagram-features li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--anthropic-primary);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-header">
+            <div class="header-content">
+                <a href="../" class="nav-home">← Home</a>
+                <div class="header-left">
+                    <h1 class="heading-2">RAG Implementation Patterns</h1>
+                    <div class="subtitle-section">Comprehensive guide to Retrieval-Augmented Generation architectures</div>
+                </div>
+                <div class="cta">
+                    <div>
+                        <div class="cta-label">Data Science Community</div>
+                        <a href="https://maxpool.dev" target="_blank" class="cta-link">
+                            maxpool.dev →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Section 1: RAG Architecture Patterns -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">RAG Architecture Patterns</div>
+                <div class="subtitle-section">Comprehensive comparison of different RAG implementation approaches</div>
+            </div>
+            <div class="content">
+                        <div class="legend">
+                            <div class="legend-item">
+                                <span class="legend-title">Complexity:</span>
+                                <span>Implementation & maintenance difficulty</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-title">Cost:</span>
+                                <span>Computational & operational expense</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-title">Latency:</span>
+                                <span>End-to-end response time</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-title">Accuracy:</span>
+                                <span>Information retrieval quality</span>
+                            </div>
+                        </div>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="width: 20%">Pattern</th>
+                                        <th style="width: 30%">Description</th>
+                                        <th style="width: 12%">Complexity</th>
+                                        <th style="width: 12%">Cost</th>
+                                        <th style="width: 13%">Latency</th>
+                                        <th style="width: 13%">Accuracy</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="technique-name">Basic RAG</span></td>
+                                        <td class="description">Single-step retrieval with vector similarity search</td>
+                                        <td><span class="metric complexity-low">Low</span></td>
+                                        <td><span class="metric cost-medium">Medium</span></td>
+                                        <td><span class="metric latency-low">200-500ms</span></td>
+                                        <td><span class="metric accuracy-medium">Medium</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Hybrid Search RAG</span></td>
+                                        <td class="description">Combines dense vectors + BM25 sparse retrieval</td>
+                                        <td><span class="metric complexity-medium">Medium</span></td>
+                                        <td><span class="metric cost-medium">Medium</span></td>
+                                        <td><span class="metric latency-medium">300-700ms</span></td>
+                                        <td><span class="metric accuracy-high">High</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Multi-hop RAG</span></td>
+                                        <td class="description">Iterative retrieval with query refinement</td>
+                                        <td><span class="metric complexity-high">High</span></td>
+                                        <td><span class="metric cost-high">High</span></td>
+                                        <td><span class="metric latency-high">800-2000ms</span></td>
+                                        <td><span class="metric accuracy-high">High</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Speculative RAG</span></td>
+                                        <td class="description">Parallel retrieval + generation with verification</td>
+                                        <td><span class="metric complexity-high">High</span></td>
+                                        <td><span class="metric cost-medium">Medium</span></td>
+                                        <td><span class="metric latency-low">150-300ms</span></td>
+                                        <td><span class="metric accuracy-high">High</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Agentic RAG</span></td>
+                                        <td class="description">LLM-driven query planning and tool selection</td>
+                                        <td><span class="metric complexity-high">High</span></td>
+                                        <td><span class="metric cost-high">High</span></td>
+                                        <td><span class="metric latency-high">1000-3000ms</span></td>
+                                        <td><span class="metric accuracy-high">High</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="insights">
+                            <h3>Key Insights</h3>
+                            <ul>
+                                <li>Hybrid Search RAG achieves 15-25% accuracy improvement over pure vector search</li>
+                                <li>Speculative RAG reduces latency by 51% while maintaining quality</li>
+                                <li>Multi-hop RAG essential for complex reasoning tasks requiring multiple evidence sources</li>
+                            </ul>
+                        </div>
+            </div>
+        </div>
+        
+        <!-- Section 2: Vector Database Strategies -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Vector Database Strategies</div>
+                <div class="subtitle-section">Optimizing vector storage and retrieval for different use cases</div>
+            </div>
+            <div class="content">
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="width: 20%">Strategy</th>
+                                        <th style="width: 35%">Implementation Details</th>
+                                        <th style="width: 15%">Best Use Case</th>
+                                        <th style="width: 15%">Performance</th>
+                                        <th style="width: 15%">Cost</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="technique-name">Single Collection</span></td>
+                                        <td class="description">All documents in one vector space with metadata filtering</td>
+                                        <td>Small-medium datasets (&lt;1M docs)</td>
+                                        <td><span class="metric accuracy-high">Fast</span></td>
+                                        <td><span class="metric cost-low">Low</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Multi-Collection</span></td>
+                                        <td class="description">Domain-specific collections with cross-search capability</td>
+                                        <td>Multi-domain knowledge bases</td>
+                                        <td><span class="metric accuracy-medium">Medium</span></td>
+                                        <td><span class="metric cost-medium">Medium</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Hierarchical Indices</span></td>
+                                        <td class="description">Document summaries + chunk-level embeddings</td>
+                                        <td>Long documents, legal/research</td>
+                                        <td><span class="metric accuracy-high">High</span></td>
+                                        <td><span class="metric cost-high">High</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Temporal Partitioning</span></td>
+                                        <td class="description">Time-based indices with recency boosting</td>
+                                        <td>News, support tickets, logs</td>
+                                        <td><span class="metric accuracy-high">High</span></td>
+                                        <td><span class="metric cost-medium">Medium</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Federated Search</span></td>
+                                        <td class="description">Query multiple vector DBs with result fusion</td>
+                                        <td>Enterprise, distributed data</td>
+                                        <td><span class="metric accuracy-medium">Variable</span></td>
+                                        <td><span class="metric cost-high">High</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="code-block">
+                            <div class="code-title">Vector Database Selection Matrix</div>
+                            <pre>
+Dataset Size    | Latency Req | Accuracy Req | Recommended Strategy
+&lt;100K docs     | &lt;100ms      | Medium       | Single Collection + Pinecone
+100K-1M docs   | &lt;200ms      | High         | Multi-Collection + Weaviate
+1M-10M docs    | &lt;500ms      | High         | Hierarchical + Qdrant
+10M+ docs      | &lt;1s         | Very High    | Federated + Custom
+            </pre>
+                        </div>
+                        <div class="insights">
+                            <h3>Implementation Best Practices</h3>
+                            <ul>
+                                <li>Use async upserts for real-time data ingestion (3-5x throughput improvement)</li>
+                                <li>Implement embedding caching to reduce inference costs by 60-80%</li>
+                                <li>Monitor index fragmentation - rebuild when performance degrades >20%</li>
+                            </ul>
+                        </div>
+            </div>
+        </div>
+        
+        <!-- Section 3: Document Chunking Strategies -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Document Chunking Strategies</div>
+                <div class="subtitle-section">Methods for splitting documents to optimize retrieval accuracy</div>
+            </div>
+            <div class="content">
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="width: 20%">Strategy</th>
+                                        <th style="width: 30%">Method</th>
+                                        <th style="width: 20%">Optimal Size</th>
+                                        <th style="width: 15%">Pros</th>
+                                        <th style="width: 15%">Cons</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="technique-name">Fixed-Size</span></td>
+                                        <td class="description">Split by character/token count with overlap</td>
+                                        <td>300-500 tokens</td>
+                                        <td>Simple, consistent</td>
+                                        <td>Breaks context</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Semantic</span></td>
+                                        <td class="description">Split at sentence/paragraph boundaries</td>
+                                        <td>200-800 tokens</td>
+                                        <td>Preserves meaning</td>
+                                        <td>Variable size</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Recursive</span></td>
+                                        <td class="description">Hierarchical splitting with fallback delimiters</td>
+                                        <td>400-600 tokens</td>
+                                        <td>Balanced approach</td>
+                                        <td>Complex logic</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Document-Aware</span></td>
+                                        <td class="description">Structure-based (headers, sections, pages)</td>
+                                        <td>Varies by structure</td>
+                                        <td>Maintains structure</td>
+                                        <td>Format-dependent</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Sliding Window</span></td>
+                                        <td class="description">Overlapping chunks with configurable stride</td>
+                                        <td>400-600 tokens</td>
+                                        <td>No context loss</td>
+                                        <td>Storage overhead</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="architecture-diagram">
+                            <div class="code-title">Optimal Chunking Pipeline</div>
+                            Document → Structure Detection → Semantic Boundaries → Size Optimization → Overlap Addition
+                            <br><br>
+                            Example: PDF → Extract Headers → Split at Paragraphs → Target 500 tokens → Add 50-token overlap
+                        </div>
+                        <div class="code-block">
+                            <div class="code-title">Chunking Performance by Content Type</div>
+                            <pre>
+Content Type      | Best Strategy     | Chunk Size | Overlap | Retrieval Accuracy
+Technical Docs    | Document-Aware    | 600-800    | 100     | 85-90%
+Blog Posts        | Semantic          | 400-600    | 50      | 80-85%
+Research Papers   | Hierarchical      | 500-700    | 75      | 88-93%
+Code Files        | Fixed-Size        | 300-500    | 25      | 75-80%
+Chat/Support      | Sliding Window    | 200-400    | 50      | 82-87%
+            </pre>
+                        </div>
+                        <div class="insights">
+                            <h3>Key Optimization Tips</h3>
+                            <ul>
+                                <li>Use 10-15% overlap for general content, 20-25% for technical documentation</li>
+                                <li>Test chunk sizes: 256, 512, 1024 tokens - often 512 provides best accuracy/cost balance</li>
+                                <li>Implement content-type detection for automatic strategy selection</li>
+                                <li>Monitor retrieval accuracy - retune chunk size if accuracy drops below 80%</li>
+                            </ul>
+                        </div>
+            </div>
+        </div>
+        
+        <!-- Section 4: Embedding Models & Reranking -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Embedding Models & Reranking</div>
+                <div class="subtitle-section">Selecting optimal embedding models and reranking strategies</div>
+            </div>
+            <div class="content">
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="width: 18%">Model</th>
+                                        <th style="width: 20%">Dimensions</th>
+                                        <th style="width: 22%">Best Use Case</th>
+                                        <th style="width: 15%">Performance</th>
+                                        <th style="width: 12%">Cost</th>
+                                        <th style="width: 13%">Latency</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="technique-name">Qwen3-Embedding-8B</span></td>
+                                        <td>4096</td>
+                                        <td class="description">SOTA performance, 70.58 MTEB score</td>
+                                        <td><span class="metric accuracy-high">Very High</span></td>
+                                        <td><span class="metric cost-medium">Self-hosted</span></td>
+                                        <td><span class="metric latency-high">150-300ms</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Qwen3-Embedding-4B</span></td>
+                                        <td>2560</td>
+                                        <td class="description">Balanced size/performance, 69.45 MTEB</td>
+                                        <td><span class="metric accuracy-high">High</span></td>
+                                        <td><span class="metric cost-medium">Self-hosted</span></td>
+                                        <td><span class="metric latency-medium">80-150ms</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">gemini-embedding-001</span></td>
+                                        <td>3072</td>
+                                        <td class="description">Google's multimodal embedding model</td>
+                                        <td><span class="metric accuracy-high">High</span></td>
+                                        <td><span class="metric cost-low">$0.00013/1k</span></td>
+                                        <td><span class="metric latency-low">60-120ms</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Qwen3-Embedding-0.6B</span></td>
+                                        <td>1024</td>
+                                        <td class="description">Efficient model for production use</td>
+                                        <td><span class="metric accuracy-high">High</span></td>
+                                        <td><span class="metric cost-low">Self-hosted</span></td>
+                                        <td><span class="metric latency-low">40-80ms</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">gte-Qwen2-7B-instruct</span></td>
+                                        <td>3584</td>
+                                        <td class="description">Instruction-tuned, multilingual</td>
+                                        <td><span class="metric accuracy-high">High</span></td>
+                                        <td><span class="metric cost-medium">Self-hosted</span></td>
+                                        <td><span class="metric latency-medium">100-200ms</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="code-block">
+                            <div class="code-title">Reranking Pipeline Architecture</div>
+                            <pre>
+Query → Embedding → Vector Search (Top 20-50) → Reranker → Top 5-10 → LLM
+
+Reranking Models:
+- Cohere Rerank: 92% accuracy improvement, +50ms latency
+- BGE-reranker: 88% accuracy improvement, +30ms latency  
+- Cross-encoder BERT: 85% accuracy improvement, +80ms latency
+            </pre>
+                        </div>
+                        <div class="insights">
+                            <h3>Model Selection Strategy</h3>
+                            <ul>
+                                <li><strong>Maximum Accuracy:</strong> Qwen3-Embedding-8B (70.58 MTEB score)</li>
+                                <li><strong>Balanced Performance:</strong> Qwen3-Embedding-4B (69.45 MTEB)</li>
+                                <li><strong>API Integration:</strong> gemini-embedding-001 for multimodal needs</li>
+                                <li><strong>Production Efficiency:</strong> Qwen3-Embedding-0.6B for speed</li>
+                                <li><strong>Multilingual:</strong> gte-Qwen2-7B-instruct or gemini-embedding-001</li>
+                                <li><strong>Cost-Sensitive:</strong> Self-host Qwen3-Embedding-0.6B</li>
+                            </ul>
+                        </div>
+                        <div class="insights">
+                            <h3>Reranking Best Practices</h3>
+                            <ul>
+                                <li>Retrieve 20-50 candidates, rerank to top 5-10 for optimal accuracy/cost</li>
+                                <li>Use cross-encoder rerankers for 10-15% accuracy boost over bi-encoders</li>
+                                <li>Cache reranking results for repeated queries (40-60% cost reduction)</li>
+                                <li>A/B test different reranker thresholds - often 0.7-0.8 works best</li>
+                            </ul>
+                        </div>
+            </div>
+        </div>
+        
+        <!-- Section 5: Performance Optimization -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">RAG Performance Optimization</div>
+                <div class="subtitle-section">Techniques to improve latency, cost, and accuracy in production</div>
+            </div>
+            <div class="content">
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="width: 20%">Optimization</th>
+                                        <th style="width: 30%">Implementation</th>
+                                        <th style="width: 15%">Latency Impact</th>
+                                        <th style="width: 15%">Cost Impact</th>
+                                        <th style="width: 20%">Implementation Effort</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="technique-name">Query Caching</span></td>
+                                        <td class="description">Cache embeddings and results for repeated queries</td>
+                                        <td><span class="metric latency-high">-80-90%</span></td>
+                                        <td><span class="metric cost-high">-60-80%</span></td>
+                                        <td><span class="metric complexity-low">Low</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Async Retrieval</span></td>
+                                        <td class="description">Parallel vector search and embedding generation</td>
+                                        <td><span class="metric latency-medium">-30-50%</span></td>
+                                        <td><span class="metric cost-low">No change</span></td>
+                                        <td><span class="metric complexity-medium">Medium</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Batch Processing</span></td>
+                                        <td class="description">Group multiple queries for batch embedding</td>
+                                        <td><span class="metric latency-low">+10-20%</span></td>
+                                        <td><span class="metric cost-high">-40-60%</span></td>
+                                        <td><span class="metric complexity-medium">Medium</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Index Optimization</span></td>
+                                        <td class="description">HNSW parameters, quantization, pruning</td>
+                                        <td><span class="metric latency-medium">-20-40%</span></td>
+                                        <td><span class="metric cost-medium">-20-30%</span></td>
+                                        <td><span class="metric complexity-high">High</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Speculative Execution</span></td>
+                                        <td class="description">Pre-compute popular queries, parallel generation</td>
+                                        <td><span class="metric latency-high">-40-60%</span></td>
+                                        <td><span class="metric cost-medium">+20-30%</span></td>
+                                        <td><span class="metric complexity-high">High</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="code-block">
+                            <div class="code-title">Production RAG Stack Performance Benchmarks</div>
+                            <pre>
+Component           | Baseline | Optimized | Improvement
+Query Processing    | 50ms     | 20ms      | 60% faster
+Vector Search       | 80ms     | 40ms      | 50% faster  
+Reranking          | 60ms     | 35ms      | 42% faster
+LLM Generation     | 800ms    | 800ms     | No change
+Total Pipeline     | 990ms    | 495ms     | 50% faster
+
+Optimization Stack:
+✓ Redis cache (embedding + results)
+✓ Async vector search  
+✓ HNSW index tuning
+✓ Connection pooling
+✓ Batch reranking
+            </pre>
+                        </div>
+                        <div class="insights">
+                            <h3>Implementation Priority Order</h3>
+                            <ul>
+                                <li><strong>1st:</strong> Query caching - 80% latency reduction, minimal effort</li>
+                                <li><strong>2nd:</strong> Async retrieval - 30-50% improvement, moderate effort</li>
+                                <li><strong>3rd:</strong> Index optimization - 20-40% improvement, high expertise needed</li>
+                                <li><strong>4th:</strong> Speculative execution - Complex but handles traffic spikes</li>
+                            </ul>
+                        </div>
+                        <div class="insights">
+                            <h3>Monitoring & Alerting</h3>
+                            <ul>
+                                <li>Track P95 latency - alert if >1.5x baseline</li>
+                                <li>Monitor cache hit ratio - target 60-80% for cost savings</li>
+                                <li>Index quality metrics - rebuild if retrieval accuracy drops >5%</li>
+                                <li>Cost per query tracking - optimize when >$0.01/query</li>
+                            </ul>
+                        </div>
+            </div>
+        </div>
+        
+        <!-- Section 6: Production Architecture -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Production Architecture Patterns</div>
+                <div class="subtitle-section">Enterprise-ready RAG systems with security and observability</div>
+            </div>
+            <div class="content">
+                        <div class="mermaid-container">
+                            <div class="diagram-title">Enterprise RAG Architecture</div>
+                            <div class="mermaid" id="enterprise-rag-diagram">
+flowchart TD
+    %% User Layer
+    UI[User Input] --> Auth[User Authentication]
+    
+    %% Security & Input Processing
+    Auth --> Guard{Input Guardrail}
+    Guard -->|Expected Input| QR[Query Rewriter]
+    Guard -->|Unexpected Input| UH[Unexpected Input Handler]
+    
+    %% Query Processing Pipeline
+    QR --> HyDE{HyDE Enhancement?}
+    HyDE -->|Yes| QE[Query Expansion]
+    HyDE -->|No| Encoder[Encoder]
+    QE --> Encoder
+    
+    %% Retrieval & Storage
+    Encoder --> Retrieval[Retrieval Engine]
+    Retrieval --> EmbedStore[(Embedding Storage)]
+    Retrieval --> DocStore[(Document Storage)]
+    
+    %% Document Processing
+    DI[Document Ingestion] --> EmbedStore
+    DI --> DocStore
+    
+    %% Generation Pipeline
+    Retrieval --> Rerank[Improve Ranking]
+    Rerank --> Generator[Generator/LLM]
+    Generator --> OutGuard[Output Guardrail]
+    OutGuard --> FinalGen[Final Response Generator]
+    
+    %% Storage & Feedback
+    Generator --> HistStore[(History Storage)]
+    FinalGen --> FeedStore[(Feedback Storage)]
+    FinalGen --> Response[Final Response]
+    
+    %% Observability
+    Obs[Observability Platform]
+    Guard -.-> Obs
+    Retrieval -.-> Obs
+    Generator -.-> Obs
+    OutGuard -.-> Obs
+    Response -.-> Obs
+    
+    %% Styling
+    classDef inputOutput fill:#87CEEB,stroke:#333,stroke-width:2px
+    classDef guardrail fill:#CD5C5C,stroke:#333,stroke-width:2px
+    classDef retrieval fill:#F0E68C,stroke:#333,stroke-width:2px
+    classDef storage fill:#DDA0DD,stroke:#333,stroke-width:2px
+    classDef observability fill:#2F2F2F,color:#FFF,stroke:#FFF,stroke-width:2px
+    
+    class UI,Auth,Response inputOutput
+    class Guard,OutGuard guardrail
+    class QR,HyDE,QE,Encoder,Retrieval,Rerank,Generator,FinalGen retrieval
+    class EmbedStore,DocStore,HistStore,FeedStore storage
+    class Obs observability
+                            </div>
+                            
+                            <div class="diagram-features">
+                                <h4>Architecture Components</h4>
+                                <ul>
+                                    <li><strong>Security Layer:</strong> Input/output guardrails, authentication, content filtering</li>
+                                    <li><strong>Query Processing:</strong> HyDE enhancement, query rewriting, encoding optimization</li>
+                                    <li><strong>Retrieval System:</strong> Hybrid vector + document storage, multi-stage ranking</li>
+                                    <li><strong>Generation Pipeline:</strong> LLM integration, response refinement, quality control</li>
+                                    <li><strong>Observability:</strong> End-to-end monitoring, performance tracking, cost analysis</li>
+                                    <li><strong>Storage Strategy:</strong> Optimized data persistence, feedback collection, history management</li>
+                                </ul>
+
+                                <h4>Key Improvements Over Basic RAG</h4>
+                                <ul>
+                                    <li><strong>HyDE (Hypothetical Document Embeddings):</strong> 15-25% retrieval accuracy improvement</li>
+                                    <li><strong>Dual Guardrails:</strong> Security and quality control at input/output stages</li>
+                                    <li><strong>Multi-stage Ranking:</strong> Vector similarity → semantic reranking → final selection</li>
+                                    <li><strong>Comprehensive Observability:</strong> Real-time monitoring of all pipeline components</li>
+                                    <li><strong>Fallback Mechanisms:</strong> Graceful handling of unexpected inputs and failures</li>
+                                    <li><strong>Production Readiness:</strong> Scalability, reliability, and cost optimization built-in</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="width: 20%">Component</th>
+                                        <th style="width: 25%">Technology Options</th>
+                                        <th style="width: 20%">Scaling Strategy</th>
+                                        <th style="width: 15%">Failure Mode</th>
+                                        <th style="width: 20%">Mitigation</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="technique-name">Vector Database</span></td>
+                                        <td class="description">Pinecone, Weaviate, Qdrant, Chroma</td>
+                                        <td>Horizontal sharding</td>
+                                        <td>Index corruption</td>
+                                        <td>Multi-region replication</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Cache Layer</span></td>
+                                        <td class="description">Redis, Memcached, DragonflyDB</td>
+                                        <td>Cluster mode, partitioning</td>
+                                        <td>Cache miss storm</td>
+                                        <td>Circuit breaker, fallback</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">API Gateway</span></td>
+                                        <td class="description">Kong, AWS API Gateway, Envoy</td>
+                                        <td>Multi-instance deployment</td>
+                                        <td>Rate limit overflow</td>
+                                        <td>Dynamic rate limiting</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">Embedding Service</span></td>
+                                        <td class="description">SentenceTransformers, OpenAI API</td>
+                                        <td>Auto-scaling pods</td>
+                                        <td>Model loading latency</td>
+                                        <td>Warm model pools</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="technique-name">LLM Service</span></td>
+                                        <td class="description">OpenAI, Anthropic, vLLM, TGI</td>
+                                        <td>Load balancing, queuing</td>
+                                        <td>Context overflow</td>
+                                        <td>Truncation, summarization</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="insights">
+                            <h3>Production Readiness Checklist</h3>
+                            <ul>
+                                <li><strong>Observability:</strong> Distributed tracing, metrics dashboards, error tracking</li>
+                                <li><strong>Security:</strong> API authentication, rate limiting, input validation</li>
+                                <li><strong>Reliability:</strong> Circuit breakers, retries, fallback responses</li>
+                                <li><strong>Performance:</strong> Connection pooling, caching, async processing</li>
+                            </ul>
+                        </div>
+                        <div class="insights">
+                            <h3>Cost Optimization Strategies</h3>
+                            <ul>
+                                <li>Use spot instances for embedding generation (60-70% cost reduction)</li>
+                                <li>Implement query similarity detection to reduce duplicate processing</li>
+                                <li>Auto-scale embedding services based on request patterns</li>
+                                <li>Use serverless functions for infrequent retrieval workloads</li>
+                            </ul>
+                        </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <h3>Data Science Community</h3>
+            <p>Join our community for more AI development resources and discussions</p>
+            <a href="https://maxpool.dev" target="_blank" class="btn-outline">
+                Visit maxpool.dev →
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                nodeSpacing: 50,
+                rankSpacing: 80,
+                curve: 'basis'
+            }
+        });
+    </script>
+</body>
+</html>
