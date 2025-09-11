@@ -6,57 +6,131 @@
     <title>AI Agent Engineering Guides</title>
     <meta name="description" content="Comprehensive technical guides for AI developers covering reliability, RAG, fine-tuning, and production deployment strategies.">
     <link rel="stylesheet" href="design-system.css">
+    <style>
+        .hero-title {
+            font-size: 2.75rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #d4a574 0%, #f0d9c1 50%, #ab8a6e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .card-grid {
+            display: grid;
+            gap: 1.25rem;
+            margin-top: 2rem;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.75rem;
+            text-decoration: none;
+            display: block;
+            transition: all 0.2s ease;
+        }
+        
+        .card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(212, 165, 116, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .card h2 {
+            color: #d4a574;
+            font-size: 1.4rem;
+            margin: 0 0 0.75rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .card p {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 0 0 1rem 0;
+        }
+        
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .tag {
+            background: rgba(212, 165, 116, 0.1);
+            color: rgba(212, 165, 116, 0.9);
+            padding: 0.3rem 0.7rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+    </style>
 </head>
 <body>
     <div class="container-narrow">
-        <header class="main-header" style="background: transparent; border: none; margin-bottom: 2rem;">
-            <h1 class="heading-1">AI Agent Engineering</h1>
-            <p class="subtitle">Professional-grade technical resources for AI developers</p>
-            <a href="https://maxpool.dev" target="_blank" class="btn-primary">Join Maxpool Community</a>
+        <header class="main-header" style="text-align: center; padding: 2.5rem 0 1rem;">
+            <h1 class="hero-title">Maxpool</h1>
+            <p class="subtitle" style="color: rgba(255, 255, 255, 0.6);">Learn production-grade AI engineering</p>
         </header>
         
-        <div class="card-list">
-            <div class="card-item">
-                <a href="agent/" class="card-link">
-                    <h2 class="card-title">
-                        AI Agent Reliability Techniques
-                        <span class="arrow">→</span>
-                    </h2>
-                    <p class="card-description">
-                        Complete comparison of 25+ methods to improve AI agent consistency, from basic prompting to advanced ensemble approaches.
-                    </p>
-                    <div class="tags">
-                        <span class="tag">Prompting</span>
-                        <span class="tag">Ensemble Methods</span>
-                        <span class="tag">Model Parameters</span>
-                        <span class="tag">Human-in-Loop</span>
-                        <span class="tag">Validation Layers</span>
-                    </div>
-                </a>
-            </div>
+        <div class="card-grid">
+            <a href="agent/" class="card">
+                <h2>
+                    Agent Reliability
+                    <span style="opacity: 0.5;">→</span>
+                </h2>
+                <p>Complete comparison of 25+ methods to improve AI agent consistency, from basic prompting to advanced ensemble approaches.</p>
+                <div class="tag-list">
+                    <span class="tag">Prompting</span>
+                    <span class="tag">Ensemble Methods</span>
+                    <span class="tag">Model Parameters</span>
+                    <span class="tag">Human-in-Loop</span>
+                </div>
+            </a>
             
-            <div class="card-item">
-                <a href="rag/" class="card-link">
-                    <h2 class="card-title">
-                        RAG Implementation Patterns
-                        <span class="arrow">→</span>
-                    </h2>
-                    <p class="card-description">
-                        Deep dive into Retrieval-Augmented Generation architectures, from basic RAG to advanced multi-hop and speculative approaches.
-                    </p>
-                    <div class="tags">
-                        <span class="tag">Vector Databases</span>
-                        <span class="tag">Chunking Strategies</span>
-                        <span class="tag">Embedding Models</span>
-                        <span class="tag">Reranking</span>
-                        <span class="tag">Multi-hop RAG</span>
-                    </div>
-                </a>
-            </div>
+            <a href="rag/" class="card">
+                <h2>
+                    RAG Implementation
+                    <span style="opacity: 0.5;">→</span>
+                </h2>
+                <p>Deep dive into Retrieval-Augmented Generation architectures, from basic RAG to advanced multi-hop and speculative approaches.</p>
+                <div class="tag-list">
+                    <span class="tag">Vector Databases</span>
+                    <span class="tag">Chunking Strategies</span>
+                    <span class="tag">Embedding Models</span>
+                    <span class="tag">Reranking</span>
+                </div>
+            </a>
+            
+            <a href="frameworks/" class="card">
+                <h2>
+                    Agent Frameworks
+                    <span style="opacity: 0.5;">→</span>
+                </h2>
+                <p>Comprehensive analysis of agent orchestration frameworks with verified GitHub stars, performance benchmarks, and production capabilities.</p>
+                <div class="tag-list">
+                    <span class="tag">LangGraph</span>
+                    <span class="tag">AutoGen</span>
+                    <span class="tag">CrewAI</span>
+                    <span class="tag">DSPy</span>
+                </div>
+            </a>
         </div>
         
-        <footer class="footer" style="background: transparent; border-top: 1px solid rgba(212, 165, 116, 0.2); margin-top: 3rem;">
-            <p>&copy; <a href="https://maxpool.dev">maxpool.dev</a></p>
+        <footer class="footer" style="text-align: center; margin-top: 3rem; padding: 2rem 0; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+            <p style="color: rgba(255, 255, 255, 0.6); font-size: 1rem; margin-bottom: 0.5rem;">
+                🌍 Discover the best practices in GenAI engineering
+            </p>
+            <p style="margin-bottom: 1rem;">
+                <a href="https://join.maxpool.dev" target="_blank" style="color: #d4a574; text-decoration: none; font-weight: 600; font-size: 1.1rem;">
+                    Join Maxpool.dev Community →
+                </a>
+            </p>
         </footer>
     </div>
 </body>

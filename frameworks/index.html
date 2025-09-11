@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent Frameworks Comparison</title>
+    <link rel="stylesheet" href="../design-system.css">
+    <style>
+        /* Framework-specific styles */
+        .framework-link {
+            color: #d4a574;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .framework-link:hover {
+            color: #e8c4a0;
+            text-decoration: underline;
+        }
+        .stars-badge {
+            background: rgba(212, 165, 116, 0.1);
+            color: #d4a574;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            margin-left: 8px;
+            font-weight: 500;
+        }
+        .deprecated-badge {
+            background: rgba(255, 100, 100, 0.1);
+            color: #ff6464;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            margin-left: 8px;
+        }
+        .language-badge {
+            background: rgba(100, 150, 255, 0.1);
+            color: #6496ff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            margin-left: 4px;
+        }
+        .performance-highlight {
+            color: #4ade80;
+            font-weight: 600;
+        }
+        .selection-table {
+            margin-top: 2rem;
+        }
+        .selection-table th {
+            background: rgba(212, 165, 116, 0.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-header">
+            <div class="header-content">
+                <a href="../" class="nav-home">← Home</a>
+                <div class="header-left">
+                    <h1 class="heading-2">AI Agent Frameworks Comparison</h1>
+                    <div class="subtitle-section">Comprehensive analysis of agent orchestration frameworks (September 2025)</div>
+                </div>
+                <div class="cta">
+                    <div>
+                        <div class="cta-label">GenAI Community</div>
+                        <a href="https://join.maxpool.dev" target="_blank" class="cta-link">
+                            join.maxpool.dev →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Section 1: Framework Comparison Table -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Comprehensive Framework Comparison</div>
+                <div class="subtitle-section">Verified GitHub stars, specifications, and production capabilities</div>
+            </div>
+            <div class="content">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 16%">Framework</th>
+                                <th style="width: 10%">GitHub Stars</th>
+                                <th style="width: 12%">Daily Downloads</th>
+                                <th style="width: 18%">Design Philosophy</th>
+                                <th style="width: 26%">Key Features</th>
+                                <th style="width: 18%">Key Indicator</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <a href="https://github.com/langchain-ai/langgraph" target="_blank" class="framework-link">
+                                        <strong>LangGraph</strong>
+                                    </a>
+                                </td>
+                                <td><span class="stars-badge">18.5k ⭐</span></td>
+                                <td><a href="https://pypistats.org/packages/langgraph" target="_blank" class="framework-link">307k/day</a></td>
+                                <td>Graph/state-machine runtime with nodes and edges</td>
+                                <td>Durable execution, branching, retries, human-in-the-loop, checkpoint/resume</td>
+                                <td>Production maturity</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="https://github.com/stanfordnlp/dspy" target="_blank" class="framework-link">
+                                        <strong>DSPy</strong>
+                                    </a>
+                                </td>
+                                <td><span class="stars-badge">27.5k ⭐</span></td>
+                                <td><a href="https://pypistats.org/packages/dspy-ai" target="_blank" class="framework-link">15k/day</a></td>
+                                <td>Optimization-first "programming not prompting"</td>
+                                <td>Self-improving systems, modules + teleprompters, MLflow integration</td>
+                                <td>Academic leadership</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="https://github.com/microsoft/autogen" target="_blank" class="framework-link">
+                                        <strong>AutoGen</strong>
+                                    </a>
+                                </td>
+                                <td><span class="stars-badge">49.2k ⭐</span></td>
+                                <td><a href="https://pypistats.org/packages/pyautogen" target="_blank" class="framework-link">12k/day</a></td>
+                                <td>GraphFlow DAG execution + event-driven async</td>
+                                <td>Cross-language (.NET/Python), concurrent agents, bounded execution</td>
+                                <td>Enterprise backing</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="https://github.com/crewAIInc/crewAI" target="_blank" class="framework-link">
+                                        <strong>CrewAI</strong>
+                                    </a>
+                                </td>
+                                <td><span class="stars-badge">37.9k ⭐</span></td>
+                                <td><a href="https://pypistats.org/packages/crewai" target="_blank" class="framework-link">45k/day</a></td>
+                                <td>Role/task orchestration with Crews + Flows</td>
+                                <td>Parallel workflows, memory sharing, hierarchical management</td>
+                                <td>Highest adoption</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="https://github.com/phidatahq/phidata" target="_blank" class="framework-link">
+                                        <strong>Agno</strong>
+                                    </a>
+                                </td>
+                                <td><span class="stars-badge">32.9k ⭐</span></td>
+                                <td><a href="https://pypistats.org/packages/agno" target="_blank" class="framework-link">41k/day</a></td>
+                                <td>"AgentOS" runs in your cloud</td>
+                                <td>10,000x faster instantiation (~2μs), 3.75KB memory, multimodal</td>
+                                <td>Performance leader</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="https://github.com/mastra-ai/mastra" target="_blank" class="framework-link">
+                                        <strong>Mastra</strong>
+                                    </a>
+                                </td>
+                                <td><span class="stars-badge">~8k ⭐</span></td>
+                                <td><a href="https://www.npmjs.com/package/mastra" target="_blank" class="framework-link">8.6k/day</a></td>
+                                <td>Durable workflow state machines (XState)</td>
+                                <td>Visual editor, serverless-ready, OpenTelemetry, suspend/resume</td>
+                                <td>TypeScript native</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="https://github.com/parlant-ai/parlant" target="_blank" class="framework-link">
+                                        <strong>Parlant</strong>
+                                    </a>
+                                </td>
+                                <td><span class="stars-badge">~3k ⭐</span></td>
+                                <td><a href="https://pypistats.org/packages/parlant" target="_blank" class="framework-link">2k/day</a></td>
+                                <td>Behavior-control via guidelines</td>
+                                <td>Guaranteed guideline adherence, explainable decisions</td>
+                                <td>Compliance focus</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="https://github.com/googleapis/genai-sdk-python" target="_blank" class="framework-link">
+                                        <strong>Google ADK</strong>
+                                    </a>
+                                </td>
+                                <td><span class="stars-badge">9.6k ⭐</span></td>
+                                <td><a href="https://pypistats.org/packages/google-adk" target="_blank" class="framework-link">37k/day</a></td>
+                                <td>Code-first agent development</td>
+                                <td>Gemini-optimized, bidirectional audio/video streaming, Vertex AI</td>
+                                <td>Google ecosystem</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="https://github.com/openai/swarm" target="_blank" class="framework-link">
+                                        <strong>OpenAI Swarm</strong>
+                                    </a>
+                                    <span class="deprecated-badge">Deprecated</span>
+                                </td>
+                                <td><span class="stars-badge">20k ⭐</span></td>
+                                <td><span class="deprecated-badge">Archived</span></td>
+                                <td>Lightweight agent handoffs</td>
+                                <td>Stateless between calls, minimal overhead, replaced by Agents SDK</td>
+                                <td>Educational value</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Performance Metrics -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Performance & Reliability Metrics</div>
+                <div class="subtitle-section">Quantified benchmarks and production characteristics</div>
+            </div>
+            <div class="content">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 20%">Framework</th>
+                                <th style="width: 25%">Performance Claims</th>
+                                <th style="width: 25%">Reliability Features</th>
+                                <th style="width: 30%">Production Adoption</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>LangGraph</strong></td>
+                                <td>Low overhead, streaming execution</td>
+                                <td>Deterministic paths, failure isolation, state persistence</td>
+                                <td>Klarna, Replit, Elastic, Uber, LinkedIn, GitLab</td>
+                            </tr>
+                            <tr>
+                                <td><strong>DSPy</strong></td>
+                                <td>Trade latency for quality via optimization</td>
+                                <td>Self-improving over time, MLflow observability</td>
+                                <td>Stanford Research, Academic institutions</td>
+                            </tr>
+                            <tr>
+                                <td><strong>AutoGen</strong></td>
+                                <td>Async messaging reduces bottlenecks</td>
+                                <td>Graph validation, bounded execution</td>
+                                <td>Microsoft Research, Novo Nordisk</td>
+                            </tr>
+                            <tr>
+                                <td><strong>CrewAI</strong></td>
+                                <td><span class="performance-highlight">5.76x faster</span> than LangGraph in QA</td>
+                                <td>Process options (sequential, parallel, hierarchical)</td>
+                                <td>100,000+ certified developers</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Agno</strong></td>
+                                <td><span class="performance-highlight">10,000x faster</span> instantiation (~2μs)</td>
+                                <td>MCP support, session management</td>
+                                <td>AgentOS cloud deployments</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Mastra</strong></td>
+                                <td>Serverless-ready, OpenTelemetry</td>
+                                <td>Durable execution, automatic retries</td>
+                                <td>"Largest companies in the world"</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Parlant</strong></td>
+                                <td>Overhead in policy checking</td>
+                                <td>Guaranteed guideline adherence</td>
+                                <td>JPMorgan Chase, Revenued</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Google ADK</strong></td>
+                                <td>Native audio/video streaming</td>
+                                <td>Built-in eval system, A2A protocol</td>
+                                <td>Google Agentspace, Customer Suite</td>
+                            </tr>
+                            <tr>
+                                <td><strong>OpenAI Swarm</strong></td>
+                                <td>Minimal overhead</td>
+                                <td>No built-in persistence</td>
+                                <td>Educational/prototype use only</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Language & Platform Support -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Language & Platform Support</div>
+                <div class="subtitle-section">Programming languages and deployment options</div>
+            </div>
+            <div class="content">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 20%">Framework</th>
+                                <th style="width: 20%">Primary Language</th>
+                                <th style="width: 25%">Additional Languages</th>
+                                <th style="width: 35%">Deployment Options</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>LangGraph</strong></td>
+                                <td><span class="language-badge">Python</span></td>
+                                <td>JavaScript/TypeScript</td>
+                                <td>LangGraph Platform, self-hosted</td>
+                            </tr>
+                            <tr>
+                                <td><strong>DSPy</strong></td>
+                                <td><span class="language-badge">Python</span></td>
+                                <td>-</td>
+                                <td>Any Python environment</td>
+                            </tr>
+                            <tr>
+                                <td><strong>AutoGen</strong></td>
+                                <td><span class="language-badge">Python</span></td>
+                                <td>.NET (C#)</td>
+                                <td>Cross-platform</td>
+                            </tr>
+                            <tr>
+                                <td><strong>CrewAI</strong></td>
+                                <td><span class="language-badge">Python</span></td>
+                                <td>-</td>
+                                <td>Cloud, on-premise</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Agno</strong></td>
+                                <td><span class="language-badge">Python</span></td>
+                                <td>-</td>
+                                <td>AgentOS in your cloud</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Mastra</strong></td>
+                                <td><span class="language-badge">TypeScript</span></td>
+                                <td>-</td>
+                                <td>Serverless, Node.js, Vercel</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Parlant</strong></td>
+                                <td><span class="language-badge">Python</span></td>
+                                <td>-</td>
+                                <td>Any Python environment</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Google ADK</strong></td>
+                                <td><span class="language-badge">Python</span><span class="language-badge">Java</span></td>
+                                <td>-</td>
+                                <td>Cloud Run, Vertex AI</td>
+                            </tr>
+                            <tr>
+                                <td><strong>OpenAI Swarm</strong></td>
+                                <td><span class="language-badge">Python</span></td>
+                                <td>JavaScript (community)</td>
+                                <td>Client-side only</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: Framework Selection Guide -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">2025 Framework Selection Guide</div>
+                <div class="subtitle-section">Recommendations based on primary use cases and requirements</div>
+            </div>
+            <div class="content">
+                <div class="insight">
+                    <strong>Key Selection Criteria:</strong> Consider your team's language expertise, performance requirements, and whether you need durable execution or compliance features. Start with simpler frameworks for prototyping, then migrate to production-grade solutions.
+                </div>
+                <div class="table-wrapper selection-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 25%">Primary Need</th>
+                                <th style="width: 18%">Top Choice</th>
+                                <th style="width: 18%">Alternative</th>
+                                <th style="width: 39%">Rationale</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Production reliability</strong></td>
+                                <td><span class="metric complexity-medium">LangGraph</span></td>
+                                <td>Google ADK</td>
+                                <td>Mature state management, proven deployments</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Maximum performance</strong></td>
+                                <td><span class="metric complexity-high">Agno</span></td>
+                                <td>-</td>
+                                <td>10,000x faster instantiation, minimal memory</td>
+                            </tr>
+                            <tr>
+                                <td><strong>TypeScript ecosystem</strong></td>
+                                <td><span class="metric complexity-medium">Mastra</span></td>
+                                <td>-</td>
+                                <td>Native TS with full type safety</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Multi-agent teams</strong></td>
+                                <td><span class="metric complexity-low">CrewAI</span></td>
+                                <td>AutoGen</td>
+                                <td>Large community, proven patterns</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Self-improving systems</strong></td>
+                                <td><span class="metric complexity-high">DSPy</span></td>
+                                <td>-</td>
+                                <td>Optimization-first design</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Compliance/control</strong></td>
+                                <td><span class="metric complexity-medium">Parlant</span></td>
+                                <td>-</td>
+                                <td>Guaranteed guideline adherence</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Google Cloud integration</strong></td>
+                                <td><span class="metric complexity-low">Google ADK</span></td>
+                                <td>-</td>
+                                <td>Native Gemini and GCP services</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Learning/prototyping</strong></td>
+                                <td><span class="metric complexity-low">CrewAI</span></td>
+                                <td>LangGraph</td>
+                                <td>Good documentation, active community</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cross-language support</strong></td>
+                                <td><span class="metric complexity-medium">AutoGen</span></td>
+                                <td>Google ADK</td>
+                                <td>.NET + Python or Java + Python</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 5: Download Statistics -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Framework Download Statistics</div>
+                <div class="subtitle-section">Daily downloads from PyPI and NPM package registries (September 2025)</div>
+            </div>
+            <div class="content">
+                <div class="insight">
+                    <strong>Data Sources:</strong> PyPI stats from <a href="https://pypistats.org" target="_blank" class="framework-link">pypistats.org</a> for Python packages, NPM stats from <a href="https://www.npmjs.com" target="_blank" class="framework-link">npmjs.com</a> for JavaScript/TypeScript packages. Daily downloads are more indicative of production usage than monthly totals.
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 20%">Framework</th>
+                                <th style="width: 18%">Daily Downloads</th>
+                                <th style="width: 15%">Registry</th>
+                                <th style="width: 15%">Accessed</th>
+                                <th style="width: 32%">Source</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>LangChain</strong></td>
+                                <td><span class="metric complexity-high">2,434,152</span></td>
+                                <td>PyPI</td>
+                                <td>Sep 2, 2025</td>
+                                <td><a href="https://pypistats.org/packages/langchain" target="_blank" class="framework-link">pypistats.org/packages/langchain</a></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Vercel AI SDK</strong></td>
+                                <td><span class="metric complexity-high">345,602</span></td>
+                                <td>NPM</td>
+                                <td>Sep 2, 2025</td>
+                                <td><a href="https://www.npmjs.com/package/ai" target="_blank" class="framework-link">npmjs.com/package/ai</a> (2.4M weekly)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>LangGraph</strong></td>
+                                <td><span class="metric complexity-high">307,303</span></td>
+                                <td>PyPI</td>
+                                <td>Sep 2, 2025</td>
+                                <td><a href="https://pypistats.org/packages/langgraph" target="_blank" class="framework-link">pypistats.org/packages/langgraph</a></td>
+                            </tr>
+                            <tr>
+                                <td><strong>OpenAI Agents SDK</strong></td>
+                                <td><span class="metric complexity-medium">57,057</span></td>
+                                <td>PyPI</td>
+                                <td>Sep 2, 2025</td>
+                                <td><a href="https://pypistats.org/packages/openai" target="_blank" class="framework-link">pypistats.org/packages/openai</a></td>
+                            </tr>
+                            <tr>
+                                <td><strong>CrewAI</strong></td>
+                                <td><span class="metric complexity-medium">45,000</span></td>
+                                <td>PyPI</td>
+                                <td>Sep 2, 2025</td>
+                                <td><a href="https://pypistats.org/packages/crewai" target="_blank" class="framework-link">pypistats.org/packages/crewai</a></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Agno</strong></td>
+                                <td><span class="metric complexity-medium">40,906</span></td>
+                                <td>PyPI</td>
+                                <td>Sep 2, 2025</td>
+                                <td><a href="https://pypistats.org/packages/agno" target="_blank" class="framework-link">pypistats.org/packages/agno</a></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Google ADK</strong></td>
+                                <td><span class="metric complexity-medium">36,943</span></td>
+                                <td>PyPI</td>
+                                <td>Sep 2, 2025</td>
+                                <td><a href="https://pypistats.org/packages/google-adk" target="_blank" class="framework-link">pypistats.org/packages/google-adk</a></td>
+                            </tr>
+                            <tr>
+                                <td><strong>DSPy</strong></td>
+                                <td><span class="metric complexity-medium">15,000</span></td>
+                                <td>PyPI</td>
+                                <td>Sep 2, 2025</td>
+                                <td><a href="https://pypistats.org/packages/dspy-ai" target="_blank" class="framework-link">pypistats.org/packages/dspy-ai</a></td>
+                            </tr>
+                            <tr>
+                                <td><strong>AutoGen</strong></td>
+                                <td><span class="metric complexity-medium">12,000</span></td>
+                                <td>PyPI</td>
+                                <td>Sep 2, 2025</td>
+                                <td><a href="https://pypistats.org/packages/pyautogen" target="_blank" class="framework-link">pypistats.org/packages/pyautogen</a></td>
+                            </tr>
+                            <tr>
+                                <td><strong>n8n</strong></td>
+                                <td><span class="metric complexity-low">9,857</span></td>
+                                <td>NPM</td>
+                                <td>Sep 2, 2025</td>
+                                <td><a href="https://www.npmjs.com/package/n8n" target="_blank" class="framework-link">npmjs.com/package/n8n</a> (69k weekly)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Mastra</strong></td>
+                                <td><span class="metric complexity-low">8,646</span></td>
+                                <td>NPM</td>
+                                <td>Sep 2, 2025</td>
+                                <td><a href="https://www.npmjs.com/package/mastra" target="_blank" class="framework-link">npmjs.com/package/mastra</a> (60k weekly)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>LlamaIndex</strong></td>
+                                <td><span class="metric complexity-low">4,983</span></td>
+                                <td>PyPI</td>
+                                <td>Sep 2, 2025</td>
+                                <td><a href="https://pypistats.org/packages/llamaindex-py-client" target="_blank" class="framework-link">pypistats.org/packages/llamaindex</a></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Parlant</strong></td>
+                                <td><span class="metric complexity-low">2,000</span></td>
+                                <td>PyPI</td>
+                                <td>Sep 2, 2025</td>
+                                <td><a href="https://pypistats.org/packages/parlant" target="_blank" class="framework-link">pypistats.org/packages/parlant</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>&copy; <a href="https://join.maxpool.dev">join.maxpool.dev</a> | Last updated: September 2025</p>
+        </footer>
+    </div>
+</body>
+</html>

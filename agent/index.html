@@ -20,9 +20,9 @@
                 </div>
                 <div class="cta">
                     <div>
-                        <div class="cta-label">Data Science Community</div>
-                        <a href="https://maxpool.dev" target="_blank" class="cta-link">
-                            maxpool.dev →
+                        <div class="cta-label">GenAI Community</div>
+                        <a href="https://join.maxpool.dev" target="_blank" class="cta-link">
+                            join.maxpool.dev →
                         </a>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
                             </div>
                             <div class="legend-item">
                                 <span class="legend-title">Latency:</span>
-                                <span>Added response time</span>
+                                <span>Added response time*</span>
                             </div>
                         </div>
                         <div class="table-wrapper">
@@ -82,31 +82,34 @@
                                         <td class="description">Providing 2-5 examples to guide model behavior and output format</td>
                                         <td><span class="metric complexity-low">Low</span></td>
                                         <td><span class="metric cost-low">Low</span></td>
-                                        <td><span class="metric latency-low">+5-10ms</span></td>
+                                        <td><span class="metric latency-low">+50-100ms</span></td>
                                     </tr>
                                     <tr>
                                         <td><span class="technique-name">Chain-of-Thought (CoT)</span></td>
                                         <td class="description">Breaking down reasoning into explicit intermediate steps for complex problems</td>
                                         <td><span class="metric complexity-medium">Medium</span></td>
                                         <td><span class="metric cost-low">Low-Med</span></td>
-                                        <td><span class="metric latency-medium">+20-50ms</span></td>
+                                        <td><span class="metric latency-medium">+200-500ms</span></td>
                                     </tr>
                                     <tr>
                                         <td><span class="technique-name">Tree-of-Thought (ToT)</span></td>
                                         <td class="description">Exploring multiple reasoning paths with backtracking capabilities</td>
                                         <td><span class="metric complexity-high">High</span></td>
                                         <td><span class="metric cost-medium">Medium</span></td>
-                                        <td><span class="metric latency-high">+100-500ms</span></td>
+                                        <td><span class="metric latency-high">+0.5-2s</span></td>
                                     </tr>
                                     <tr>
                                         <td><span class="technique-name">Self-Consistency CoT</span></td>
                                         <td class="description">Running multiple CoT paths and selecting most consistent answer</td>
                                         <td><span class="metric complexity-medium">Medium</span></td>
                                         <td><span class="metric cost-medium">Medium</span></td>
-                                        <td><span class="metric latency-high">+200-1000ms</span></td>
+                                        <td><span class="metric latency-high">+1-5s</span></td>
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+                        <div style="margin-top: 10px; font-size: 0.9em; color: #666; font-style: italic;">
+                            * Latency values are approximate and can vary significantly based on model size, infrastructure, network conditions, and specific implementation details.
                         </div>
                         <div class="insights">
                             <h3>Key Insight</h3>
@@ -142,14 +145,14 @@
                                         <td class="description">Retrieving relevant documents to augment prompts with external knowledge</td>
                                         <td><span class="metric complexity-medium">Medium</span></td>
                                         <td><span class="metric cost-medium">Medium</span></td>
-                                        <td><span class="metric latency-medium">+50-200ms</span></td>
+                                        <td><span class="metric latency-medium">+100-500ms</span></td>
                                     </tr>
                                     <tr>
                                         <td><span class="technique-name">Iterative RAG</span></td>
                                         <td class="description">Multiple retrieval cycles for depth and relevance refinement</td>
                                         <td><span class="metric complexity-high">High</span></td>
                                         <td><span class="metric cost-high">High</span></td>
-                                        <td><span class="metric latency-high">+200-800ms</span></td>
+                                        <td><span class="metric latency-high">+0.5-2s</span></td>
                                     </tr>
                                     <tr>
                                         <td><span class="technique-name">Speculative RAG</span></td>
@@ -163,7 +166,7 @@
                                         <td class="description">Loading entire corpus into context window for smaller datasets</td>
                                         <td><span class="metric complexity-low">Low</span></td>
                                         <td><span class="metric cost-high">High</span></td>
-                                        <td><span class="metric latency-low">+10-30ms</span></td>
+                                        <td><span class="metric latency-low">+50-150ms</span></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -271,14 +274,14 @@
                                         <td class="description">Enforcing JSON/XML schemas for predictable formats</td>
                                         <td><span class="metric complexity-low">Low</span></td>
                                         <td><span class="metric cost-low">Low</span></td>
-                                        <td><span class="metric latency-low">+5-15ms</span></td>
+                                        <td><span class="metric latency-low">+10-50ms</span></td>
                                     </tr>
                                     <tr>
                                         <td><span class="technique-name">Output Validation Layers</span></td>
                                         <td class="description">Automated checking against rules, schemas, or classifiers</td>
                                         <td><span class="metric complexity-medium">Medium</span></td>
                                         <td><span class="metric cost-low">Low</span></td>
-                                        <td><span class="metric latency-low">+10-30ms</span></td>
+                                        <td><span class="metric latency-low">+50-100ms</span></td>
                                     </tr>
                                     <tr>
                                         <td><span class="technique-name">Confidence Thresholds</span></td>
@@ -332,14 +335,14 @@
                                         <td class="description">Blocking execution for human approval on critical decisions</td>
                                         <td><span class="metric complexity-high">High</span></td>
                                         <td><span class="metric cost-high">High</span></td>
-                                        <td><span class="metric latency-high">+1-60 sec</span></td>
+                                        <td><span class="metric latency-high">+1-60s</span></td>
                                     </tr>
                                     <tr>
                                         <td><span class="technique-name">Active Learning</span></td>
                                         <td class="description">Models identify uncertain cases for targeted improvement</td>
                                         <td><span class="metric complexity-high">High</span></td>
                                         <td><span class="metric cost-medium">Medium</span></td>
-                                        <td><span class="metric latency-medium">+50-200ms</span></td>
+                                        <td><span class="metric latency-medium">+100-300ms</span></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -380,14 +383,14 @@
                                         <td class="description">Maintaining conversation history and context across interactions</td>
                                         <td><span class="metric complexity-medium">Medium</span></td>
                                         <td><span class="metric cost-medium">Medium</span></td>
-                                        <td><span class="metric latency-low">+20-50ms</span></td>
+                                        <td><span class="metric latency-low">+50-150ms</span></td>
                                     </tr>
                                     <tr>
                                         <td><span class="technique-name">Multi-Agent Systems</span></td>
                                         <td class="description">Specialized agents collaborating on complex tasks</td>
                                         <td><span class="metric complexity-high">High</span></td>
                                         <td><span class="metric cost-high">High</span></td>
-                                        <td><span class="metric latency-high">+100-1000ms</span></td>
+                                        <td><span class="metric latency-high">+0.5-3s</span></td>
                                     </tr>
                                     <tr>
                                         <td><span class="technique-name">Model-Based Transfer Learning</span></td>
@@ -401,7 +404,7 @@
                                         <td class="description">Optimizing prompt length and relevant information inclusion</td>
                                         <td><span class="metric complexity-medium">Medium</span></td>
                                         <td><span class="metric cost-medium">Medium</span></td>
-                                        <td><span class="metric latency-medium">+10-50ms</span></td>
+                                        <td><span class="metric latency-medium">+50-200ms</span></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -455,10 +458,10 @@
         </div>
         
         <div class="footer">
-            <h3>Data Science Community</h3>
+            <h3>GenAI Community</h3>
             <p>Join our community for more AI development resources and discussions</p>
-            <a href="https://maxpool.dev" target="_blank" class="btn-outline">
-                Visit maxpool.dev →
+            <a href="https://join.maxpool.dev" target="_blank" class="btn-outline">
+                Visit join.maxpool.dev →
             </a>
         </div>
     </div>
