@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vector Database Engineering</title>
+    <link rel="stylesheet" href="../../design-system.css">
+    <style>
+        .vector-hero {
+            max-width: 720px;
+            margin-top: 2rem;
+            color: #e2e8f0;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+        .subtitle-section {
+            color: #cbd5e1;
+            font-weight: 400;
+        }
+        .principle-badge {
+            background: #3a3938;
+            color: #d4a574;
+            padding: 0.25rem 0.6rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            font-weight: 600;
+            border: 1px solid #d4a574;
+        }
+        .metric-chip {
+            background: #fef7ed;
+            color: #92400e;
+            padding: 0.25rem 0.55rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-weight: 600;
+            border: 1px solid #fed7aa;
+            margin: 0.15rem 0;
+        }
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+        }
+        .resource-card {
+            background: #2a2928;
+            border: 1px solid #3a3938;
+            border-radius: 12px;
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
+        }
+        .resource-card:hover {
+            border-color: #d4a574;
+            background: #323130;
+            transform: translateY(-2px);
+        }
+        .resource-card h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #e4c5a4;
+            font-weight: 600;
+        }
+        .resource-card p {
+            margin: 0;
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        .list-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+        .list-chips span {
+            background: #3a3938;
+            color: #94a3b8;
+            padding: 0.25rem 0.55rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 1px solid #475569;
+        }
+        table code {
+            background: #fef3e2;
+            color: #92400e;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.82rem;
+            white-space: nowrap;
+            border: 1px solid #fed7aa;
+        }
+        tbody td {
+            line-height: 1.4;
+        }
+        tbody td strong {
+            font-weight: 600;
+        }
+        tbody td br {
+            margin-bottom: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-header">
+            <div class="header-content">
+                <a href="../../" class="nav-home">← Home</a>
+                <div class="header-left">
+                    <h1 class="heading-2">Vector Database Engineering</h1>
+                    <div class="subtitle-section vector-hero">
+                        Design guidance, index selection trade-offs, and operational benchmarks for production-grade vector search systems.
+                    </div>
+                </div>
+                <div class="cta">
+                    <div>
+                        <div class="cta-label">GenAI Community</div>
+                        <a href="https://join.maxpool.dev" target="_blank" class="cta-link">
+                            join.maxpool.dev →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Core Retrieval Principles</div>
+                <div class="subtitle-section">Foundation concepts that keep similarity search precise, fast, and cost-efficient</div>
+            </div>
+            <div class="content">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 18%">Principle</th>
+                                <th style="width: 32%">Design Guidance</th>
+                                <th style="width: 25%">Observable Signals</th>
+                                <th style="width: 25%">Common Pitfalls</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="principle-badge">Embedding Quality</span></td>
+                                <td><strong>Align embedding model</strong> with corpus domain; monitor drift and re-train quarterly for dynamic data.</td>
+                                <td>
+                                    <div class="metric-chip">NDCG@10 ≥ 0.82</div>
+                                    <div class="metric-chip">Mean cosine ≥ 0.75</div>
+                                </td>
+                                <td>Mixed encoders per class, unnormalized vectors, ignoring prompt leakage.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="principle-badge">Index Fit</span></td>
+                                <td><strong>Match ANN family</strong> (graph, IVF, disk-based) to recall target and memory budget before adding replicas.</td>
+                                <td>
+                                    <div class="metric-chip">Recall@50 ≥ 0.92</div>
+                                    <div class="metric-chip">P95 latency ≤ 120 ms</div>
+                                </td>
+                                <td>Default parameters (ef, nlist, m) kept static despite growth.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="principle-badge">Hybrid Retrieval</span></td>
+                                <td><strong>Blend dense similarity</strong> with lexical or metadata filters for compliance and explainability.</td>
+                                <td>
+                                    <div class="metric-chip">Filter hit rate ≥ 70%</div>
+                                    <div class="metric-chip">CTR lift 10–18%</div>
+                                </td>
+                                <td>Combining scores without normalization; filter-first queries that break ANN heuristics.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="principle-badge">Freshness SLAs</span></td>
+                                <td><strong>Use dual write path</strong> (OLTP + queue) and incremental index builders to keep staleness under target.</td>
+                                <td>
+                                    <div class="metric-chip">Age p95 ≤ 5 min</div>
+                                    <div class="metric-chip">Import success ≥ 99.9%</div>
+                                </td>
+                                <td>Bulk-only ingestion, missing dead-letter queues, absent idempotency.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Index Strategy Playbook</div>
+                <div class="subtitle-section">Choosing between HNSW, IVF-PQ, and disk-first indices by workload characteristics</div>
+            </div>
+            <div class="content">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 16%">Index Type</th>
+                                <th style="width: 24%">Best For</th>
+                                <th style="width: 20%">Memory Footprint</th>
+                                <th style="width: 20%">Latency Envelope</th>
+                                <th style="width: 20%">Tuning Knobs</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>HNSW</strong></td>
+                                <td>Low-latency QPS (<2k) with recall ≥ 0.95 and frequent updates.</td>
+                                <td>1.2–1.5× vector set; cache hot set in RAM.</td>
+                                <td>p50 8–15 ms, p95 40–70 ms with ef_search 80–120.</td>
+                                <td>ef_construction, ef_search, M (graph degree).</td>
+                            </tr>
+                            <tr>
+                                <td><strong>IVF-PQ</strong></td>
+                                <td>Large catalogs (≥50M) where memory < dataset and recall target ≈0.9.</td>
+                                <td>0.3–0.5× with 8-bit PQ; offload centroids to RAM.</td>
+                                <td>p50 25–40 ms; p95 80–140 ms depending on probes.</td>
+                                <td>nlist (coarse cells), nprobe, code size (m × bits).</td>
+                            </tr>
+                            <tr>
+                                <td><strong>DiskANN / ScaNN</strong></td>
+                                <td>Cold datasets on SSD, read-heavy workloads, recall ≥0.92.</td>
+                                <td>0.1× RAM + SSD tier; warm graph neighbors.</td>
+                                <td>p50 12–20 ms; p95 60–110 ms with async prefetch.</td>
+                                <td>Beam width, PQ precision, reordering depth.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Flat / Brute Force</strong></td>
+                                <td>Ground-truth evaluation, ≤1M vectors, or rerank stage.</td>
+                                <td>1.0×; often GPU-backed.</td>
+                                <td>p50 60–180 ms CPU; 6–12 ms GPU batch.</td>
+                                <td>Batch size, BLAS backend, precision (fp16/bf16).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Reference Architectures</div>
+                <div class="subtitle-section">Blueprints for growth stages from prototype to global deployments</div>
+            </div>
+            <div class="content">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 18%">Stage</th>
+                                <th style="width: 30%">Stack & Topology</th>
+                                <th style="width: 26%">Throughput Envelope</th>
+                                <th style="width: 26%">Upgrade Trigger</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Prototype</strong></td>
+                                <td>Single-node vector DB + embedding job; nightly rebuilds.</td>
+                                <td>≤200 QPS, 1M vectors, SLA 300 ms.</td>
+                                <td>Staleness > 24 h or memory pressure > 70%.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Growth</strong></td>
+                                <td>Dual-writer ingestion, read replicas, cache tier, metrics/alerts.</td>
+                                <td>≤1.5k QPS, 20M vectors, SLA 180 ms.</td>
+                                <td>Error budget < 99.5% or latency burn > 30%.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Enterprise</strong></td>
+                                <td>Sharded cluster, schema-based multi-tenancy, streaming updates, feature store.</td>
+                                <td>≤5k QPS, 200M vectors, SLA 150 ms.</td>
+                                <td>Multi-region demand or compliance isolation needs.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Global</strong></td>
+                                <td>Geo-partitioned shards, edge cache, async replication, failover playbooks.</td>
+                                <td>≤15k QPS, 1B+ vectors, SLA 120 ms RT95.</td>
+                                <td>Latency variance >25 ms across regions.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Implementation Examples</div>
+                <div class="subtitle-section">Practical configurations and code snippets for production deployments</div>
+            </div>
+            <div class="content">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 22%">Implementation</th>
+                                <th style="width: 38%">Configuration Example</th>
+                                <th style="width: 20%">Key Parameters</th>
+                                <th style="width: 20%">Performance Impact</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>HNSW Index Config</strong></td>
+                                <td><code>{"ef_construction": 200, "m": 16, "max_connections": 32, "ef_search": 80}</code></td>
+                                <td>ef_construction: build quality<br>m: connectivity<br>ef_search: query accuracy</td>
+                                <td>Build: 3-4× slower<br>Query: 95% recall@10<br>Memory: 1.3× vectors</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Embedding Pipeline</strong></td>
+                                <td><code>model="text-embedding-3-large", dimensions=1536, batch_size=100, normalize=True</code></td>
+                                <td>dimensions: vector size<br>batch_size: throughput<br>normalize: cosine sim</td>
+                                <td>Latency: 45ms/batch<br>Throughput: 2.2k/sec<br>Cost: $0.13/1M tokens</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Hybrid Search Query</strong></td>
+                                <td><code>alpha=0.7, keyword_weight=0.3, filter="category:tech", limit=50, rerank=True</code></td>
+                                <td>alpha: dense/sparse mix<br>rerank: re-scoring<br>filter: pre-filtering</td>
+                                <td>Precision: +18%<br>Latency: +25ms<br>Relevance: +22%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Incremental Updates</strong></td>
+                                <td><code>batch_interval=30s, queue_size=10000, async=True, dedupe_window=300s</code></td>
+                                <td>batch_interval: latency<br>queue_size: buffer<br>dedupe: duplicate handling</td>
+                                <td>Freshness: <1 min<br>CPU: -40%<br>Write amp: 0.7×</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Operational Benchmarks</div>
+                <div class="subtitle-section">Targets for observability, capacity planning, and reliability engineering</div>
+            </div>
+            <div class="content">
+                <ul class="insights">
+                    <li><strong>Error budgets:</strong> 99.9% index availability, ingestion success ≥ 99.95%, replication lag &lt; 3 s.</li>
+                    <li><strong>Capacity guardrails:</strong> keep RAM usage ≤ 65% of node capacity, SSD queue depth ≤ 16, CPU saturation &lt; 70%.</li>
+                    <li><strong>Quality telemetry:</strong> weekly labeled eval set (1k samples), track recall@k, coverage, hallucination complaints.</li>
+                    <li><strong>Cost baseline:</strong> target $0.35–$0.60 per 1M similarity calls on self-hosted clusters; double-check GPU idle time.</li>
+                    <li><strong>Change management:</strong> blue/green schema migrations, canary index rebuilds, documented rollback within 10 min.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Platform Selection Snapshot</div>
+                <div class="subtitle-section">Quick heuristics when choosing between popular vector data platforms</div>
+            </div>
+            <div class="content">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 18%">Platform</th>
+                                <th style="width: 32%">Why Teams Pick It</th>
+                                <th style="width: 25%">Notable Constraints</th>
+                                <th style="width: 25%">Footnotes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Weaviate</strong></td>
+                                <td>Hybrid search, multi-tenancy, production tooling; strong open-source + managed options.</td>
+                                <td>Requires ops expertise for clustering; GPU module optional but adds cost.</td>
+                                <td>See detailed playbook →</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Pinecone</strong></td>
+                                <td>Serverless UX, zero-maintenance, automatic scaling for RAG startups.</td>
+                                <td>Vendor lock-in, limited low-level control, cost premium at scale.</td>
+                                <td>Ideal for ≤100M vectors, QPS bursts.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Qdrant</strong></td>
+                                <td>Rust-based performance, payload filtering, generous open-source feature set.</td>
+                                <td>Fewer managed regions; instant consistency not default.</td>
+                                <td>Watch disk/RAM ratios; great on NVMe.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>pgvector</strong></td>
+                                <td>Leverages Postgres stack, transactional semantics, low barrier for teams already on SQL.</td>
+                                <td>Limited index types, high-latency beyond ~5M vectors without partitioning.</td>
+                                <td>Works best as warm cache, not primary store.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Further Reading</div>
+                <div class="subtitle-section">Deep dives for architecture fundamentals and the Weaviate deployment guide</div>
+            </div>
+            <div class="content">
+                <div class="resource-grid">
+                    <a class="resource-card" href="vector-db-principles.html">
+                        <h3>Vector DB Principles</h3>
+                        <p>Mathematical foundations, capacity planning formulas, and scale patterns for semantic retrieval systems.</p>
+                        <div class="list-chips">
+                            <span>Embeddings</span>
+                            <span>Index Math</span>
+                            <span>Resiliency</span>
+                        </div>
+                    </a>
+                    <a class="resource-card" href="weaviate.html">
+                        <h3>Weaviate Playbook</h3>
+                        <p>Production-ready settings, deployment templates, and troubleshooting routines for Weaviate clusters.</p>
+                        <div class="list-chips">
+                            <span>Hybrid Search</span>
+                            <span>Schema Design</span>
+                            <span>Cost Models</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <h3>GenAI Community</h3>
+            <p>Share benchmarks, runbooks, and incident retros with peers building retrieval infrastructure.</p>
+            <a href="https://join.maxpool.dev" target="_blank" class="btn-outline">
+                Visit join.maxpool.dev →
+            </a>
+        </div>
+    </div>
+</body>
+</html>

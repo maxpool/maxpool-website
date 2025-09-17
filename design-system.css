@@ -381,6 +381,7 @@ td {
   padding: var(--spacing-md);
   border-bottom: 1px solid rgba(168, 165, 160, 0.15);
   font-size: 0.9em;
+  color: var(--text-primary);
 }
 
 tbody tr {

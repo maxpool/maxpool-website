@@ -30,7 +30,7 @@ Update project structure as the website changes.
     ├── tools/                   # Agent tools and utilities
     │   └── README.md
     └── vector-db/               # Vector database implementations
-        ├── README.md
+        ├── index.html           # Vector database guide
         └── weaviate.md
 ```
 

@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weaviate Production Playbook - Vector Database Engineering</title>
+    <link rel="stylesheet" href="../../design-system.css">
+    <style>
+        .performance-metric {
+            background: #fef7ed;
+            color: #92400e;
+            padding: 0.25rem 0.55rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-weight: 600;
+            border: 1px solid #fed7aa;
+            margin: 0.15rem 0;
+        }
+        
+        .architecture-badge {
+            background: #3a3938;
+            color: #d4a574;
+            padding: 0.25rem 0.6rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            font-weight: 600;
+            border: 1px solid #d4a574;
+        }
+        
+        .resource-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        
+        .resource-link {
+            background: #f9f9f8;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid #e5e5e5;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        
+        .resource-link:hover {
+            border-color: #d4a574;
+            background: #fef7ed;
+            transform: translateY(-1px);
+        }
+        
+        .resource-link strong {
+            color: #2c2b2a;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+        
+        .resource-link span {
+            color: #605f5e;
+            font-size: 0.85rem;
+        }
+        
+        .deployment-config {
+            background: #fef3e2;
+            color: #92400e;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.82rem;
+            white-space: nowrap;
+            border: 1px solid #fed7aa;
+        }
+        
+        tbody td code {
+            background: #fef3e2;
+            color: #92400e;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.82rem;
+            white-space: nowrap;
+            border: 1px solid #fed7aa;
+        }
+        
+        .section-intro {
+            color: #334155;
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            padding: 1.25rem;
+            background: #f9f9f8;
+            border-radius: 8px;
+            border-left: 3px solid #d4a574;
+        }
+        
+        .performance-note {
+            font-size: 0.85rem;
+            color: #605f5e;
+            font-style: italic;
+            margin-top: 0.5rem;
+        }
+        
+        .troubleshooting-category {
+            font-weight: 600;
+            color: #c45d5d;
+            background: rgba(196, 93, 93, 0.08);
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-header">
+            <div class="header-content">
+                <a href="./" class="nav-home">← Vector DB</a>
+                <div class="header-left">
+                    <h1 class="heading-2">Weaviate Production Playbook</h1>
+                    <div class="subtitle-section">
+                        Enterprise deployment guide for Weaviate vector database - architecture, performance, and operational excellence
+                    </div>
+                </div>
+                <div class="cta">
+                    <div>
+                        <div class="cta-label">GenAI Community</div>
+                        <a href="https://join.maxpool.dev" target="_blank" class="cta-link">
+                            join.maxpool.dev →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Platform Overview Section -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Platform Overview</div>
+                <div class="subtitle-section">AI-native vector database built for semantic search at scale</div>
+            </div>
+            <div class="content">
+                <div class="section-intro">
+                    <strong>Why Weaviate Stands Out:</strong> Weaviate is an AI-native vector database built from the ground up for semantic search, not retrofitted from traditional databases. It excels in multi-tenant architectures with its ability to handle 50,000+ active shards per node and millions of tenants. The platform's dynamic indexing automatically transitions from flat to HNSW indices at 10,000 objects, optimizing for both small and large datasets without manual intervention.
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 20%">Capability</th>
+                                <th style="width: 30%">Key Features</th>
+                                <th style="width: 25%">Performance Metrics</th>
+                                <th style="width: 25%">Optimal Use Cases</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="architecture-badge">Core Platform</span></td>
+                                <td>Native hybrid search, GraphQL API, dynamic indexing, streaming ingestion</td>
+                                <td>
+                                    <div class="performance-metric">50k+ shards/node</div>
+                                    <div class="performance-metric">Sub-5ms p99 latency</div>
+                                </td>
+                                <td>Multi-tenant SaaS, real-time RAG, graph-based architectures</td>
+                            </tr>
+                            <tr>
+                                <td><span class="architecture-badge">Multi-Tenancy</span></td>
+                                <td>Shard-level isolation, automatic tenant lifecycle, resource quotas</td>
+                                <td>
+                                    <div class="performance-metric">Millions of tenants</div>
+                                    <div class="performance-metric">30-50% memory savings</div>
+                                </td>
+                                <td>B2B SaaS, GDPR compliance, variable dataset sizes</td>
+                            </tr>
+                            <tr>
+                                <td><span class="architecture-badge">Hybrid Search</span></td>
+                                <td>Combined BM25 + semantic, single query fusion, native result ranking</td>
+                                <td>
+                                    <div class="performance-metric">Zero fusion overhead</div>
+                                    <div class="performance-metric">97%+ recall accuracy</div>
+                                </td>
+                                <td>Enterprise search, e-commerce, content discovery</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Characteristics Section -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Performance Benchmarks</div>
+                <div class="subtitle-section">Production performance on standard cloud hardware (2024 results)</div>
+            </div>
+            <div class="content">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 22%">Dataset</th>
+                                <th style="width: 18%">Vector Count</th>
+                                <th style="width: 15%">Dimensions</th>
+                                <th style="width: 15%">Throughput</th>
+                                <th style="width: 15%">P99 Latency</th>
+                                <th style="width: 15%">Recall</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>DBPedia OpenAI</strong></td>
+                                <td>1 million</td>
+                                <td>1,536</td>
+                                <td><span class="deployment-config">5,639 QPS</span></td>
+                                <td><span class="deployment-config">4.43ms</span></td>
+                                <td>97.24%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>SIFT1M</strong></td>
+                                <td>1 million</td>
+                                <td>128</td>
+                                <td><span class="deployment-config">10,940 QPS</span></td>
+                                <td><span class="deployment-config">3.13ms</span></td>
+                                <td>98.35%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>MSMARCO</strong></td>
+                                <td>8.8 million</td>
+                                <td>768</td>
+                                <td><span class="deployment-config">7,363 QPS</span></td>
+                                <td><span class="deployment-config">3.69ms</span></td>
+                                <td>95.8%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sphere DPR</strong></td>
+                                <td>10 million</td>
+                                <td>768</td>
+                                <td><span class="deployment-config">3,523 QPS</span></td>
+                                <td><span class="deployment-config">7.73ms</span></td>
+                                <td>96%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="performance-note">* Benchmarks on 16 vCPU, 128GB RAM instances with NVMe storage</p>
+            </div>
+        </div>
+
+        <!-- Index Selection Strategy Section -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Index Selection Strategy</div>
+                <div class="subtitle-section">Choosing the right index type for your workload characteristics</div>
+            </div>
+            <div class="content">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 18%">Index Type</th>
+                                <th style="width: 28%">Best For</th>
+                                <th style="width: 18%">Memory Usage</th>
+                                <th style="width: 18%">Build Time</th>
+                                <th style="width: 18%">Query Performance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="architecture-badge">Flat</span></td>
+                                <td>Datasets < 10k objects, cold tenants, exact search requirements</td>
+                                <td>Baseline (vector size)</td>
+                                <td>Instant</td>
+                                <td>O(n) linear</td>
+                            </tr>
+                            <tr>
+                                <td><span class="architecture-badge">HNSW</span></td>
+                                <td>Large datasets > 10k, hot data, sub-100ms latency needs</td>
+                                <td>+30-50% overhead</td>
+                                <td>Slower initial build</td>
+                                <td>O(log n) logarithmic</td>
+                            </tr>
+                            <tr>
+                                <td><span class="architecture-badge">Dynamic</span></td>
+                                <td>Multi-tenant with varying sizes, unpredictable growth patterns</td>
+                                <td>Adaptive optimization</td>
+                                <td>Progressive</td>
+                                <td>Auto-optimized</td>
+                            </tr>
+                            <tr>
+                                <td><span class="architecture-badge">PQ Compressed</span></td>
+                                <td>Very large datasets, memory-constrained environments</td>
+                                <td>60-75% reduction</td>
+                                <td>Additional preprocessing</td>
+                                <td>5% recall trade-off</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="insights">
+                    <h3>Dynamic Indexing Benefits</h3>
+                    <ul>
+                        <li><strong>Automatic optimization:</strong> Switches from flat to HNSW at 10,000 objects threshold</li>
+                        <li><strong>Multi-tenant efficiency:</strong> Reduces memory by 30-50% vs uniform HNSW</li>
+                        <li><strong>Zero manual tuning:</strong> Ideal for unpredictable growth patterns</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Production Architecture Section -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Production Architecture</div>
+                <div class="subtitle-section">Reference topologies for different scale requirements</div>
+            </div>
+            <div class="content">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 18%">Scale Tier</th>
+                                <th style="width: 25%">Cluster Configuration</th>
+                                <th style="width: 20%">Capacity</th>
+                                <th style="width: 18%">Performance</th>
+                                <th style="width: 19%">Monthly Cost*</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Development</strong></td>
+                                <td>1 node: 4 vCPU, 16GB RAM, 500GB SSD</td>
+                                <td>Up to 1M vectors</td>
+                                <td>500 QPS, p99 < 100ms</td>
+                                <td>$150-200</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Small Production</strong></td>
+                                <td>3 nodes: 8 vCPU, 32GB RAM, 1TB SSD</td>
+                                <td>Up to 10M vectors</td>
+                                <td>2,500 QPS, p99 < 50ms</td>
+                                <td>$600-800</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Medium Production</strong></td>
+                                <td>5 nodes: 16 vCPU, 64GB RAM, 2TB NVMe</td>
+                                <td>Up to 100M vectors</td>
+                                <td>10,000 QPS, p99 < 100ms</td>
+                                <td>$2,500-3,500</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Large Production</strong></td>
+                                <td>10+ nodes: 32 vCPU, 128GB RAM, 4TB NVMe</td>
+                                <td>1B+ vectors</td>
+                                <td>50,000 QPS, p99 < 150ms</td>
+                                <td>$8,000-12,000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="performance-note">* Self-hosted costs including compute, storage, networking, and operational overhead</p>
+            </div>
+        </div>
+
+        <!-- Multi-Tenancy Architecture Section -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Multi-Tenancy Architecture</div>
+                <div class="subtitle-section">Shard-level isolation for compliance and performance</div>
+            </div>
+            <div class="content">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 20%">Feature</th>
+                                <th style="width: 35%">Implementation</th>
+                                <th style="width: 22%">Benefits</th>
+                                <th style="width: 23%">Limitations</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Tenant Isolation</strong></td>
+                                <td>Dedicated shards with separate storage and vector indices per tenant</td>
+                                <td>Complete data isolation, GDPR compliance</td>
+                                <td>Minimum overhead per tenant</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Lifecycle Management</strong></td>
+                                <td>Automatic creation, activation/deactivation, resource preservation</td>
+                                <td>On-demand resources, cost optimization</td>
+                                <td>Reactivation latency</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Resource Quotas</strong></td>
+                                <td>Per-tenant rate limiting, storage caps, query complexity bounds</td>
+                                <td>Fair resource sharing, predictable costs</td>
+                                <td>Manual configuration needed</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Scale Limits</strong></td>
+                                <td>50,000+ active shards per node, millions of total tenants</td>
+                                <td>Massive multi-tenancy support</td>
+                                <td>Monitoring complexity at scale</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Operational Excellence Section -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Operational Excellence</div>
+                <div class="subtitle-section">Monitoring, disaster recovery, and performance optimization</div>
+            </div>
+            <div class="content">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 20%">Operational Area</th>
+                                <th style="width: 30%">Key Metrics & Thresholds</th>
+                                <th style="width: 25%">Best Practices</th>
+                                <th style="width: 25%">Common Issues</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Monitoring</strong></td>
+                                <td>
+                                    <code>cache_hit_ratio > 80%</code><br>
+                                    <code>bloom_filter_hit > 90%</code><br>
+                                    <code>indexing_queue < 100k</code>
+                                </td>
+                                <td>Prometheus integration, granular alerts, monitoring groups for multi-tenant</td>
+                                <td>Missing aggregation config, alert fatigue</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Performance Tuning</strong></td>
+                                <td>
+                                    <code>ef: 64-128</code><br>
+                                    <code>maxConnections: 32-64</code><br>
+                                    <code>vectorCacheMaxObjects: 2M</code>
+                                </td>
+                                <td>Async indexing, batch processing, HNSW parameter tuning</td>
+                                <td>Over-indexing, cache thrashing</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Disaster Recovery</strong></td>
+                                <td>
+                                    <code>RTO < 15 minutes</code><br>
+                                    <code>RPO ≈ 0 (with replication)</code><br>
+                                    <code>Backup frequency: hourly</code>
+                                </td>
+                                <td>S3/GCS backups, blue-green deployments, cross-AZ replication</td>
+                                <td>Incomplete backups, version mismatches</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Memory Management</strong></td>
+                                <td>
+                                    <code>HNSW overhead: +30-50%</code><br>
+                                    <code>PQ compression: -60-75%</code><br>
+                                    <code>Tombstone cleanup cycles</code>
+                                </td>
+                                <td>Memory-mapped files, configurable WAL, Product Quantization</td>
+                                <td>Memory leaks in high-churn, OOM on imports</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cost Optimization Section -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Cost Optimization</div>
+                <div class="subtitle-section">Strategies for reducing operational expenses</div>
+            </div>
+            <div class="content">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 22%">Optimization Strategy</th>
+                                <th style="width: 30%">Implementation</th>
+                                <th style="width: 20%">Cost Impact</th>
+                                <th style="width: 28%">Trade-offs</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Dynamic Indexing</strong></td>
+                                <td>Auto-switch between flat and HNSW based on tenant size</td>
+                                <td>-30-50% memory costs</td>
+                                <td>Slightly higher management complexity</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Product Quantization</strong></td>
+                                <td>Compress vectors using PQ encoding for cold data</td>
+                                <td>-60-75% storage costs</td>
+                                <td>~5% recall degradation</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Tenant Deactivation</strong></td>
+                                <td>Automatically deactivate idle tenants after threshold</td>
+                                <td>-40-60% resource usage</td>
+                                <td>Reactivation latency on first query</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Module Optimization</strong></td>
+                                <td>Disable unused modules and vectorizers</td>
+                                <td>-20-30% CPU overhead</td>
+                                <td>Reduced feature availability</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="insights">
+                    <h3>Weaviate Cloud Pricing</h3>
+                    <ul>
+                        <li><strong>Usage-based:</strong> $0.095/GB storage + $0.075/million queries</li>
+                        <li><strong>Dedicated instances:</strong> Starting at $900/month for 4 vCPU, 16GB RAM</li>
+                        <li><strong>Includes:</strong> Daily backups, SSO, automatic scaling</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Troubleshooting Patterns Section -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Troubleshooting Patterns</div>
+                <div class="subtitle-section">Common issues and resolution strategies</div>
+            </div>
+            <div class="content">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 20%">Issue Category</th>
+                                <th style="width: 30%">Symptoms</th>
+                                <th style="width: 25%">Root Causes</th>
+                                <th style="width: 25%">Resolution</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="troubleshooting-category">Slow Queries</span></td>
+                                <td>P95 latency > 150ms, degrading response times</td>
+                                <td>Low ef parameter, cache misses, wrong index type</td>
+                                <td>Increase ef to 128, expand vector cache, verify index selection</td>
+                            </tr>
+                            <tr>
+                                <td><span class="troubleshooting-category">Memory Pressure</span></td>
+                                <td>OOM kills, pod evictions, import failures</td>
+                                <td>Insufficient vector cache, large batch sizes, memory leaks</td>
+                                <td>Reduce cache size, enable PQ compression, horizontal scale</td>
+                            </tr>
+                            <tr>
+                                <td><span class="troubleshooting-category">Split Brain</span></td>
+                                <td>Inconsistent cluster state, gossip failures</td>
+                                <td>Network segmentation, port 7946/7947 blocked</td>
+                                <td>Verify network connectivity, check pod hostnames consistency</td>
+                            </tr>
+                            <tr>
+                                <td><span class="troubleshooting-category">Import Failures</span></td>
+                                <td>Timeouts, partial imports, data loss</td>
+                                <td>Oversized batches, duplicate detection, schema mismatches</td>
+                                <td>Reduce batch size to 100, verify schema, check deduplication</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Integration Ecosystem Section -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Integration Ecosystem</div>
+                <div class="subtitle-section">Vectorization options and deployment platforms</div>
+            </div>
+            <div class="content">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 20%">Integration Type</th>
+                                <th style="width: 35%">Options Available</th>
+                                <th style="width: 22%">Use Cases</th>
+                                <th style="width: 23%">Considerations</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Vectorization</strong></td>
+                                <td>OpenAI, Cohere, Hugging Face, Google Vertex AI, Sentence Transformers</td>
+                                <td>Text/image embeddings, multi-modal search</td>
+                                <td>API costs, latency, data privacy</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Deployment</strong></td>
+                                <td>Kubernetes Helm charts, Docker Compose, Embedded, Cloud marketplaces</td>
+                                <td>Production clusters, development, edge computing</td>
+                                <td>Operational complexity, costs</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Query Interface</strong></td>
+                                <td>GraphQL API, REST API, gRPC, Client SDKs (Python, JS, Go, Java)</td>
+                                <td>Application integration, batch operations</td>
+                                <td>Learning curve, performance</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Observability</strong></td>
+                                <td>Prometheus metrics, Grafana dashboards, OpenTelemetry traces</td>
+                                <td>Monitoring, alerting, debugging</td>
+                                <td>Metric cardinality at scale</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Innovations Section -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Recent Innovations (v1.25+)</div>
+                <div class="subtitle-section">Latest features improving performance and scalability</div>
+            </div>
+            <div class="content">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 22%">Feature</th>
+                                <th style="width: 33%">Description</th>
+                                <th style="width: 22%">Performance Impact</th>
+                                <th style="width: 23%">Best For</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Dynamic Indexing</strong></td>
+                                <td>Automatic transition from flat to HNSW at configurable thresholds</td>
+                                <td>30-50% memory reduction</td>
+                                <td>Multi-tenant deployments with varying data sizes</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Async Indexing</strong></td>
+                                <td>Decouples object creation from vector indexing</td>
+                                <td>40-60% ingestion speedup</td>
+                                <td>High-throughput streaming workloads</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Enhanced Multi-tenancy</strong></td>
+                                <td>50,000+ active shards per node, automatic tenant management</td>
+                                <td>10x tenant density</td>
+                                <td>Large-scale B2B SaaS platforms</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Binary Quantization</strong></td>
+                                <td>1-bit vector compression for flat indices</td>
+                                <td>32x memory reduction</td>
+                                <td>Massive datasets with relaxed recall requirements</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resources Section -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Resources & Documentation</div>
+                <div class="subtitle-section">Official resources and community support channels</div>
+            </div>
+            <div class="content">
+                <div class="resource-links">
+                    <a href="https://weaviate.io/developers/weaviate" target="_blank" class="resource-link">
+                        <strong>Documentation</strong>
+                        <span>Comprehensive technical docs</span>
+                    </a>
+                    <a href="https://github.com/weaviate/weaviate-helm" target="_blank" class="resource-link">
+                        <strong>Helm Charts</strong>
+                        <span>Production K8s deployments</span>
+                    </a>
+                    <a href="https://weaviate.io/developers/weaviate/benchmarks" target="_blank" class="resource-link">
+                        <strong>Benchmarks</strong>
+                        <span>Latest performance metrics</span>
+                    </a>
+                    <a href="https://console.weaviate.cloud" target="_blank" class="resource-link">
+                        <strong>Cloud Console</strong>
+                        <span>Managed service portal</span>
+                    </a>
+                    <a href="https://forum.weaviate.io" target="_blank" class="resource-link">
+                        <strong>Community Forum</strong>
+                        <span>Production experiences</span>
+                    </a>
+                    <a href="https://weaviate.io/slack" target="_blank" class="resource-link">
+                        <strong>Slack Community</strong>
+                        <span>Real-time engineer support</span>
+                    </a>
+                    <a href="https://weaviate.io/developers/academy" target="_blank" class="resource-link">
+                        <strong>Weaviate Academy</strong>
+                        <span>Structured learning courses</span>
+                    </a>
+                    <a href="https://weaviate.io/blog" target="_blank" class="resource-link">
+                        <strong>Technical Blog</strong>
+                        <span>Deep-dives and case studies</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <h3>GenAI Community</h3>
+            <p>Share benchmarks, runbooks, and incident retros with peers building retrieval infrastructure.</p>
+            <a href="https://join.maxpool.dev" target="_blank" class="btn-outline">
+                Visit join.maxpool.dev →
+            </a>
+        </div>
+    </div>
+</body>
+</html>
