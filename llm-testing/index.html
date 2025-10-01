@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testing Framework for New Coding Models</title>
+    <link rel="stylesheet" href="../design-system.css">
+    <style>
+        .query-example {
+            background: #FAF9F7;
+            border-left: 3px solid #DC8850;
+            padding: 12px 16px;
+            margin: 8px 0;
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #191817;
+            line-height: 1.6;
+        }
+
+        .score-card {
+            background: #FAF9F7;
+            border: 2px solid #E0E0E0;
+            border-radius: 12px;
+            padding: 32px;
+            margin: 24px 0;
+        }
+
+        .score-card h4 {
+            margin-bottom: 24px;
+            color: #191817;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .score-card strong {
+            color: #191817;
+            font-size: 1.1em;
+            display: block;
+            margin-top: 24px;
+            margin-bottom: 12px;
+        }
+
+        .score-card ul {
+            color: #605F5E;
+            line-height: 1.8;
+        }
+
+        .rating-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            margin: 4px 0;
+            background: #FFFFFF;
+            border-radius: 6px;
+            border: 1px solid #E0E0E0;
+        }
+
+        .rating-row span:first-child {
+            color: #191817;
+            font-weight: 500;
+        }
+
+        .stars {
+            color: #DC8850;
+            font-size: 1.1em;
+            letter-spacing: 2px;
+        }
+
+        .use-case-category {
+            background: #FAF9F7;
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+
+        .use-case-category h4 {
+            color: #191817;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .test-focus {
+            color: #605F5E;
+            font-style: italic;
+            margin-bottom: 16px;
+            font-size: 0.95em;
+        }
+
+        .methodology-step {
+            background: #FAF9F7;
+            border-left: 4px solid #7C9885;
+            padding: 20px;
+            margin: 16px 0;
+            border-radius: 4px;
+        }
+
+        .methodology-step h4 {
+            color: #191817;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .methodology-step ul {
+            color: #605F5E;
+            line-height: 1.8;
+        }
+
+        .content h4 {
+            color: #191817;
+            margin-top: 24px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .content p {
+            color: #605F5E;
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+
+        .content ol,
+        .content ul {
+            color: #605F5E;
+            line-height: 1.8;
+            margin-left: 24px;
+        }
+
+        .content li {
+            margin-bottom: 8px;
+        }
+
+        .content strong {
+            color: #191817;
+        }
+
+        /* Override excessive min-height from design system */
+        .content {
+            min-height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-header">
+            <div class="header-content">
+                <a href="../" class="nav-home">� Home</a>
+                <div class="header-left">
+                    <h1 class="heading-2">Testing Framework for New Coding Models</h1>
+                    <div class="subtitle-section">Structured approach to evaluate LLMs across multiple dimensions with practical benchmarks</div>
+                </div>
+                <div class="cta">
+                    <div>
+                        <div class="cta-label">GenAI Community</div>
+                        <a href="https://join.maxpool.dev" target="_blank" class="cta-link">
+                            join.maxpool.dev �
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Core Testing Dimensions -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Core Testing Dimensions</div>
+                <div class="subtitle-section">Key metrics and quality attributes for comprehensive evaluation</div>
+            </div>
+            <div class="content">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 20%">Category</th>
+                                <th style="width: 25%">Metric</th>
+                                <th style="width: 55%">Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td rowspan="4"><strong>Performance Metrics</strong></td>
+                                <td>Speed/Latency</td>
+                                <td>Time to first token and total completion time</td>
+                            </tr>
+                            <tr>
+                                <td>Accuracy</td>
+                                <td>Correctness of code output and bug detection rate</td>
+                            </tr>
+                            <tr>
+                                <td>Task Completion Rate</td>
+                                <td>Percentage of tasks completed successfully without human intervention</td>
+                            </tr>
+                            <tr>
+                                <td>Cost Efficiency</td>
+                                <td>Token usage and API costs per task type</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="4"><strong>Quality Attributes</strong></td>
+                                <td>Determinism/Repeatability</td>
+                                <td>Consistency of outputs for identical prompts</td>
+                            </tr>
+                            <tr>
+                                <td>Verbosity Control</td>
+                                <td>Ability to adjust response length and detail level</td>
+                            </tr>
+                            <tr>
+                                <td>Steerability</td>
+                                <td>How well the model follows specific instructions and constraints</td>
+                            </tr>
+                            <tr>
+                                <td>Context Management</td>
+                                <td>Handling of large codebases and long conversation threads</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="4"><strong>Operational Characteristics</strong></td>
+                                <td>Number of Attempts</td>
+                                <td>Iterations needed for complex tasks</td>
+                            </tr>
+                            <tr>
+                                <td>Error Recovery</td>
+                                <td>Ability to self-correct and handle edge cases</td>
+                            </tr>
+                            <tr>
+                                <td>Multi-file Reasoning</td>
+                                <td>Coordination across multiple files and dependencies</td>
+                            </tr>
+                            <tr>
+                                <td>Tool Integration</td>
+                                <td>Effectiveness with CLI tools, IDEs, and version control</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Use Case Categories -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Use Case Categories with Example Queries</div>
+                <div class="subtitle-section">Practical test scenarios across different development workflows</div>
+            </div>
+            <div class="content">
+
+                <div class="use-case-category">
+                    <h4>2.1 Brainstorming & Architecture Design</h4>
+                    <div class="test-focus">Test Focus: Creativity, system design understanding, trade-off analysis</div>
+                    <div class="query-example">1. "Design a scalable architecture for a real-time collaborative document editor supporting 10,000 concurrent users"</div>
+                    <div class="query-example">2. "Suggest 5 different approaches to implement a recommendation engine for an e-commerce platform, with pros and cons"</div>
+                    <div class="query-example">3. "What design patterns would work best for a plugin system in a desktop application?"</div>
+                    <div class="query-example">4. "Brainstorm solutions for reducing cold start latency in a serverless architecture"</div>
+                </div>
+
+                <div class="use-case-category">
+                    <h4>2.2 Proof of Concept (PoC) Development</h4>
+                    <div class="test-focus">Test Focus: Speed of implementation, working prototypes, minimal viable code</div>
+                    <div class="query-example">1. "Create a PoC for a webhook dispatcher system with retry logic and exponential backoff"</div>
+                    <div class="query-example">2. "Build a minimal GraphQL server with authentication and rate limiting"</div>
+                    <div class="query-example">3. "Implement a basic version control system in Python that supports commit, diff, and merge"</div>
+                    <div class="query-example">4. "Create a prototype web scraper that handles JavaScript-rendered pages and respects robots.txt"</div>
+                </div>
+
+                <div class="use-case-category">
+                    <h4>2.3 Production Codebase - Feature Addition</h4>
+                    <div class="test-focus">Test Focus: Understanding existing patterns, maintaining consistency, integration complexity</div>
+                    <div class="query-example">1. "Add a bulk export feature to this Django REST API [attach codebase], maintaining existing authentication and pagination patterns"</div>
+                    <div class="query-example">2. "Implement soft delete functionality across all models in this Rails application [attach schema]"</div>
+                    <div class="query-example">3. "Add WebSocket support to this Express server for real-time notifications, integrating with the existing event system"</div>
+                    <div class="query-example">4. "Create a new admin dashboard component in this React app that follows the existing component structure and design system"</div>
+                </div>
+
+                <div class="use-case-category">
+                    <h4>2.4 Production Codebase - Bug Fixes</h4>
+                    <div class="test-focus">Test Focus: Root cause analysis, edge case detection, minimal change fixes</div>
+                    <div class="query-example">1. "Users report that the search feature returns duplicate results after pagination. Debug and fix this issue [attach relevant code]"</div>
+                    <div class="query-example">2. "The application crashes when processing files larger than 100MB. Find and fix the memory leak"</div>
+                    <div class="query-example">3. "Fix the race condition in this concurrent data processing pipeline [attach code]"</div>
+                    <div class="query-example">4. "Database connections are not being properly released in error scenarios. Identify and fix all connection leak points"</div>
+                </div>
+
+                <div class="use-case-category">
+                    <h4>2.5 Agentic Applications</h4>
+                    <div class="test-focus">Test Focus: Long-running tasks, multi-step reasoning, autonomous decision-making</div>
+                    <div class="query-example">1. "Analyze this entire codebase and generate a comprehensive technical documentation with API references"</div>
+                    <div class="query-example">2. "Create a migration plan to upgrade this Node.js application from v14 to v20, handling all breaking changes"</div>
+                    <div class="query-example">3. "Build an automated code review agent that checks for security vulnerabilities, performance issues, and style violations"</div>
+                    <div class="query-example">4. "Develop a test generator that creates comprehensive unit tests for all public methods in this Java project"</div>
+                </div>
+
+                <div class="use-case-category">
+                    <h4>2.6 Code Analysis & Summarization</h4>
+                    <div class="test-focus">Test Focus: Comprehension accuracy, relevant detail extraction, clarity of explanation</div>
+                    <div class="query-example">1. "Analyze this pull request and summarize the changes, potential impacts, and any risks"</div>
+                    <div class="query-example">2. "Create an onboarding guide for new developers based on this codebase structure"</div>
+                    <div class="query-example">3. "Generate a dependency analysis report showing which packages can be safely updated"</div>
+                    <div class="query-example">4. "Summarize the authentication flow in this application for a security audit"</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testing Methodology -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Testing Methodology</div>
+                <div class="subtitle-section">Systematic approach to model evaluation and comparison</div>
+            </div>
+            <div class="content">
+
+                <div class="methodology-step">
+                    <h4>Baseline Establishment</h4>
+                    <ul>
+                        <li>Run identical queries across multiple models (GPT-5 Codex, Claude Opus 4.1, Claude Sonnet 4.5)</li>
+                        <li>Document completion times, token usage, and success rates</li>
+                        <li>Create a scoring rubric for subjective qualities</li>
+                    </ul>
+                </div>
+
+                <div class="methodology-step">
+                    <h4>Progressive Complexity Testing</h4>
+                    <ul>
+                        <li><strong>Level 1:</strong> Simple, single-file tasks (5-50 lines)</li>
+                        <li><strong>Level 2:</strong> Multi-file coordination (100-500 lines)</li>
+                        <li><strong>Level 3:</strong> Large codebase navigation (1000+ lines)</li>
+                        <li><strong>Level 4:</strong> Complex architectural changes</li>
+                    </ul>
+                </div>
+
+                <div class="methodology-step">
+                    <h4>Stress Testing Scenarios</h4>
+                    <ul>
+                        <li>Maximum context window utilization</li>
+                        <li>Highly ambiguous requirements</li>
+                        <li>Contradictory constraints</li>
+                        <li>Legacy code with poor documentation</li>
+                        <li>Multi-language polyglot projects</li>
+                    </ul>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 20%">Metric</th>
+                                <th style="width: 35%">Measurement Method</th>
+                                <th style="width: 45%">Target Threshold</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Speed</strong></td>
+                                <td>Time to completion</td>
+                                <td><span class="metric latency-low">&lt; 2 minutes for simple tasks</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Accuracy</strong></td>
+                                <td>Unit test pass rate</td>
+                                <td><span class="metric complexity-low">&gt; 95% for generated code</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Determinism</strong></td>
+                                <td>Variance across 10 runs</td>
+                                <td><span class="metric complexity-low">&lt; 10% output variation</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Verbosity</strong></td>
+                                <td>Lines of explanation vs code</td>
+                                <td><span class="metric complexity-medium">Adjustable 1:1 to 1:5 ratio</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cost</strong></td>
+                                <td>$ per 1000 tasks</td>
+                                <td><span class="metric cost-medium">Model-specific optimization</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Attempts</strong></td>
+                                <td>Average iterations to success</td>
+                                <td><span class="metric complexity-low">&lt; 2 for standard tasks</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Testing Considerations -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Additional Testing Considerations</div>
+                <div class="subtitle-section">Model-specific behaviors and integration requirements</div>
+            </div>
+            <div class="content">
+                <h4>Model-Specific Behaviors</h4>
+                <ul>
+                    <li><strong>Hallucination tendencies:</strong> Inventing APIs or functions</li>
+                    <li><strong>Refusal patterns:</strong> Tasks the model won't complete</li>
+                    <li><strong>Language preferences:</strong> Performance variance across programming languages</li>
+                    <li><strong>Framework expertise:</strong> Depth of knowledge in specific tech stacks</li>
+                </ul>
+
+                <h4>Integration Testing</h4>
+                <ul>
+                    <li><strong>IDE compatibility:</strong> VS Code, JetBrains, Vim plugins</li>
+                    <li><strong>CI/CD pipeline:</strong> Automated code review and testing</li>
+                    <li><strong>Version control:</strong> Git operations and PR management</li>
+                    <li><strong>Documentation:</strong> Inline comments and external docs generation</li>
+                </ul>
+
+                <h4>Real-world Scenarios</h4>
+                <ul>
+                    <li><strong>Pair programming simulation:</strong> Back-and-forth debugging sessions</li>
+                    <li><strong>Code review effectiveness:</strong> Catching subtle bugs and security issues</li>
+                    <li><strong>Refactoring capabilities:</strong> Improving code without changing functionality</li>
+                    <li><strong>Migration assistance:</strong> Framework and language transitions</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Scoring Template -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Quick Assessment Scorecard</div>
+                <div class="subtitle-section">Template for rapid model evaluation</div>
+            </div>
+            <div class="content">
+                <div class="score-card">
+                    <h4>Model: [Name/Version] | Date: [Test Date]</h4>
+
+                    <div style="margin-top: 20px;">
+                        <strong>Core Metrics:</strong>
+                        <div class="rating-row">
+                            <span>Speed</span>
+                            <span class="stars">★★★★☆</span>
+                        </div>
+                        <div class="rating-row">
+                            <span>Accuracy</span>
+                            <span class="stars">★★★★☆</span>
+                        </div>
+                        <div class="rating-row">
+                            <span>Steerability</span>
+                            <span class="stars">★★★★☆</span>
+                        </div>
+                        <div class="rating-row">
+                            <span>Context Handling</span>
+                            <span class="stars">★★★★☆</span>
+                        </div>
+                        <div class="rating-row">
+                            <span>Cost Efficiency</span>
+                            <span class="stars">★★★★☆</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <strong>Best For:</strong>
+                        <ul style="margin-left: 20px; margin-top: 8px;">
+                            <li> Rapid prototyping</li>
+                            <li> Production debugging</li>
+                            <li> Code review</li>
+                            <li> Architecture design</li>
+                            <li> Long-running tasks</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <strong>Limitations:</strong>
+                        <ul style="margin-left: 20px; margin-top: 8px;">
+                            <li>[To be filled based on testing]</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <strong>Recommendation:</strong> [Daily driver / Specific use cases / Not recommended]
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Continuous Evaluation Protocol -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Continuous Evaluation Protocol</div>
+                <div class="subtitle-section">Ongoing monitoring and assessment strategy</div>
+            </div>
+            <div class="content">
+                <ol>
+                    <li><strong>Weekly spot checks:</strong> Run standardized query set</li>
+                    <li><strong>Monthly deep dives:</strong> Complete use case evaluation</li>
+                    <li><strong>Regression tracking:</strong> Monitor performance degradation</li>
+                    <li><strong>Feature updates:</strong> Test new capabilities as released</li>
+                    <li><strong>Community feedback:</strong> Aggregate user experiences</li>
+                </ol>
+
+                <div class="insights">
+                    <h3>The Ultimate Test: The Reach Test</h3>
+                    <ul>
+                        <li>Effective testing balances raw performance metrics with practical usability factors</li>
+                        <li>The "Reach Test" remains the ultimate measure of success: do developers naturally turn to this tool?</li>
+                        <li>Regular, structured testing using this framework helps teams make informed decisions about model adoption</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Next Steps -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title heading-3">Next Steps</div>
+                <div class="subtitle-section">Implementation checklist for your testing workflow</div>
+            </div>
+            <div class="content">
+                <ol>
+                    <li>Customize example queries to your specific tech stack</li>
+                    <li>Establish baseline metrics with current tools</li>
+                    <li>Create automated testing pipelines for consistent evaluation</li>
+                    <li>Document model-specific quirks and workarounds</li>
+                    <li>Share findings with your team for collaborative assessment</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

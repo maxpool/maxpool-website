@@ -6,9 +6,9 @@
 /* Color Palette - Based on Anthropic's brand colors */
 :root {
   /* Primary Colors */
-  --anthropic-primary: #D4A574;        /* Warm tan/beige - Anthropic's signature color */
-  --anthropic-primary-light: #E4C5A4;  /* Lighter variant */
-  --anthropic-primary-dark: #B48754;   /* Darker variant */
+  --anthropic-primary: #FFFFFF;        /* White - Primary color */
+  --anthropic-primary-light: #FFFFFF;  /* White - Lighter variant */
+  --anthropic-primary-dark: #E0E0E0;   /* Light gray - Darker variant */
   
   /* Background Colors */
   --bg-dark: #191817;                  /* Deep charcoal */
@@ -202,10 +202,10 @@ body {
    ============================================== */
 
 .nav-home {
-  background: rgba(212, 165, 116, 0.1);
+  background: rgba(255, 255, 255, 0.1);
   padding: var(--spacing-sm) var(--spacing-md);
   border-radius: var(--radius-xl);
-  border: 1px solid rgba(212, 165, 116, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   text-decoration: none;
   color: var(--anthropic-primary);
   font-size: 0.9em;
@@ -214,7 +214,7 @@ body {
 }
 
 .nav-home:hover {
-  background: rgba(212, 165, 116, 0.2);
+  background: rgba(255, 255, 255, 0.2);
   transform: translateY(-1px);
 }
 
@@ -258,10 +258,10 @@ body {
 }
 
 .cta {
-  background: rgba(212, 165, 116, 0.08);
+  background: rgba(255, 255, 255, 0.08);
   padding: var(--spacing-md) var(--spacing-lg);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(212, 165, 116, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
