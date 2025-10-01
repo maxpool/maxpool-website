@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curse of Instructions: Large Language Models Cannot Follow Multiple Instructions at Once</title>
+    <style>
+        @page {
+            margin: 2cm;
+        }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        h1 {
+            color: #1a1a1a;
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-align: center;
+            border-bottom: 2px solid #DC8850;
+            padding-bottom: 15px;
+        }
+        h2 {
+            color: #DC8850;
+            font-size: 20px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 8px;
+        }
+        h3 {
+            color: #555;
+            font-size: 16px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .authors {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 30px;
+            color: #666;
+        }
+        .abstract {
+            background: #f8f8f8;
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding {
+            background: #fff8f0;
+            padding: 15px;
+            border-left: 4px solid #DC8850;
+            margin: 15px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #DC8850;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .metric {
+            font-weight: bold;
+            color: #DC8850;
+        }
+        .performance-improvement {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .performance-decline {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .methodology-box {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .conclusion-box {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #DC8850;
+            color: white;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .formula {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Curse of Instructions: Large Language Models Cannot Follow Multiple Instructions at Once</h1>
+
+    <div class="authors">
+        Keno Harada, Yudai Yamazaki, Masachika Taniguchi, Takeshi Kojima, Yusuke Iwasawa, Yutaka Matsuo
+    </div>
+
+    <div class="abstract">
+        <h2>Executive Summary</h2>
+        <p>This research reveals a fundamental limitation in Large Language Models (LLMs): their ability to follow instructions deteriorates significantly as the number of simultaneous instructions increases. Through the introduction of ManyIFEval, a comprehensive benchmark dataset with up to 10 objectively verifiable instructions, researchers demonstrate that state-of-the-art models including GPT-4o, Claude-3.5, Gemini-1.5, Gemma2, and Llama3.1 all exhibit declining performance with increased instruction complexity. This phenomenon, termed the "curse of instructions," follows a mathematical pattern where overall success rates decline exponentially with the number of instructions.</p>
+    </div>
+
+    <h2>Research Context & Motivation</h2>
+    <p>As Large Language Models become increasingly integrated into production systems requiring complex, multi-step task execution, understanding their limitations with multiple simultaneous instructions becomes critical for system reliability and user experience. Previous benchmarks focused on single-instruction scenarios, leaving a gap in understanding how LLMs handle realistic use cases involving multiple constraints and requirements.</p>
+
+    <h2>Key Contributions</h2>
+    <ol>
+        <li><strong>ManyIFEval Benchmark:</strong> A large-scale dataset comprising task prompts with up to 10 objectively verifiable instructions per prompt</li>
+        <li><strong>Systematic Evaluation:</strong> Comprehensive testing of major LLMs (GPT-4o, Claude-3.5, Gemini-1.5, Gemma2, Llama3.1) across varying instruction counts</li>
+        <li><strong>Mathematical Framework:</strong> Identification of the "curse of instructions" phenomenon with formal characterization</li>
+        <li><strong>Mitigation Strategy:</strong> Inference-time self-refinement approach to improve instruction-following performance</li>
+    </ol>
+
+    <h2>Methodology</h2>
+
+    <div class="methodology-box">
+        <h3>Benchmark Design: ManyIFEval</h3>
+        <ul>
+            <li><span class="badge">SCALE</span> Large-scale dataset with systematic instruction count variation</li>
+            <li><span class="badge">VERIFICATION</span> Objectively verifiable instructions for automated evaluation</li>
+            <li><span class="badge">RANGE</span> 1-10 simultaneous instructions per prompt</li>
+            <li><span class="badge">DIVERSITY</span> Multiple instruction types and task domains</li>
+        </ul>
+    </div>
+
+    <div class="methodology-box">
+        <h3>Tested Models</h3>
+        <ul>
+            <li><strong>GPT-4o</strong> - OpenAI's latest multimodal model</li>
+            <li><strong>Claude-3.5 Sonnet</strong> - Anthropic's advanced reasoning model</li>
+            <li><strong>Gemini-1.5</strong> - Google's latest generation model</li>
+            <li><strong>Gemma2</strong> - Google's open-source model family</li>
+            <li><strong>Llama3.1</strong> - Meta's latest open-source model</li>
+        </ul>
+    </div>
+
+    <div class="methodology-box">
+        <h3>Evaluation Approach</h3>
+        <ol>
+            <li>Baseline performance measurement across all models</li>
+            <li>Systematic variation of instruction count (1-10)</li>
+            <li>Individual instruction success rate tracking</li>
+            <li>Overall task completion rate measurement</li>
+            <li>Self-refinement intervention testing</li>
+        </ol>
+    </div>
+
+    <h2>Key Findings</h2>
+
+    <div class="key-finding">
+        <h3>The Curse of Instructions Phenomenon</h3>
+        <p>As instruction count increases, models' ability to follow individual instructions deteriorates. The overall success rate follows a mathematical relationship:</p>
+        <div class="formula">
+            P(all instructions followed) = P(individual instruction)^n
+        </div>
+        <p>where <em>n</em> is the total number of instructions. This exponential decay means even small decreases in individual instruction following rates lead to dramatic drops in overall task success.</p>
+    </div>
+
+    <div class="key-finding">
+        <h3>Performance Degradation Across All Models</h3>
+        <p>All tested models, including state-of-the-art commercial systems, exhibited significant performance decline with increased instruction complexity. No model maintained consistent performance across the full 1-10 instruction range.</p>
+    </div>
+
+    <h2>Performance Results</h2>
+
+    <h3>Baseline Performance (Without Self-Refinement)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Model</th>
+                <th>Single Instruction</th>
+                <th>Multiple Instructions (Avg)</th>
+                <th>Performance Trend</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>GPT-4o</td>
+                <td class="metric">~85%</td>
+                <td class="metric">15%</td>
+                <td class="performance-decline">Significant Decline</td>
+            </tr>
+            <tr>
+                <td>Claude 3.5 Sonnet</td>
+                <td class="metric">~90%</td>
+                <td class="metric">44%</td>
+                <td class="performance-decline">Moderate Decline</td>
+            </tr>
+            <tr>
+                <td>Gemini-1.5</td>
+                <td class="metric">~82%</td>
+                <td class="metric">Variable</td>
+                <td class="performance-decline">Significant Decline</td>
+            </tr>
+            <tr>
+                <td>Gemma2</td>
+                <td class="metric">~75%</td>
+                <td class="metric">Variable</td>
+                <td class="performance-decline">Severe Decline</td>
+            </tr>
+            <tr>
+                <td>Llama3.1</td>
+                <td class="metric">~78%</td>
+                <td class="metric">Variable</td>
+                <td class="performance-decline">Severe Decline</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Self-Refinement Improvement Results</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Model</th>
+                <th>Baseline Success Rate</th>
+                <th>With Self-Refinement</th>
+                <th>Improvement</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>GPT-4o</td>
+                <td class="metric">15%</td>
+                <td class="metric">31%</td>
+                <td class="performance-improvement">+107% (16pp)</td>
+            </tr>
+            <tr>
+                <td>Claude 3.5 Sonnet</td>
+                <td class="metric">44%</td>
+                <td class="metric">58%</td>
+                <td class="performance-improvement">+32% (14pp)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Self-Refinement Mitigation Strategy</h2>
+
+    <p>The researchers proposed an inference-time iterative self-refinement technique to improve instruction-following performance:</p>
+
+    <h3>Self-Refinement Process</h3>
+    <ol>
+        <li><strong>Initial Generation:</strong> Model generates response to multi-instruction prompt</li>
+        <li><strong>Self-Evaluation:</strong> Model evaluates which instructions were successfully followed</li>
+        <li><strong>Targeted Refinement:</strong> Model regenerates response focusing on unfollowed instructions</li>
+        <li><strong>Iteration:</strong> Process repeats until convergence or maximum iterations</li>
+    </ol>
+
+    <h3>Self-Refinement Effectiveness</h3>
+    <ul>
+        <li><strong>GPT-4o:</strong> 107% relative improvement (15% → 31%)</li>
+        <li><strong>Claude 3.5 Sonnet:</strong> 32% relative improvement (44% → 58%)</li>
+        <li><strong>Limitation:</strong> While significant, self-refinement doesn't fully solve the curse of instructions</li>
+        <li><strong>Cost Trade-off:</strong> Requires multiple inference passes, increasing computational cost</li>
+    </ul>
+
+    <h2>Implications for Production Systems</h2>
+
+    <h3>System Design Considerations</h3>
+    <ul>
+        <li><strong>Instruction Decomposition:</strong> Break complex multi-instruction prompts into sequential single-instruction calls</li>
+        <li><strong>Verification Layers:</strong> Implement automated verification of instruction compliance</li>
+        <li><strong>Fallback Strategies:</strong> Design systems with graceful degradation for incomplete instruction following</li>
+        <li><strong>User Interface Design:</strong> Limit simultaneous instruction complexity in user-facing applications</li>
+    </ul>
+
+    <h3>Performance Budgeting</h3>
+    <div class="key-finding">
+        <p>For production systems requiring high reliability, the exponential decay formula provides a framework for performance budgeting:</p>
+        <ul>
+            <li>Target reliability: 95% → Maximum ~2 instructions (assuming 97.5% individual success rate)</li>
+            <li>Target reliability: 90% → Maximum ~3 instructions (assuming 96.5% individual success rate)</li>
+            <li>Target reliability: 80% → Maximum ~4-5 instructions (assuming 95% individual success rate)</li>
+        </ul>
+    </div>
+
+    <h2>Comparison with Related Work</h2>
+
+    <h3>Multi-Task Inference Research</h3>
+    <p>Contrasting findings from parallel research on multi-task inference (MTI Bench) showed that LLMs can actually <em>improve</em> performance on certain types of multiple simultaneous tasks:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Aspect</th>
+                <th>Curse of Instructions</th>
+                <th>Multi-Task Inference</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Task Type</td>
+                <td>Multiple constraints on single output</td>
+                <td>Multiple independent tasks</td>
+            </tr>
+            <tr>
+                <td>Performance Trend</td>
+                <td class="performance-decline">Declining with count</td>
+                <td class="performance-improvement">Improving (7-12%)</td>
+            </tr>
+            <tr>
+                <td>Speed Impact</td>
+                <td>Neutral to negative</td>
+                <td>1.46x faster</td>
+            </tr>
+            <tr>
+                <td>Key Insight</td>
+                <td>Constraint satisfaction difficulty</td>
+                <td>Context sharing benefits</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p><strong>Key Distinction:</strong> The curse of instructions applies specifically to <em>constraints that must all be satisfied in a single output</em>, while multi-task inference benefits apply to <em>independent tasks that can leverage shared context</em>.</p>
+
+    <h2>Technical Analysis</h2>
+
+    <h3>Root Causes of Performance Degradation</h3>
+    <ol>
+        <li><strong>Attention Mechanism Limitations:</strong> Difficulty maintaining simultaneous focus on multiple constraints</li>
+        <li><strong>Working Memory Constraints:</strong> Implicit limitations in maintaining multiple active requirements</li>
+        <li><strong>Priority Ambiguity:</strong> Lack of explicit prioritization mechanisms for conflicting instructions</li>
+        <li><strong>Training Distribution:</strong> Under-representation of high-complexity multi-instruction examples in training data</li>
+    </ol>
+
+    <h3>Mathematical Characterization</h3>
+    <div class="formula">
+        Success_rate(n) ≈ Success_rate(1)^n
+    </div>
+    <p>Where:</p>
+    <ul>
+        <li><em>n</em> = number of instructions</li>
+        <li>Success_rate(1) = success rate on individual instructions</li>
+        <li>Success_rate(n) = probability of following all n instructions</li>
+    </ul>
+
+    <h2>Future Directions</h2>
+
+    <h3>Research Opportunities</h3>
+    <ul>
+        <li><strong>Architectural Improvements:</strong> Explicit instruction-tracking mechanisms in model architectures</li>
+        <li><strong>Training Methodologies:</strong> Curriculum learning with progressive instruction complexity</li>
+        <li><strong>Prompt Engineering:</strong> Optimal instruction formatting and ordering strategies</li>
+        <li><strong>Hybrid Approaches:</strong> Combining LLMs with symbolic constraint solvers</li>
+    </ul>
+
+    <h3>Benchmarking Extensions</h3>
+    <ul>
+        <li>Domain-specific instruction sets (code generation, creative writing, data analysis)</li>
+        <li>Instruction conflict resolution scenarios</li>
+        <li>Long-context multi-instruction following</li>
+        <li>Multi-modal instruction following</li>
+    </ul>
+
+    <div class="conclusion-box">
+        <h2>Conclusions</h2>
+        <p>This research establishes the "curse of instructions" as a fundamental limitation in current Large Language Models, with significant implications for production system design and reliability engineering. Key takeaways:</p>
+        <ul>
+            <li><strong>Universal Limitation:</strong> All tested models, including state-of-the-art systems, exhibit performance degradation with increased instruction complexity</li>
+            <li><strong>Exponential Decay:</strong> Success rates follow a mathematical relationship that compounds individual instruction following rates</li>
+            <li><strong>Partial Mitigation:</strong> Self-refinement techniques provide meaningful improvements but don't eliminate the fundamental limitation</li>
+            <li><strong>System Design Impact:</strong> Production systems should be architected with explicit consideration of multi-instruction limitations</li>
+        </ul>
+        <p>For developers building AI-powered applications, this research underscores the importance of:</p>
+        <ol>
+            <li>Decomposing complex requirements into sequential simple instructions</li>
+            <li>Implementing robust verification mechanisms</li>
+            <li>Designing for graceful degradation when instruction following is incomplete</li>
+            <li>Understanding performance budgets based on instruction count</li>
+        </ol>
+    </div>
+
+    <h2>References</h2>
+    <ul>
+        <li>Harada, K., Yamazaki, Y., Taniguchi, M., Kojima, T., Iwasawa, Y., & Matsuo, Y. "Curse of Instructions: Large Language Models Cannot Follow Multiple Instructions at Once." OpenReview.</li>
+        <li>Related: Multi-Task Inference research (MTI Bench) on simultaneous task processing benefits</li>
+        <li>ManyIFEval Benchmark Dataset (https://openreview.net/forum?id=R6q67CDBCH)</li>
+    </ul>
+
+    <div style="margin-top: 50px; padding-top: 20px; border-top: 2px solid #e0e0e0; text-align: center; color: #666; font-size: 12px;">
+        <p>Report compiled for AI Agent Engineering Research Collection</p>
+        <p>For more resources, visit <a href="https://join.maxpool.dev" style="color: #DC8850;">join.maxpool.dev</a></p>
+    </div>
+</body>
+</html>
