@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReasoningBank: Scaling Agent Self-Evolving with Reasoning Memory</title>
+    <style>
+        @page {
+            margin: 2cm;
+        }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        h1 {
+            color: #1a1a1a;
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-align: center;
+            border-bottom: 2px solid #DC8850;
+            padding-bottom: 15px;
+        }
+        h2 {
+            color: #DC8850;
+            font-size: 20px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 8px;
+        }
+        h3 {
+            color: #555;
+            font-size: 16px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .authors {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 30px;
+            color: #666;
+        }
+        .abstract {
+            background: #f8f8f8;
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding {
+            background: #fff8f0;
+            padding: 15px;
+            border-left: 4px solid #DC8850;
+            margin: 15px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #DC8850;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .metric {
+            font-weight: bold;
+            color: #DC8850;
+        }
+        .performance-improvement {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .performance-decline {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .methodology-box {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .conclusion-box {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #DC8850;
+            color: white;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .formula {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>ReasoningBank: Scaling Agent Self-Evolving with Reasoning Memory</h1>
+
+    <div class="authors">
+        Siru Ouyang, Jun Yan, I-Hung Hsu, Yanfei Chen, Ke Jiang, Zifeng Wang, Rujun Han, Long T. Le,<br>
+        Samira Daruki, Xiangru Tang, Vishy Tirumalashetty, George Lee, Mahsan Rofouei, Hangfei Lin,<br>
+        Jiawei Han, Chen-Yu Lee, and Tomas Pfister<br>
+        <em>University of Illinois Urbana-Champaign, Google Cloud AI Research, Yale University, Google Cloud AI</em>
+    </div>
+
+    <div class="abstract">
+        <h2>Executive Summary</h2>
+        <p>This research introduces <strong>ReasoningBank</strong>, a novel memory framework that enables AI agents to learn from accumulated experience by distilling generalizable reasoning strategies from both successful and failed interactions. Unlike existing approaches that store raw trajectories or only successful routines, ReasoningBank creates structured memory items capturing high-level reasoning patterns. Building on this foundation, the paper introduces <strong>Memory-aware Test-Time Scaling (MaTTS)</strong>, which creates a powerful synergy between memory and computational scaling. Across web browsing and software engineering benchmarks, ReasoningBank demonstrates up to 34.2% relative improvement in effectiveness while reducing interaction steps by 16.0%, establishing memory-driven experience scaling as a new dimension for agent self-evolution.</p>
+    </div>
+
+    <h2>Research Context & Motivation</h2>
+    <p>As Large Language Model (LLM) agents are increasingly deployed in persistent, long-running roles encountering continuous streams of tasks, a critical limitation emerges: they fail to learn from accumulated interaction history. Current agents approach each task in isolation, repeating past errors and discarding valuable insights. This necessitates building memory-aware agent systems capable of self-evolution through experience accumulation.</p>
+
+    <h2>Key Contributions</h2>
+    <ol>
+        <li><strong>ReasoningBank Framework:</strong> A novel memory system that distills generalizable reasoning strategies from both successful and failed experiences, moving beyond raw trajectories and success-only patterns</li>
+        <li><strong>Memory-aware Test-Time Scaling (MaTTS):</strong> Two complementary approaches (parallel and sequential scaling) that create synergy between memory quality and test-time computation</li>
+        <li><strong>Memory-Driven Experience Scaling:</strong> Establishing experience scaling as a new dimension for agents, where better memory guides more effective scaling, while diverse experiences forge stronger memories</li>
+        <li><strong>Comprehensive Empirical Validation:</strong> Extensive experiments demonstrating effectiveness, efficiency, and emergent behaviors across multiple challenging benchmarks</li>
+    </ol>
+
+    <h2>Methodology</h2>
+
+    <div class="methodology-box">
+        <h3>ReasoningBank Architecture</h3>
+        <p><span class="badge">MEMORY SCHEMA</span> Three-component structure:</p>
+        <ul>
+            <li><strong>Title:</strong> Concise identifier summarizing core strategy</li>
+            <li><strong>Description:</strong> One-sentence summary</li>
+            <li><strong>Content:</strong> Distilled reasoning steps, decision rationales, and operational insights</li>
+        </ul>
+    </div>
+
+    <div class="methodology-box">
+        <h3>Integration with Agents</h3>
+        <ol>
+            <li><strong>Memory Retrieval:</strong> Top-k similarity search using embedding-based retrieval (Gemini-embedding-001) to identify relevant past experiences</li>
+            <li><strong>Memory Construction:</strong> LLM-as-a-judge labels trajectories as success/failure; different extraction strategies applied for each type</li>
+            <li><strong>Memory Consolidation:</strong> New memory items incorporated into ReasoningBank, enabling continuous evolution</li>
+        </ol>
+    </div>
+
+    <div class="methodology-box">
+        <h3>Memory-aware Test-Time Scaling (MaTTS)</h3>
+        <p><span class="badge">PARALLEL SCALING</span> Generate multiple trajectories for the same query, using self-contrast across different outcomes to identify consistent patterns and filter spurious solutions</p>
+        <p><span class="badge">SEQUENTIAL SCALING</span> Iteratively refine reasoning within a single trajectory through self-refinement, using intermediate notes as valuable signals for memory synthesis</p>
+    </div>
+
+    <h2>Key Findings</h2>
+
+    <div class="key-finding">
+        <h3>ReasoningBank Outperforms Existing Memory Mechanisms</h3>
+        <p>Across all tested models and benchmarks, ReasoningBank consistently outperforms both memory-free agents and existing memory baselines:</p>
+        <ul>
+            <li><strong>WebArena:</strong> +8.3% to +4.6% improvement over memory-free baseline across different LLM backbones</li>
+            <li><strong>SWE-Bench-Verified:</strong> 38.8% vs 34.2% resolve rate (Gemini-2.5-flash)</li>
+            <li><strong>Mind2Web:</strong> Particularly strong gains in cross-domain generalization (+0.7 absolute task-level SR improvement)</li>
+        </ul>
+    </div>
+
+    <div class="key-finding">
+        <h3>Learning from Failures is Critical</h3>
+        <p>Ablation studies demonstrate that incorporating failure trajectories significantly boosts performance. ReasoningBank improves from 46.5% (success-only) to 49.7% (with failures), while baselines like AWM actually degrade performance when failures are added (44.4% → 42.2%).</p>
+    </div>
+
+    <div class="key-finding">
+        <h3>MaTTS Creates Powerful Synergy</h3>
+        <p>Memory-aware test-time scaling establishes a virtuous cycle:</p>
+        <ul>
+            <li><strong>Better memory → Better scaling:</strong> Best-of-N improves from 40.6% (no memory) to 52.4% (ReasoningBank) at k=3</li>
+            <li><strong>Better scaling → Better memory:</strong> Pass@1 improves from 49.7 to 50.8 with scaling for ReasoningBank, while baselines degrade</li>
+        </ul>
+    </div>
+
+    <h2>Performance Results</h2>
+
+    <h3>WebArena Benchmark Results</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Model</th>
+                <th>Overall SR</th>
+                <th>Overall Steps</th>
+                <th>vs No Memory</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="4" style="background-color: #f0f0f0; font-weight: bold;">Gemini-2.5-flash</td>
+            </tr>
+            <tr>
+                <td>No Memory</td>
+                <td class="metric">40.5%</td>
+                <td class="metric">9.7</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td>Synapse</td>
+                <td class="metric">42.1%</td>
+                <td class="metric">9.2</td>
+                <td class="performance-improvement">+1.6pp</td>
+            </tr>
+            <tr>
+                <td>AWM</td>
+                <td class="metric">44.1%</td>
+                <td class="metric">9.0</td>
+                <td class="performance-improvement">+3.6pp</td>
+            </tr>
+            <tr>
+                <td>ReasoningBank</td>
+                <td class="metric">48.8%</td>
+                <td class="metric">8.3</td>
+                <td class="performance-improvement">+8.3pp</td>
+            </tr>
+            <tr>
+                <td colspan="4" style="background-color: #f0f0f0; font-weight: bold;">Gemini-2.5-pro</td>
+            </tr>
+            <tr>
+                <td>No Memory</td>
+                <td class="metric">46.7%</td>
+                <td class="metric">8.8</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td>ReasoningBank</td>
+                <td class="metric">53.9%</td>
+                <td class="metric">7.4</td>
+                <td class="performance-improvement">+7.2pp</td>
+            </tr>
+            <tr>
+                <td colspan="4" style="background-color: #f0f0f0; font-weight: bold;">Claude-3.7-sonnet</td>
+            </tr>
+            <tr>
+                <td>No Memory</td>
+                <td class="metric">41.7%</td>
+                <td class="metric">8.0</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td>ReasoningBank</td>
+                <td class="metric">46.3%</td>
+                <td class="metric">7.3</td>
+                <td class="performance-improvement">+4.6pp</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>SWE-Bench-Verified Results</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Method</th>
+                <th>Resolve Rate</th>
+                <th>Avg Steps</th>
+                <th>Improvement</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="4" style="background-color: #f0f0f0; font-weight: bold;">Gemini-2.5-flash</td>
+            </tr>
+            <tr>
+                <td>No Memory</td>
+                <td class="metric">34.2%</td>
+                <td class="metric">30.3</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td>Synapse</td>
+                <td class="metric">35.4%</td>
+                <td class="metric">30.7</td>
+                <td class="performance-improvement">+1.2pp</td>
+            </tr>
+            <tr>
+                <td>ReasoningBank</td>
+                <td class="metric">38.8%</td>
+                <td class="metric">27.5</td>
+                <td class="performance-improvement">+4.6pp</td>
+            </tr>
+            <tr>
+                <td colspan="4" style="background-color: #f0f0f0; font-weight: bold;">Gemini-2.5-pro</td>
+            </tr>
+            <tr>
+                <td>No Memory</td>
+                <td class="metric">54.0%</td>
+                <td class="metric">21.1</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td>ReasoningBank</td>
+                <td class="metric">57.4%</td>
+                <td class="metric">19.8</td>
+                <td class="performance-improvement">+3.4pp</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>MaTTS Scaling Results (WebArena-Shopping)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Scaling Factor (k)</th>
+                <th>Parallel Scaling SR</th>
+                <th>Sequential Scaling SR</th>
+                <th>Baseline (No Memory)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>k = 1</td>
+                <td class="metric">49.7%</td>
+                <td class="metric">49.7%</td>
+                <td class="metric">39.0%</td>
+            </tr>
+            <tr>
+                <td>k = 2</td>
+                <td class="metric">50.3%</td>
+                <td class="metric">51.9%</td>
+                <td class="metric">39.4%</td>
+            </tr>
+            <tr>
+                <td>k = 3</td>
+                <td class="metric">52.4%</td>
+                <td class="metric">53.5%</td>
+                <td class="metric">42.2%</td>
+            </tr>
+            <tr>
+                <td>k = 4</td>
+                <td class="metric">54.0%</td>
+                <td class="metric">54.0%</td>
+                <td class="metric">41.7%</td>
+            </tr>
+            <tr>
+                <td>k = 5</td>
+                <td class="metric">55.1%</td>
+                <td class="metric">54.5%</td>
+                <td class="metric">42.2%</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Emergent Behaviors & Strategic Evolution</h2>
+
+    <p>A remarkable finding is that ReasoningBank exhibits <strong>emergent self-evolution</strong>, where memory items progressively mature through test-time learning:</p>
+
+    <ol>
+        <li><strong>Stage 1 - Procedural/Execution:</strong> Simple action rules like "actively look for and click on 'Next Page' links"</li>
+        <li><strong>Stage 2 - Atomic Self-Reflection:</strong> Basic verification strategies like "re-check the element's current identifier"</li>
+        <li><strong>Stage 3 - Evolved Adaptive Checks:</strong> Systematic strategies like "leverage available search or filter functionalities, ensure completeness before reporting"</li>
+        <li><strong>Stage 4 - Generalized Complex Strategies:</strong> High-level reasoning like "regularly cross-referencing the current view with task requirements, reassess available options when data doesn't align with expectations"</li>
+    </ol>
+
+    <p>This evolution resembles reinforcement learning dynamics where agents develop increasingly sophisticated strategies through experience accumulation.</p>
+
+    <h2>Efficiency Analysis</h2>
+
+    <h3>Breakdown: Successful vs Failed Trajectories</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Domain</th>
+                <th>No Memory (Success)</th>
+                <th>ReasoningBank (Success)</th>
+                <th>Reduction</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Shopping</td>
+                <td class="metric">6.8 steps</td>
+                <td class="metric">4.7 steps</td>
+                <td class="performance-improvement">-2.1 steps (30.9%)</td>
+            </tr>
+            <tr>
+                <td>Admin</td>
+                <td class="metric">8.4 steps</td>
+                <td class="metric">7.0 steps</td>
+                <td class="performance-improvement">-1.4 steps (16.7%)</td>
+            </tr>
+            <tr>
+                <td>Gitlab</td>
+                <td class="metric">8.6 steps</td>
+                <td class="metric">7.6 steps</td>
+                <td class="performance-improvement">-1.0 steps (11.6%)</td>
+            </tr>
+            <tr>
+                <td>Reddit</td>
+                <td class="metric">6.1 steps</td>
+                <td class="metric">5.0 steps</td>
+                <td class="performance-improvement">-1.1 steps (18.0%)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p><strong>Key Insight:</strong> ReasoningBank achieves particularly pronounced step reductions on successful cases (up to 30.9%), indicating that memory primarily helps agents reach solutions more efficiently by following effective reasoning paths, rather than simply truncating failed attempts.</p>
+
+    <h2>Comparison with Existing Approaches</h2>
+
+    <h3>Memory Types Comparison</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Approach</th>
+                <th>Memory Content</th>
+                <th>Learns from Failures</th>
+                <th>Abstraction Level</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Raw Trajectories</strong><br>(Synapse)</td>
+                <td>Complete action sequences</td>
+                <td>❌ No</td>
+                <td>Low (specific actions)</td>
+            </tr>
+            <tr>
+                <td><strong>Workflow Memory</strong><br>(AWM)</td>
+                <td>Common successful routines</td>
+                <td>❌ No</td>
+                <td>Medium (procedural patterns)</td>
+            </tr>
+            <tr>
+                <td><strong>ReasoningBank</strong></td>
+                <td>Distilled reasoning strategies</td>
+                <td>✅ Yes</td>
+                <td>High (generalizable principles)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Implications for Production Systems</h2>
+
+    <h3>System Design Considerations</h3>
+    <ul>
+        <li><strong>Continuous Learning:</strong> Deploy agents in persistent roles where they accumulate experiences across multiple user sessions</li>
+        <li><strong>Memory Infrastructure:</strong> Implement efficient vector stores with embedding-based retrieval for real-time memory access</li>
+        <li><strong>Failure Recovery:</strong> Design systems that explicitly learn from failures, not just successes, to build comprehensive reasoning capabilities</li>
+        <li><strong>Test-Time Scaling:</strong> Allocate additional compute for critical tasks through MaTTS to achieve higher reliability</li>
+    </ul>
+
+    <h3>Performance Budgeting for MaTTS</h3>
+    <div class="key-finding">
+        <p>Organizations can trade compute for reliability using scaling factor k:</p>
+        <ul>
+            <li><strong>Standard reliability (50%):</strong> k = 1 (baseline)</li>
+            <li><strong>High reliability (52-53%):</strong> k = 2-3 (2-3× compute)</li>
+            <li><strong>Critical reliability (54-55%):</strong> k = 4-5 (4-5× compute)</li>
+        </ul>
+        <p>Note: Returns begin to diminish after k = 5, suggesting optimal scaling range of 2-5× for most applications.</p>
+    </div>
+
+    <h2>Technical Architecture Insights</h2>
+
+    <h3>Memory Extraction Pipeline</h3>
+    <ol>
+        <li><strong>Trajectory Completion:</strong> Agent executes task and generates trajectory</li>
+        <li><strong>Self-Judgment:</strong> LLM-as-a-judge evaluates success/failure without ground truth</li>
+        <li><strong>Strategy Extraction:</strong>
+            <ul>
+                <li>Success trajectories: Extract validated strategies and effective patterns</li>
+                <li>Failure trajectories: Extract counterfactual signals and preventative lessons</li>
+            </ul>
+        </li>
+        <li><strong>Structured Storage:</strong> Store as {title, description, content} with pre-computed embeddings</li>
+    </ol>
+
+    <h3>Self-Contrast in Parallel Scaling</h3>
+    <p>Instead of relying on external quality judges, MaTTS guides the model to directly compare multiple trajectories for the same query, identifying:</p>
+    <ul>
+        <li>Patterns that consistently lead to success</li>
+        <li>Mistakes that cause failure</li>
+        <li>Contrastive signals that distinguish good from bad reasoning</li>
+    </ul>
+
+    <h2>Limitations & Future Directions</h2>
+
+    <h3>Current Limitations</h3>
+    <ul>
+        <li><strong>Simple Retrieval Mechanism:</strong> Uses basic embedding similarity; could benefit from more sophisticated multi-hop reasoning-based retrieval</li>
+        <li><strong>No Memory Composition:</strong> Treats memory items independently; doesn't explore compositional strategies</li>
+        <li><strong>LLM-as-Judge Dependency:</strong> Success/failure signals from self-evaluation may introduce noise in ambiguous cases</li>
+        <li><strong>Minimal Consolidation:</strong> Simply appends new memories; lacks sophisticated pruning or merging strategies</li>
+    </ul>
+
+    <h3>Future Research Opportunities</h3>
+    <ul>
+        <li><strong>Hierarchical Memory Architecture:</strong> Integrate episodic (per-task), working (within-session), and long-term (consolidated) memory tiers</li>
+        <li><strong>Compositional Memory:</strong> Enable combining multiple memory items into higher-level macro-strategies</li>
+        <li><strong>Advanced Retrieval:</strong> Implement reasoning-intensive controllers that decompose queries and plan multi-hop lookups</li>
+        <li><strong>Memory Management:</strong> Develop automatic pruning, merging, and decay policies for scalable long-term deployment</li>
+    </ul>
+
+    <div class="conclusion-box">
+        <h2>Conclusions</h2>
+        <p>ReasoningBank represents a significant advance in building self-evolving AI agents through memory-driven experience accumulation. Key takeaways:</p>
+        <ul>
+            <li><strong>Memory Content Matters:</strong> Distilling high-level reasoning strategies from both successes and failures outperforms storing raw trajectories or success-only patterns</li>
+            <li><strong>Memory Enables Scaling:</strong> MaTTS creates powerful synergy where better memory guides more effective test-time scaling, while scaling generates richer experiences for better memory</li>
+            <li><strong>Emergent Self-Evolution:</strong> Agents exhibit progressively sophisticated reasoning strategies over time, evolving from procedural actions to complex adaptive reasoning</li>
+            <li><strong>Practical Benefits:</strong> Consistent improvements in both effectiveness (up to 34.2% relative) and efficiency (16.0% fewer steps), with particularly strong gains in generalization scenarios</li>
+            <li><strong>New Scaling Dimension:</strong> Establishes memory-driven experience scaling as a complementary dimension to parameter scaling and test-time compute scaling</li>
+        </ul>
+        <p><strong>For practitioners building AI agent systems:</strong></p>
+        <ol>
+            <li>Implement memory systems that capture reasoning strategies, not just action sequences</li>
+            <li>Design for learning from failures, not just successes</li>
+            <li>Consider test-time scaling with memory-aware approaches for critical tasks</li>
+            <li>Architect for continuous self-evolution in persistent deployment scenarios</li>
+        </ol>
+        <p>ReasoningBank opens pathways toward truly adaptive, lifelong-learning agents that improve through experience accumulation, bringing us closer to autonomous systems that naturally evolve and enhance their capabilities over time.</p>
+    </div>
+
+    <h2>References</h2>
+    <ul>
+        <li>Ouyang, S., Yan, J., Hsu, I-H., et al. "ReasoningBank: Scaling Agent Self-Evolving with Reasoning Memory." arXiv preprint arXiv:2509.25140v1 [cs.AI], September 2025.</li>
+        <li>Benchmarks: WebArena (Zhou et al., 2024), Mind2Web (Deng et al., 2023), SWE-Bench-Verified (Jimenez et al., 2024)</li>
+        <li>Baselines: Synapse (Zheng et al., 2024), Agent Workflow Memory/AWM (Wang et al., 2025d)</li>
+        <li>Related Work: Test-Time Scaling (Snell et al., 2025), Self-Refinement (Madaan et al., 2023)</li>
+    </ul>
+
+    <div style="margin-top: 50px; padding-top: 20px; border-top: 2px solid #e0e0e0; text-align: center; color: #666; font-size: 12px;">
+        <p>Report compiled for AI Agent Engineering Research Collection</p>
+        <p>For more resources, visit <a href="https://join.maxpool.dev" style="color: #DC8850;">join.maxpool.dev</a></p>
+    </div>
+</body>
+</html>
