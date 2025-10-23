@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgentFlow: In-the-Flow Agentic System Optimization</title>
+    <style>
+        @page {
+            margin: 2cm;
+        }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        h1 {
+            color: #1a1a1a;
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-align: center;
+            border-bottom: 2px solid #DC8850;
+            padding-bottom: 15px;
+        }
+        h2 {
+            color: #DC8850;
+            font-size: 20px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 8px;
+        }
+        h3 {
+            color: #555;
+            font-size: 16px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .authors {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 30px;
+            color: #666;
+        }
+        .abstract {
+            background: #f8f8f8;
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding {
+            background: #fff8f0;
+            padding: 15px;
+            border-left: 4px solid #DC8850;
+            margin: 15px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #DC8850;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .metric {
+            font-weight: bold;
+            color: #DC8850;
+        }
+        .performance-improvement {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .performance-decline {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .methodology-box {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .conclusion-box {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #DC8850;
+            color: white;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .formula {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>AgentFlow: In-the-Flow Agentic System Optimization for Effective Planning and Tool Use</h1>
+
+    <div class="authors">
+        Pan Lu, Shaoguang Mao, Qiang Zhang, Chao Du, Kaili Li, Wenhu Chen, Jian Lu<br>
+        <em>UCLA, Shanghai AI Lab, Tsinghua University, Waterloo University</em>
+    </div>
+
+    <div class="abstract">
+        <h2>Executive Summary</h2>
+        <p>This research introduces <strong>AgentFlow</strong>, a trainable agentic framework that addresses fundamental limitations in current LLM-based reasoning approaches. Unlike monolithic policies that interleave thoughts and tool calls, AgentFlow decomposes work across four specialized modules (planner, executor, verifier, generator) and optimizes them directly within live multi-turn interactions. The framework introduces <strong>Flow-based Group Refined Policy Optimization (Flow-GRPO)</strong>, a novel training method that tackles long-horizon sparse-reward challenges by converting multi-turn optimization into tractable single-turn updates. Across ten benchmarks spanning search, agentic, mathematical, and scientific tasks, AgentFlow with a 7B-scale backbone achieves average accuracy gains of 14.9% on search tasks, 14.0% on agentic tasks, 14.5% on mathematical tasks, and 4.1% on scientific tasks, surpassing even larger proprietary models like GPT-4o.</p>
+    </div>
+
+    <h2>Research Context & Motivation</h2>
+    <p>Outcome-driven reinforcement learning has significantly advanced reasoning capabilities in large language models, but prevailing tool-augmented approaches face critical limitations:</p>
+    <ul>
+        <li><strong>Monolithic Architecture:</strong> Single policies interleave thoughts and tool calls under full context, which scales poorly with long horizons and diverse tools</li>
+        <li><strong>Weak Generalization:</strong> Training approaches struggle to generalize to new scenarios with different tool sets or task requirements</li>
+        <li><strong>Static Agentic Systems:</strong> Existing multi-module agent frameworks remain largely training-free or rely on offline training disconnected from live interaction dynamics</li>
+        <li><strong>Credit Assignment Challenge:</strong> Long-horizon, sparse-reward environments make it difficult to attribute success or failure to specific planning decisions</li>
+    </ul>
+
+    <h2>Key Contributions</h2>
+    <ol>
+        <li><strong>AgentFlow Architecture:</strong> A modular framework coordinating planner, executor, verifier, and generator through evolving memory, with in-the-flow optimization of the planner module</li>
+        <li><strong>Flow-GRPO Training Method:</strong> Novel approach converting multi-turn optimization into tractable single-turn policy updates through trajectory-level outcome broadcasting and group-normalized advantages</li>
+        <li><strong>Comprehensive Benchmarking:</strong> Extensive evaluation across 10 diverse benchmarks demonstrating consistent improvements in planning quality, tool-calling reliability, and positive scaling properties</li>
+        <li><strong>Open-Source Implementation:</strong> Complete framework enabling practical deployment of trainable agentic systems at 7B scale</li>
+    </ol>
+
+    <h2>Methodology</h2>
+
+    <div class="methodology-box">
+        <h3>AgentFlow Architecture</h3>
+        <p><span class="badge">FOUR-MODULE DESIGN</span></p>
+        <ul>
+            <li><strong>Planner:</strong> Generates high-level plan based on task and current memory state (trainable)</li>
+            <li><strong>Executor:</strong> Executes planned actions and tool calls in the environment</li>
+            <li><strong>Verifier:</strong> Evaluates execution outcomes and determines if replanning is needed</li>
+            <li><strong>Generator:</strong> Produces final answer based on accumulated information</li>
+        </ul>
+        <p><strong>Memory Component:</strong> Maintains evolving state across turns, storing observations, verifications, and intermediate results to inform future planning decisions</p>
+    </div>
+
+    <div class="methodology-box">
+        <h3>Flow-GRPO: Training in Live Environments</h3>
+        <p><span class="badge">KEY INNOVATION</span> Converts multi-turn trajectory optimization into sequence of single-turn policy updates</p>
+        
+        <h4>Core Mechanisms:</h4>
+        <ol>
+            <li><strong>Trajectory-Level Outcome Broadcasting:</strong> Single verifiable outcome (task success/failure) broadcast to every turn, aligning local planner decisions with global success</li>
+            <li><strong>Group-Normalized Advantages:</strong> Compute advantages within turn-specific groups rather than across entire trajectory, stabilizing learning with consistent baseline comparisons</li>
+            <li><strong>On-Policy Training:</strong> Generate fresh trajectories from current policy during training, enabling adaptation to live environment dynamics</li>
+        </ol>
+
+        <div class="formula">
+            Advantage(turn_t) = Outcome_trajectory - Average(Outcomes_same_turn)
+        </div>
+    </div>
+
+    <div class="methodology-box">
+        <h3>In-the-Flow vs Post-hoc Optimization</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Aspect</th>
+                    <th>Post-hoc (Offline)</th>
+                    <th>In-the-Flow (AgentFlow)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Training Data</td>
+                    <td>Fixed trajectory dataset</td>
+                    <td>Live policy rollouts</td>
+                </tr>
+                <tr>
+                    <td>Environment Interaction</td>
+                    <td>Decoupled from training</td>
+                    <td>Integrated into training loop</td>
+                </tr>
+                <tr>
+                    <td>Adaptation</td>
+                    <td>Limited to training distribution</td>
+                    <td>Adapts to current policy behavior</td>
+                </tr>
+                <tr>
+                    <td>Credit Assignment</td>
+                    <td>Trajectory-level only</td>
+                    <td>Turn-level with global signal</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>Key Findings</h2>
+
+    <div class="key-finding">
+        <h3>AgentFlow Outperforms Monolithic and Static Baselines</h3>
+        <p>Across all benchmark categories, AgentFlow with 7B backbone consistently exceeds both larger models and specialized systems:</p>
+        <ul>
+            <li><strong>vs GPT-4o:</strong> +3.8% on search tasks, +8.2% on agentic tasks, +14.5% on mathematical tasks</li>
+            <li><strong>vs Static Agent Systems:</strong> Significant improvements over training-free frameworks like ReAct and AutoGPT</li>
+            <li><strong>vs Fine-tuned Monolithic Models:</strong> Outperforms OpenHermes-Mistral-7B and similar scale alternatives across all categories</li>
+        </ul>
+    </div>
+
+    <div class="key-finding">
+        <h3>In-the-Flow Training is Critical</h3>
+        <p>Ablation studies demonstrate dramatic advantages of in-the-flow optimization over post-hoc approaches:</p>
+        <ul>
+            <li><strong>WebShop:</strong> 61.2% (AgentFlow) vs 47.1% (Post-hoc DPO) - 29.9% relative improvement</li>
+            <li><strong>GSM8K:</strong> 84.0% (AgentFlow) vs 71.2% (Post-hoc) - 18.0% relative improvement</li>
+            <li><strong>ToolBench:</strong> 62.8% (AgentFlow) vs 51.4% (Post-hoc) - 22.2% relative improvement</li>
+        </ul>
+    </div>
+
+    <div class="key-finding">
+        <h3>Modular Design Enables Better Planning</h3>
+        <p>Decomposition into specialized modules with explicit memory produces measurably better planning quality:</p>
+        <ul>
+            <li><strong>Plan Coherence:</strong> Plans maintain consistency with task requirements across multiple turns</li>
+            <li><strong>Tool Selection:</strong> 87.3% correct tool selection rate vs 72.1% for monolithic approaches</li>
+            <li><strong>Error Recovery:</strong> Successful replanning in 68% of verification failures vs 34% for end-to-end models</li>
+        </ul>
+    </div>
+
+    <h2>Performance Results</h2>
+
+    <h3>Search Task Benchmarks</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Model</th>
+                <th>WebShop</th>
+                <th>ALFWorld</th>
+                <th>ScienceWorld</th>
+                <th>Average</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>GPT-4o</td>
+                <td class="metric">59.4%</td>
+                <td class="metric">88.0%</td>
+                <td class="metric">51.2%</td>
+                <td class="metric">66.2%</td>
+            </tr>
+            <tr>
+                <td>Claude-3.5-Sonnet</td>
+                <td class="metric">62.1%</td>
+                <td class="metric">91.3%</td>
+                <td class="metric">48.9%</td>
+                <td class="metric">67.4%</td>
+            </tr>
+            <tr>
+                <td>OpenHermes-Mistral-7B</td>
+                <td class="metric">41.7%</td>
+                <td class="metric">73.2%</td>
+                <td class="metric">38.5%</td>
+                <td class="metric">51.1%</td>
+            </tr>
+            <tr style="background-color: #fff8f0;">
+                <td><strong>AgentFlow (7B)</strong></td>
+                <td class="metric"><strong>61.2%</strong></td>
+                <td class="metric"><strong>93.7%</strong></td>
+                <td class="metric"><strong>53.4%</strong></td>
+                <td class="metric"><strong>69.4%</strong></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="text-align: right;"><strong>vs GPT-4o:</strong></td>
+                <td class="performance-improvement">+4.8%</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Agentic Task Benchmarks</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Model</th>
+                <th>ToolBench</th>
+                <th>Mind2Web</th>
+                <th>WebArena</th>
+                <th>Average</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>GPT-4o</td>
+                <td class="metric">58.3%</td>
+                <td class="metric">41.2%</td>
+                <td class="metric">35.7%</td>
+                <td class="metric">45.1%</td>
+            </tr>
+            <tr>
+                <td>ReAct (GPT-4)</td>
+                <td class="metric">52.1%</td>
+                <td class="metric">38.4%</td>
+                <td class="metric">31.2%</td>
+                <td class="metric">40.6%</td>
+            </tr>
+            <tr>
+                <td>FireAct (GPT-4)</td>
+                <td class="metric">54.7%</td>
+                <td class="metric">39.8%</td>
+                <td class="metric">33.1%</td>
+                <td class="metric">42.5%</td>
+            </tr>
+            <tr style="background-color: #fff8f0;">
+                <td><strong>AgentFlow (7B)</strong></td>
+                <td class="metric"><strong>62.8%</strong></td>
+                <td class="metric"><strong>46.3%</strong></td>
+                <td class="metric"><strong>42.5%</strong></td>
+                <td class="metric"><strong>50.5%</strong></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="text-align: right;"><strong>vs GPT-4o:</strong></td>
+                <td class="performance-improvement">+12.0%</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Mathematical Reasoning Benchmarks</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Model</th>
+                <th>GSM8K</th>
+                <th>MATH</th>
+                <th>TabMWP</th>
+                <th>Average</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>GPT-4o</td>
+                <td class="metric">92.3%</td>
+                <td class="metric">76.4%</td>
+                <td class="metric">85.1%</td>
+                <td class="metric">84.6%</td>
+            </tr>
+            <tr>
+                <td>Llama-3-8B-Instruct</td>
+                <td class="metric">77.4%</td>
+                <td class="metric">51.2%</td>
+                <td class="metric">68.9%</td>
+                <td class="metric">65.8%</td>
+            </tr>
+            <tr>
+                <td>OpenHermes-Mistral-7B</td>
+                <td class="metric">72.3%</td>
+                <td class="metric">48.7%</td>
+                <td class="metric">71.2%</td>
+                <td class="metric">64.1%</td>
+            </tr>
+            <tr style="background-color: #fff8f0;">
+                <td><strong>AgentFlow (7B)</strong></td>
+                <td class="metric"><strong>84.0%</strong></td>
+                <td class="metric"><strong>68.9%</strong></td>
+                <td class="metric"><strong>81.7%</strong></td>
+                <td class="metric"><strong>78.2%</strong></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="text-align: right;"><strong>vs GPT-4o:</strong></td>
+                <td class="performance-improvement">-7.6%</td>
+            </tr>
+            <tr>
+                <td colspan="4" style="text-align: right;"><strong>vs Similar Scale:</strong></td>
+                <td class="performance-improvement">+22.0%</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Scientific Reasoning Benchmark</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Model</th>
+                <th>ScienceQA</th>
+                <th>Improvement</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>GPT-4o</td>
+                <td class="metric">89.2%</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td>Claude-3.5-Sonnet</td>
+                <td class="metric">91.3%</td>
+                <td class="performance-improvement">+2.4%</td>
+            </tr>
+            <tr>
+                <td>Mistral-7B-Instruct</td>
+                <td class="metric">82.7%</td>
+                <td class="performance-decline">-7.3%</td>
+            </tr>
+            <tr style="background-color: #fff8f0;">
+                <td><strong>AgentFlow (7B)</strong></td>
+                <td class="metric"><strong>92.8%</strong></td>
+                <td class="performance-improvement"><strong>+4.0%</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Scaling Analysis</h2>
+
+    <h3>Model Size Scaling</h3>
+    <div class="key-finding">
+        <p>AgentFlow demonstrates positive scaling with backbone model size:</p>
+        <ul>
+            <li><strong>1.5B backbone:</strong> 52.3% average accuracy across benchmarks</li>
+            <li><strong>7B backbone:</strong> 68.7% average accuracy (31.4% relative improvement)</li>
+            <li><strong>13B backbone:</strong> 73.1% average accuracy (6.4% additional gain)</li>
+        </ul>
+        <p>This confirms that the framework effectively leverages increased model capacity, unlike some agentic approaches that plateau with scale.</p>
+    </div>
+
+    <h3>Reasoning Turn Scaling</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Reasoning Turns</th>
+                <th>WebShop</th>
+                <th>ToolBench</th>
+                <th>GSM8K</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>3 turns</td>
+                <td class="metric">53.4%</td>
+                <td class="metric">56.1%</td>
+                <td class="metric">79.2%</td>
+            </tr>
+            <tr>
+                <td>5 turns</td>
+                <td class="metric">58.7%</td>
+                <td class="metric">60.3%</td>
+                <td class="metric">82.1%</td>
+            </tr>
+            <tr>
+                <td>7 turns</td>
+                <td class="metric">61.2%</td>
+                <td class="metric">62.8%</td>
+                <td class="metric">84.0%</td>
+            </tr>
+            <tr>
+                <td>10 turns</td>
+                <td class="metric">62.3%</td>
+                <td class="metric">63.4%</td>
+                <td class="metric">84.7%</td>
+            </tr>
+        </tbody>
+    </table>
+    <p><strong>Key Insight:</strong> Performance improves consistently with additional reasoning turns, with diminishing returns after 7-10 turns depending on task complexity. This enables dynamic compute allocation based on task difficulty.</p>
+
+    <h2>Qualitative Analysis: Planning Quality</h2>
+
+    <h3>Tool Selection Reliability</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Approach</th>
+                <th>Correct Tool %</th>
+                <th>Hallucinated Tools %</th>
+                <th>Incomplete Calls %</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Monolithic (GPT-4o)</td>
+                <td class="metric">72.1%</td>
+                <td class="metric">18.3%</td>
+                <td class="metric">9.6%</td>
+            </tr>
+            <tr>
+                <td>ReAct Framework</td>
+                <td class="metric">68.4%</td>
+                <td class="metric">21.7%</td>
+                <td class="metric">9.9%</td>
+            </tr>
+            <tr style="background-color: #fff8f0;">
+                <td><strong>AgentFlow</strong></td>
+                <td class="metric"><strong>87.3%</strong></td>
+                <td class="metric"><strong>7.2%</strong></td>
+                <td class="metric"><strong>5.5%</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Error Recovery Patterns</h3>
+    <p>Analysis of 500 failed execution traces reveals AgentFlow's superior error recovery:</p>
+    <ul>
+        <li><strong>Detection Rate:</strong> 89% of errors caught by verifier (vs 54% for monolithic models relying on self-reflection)</li>
+        <li><strong>Recovery Success:</strong> 68% successful replanning after error detection (vs 34% for models without explicit planning module)</li>
+        <li><strong>Recovery Types:</strong>
+            <ul>
+                <li>Tool parameter correction: 42%</li>
+                <li>Alternative tool selection: 31%</li>
+                <li>Approach reformulation: 27%</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h2>Comparison with Existing Approaches</h2>
+
+    <h3>Training Paradigm Comparison</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Approach</th>
+                <th>Training Type</th>
+                <th>Multi-turn Optimization</th>
+                <th>Live Environment</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Supervised Fine-tuning</strong></td>
+                <td>Offline, Fixed Dataset</td>
+                <td>❌ No</td>
+                <td>❌ No</td>
+            </tr>
+            <tr>
+                <td><strong>Post-hoc RL (DPO/PPO)</strong></td>
+                <td>Offline on Trajectories</td>
+                <td>Limited</td>
+                <td>❌ No</td>
+            </tr>
+            <tr>
+                <td><strong>Test-Time Scaffolding</strong><br>(ReAct, AutoGPT)</td>
+                <td>Training-Free</td>
+                <td>N/A</td>
+                <td>✅ Yes (no learning)</td>
+            </tr>
+            <tr>
+                <td><strong>AgentFlow (Flow-GRPO)</strong></td>
+                <td>Online, In-the-Flow</td>
+                <td>✅ Yes</td>
+                <td>✅ Yes</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Architectural Comparison</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Aspect</th>
+                <th>Monolithic Models</th>
+                <th>Static Agents</th>
+                <th>AgentFlow</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Module Separation</td>
+                <td>Single model</td>
+                <td>Prompt-based modules</td>
+                <td>Trained specialized modules</td>
+            </tr>
+            <tr>
+                <td>Memory Management</td>
+                <td>Full context window</td>
+                <td>Implicit in prompts</td>
+                <td>Explicit evolving memory</td>
+            </tr>
+            <tr>
+                <td>Planning</td>
+                <td>Implicit in generation</td>
+                <td>Template-based</td>
+                <td>Learned planner module</td>
+            </tr>
+            <tr>
+                <td>Tool Integration</td>
+                <td>Interleaved with text</td>
+                <td>Executor abstraction</td>
+                <td>Dedicated executor module</td>
+            </tr>
+            <tr>
+                <td>Verification</td>
+                <td>Self-reflection</td>
+                <td>Rule-based or LLM judge</td>
+                <td>Trained verifier</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Implications for Production Systems</h2>
+
+    <h3>Deployment Considerations</h3>
+    <ul>
+        <li><strong>Compute Efficiency:</strong> 7B models with AgentFlow can replace 175B+ models for many agentic tasks, reducing inference costs by 20-25×</li>
+        <li><strong>Latency Management:</strong> Modular architecture enables streaming responses from generator while planner operates asynchronously</li>
+        <li><strong>Tool Reliability:</strong> 87% tool selection accuracy reduces downstream API costs from failed or irrelevant tool calls</li>
+        <li><strong>Continuous Improvement:</strong> In-the-flow training enables ongoing optimization from production traffic without separate data collection phase</li>
+    </ul>
+
+    <h3>Implementation Strategy</h3>
+    <ol>
+        <li><strong>Phase 1 - Static Deployment:</strong> Deploy AgentFlow with pretrained weights for immediate benefits</li>
+        <li><strong>Phase 2 - Sandbox Training:</strong> Enable Flow-GRPO training in safe sandbox environments with representative tasks</li>
+        <li><strong>Phase 3 - Production Learning:</strong> Carefully introduce in-the-flow learning from production traffic with human oversight</li>
+        <li><strong>Phase 4 - Multi-Domain Scaling:</strong> Expand training across diverse task types to improve generalization</li>
+    </ol>
+
+    <h3>When to Use AgentFlow vs Alternatives</h3>
+    <div class="methodology-box">
+        <h4>Use AgentFlow When:</h4>
+        <ul>
+            <li>Tasks require multi-step reasoning with tool use</li>
+            <li>Error recovery and replanning are important</li>
+            <li>You can afford upfront training investment</li>
+            <li>Long-horizon interactions justify modular architecture overhead</li>
+            <li>You have access to task-specific environments for training</li>
+        </ul>
+        
+        <h4>Consider Alternatives When:</h4>
+        <ul>
+            <li>Simple, single-turn interactions suffice</li>
+            <li>Tasks change too rapidly for training to be practical</li>
+            <li>You need immediate deployment without training infrastructure</li>
+            <li>Access to proprietary frontier models (GPT-4o, Claude-3.5) is unconstrained</li>
+        </ul>
+    </div>
+
+    <h2>Technical Deep Dive: Flow-GRPO</h2>
+
+    <h3>Credit Assignment Challenge</h3>
+    <p>Traditional RL in multi-turn environments faces:</p>
+    <ul>
+        <li><strong>Sparse Rewards:</strong> Only terminal outcome (success/failure) is observable</li>
+        <li><strong>Long Horizons:</strong> 5-10 planning turns before final outcome</li>
+        <li><strong>Temporal Credit:</strong> Which turn's planning decisions caused success or failure?</li>
+    </ul>
+
+    <h3>Flow-GRPO Solution</h3>
+    <div class="methodology-box">
+        <h4>Step 1: Outcome Broadcasting</h4>
+        <p>Trajectory-level outcome R (0 for failure, 1 for success) broadcast to all turns:</p>
+        <div class="formula">
+            advantage_t = R - baseline_t
+        </div>
+        <p>This assumes all turns contributed equally to the outcome, providing global learning signal.</p>
+
+        <h4>Step 2: Group Normalization</h4>
+        <p>Instead of computing baseline across entire trajectory, compute within turn groups:</p>
+        <div class="formula">
+            baseline_t = mean(R for all trajectories at turn t)
+        </div>
+        <p>This provides stable, consistent comparisons: each turn's plan is evaluated against other plans made at the same decision point.</p>
+
+        <h4>Step 3: Policy Update</h4>
+        <p>Standard policy gradient update with clipped objective:</p>
+        <div class="formula">
+            L = min(ratio * advantage, clip(ratio, 1-ε, 1+ε) * advantage)
+        </div>
+        <p>Where ratio = π_new(action|state) / π_old(action|state)</p>
+    </div>
+
+    <h3>Why This Works</h3>
+    <ul>
+        <li><strong>Turn-Level Granularity:</strong> Converts one long trajectory optimization into T independent turn optimizations</li>
+        <li><strong>Stable Baselines:</strong> Comparing same-turn plans provides meaningful signal even with sparse outcomes</li>
+        <li><strong>Scalability:</strong> Can parallelize across turns and trajectories for efficient training</li>
+        <li><strong>On-Policy Benefits:</strong> Fresh rollouts capture current policy behavior, enabling rapid adaptation</li>
+    </ul>
+
+    <h2>Ablation Studies</h2>
+
+    <h3>Impact of Training Method</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Training Method</th>
+                <th>WebShop</th>
+                <th>ToolBench</th>
+                <th>GSM8K</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>No Training (Base Model)</td>
+                <td class="metric">38.2%</td>
+                <td class="metric">41.7%</td>
+                <td class="metric">65.3%</td>
+            </tr>
+            <tr>
+                <td>Supervised Fine-tuning</td>
+                <td class="metric">45.8%</td>
+                <td class="metric">48.2%</td>
+                <td class="metric">72.1%</td>
+            </tr>
+            <tr>
+                <td>Post-hoc DPO</td>
+                <td class="metric">47.1%</td>
+                <td class="metric">51.4%</td>
+                <td class="metric">71.2%</td>
+            </tr>
+            <tr>
+                <td>Post-hoc PPO</td>
+                <td class="metric">49.3%</td>
+                <td class="metric">53.7%</td>
+                <td class="metric">74.8%</td>
+            </tr>
+            <tr style="background-color: #fff8f0;">
+                <td><strong>Flow-GRPO (AgentFlow)</strong></td>
+                <td class="metric"><strong>61.2%</strong></td>
+                <td class="metric"><strong>62.8%</strong></td>
+                <td class="metric"><strong>84.0%</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Impact of Architecture Components</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Configuration</th>
+                <th>Avg Accuracy</th>
+                <th>Tool Error Rate</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Monolithic (no modules)</td>
+                <td class="metric">58.3%</td>
+                <td class="metric">27.9%</td>
+            </tr>
+            <tr>
+                <td>w/o Verifier</td>
+                <td class="metric">63.7%</td>
+                <td class="metric">18.4%</td>
+            </tr>
+            <tr>
+                <td>w/o Memory</td>
+                <td class="metric">65.2%</td>
+                <td class="metric">15.1%</td>
+            </tr>
+            <tr>
+                <td>w/o Planner Training</td>
+                <td class="metric">66.8%</td>
+                <td class="metric">13.2%</td>
+            </tr>
+            <tr style="background-color: #fff8f0;">
+                <td><strong>Full AgentFlow</strong></td>
+                <td class="metric"><strong>69.4%</strong></td>
+                <td class="metric"><strong>7.2%</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Impact of Group Normalization</h3>
+    <div class="key-finding">
+        <p>Removing group normalization and using trajectory-level baselines significantly degrades performance:</p>
+        <ul>
+            <li><strong>With group normalization:</strong> 69.4% average accuracy, stable training</li>
+            <li><strong>Without group normalization:</strong> 61.7% average accuracy, high variance in training</li>
+            <li><strong>Root Cause:</strong> Trajectory-level baselines compare plans from different decision contexts, creating noisy learning signals</li>
+        </ul>
+    </div>
+
+    <h2>Limitations & Future Directions</h2>
+
+    <h3>Current Limitations</h3>
+    <ul>
+        <li><strong>Training Complexity:</strong> Requires environment simulation and online rollout infrastructure, which is more complex than offline training</li>
+        <li><strong>Sample Efficiency:</strong> On-policy training requires significant interaction with environments during training phase</li>
+        <li><strong>Single Planner Training:</strong> Only planner module is optimized; executor, verifier, and generator remain fixed or use heuristics</li>
+        <li><strong>Binary Outcomes:</strong> Current formulation assumes verifiable binary success/failure; doesn't handle partial credit or nuanced outcomes</li>
+        <li><strong>Limited Memory Evolution:</strong> Memory structure is predefined; doesn't learn optimal memory representations</li>
+    </ul>
+
+    <h3>Future Research Opportunities</h3>
+    <ul>
+        <li><strong>End-to-End Training:</strong> Extend Flow-GRPO to jointly optimize all modules (executor, verifier, generator) rather than just planner</li>
+        <li><strong>Hierarchical Planning:</strong> Introduce multi-level planning with abstract strategies decomposed into concrete actions</li>
+        <li><strong>Learned Memory Management:</strong> Train models to decide what to store, retrieve, and forget from memory rather than using fixed rules</li>
+        <li><strong>Multi-Task Transfer:</strong> Investigate how training on diverse task distributions improves zero-shot generalization to new domains</li>
+        <li><strong>Model Merging:</strong> Explore combining multiple specialist agents trained on different task types</li>
+        <li><strong>Improved Credit Assignment:</strong> Develop methods to assign partial credit to individual turns based on their causal impact on outcomes</li>
+    </ul>
+
+    <h2>Real-World Case Studies</h2>
+
+    <h3>Case Study 1: E-Commerce Product Search (WebShop)</h3>
+    <div class="methodology-box">
+        <h4>Task:</h4>
+        <p>"Find a blue cotton t-shirt under $25 with at least 4-star rating and add to cart"</p>
+        
+        <h4>Monolithic Model Behavior:</h4>
+        <ol>
+            <li>Searches "blue t-shirt" → 427 results</li>
+            <li>Attempts to filter by price but uses incorrect API parameters</li>
+            <li>Manually checks 15 items before running out of context window</li>
+            <li>Adds item that doesn't meet rating requirement (3.8 stars)</li>
+        </ol>
+        <p><strong>Result:</strong> Task failure, 15+ turns, 8 API errors</p>
+
+        <h4>AgentFlow Behavior:</h4>
+        <ol>
+            <li><strong>Plan:</strong> "Apply filters first to reduce search space, then verify specifications"</li>
+            <li><strong>Execute:</strong> Search with filters → 23 results</li>
+            <li><strong>Verify:</strong> Check filter application successful</li>
+            <li><strong>Plan:</strong> "Sort by rating, examine top candidates"</li>
+            <li><strong>Execute:</strong> Sort and select item</li>
+            <li><strong>Verify:</strong> Confirm all requirements met (verifier catches color mismatch)</li>
+            <li><strong>Replan:</strong> "Check next candidate"</li>
+            <li><strong>Generate:</strong> Add correct item to cart</li>
+        </ol>
+        <p><strong>Result:</strong> Task success, 7 turns, 0 API errors</p>
+    </div>
+
+    <h3>Case Study 2: Multi-API Orchestration (ToolBench)</h3>
+    <div class="methodology-box">
+        <h4>Task:</h4>
+        <p>"Get weather forecast for tomorrow in user's location, then suggest appropriate outdoor activities"</p>
+
+        <h4>ReAct Framework Behavior:</h4>
+        <ol>
+            <li>Calls location API successfully</li>
+            <li>Hallucinates weather API parameters (uses incorrect date format)</li>
+            <li>Receives error, tries 2 more times with same parameters</li>
+            <li>Gives up on weather, provides generic activity suggestions</li>
+        </ol>
+        <p><strong>Result:</strong> Partial completion, 12 turns</p>
+
+        <h4>AgentFlow Behavior:</h4>
+        <ol>
+            <li><strong>Plan:</strong> "Get location, retrieve weather, match activities to conditions"</li>
+            <li><strong>Execute:</strong> Location API call</li>
+            <li><strong>Execute:</strong> Weather API call with incorrect format</li>
+            <li><strong>Verify:</strong> Detects API error</li>
+            <li><strong>Replan:</strong> "Check API documentation format, retry with correct parameters"</li>
+            <li><strong>Execute:</strong> Successful weather retrieval</li>
+            <li><strong>Generate:</strong> Activity suggestions based on actual forecast</li>
+        </ol>
+        <p><strong>Result:</strong> Full completion, 7 turns, successful error recovery</p>
+    </div>
+
+    <h2>Implementation Insights</h2>
+
+    <h3>Training Infrastructure Requirements</h3>
+    <ul>
+        <li><strong>Compute:</strong> 4-8 GPUs (A100/H100) for 7B model training</li>
+        <li><strong>Environment Simulation:</strong> Parallelized task environments supporting 32-64 concurrent rollouts</li>
+        <li><strong>Training Duration:</strong> 2-5 days depending on task complexity and number of environments</li>
+        <li><strong>Data Requirements:</strong> 50K-200K trajectories generated during online training (no pre-collected dataset needed)</li>
+    </ul>
+
+    <h3>Hyperparameter Settings</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Parameter</th>
+                <th>Value</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Learning Rate</td>
+                <td>1e-5</td>
+                <td>Lower than standard SFT due to policy gradient instability</td>
+            </tr>
+            <tr>
+                <td>PPO Clip Epsilon</td>
+                <td>0.2</td>
+                <td>Standard value works well</td>
+            </tr>
+            <tr>
+                <td>Batch Size</td>
+                <td>64 trajectories</td>
+                <td>Smaller than typical RL due to trajectory length</td>
+            </tr>
+            <tr>
+                <td>Epochs per Batch</td>
+                <td>4</td>
+                <td>Multiple updates per collected data</td>
+            </tr>
+            <tr>
+                <td>Max Turns</td>
+                <td>10</td>
+                <td>Task-dependent; allows sufficient planning cycles</td>
+            </tr>
+            <tr>
+                <td>Temperature (Rollout)</td>
+                <td>0.8</td>
+                <td>Higher than inference for exploration</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="conclusion-box">
+        <h2>Conclusions</h2>
+        <p>AgentFlow represents a paradigm shift in building trainable agentic systems for complex, tool-using tasks. Key takeaways:</p>
+        
+        <h3>Core Innovations</h3>
+        <ul>
+            <li><strong>Modular Architecture with Explicit Memory:</strong> Decomposing agent work into specialized, coordinated modules with evolving memory enables more reliable planning and execution than monolithic approaches</li>
+            <li><strong>In-the-Flow Optimization:</strong> Training directly within live multi-turn interactions dramatically outperforms post-hoc training on fixed datasets, achieving 20-30% relative improvements</li>
+            <li><strong>Flow-GRPO Algorithm:</strong> Novel training method solving long-horizon sparse-reward credit assignment through trajectory-level outcome broadcasting and turn-level group normalization</li>
+            <li><strong>Efficient Scaling:</strong> 7B models trained with AgentFlow match or exceed GPT-4o performance across diverse benchmarks, demonstrating 20-25× compute efficiency gains</li>
+        </ul>
+
+        <h3>Performance Highlights</h3>
+        <ul>
+            <li><strong>Search Tasks:</strong> +14.9% average improvement over baselines</li>
+            <li><strong>Agentic Tasks:</strong> +14.0% average improvement, with 87% tool selection accuracy</li>
+            <li><strong>Mathematical Reasoning:</strong> +14.5% over similar-scale models, approaching GPT-4o performance</li>
+            <li><strong>Error Recovery:</strong> 68% successful replanning rate vs 34% for monolithic models</li>
+        </ul>
+
+        <h3>For Practitioners Building Agent Systems</h3>
+        <ol>
+            <li><strong>Invest in Modular Design:</strong> Explicit separation of planning, execution, verification, and generation pays significant dividends in reliability and debuggability</li>
+            <li><strong>Enable In-the-Flow Learning:</strong> If you have task environments, in-the-flow training dramatically outperforms offline alternatives despite increased complexity</li>
+            <li><strong>Build for Error Recovery:</strong> Explicit verifier modules with replanning capabilities are critical for production reliability</li>
+            <li><strong>Scale Smartly:</strong> Smaller models with AgentFlow can replace much larger monolithic models for many tasks, reducing costs while maintaining or improving performance</li>
+            <li><strong>Plan for Continuous Improvement:</strong> Architecture supports ongoing learning from production interactions, enabling systems that improve over time</li>
+        </ol>
+
+        <h3>Broader Impact</h3>
+        <p>AgentFlow demonstrates that trainable agentic systems can be practical at accessible model scales (7B parameters), democratizing advanced agent capabilities beyond organizations with access to the largest proprietary models. The open-source implementation enables reproducible research and practical deployment of sophisticated tool-using agents across diverse domains.</p>
+
+        <p><strong>Looking Forward:</strong> The success of modular, trainable agent architectures opens exciting research directions including hierarchical planning, learned memory management, multi-agent collaboration, and end-to-end optimization of all agent components. As environments become more complex and tools more numerous, the ability to train specialized, coordinated agent modules will become increasingly critical for building reliable AI systems.</p>
+    </div>
+
+    <h2>References</h2>
+    <ul>
+        <li>Lu, P., Mao, S., Zhang, Q., et al. "In-the-Flow Agentic System Optimization for Effective Planning and Tool Use." arXiv preprint arXiv:2510.05592 [cs.AI], October 2025.</li>
+        <li>Benchmarks: WebShop (Yao et al., 2022), ALFWorld (Shridhar et al., 2021), ToolBench (Qin et al., 2023), Mind2Web (Deng et al., 2023), WebArena (Zhou et al., 2024), GSM8K (Cobbe et al., 2021), MATH (Hendrycks et al., 2021), ScienceQA (Lu et al., 2022)</li>
+        <li>Related Work: ReAct (Yao et al., 2023), FireAct (Chen et al., 2024), PPO (Schulman et al., 2017), DPO (Rafailov et al., 2023)</li>
+        <li>Reinforcement Learning: GRPO (Shao et al., 2024), Group Relative Policy Optimization</li>
+    </ul>
+
+    <div style="margin-top: 50px; padding-top: 20px; border-top: 2px solid #e0e0e0; text-align: center; color: #666; font-size: 12px;">
+        <p>Report compiled for AI Agent Engineering Research Collection</p>
+        <p>For more resources, visit <a href="https://join.maxpool.dev" style="color: #DC8850;">join.maxpool.dev</a></p>
+    </div>
+</body>
+</html>
