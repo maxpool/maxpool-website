@@ -3,829 +3,627 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Reliability Research: Half-Life Analysis & Long Task Completion | MaxPool</title>
-    <meta name="description" content="Understanding when AI becomes reliable: Half-life framework meets exponential capability growth. Analysis of AI task completion reliability and future projections.">
+    <title>AI Reliability Timeline: Half-Life Analysis & Long Task Completion</title>
     <style>
-        :root {
-            --primary: #00ffcc;
-            --secondary: #b794f6;
-            --bg-dark: #0a0e1a;
-            --bg-card: #1a1f2e;
-            --text-primary: #e2e8f0;
-            --text-secondary: #94a3b8;
-            --border: #2d3748;
-            --success: #48bb78;
-            --warning: #f6ad55;
-            --danger: #fc8181;
+        @page {
+            margin: 2cm;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-            background: linear-gradient(135deg, #0a0e1a 0%, #1a1f2e 100%);
-            color: var(--text-primary);
+            font-family: 'Georgia', 'Times New Roman', serif;
             line-height: 1.6;
-            min-height: 100vh;
-        }
-
-        .header {
-            background: rgba(10, 14, 26, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            max-width: 1400px;
+            color: #333;
+            max-width: 900px;
             margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding: 20px;
+            background: white;
         }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 600;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary);
-        }
-
-        .community-btn {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: var(--bg-dark);
-            padding: 0.5rem 1.25rem;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .community-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 255, 204, 0.3);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 3rem 2rem;
-        }
-
-        .hero {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
         h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 1rem;
-            line-height: 1.2;
-        }
-
-        .subtitle {
-            font-size: 1.25rem;
-            color: var(--text-secondary);
-            max-width: 800px;
-            margin: 0 auto 2rem;
-        }
-
-        .meta-info {
-            display: flex;
-            gap: 2rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 2rem;
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--text-secondary);
-        }
-
-        .meta-item svg {
-            width: 20px;
-            height: 20px;
-            opacity: 0.8;
-        }
-
-        .section {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 2.5rem;
-            margin-bottom: 2rem;
-            border: 1px solid var(--border);
-        }
-
-        h2 {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            color: var(--primary);
-        }
-
-        h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--secondary);
-        }
-
-        h4 {
-            font-size: 1.2rem;
-            margin-bottom: 0.75rem;
-            color: var(--text-primary);
-        }
-
-        .key-insight {
-            background: linear-gradient(135deg, rgba(0, 255, 204, 0.1), rgba(183, 148, 246, 0.1));
-            border-left: 4px solid var(--primary);
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin: 1.5rem 0;
-        }
-
-        .key-insight h4 {
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .metric-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-
-        .metric-card {
-            background: rgba(10, 14, 26, 0.5);
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            transition: transform 0.3s, border-color 0.3s;
-        }
-
-        .metric-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--primary);
-        }
-
-        .metric-value {
-            font-size: 2rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .metric-label {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
-        }
-
-        .formula-box {
-            background: rgba(10, 14, 26, 0.8);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
-            overflow-x: auto;
-        }
-
-        .formula-box code {
-            color: var(--primary);
-            font-size: 1rem;
-        }
-
-        .comparison-table {
-            width: 100%;
-            margin: 2rem 0;
-            border-collapse: separate;
-            border-spacing: 0;
-            overflow: hidden;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-        }
-
-        .comparison-table th {
-            background: rgba(0, 255, 204, 0.1);
-            padding: 1rem;
-            text-align: left;
-            font-weight: 600;
-            border-bottom: 2px solid var(--border);
-        }
-
-        .comparison-table td {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border);
-            background: rgba(10, 14, 26, 0.3);
-        }
-
-        .comparison-table tr:hover td {
-            background: rgba(0, 255, 204, 0.05);
-        }
-
-        .chart-placeholder {
-            background: rgba(10, 14, 26, 0.8);
-            border: 2px dashed var(--border);
-            border-radius: 12px;
-            padding: 3rem;
+            color: #1a1a1a;
+            font-size: 28px;
+            margin-bottom: 10px;
             text-align: center;
-            margin: 2rem 0;
+            border-bottom: 2px solid #DC8850;
+            padding-bottom: 15px;
         }
-
-        .chart-placeholder img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
+        h2 {
+            color: #DC8850;
+            font-size: 22px;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 8px;
         }
-
-        .chart-caption {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-top: 1rem;
-            font-style: italic;
-        }
-
-        .timeline {
-            position: relative;
-            padding: 2rem 0;
-        }
-
-        .timeline-item {
-            display: flex;
-            align-items: center;
-            margin: 2rem 0;
-            position: relative;
-        }
-
-        .timeline-marker {
-            width: 12px;
-            height: 12px;
-            background: var(--primary);
-            border-radius: 50%;
-            margin-right: 2rem;
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
-        }
-
-        .timeline-content {
-            flex: 1;
-            background: rgba(10, 14, 26, 0.5);
-            padding: 1.5rem;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-        }
-
-        .timeline-date {
-            color: var(--secondary);
+        h3 {
+            color: #555;
+            font-size: 18px;
+            margin-top: 25px;
+            margin-bottom: 12px;
             font-weight: 600;
-            margin-bottom: 0.5rem;
         }
-
+        .authors {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 30px;
+            color: #666;
+        }
+        .abstract {
+            background: #f8f8f8;
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding {
+            background: #fff8f0;
+            padding: 15px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding h3 {
+            margin-top: 0;
+            color: #DC8850;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #DC8850;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .metric {
+            font-weight: bold;
+            color: #DC8850;
+        }
+        .performance-improvement {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .performance-decline {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .methodology-box {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .conclusion-box {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
         .badge {
             display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 4px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-right: 0.5rem;
+            padding: 4px 10px;
+            background: #DC8850;
+            color: white;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 8px;
         }
-
         .badge-success {
-            background: rgba(72, 187, 120, 0.2);
-            color: var(--success);
-            border: 1px solid var(--success);
+            background: #27ae60;
         }
-
         .badge-warning {
-            background: rgba(246, 173, 85, 0.2);
-            color: var(--warning);
-            border: 1px solid var(--warning);
+            background: #f39c12;
         }
-
         .badge-danger {
-            background: rgba(252, 129, 129, 0.2);
-            color: var(--danger);
-            border: 1px solid var(--danger);
+            background: #e74c3c;
         }
-
-        .source-links {
-            display: flex;
-            gap: 1rem;
-            margin: 2rem 0;
-            flex-wrap: wrap;
-        }
-
-        .source-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.25rem;
-            background: rgba(10, 14, 26, 0.8);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text-primary);
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-
-        .source-link:hover {
-            border-color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 255, 204, 0.2);
-        }
-
-        .footer {
+        .formula {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
             text-align: center;
-            padding: 3rem 2rem;
-            border-top: 1px solid var(--border);
-            margin-top: 4rem;
+            margin: 20px 0;
+            overflow-x: auto;
         }
-
-        .footer p {
-            color: var(--text-secondary);
+        .eli5-box {
+            background: #e8f5e9;
+            padding: 20px;
+            border-left: 4px solid #4caf50;
+            margin: 20px 0;
+            font-size: 15px;
         }
-
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-
-            .subtitle {
-                font-size: 1rem;
-            }
-
-            .section {
-                padding: 1.5rem;
-            }
-
-            .nav-links {
-                display: none;
-            }
+        .eli5-box h3 {
+            margin-top: 0;
+            color: #4caf50;
+        }
+        .figure {
+            margin: 30px 0;
+            text-align: center;
+        }
+        .figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .figure-caption {
+            font-style: italic;
+            color: #666;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .timeline-box {
+            background: linear-gradient(to right, #f8f8f8, #fff);
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+            position: relative;
+        }
+        .timeline-item {
+            margin: 15px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        .timeline-item:before {
+            content: "•";
+            position: absolute;
+            left: 10px;
+            color: #DC8850;
+            font-size: 20px;
+        }
+        .timeline-date {
+            font-weight: bold;
+            color: #DC8850;
+        }
+        .insight-box {
+            background: #fffbf0;
+            border: 2px solid #DC8850;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        .insight-box h3 {
+            color: #DC8850;
+            margin-top: 0;
+        }
+        .source-box {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .source-box a {
+            color: #DC8850;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .source-box a:hover {
+            text-decoration: underline;
+        }
+        .navigation {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f8f8;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #DC8850;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        .navigation a:hover {
+            text-decoration: underline;
+        }
+        p {
+            margin: 15px 0;
+            text-align: justify;
         }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="header-content">
-            <a href="../index.html" class="logo">MaxPool</a>
-            <nav class="nav-links">
-                <a href="../agent/index.html">Agent Reliability</a>
-                <a href="../rag/index.html">RAG Patterns</a>
-                <a href="../frameworks/index.html">Frameworks</a>
-                <a href="../research-papers/index.html" style="color: var(--primary);">Research</a>
-                <a href="https://join.maxpool.dev" class="community-btn" target="_blank">Join Community</a>
-            </nav>
-        </div>
-    </header>
-
-    <div class="container">
-        <div class="hero">
-            <h1>When Will AI Become Reliable?</h1>
-            <p class="subtitle">Combining half-life analysis with exponential growth patterns to predict AI reliability thresholds for real-world tasks</p>
-
-            <div class="meta-info">
-                <div class="meta-item">
-                    <svg fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M10 2a8 8 0 100 16 8 8 0 000-16zM10 12a1 1 0 01-1-1V7a1 1 0 112 0v4a1 1 0 01-1 1z"/>
-                    </svg>
-                    <span>January 2025 Analysis</span>
-                </div>
-                <div class="meta-item">
-                    <svg fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3.293 1.293a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 01-1.414-1.414L7.586 10 5.293 7.707a1 1 0 010-1.414z"/>
-                    </svg>
-                    <span>Combined Research from METR & Toby Ord</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Executive Summary -->
-        <section class="section">
-            <h2>📊 Executive Summary</h2>
-
-            <div class="key-insight">
-                <h4>The Convergence Point</h4>
-                <p>Two independent research approaches reveal a unified picture: AI agents fail at a constant rate per unit time (half-life model), but this rate is improving exponentially (doubling every 7 months). This creates predictable reliability thresholds we can project into the future.</p>
-            </div>
-
-            <div class="metric-grid">
-                <div class="metric-card">
-                    <div class="metric-value">7 months</div>
-                    <div class="metric-label">Task completion capability doubling time</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-value">50 minutes</div>
-                    <div class="metric-label">Current 50% success time horizon (2025)</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-value">~2030</div>
-                    <div class="metric-label">Projected month-long task automation</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-value">1/70×</div>
-                    <div class="metric-label">Task length reduction for 99% reliability</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Half-Life Framework -->
-        <section class="section">
-            <h2>⚛️ The Half-Life Framework</h2>
-            <h3>Understanding AI Failure Through Survival Analysis</h3>
-
-            <p>Toby Ord's breakthrough insight: AI agent performance follows the same mathematical patterns as radioactive decay. Each agent has a measurable "half-life" - the task duration where success probability drops to 50%.</p>
-
-            <div class="formula-box">
-                <code>
-                    P(success) = e^(-λt)<br>
-                    where λ = ln(2) / half_life<br>
-                    and t = task duration
-                </code>
-            </div>
-
-            <h4>Key Reliability Relationships</h4>
-            <table class="comparison-table">
-                <thead>
-                    <tr>
-                        <th>Target Success Rate</th>
-                        <th>Required Task Length Reduction</th>
-                        <th>Practical Implication</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><span class="badge badge-warning">80%</span></td>
-                        <td>1/3 of half-life duration</td>
-                        <td>Suitable for monitored automation</td>
-                    </tr>
-                    <tr>
-                        <td><span class="badge badge-success">90%</span></td>
-                        <td>1/7 of half-life duration</td>
-                        <td>Production-ready with fallbacks</td>
-                    </tr>
-                    <tr>
-                        <td><span class="badge badge-success">99%</span></td>
-                        <td>1/70 of half-life duration</td>
-                        <td>Autonomous operation possible</td>
-                    </tr>
-                    <tr>
-                        <td><span class="badge badge-danger">99.9%</span></td>
-                        <td>1/700 of half-life duration</td>
-                        <td>Mission-critical applications</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div class="chart-placeholder">
-                <p>📈 Exponential Decay Curves</p>
-                <div class="chart-caption">Success probability decreases exponentially with task duration, following P(t) = e^(-λt)</div>
-            </div>
-
-            <div class="key-insight">
-                <h4>Why This Matters</h4>
-                <p>The half-life model reveals that current AI lacks error recovery mechanisms. Each minute of operation carries a constant failure probability, compounding over time. This explains why "just make the context longer" doesn't solve reliability problems.</p>
-            </div>
-        </section>
-
-        <!-- METR Long Tasks Study -->
-        <section class="section">
-            <h2>📈 Exponential Capability Growth</h2>
-            <h3>METR's Analysis of AI Task Completion Over Time</h3>
-
-            <p>While the half-life model explains <em>how</em> AI fails, METR's comprehensive study reveals <em>how fast</em> this is improving. Their analysis of 13 frontier models from 2019-2025 shows consistent exponential growth.</p>
-
-            <h4>The 50% Task Completion Time Horizon</h4>
-            <p>METR introduced a crucial metric: the duration of tasks (measured in human time) that AI can complete with 50% success rate.</p>
-
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-date">2019</div>
-                        <p><strong>~3 minutes</strong> - Early GPT models handle only brief interactions</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-date">2021</div>
-                        <p><strong>~12 minutes</strong> - GPT-3 era enables short coding tasks</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-date">2023</div>
-                        <p><strong>~25 minutes</strong> - ChatGPT/Claude handle moderate complexity</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-date">2025 (Current)</div>
-                        <p><strong>~50 minutes</strong> - Claude 3.7 Sonnet approaches hour-long tasks</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-date">2027 (Projected)</div>
-                        <p><strong>~3.5 hours</strong> - Half-day task automation feasible</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-date">2030 (Projected)</div>
-                        <p><strong>~1 month</strong> - Complex project automation possible</p>
-                    </div>
-                </div>
-            </div>
-
-            <h4>Methodology & Validation</h4>
-            <div class="metric-grid">
-                <div class="metric-card">
-                    <h4>HCAST Benchmark</h4>
-                    <p>Existing task suite for model comparison</p>
-                </div>
-                <div class="metric-card">
-                    <h4>RE-Bench</h4>
-                    <p>Research engineering tasks with real-world complexity</p>
-                </div>
-                <div class="metric-card">
-                    <h4>SWAA Dataset</h4>
-                    <p>66 atomic software tasks for historical models</p>
-                </div>
-            </div>
-
-            <div class="chart-placeholder">
-                <p>📊 Exponential Growth in Task Completion Time</p>
-                <div class="chart-caption">Log-scale plot showing 7-month doubling time with 95% confidence intervals</div>
-            </div>
-        </section>
-
-        <!-- Combined Analysis -->
-        <section class="section">
-            <h2>🔬 Synthesis: When AI Becomes Reliable</h2>
-            <h3>Combining Half-Life Decay with Exponential Growth</h3>
-
-            <p>By merging both frameworks, we can predict specific reliability thresholds:</p>
-
-            <div class="formula-box">
-                <code>
-                    Task_Duration(year) = 50min × 2^((year-2025)×12/7)<br>
-                    Reliability(duration, year) = e^(-duration / Task_Duration(year))<br>
-                </code>
-            </div>
-
-            <h4>Reliability Projections by Use Case</h4>
-            <table class="comparison-table">
-                <thead>
-                    <tr>
-                        <th>Use Case</th>
-                        <th>Required Reliability</th>
-                        <th>Task Duration</th>
-                        <th>Projected Ready Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Code Review Assistant</td>
-                        <td>80%</td>
-                        <td>15 minutes</td>
-                        <td><span class="badge badge-success">Now (2025)</span></td>
-                    </tr>
-                    <tr>
-                        <td>Bug Fix Automation</td>
-                        <td>90%</td>
-                        <td>7 minutes</td>
-                        <td><span class="badge badge-success">Now (2025)</span></td>
-                    </tr>
-                    <tr>
-                        <td>Feature Implementation</td>
-                        <td>80%</td>
-                        <td>2 hours</td>
-                        <td><span class="badge badge-warning">2026</span></td>
-                    </tr>
-                    <tr>
-                        <td>Sprint Automation</td>
-                        <td>90%</td>
-                        <td>1 day</td>
-                        <td><span class="badge badge-warning">2028</span></td>
-                    </tr>
-                    <tr>
-                        <td>Project Management</td>
-                        <td>99%</td>
-                        <td>1 week</td>
-                        <td><span class="badge badge-danger">2030+</span></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div class="key-insight">
-                <h4>The Reliability Cliff</h4>
-                <p>The exponential nature of both curves creates a "reliability cliff" - tasks slightly beyond current capabilities have near-zero success rates, but become suddenly feasible as capabilities improve. This explains why AI progress often feels discontinuous.</p>
-            </div>
-        </section>
-
-        <!-- Key Drivers and Limitations -->
-        <section class="section">
-            <h2>⚙️ Progress Drivers & Current Limitations</h2>
-
-            <h3>What's Improving (Per METR Analysis)</h3>
-            <div class="metric-grid">
-                <div class="metric-card">
-                    <h4>🧠 Logical Reasoning</h4>
-                    <p>Better chain-of-thought, multi-step planning, and problem decomposition</p>
-                </div>
-                <div class="metric-card">
-                    <h4>🔧 Tool Utilization</h4>
-                    <p>More effective use of APIs, code execution, and external resources</p>
-                </div>
-                <div class="metric-card">
-                    <h4>🔄 Error Recovery</h4>
-                    <p>Improved adaptation to unexpected outputs and self-correction</p>
-                </div>
-                <div class="metric-card">
-                    <h4>💾 Context Management</h4>
-                    <p>Better tracking of state across long interactions</p>
-                </div>
-            </div>
-
-            <h3>Persistent Challenges</h3>
-            <ul>
-                <li><strong>Compounding Errors:</strong> Small mistakes early in tasks cascade into failures</li>
-                <li><strong>Lack of True Recovery:</strong> No mechanism to "checkpoint and rollback" like humans</li>
-                <li><strong>Context Degradation:</strong> Performance decreases with context length, even within limits</li>
-                <li><strong>Unstructured Tasks:</strong> Open-ended problems without clear success criteria remain difficult</li>
-                <li><strong>Real-World Complexity:</strong> Benchmarks may not capture production environment challenges</li>
-            </ul>
-        </section>
-
-        <!-- Practical Implications -->
-        <section class="section">
-            <h2>💡 Practical Implications for AI Engineering</h2>
-
-            <h3>Design Patterns for Current Reliability Levels</h3>
-
-            <div class="key-insight">
-                <h4>The 7-Minute Rule</h4>
-                <p>For 90% reliability with current models (2025), keep individual agent tasks under 7 minutes. Design systems that checkpoint frequently and can restart from known good states.</p>
-            </div>
-
-            <h4>Recommended Architecture Patterns</h4>
-            <table class="comparison-table">
-                <thead>
-                    <tr>
-                        <th>Pattern</th>
-                        <th>When to Use</th>
-                        <th>Reliability Gain</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Task Decomposition</td>
-                        <td>Always - break tasks into <5 minute chunks</td>
-                        <td>2-3× improvement</td>
-                    </tr>
-                    <tr>
-                        <td>Parallel Attempts</td>
-                        <td>Critical tasks - run 3 agents, take majority</td>
-                        <td>Up to 99.9% from 90%</td>
-                    </tr>
-                    <tr>
-                        <td>Human Checkpoints</td>
-                        <td>Every 15-30 minutes of agent work</td>
-                        <td>Prevents cascade failures</td>
-                    </tr>
-                    <tr>
-                        <td>State Verification</td>
-                        <td>After each subtask completion</td>
-                        <td>Early error detection</td>
-                    </tr>
-                    <tr>
-                        <td>Rollback Capability</td>
-                        <td>For any state-changing operations</td>
-                        <td>Recovery from failures</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h3>Investment Timeline for Organizations</h3>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-date">Now (2025)</div>
-                        <p><strong>Invest in:</strong> Code review, test generation, documentation, short bug fixes</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-date">2026-2027</div>
-                        <p><strong>Prepare for:</strong> Feature implementation, refactoring, multi-file changes</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-date">2028-2030</div>
-                        <p><strong>Plan for:</strong> Sprint automation, complex debugging, system design</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Research Sources -->
-        <section class="section">
-            <h2>📚 Primary Sources</h2>
-
-            <div class="source-links">
-                <a href="https://www.tobyord.com/writing/half-life" target="_blank" class="source-link">
-                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
-                        <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>
-                    </svg>
-                    Toby Ord: AI Agent Half-Life
-                </a>
-                <a href="https://arxiv.org/html/2503.14499v2" target="_blank" class="source-link">
-                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
-                        <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>
-                    </svg>
-                    METR: Measuring AI Ability to Complete Long Tasks
-                </a>
-            </div>
-
-            <h3>Additional Context</h3>
-            <ul>
-                <li>METR (Model Evaluation & Threat Research) - Independent AI safety organization</li>
-                <li>Research collaboration with Anthropic on frontier model capabilities</li>
-                <li>Analysis based on 13 models from GPT-2 (2019) to Claude 3.7 Sonnet (2025)</li>
-                <li>Human baseline data from domain experts timing themselves on identical tasks</li>
-            </ul>
-        </section>
-
-        <!-- Conclusion -->
-        <section class="section">
-            <h2>🎯 Conclusion</h2>
-
-            <div class="key-insight">
-                <h4>The Path to Reliability</h4>
-                <p>AI reliability isn't about sudden breakthroughs - it's about steady exponential improvement in failure rates. By understanding both the half-life model (why AI fails) and growth patterns (how fast it's improving), we can make informed decisions about when and how to deploy AI agents.</p>
-            </div>
-
-            <p>The convergence of these two research approaches provides a framework for predicting when specific automation thresholds become feasible. Organizations that understand these dynamics can time their investments optimally - neither too early (wasting resources on unreliable systems) nor too late (missing competitive advantages).</p>
-
-            <h3>Key Takeaways</h3>
-            <ul>
-                <li>🎯 <strong>Current State (2025):</strong> 50-minute tasks at 50% reliability, 7-minute tasks at 90%</li>
-                <li>📈 <strong>Growth Rate:</strong> Doubling every 7 months, highly consistent since 2019</li>
-                <li>🔮 <strong>2030 Projection:</strong> Month-long tasks achievable, week-long at 99% reliability</li>
-                <li>⚙️ <strong>Design Principle:</strong> Architect systems around current reliability limits, not hoped-for improvements</li>
-                <li>💡 <strong>Investment Strategy:</strong> Phase adoption based on task duration and required reliability</li>
-            </ul>
-        </section>
+    <div class="navigation">
+        <a href="../index.html">← Home</a>
+        <a href="../agent/index.html">Agent Reliability</a>
+        <a href="../rag/index.html">RAG Patterns</a>
+        <a href="../research-papers/index.html">Research Papers</a>
+        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
     </div>
 
-    <footer class="footer">
-        <p>© 2025 MaxPool - High-density technical resources for AI developers</p>
-        <p style="margin-top: 1rem;">
-            <a href="https://join.maxpool.dev" style="color: var(--primary); text-decoration: none;">Join the GenAI Community →</a>
+    <h1>When Will AI Become Reliable?<br>Half-Life Analysis Meets Exponential Growth</h1>
+
+    <div class="authors">
+        Synthesis of research from Toby Ord (Oxford) and METR (Model Evaluation & Threat Research)<br>
+        <em>January 2025</em>
+    </div>
+
+    <div class="abstract">
+        <h2>Executive Summary</h2>
+        <p>This analysis synthesizes two groundbreaking research papers to answer a critical question: when will AI agents become reliable enough for real-world deployment? By combining Toby Ord's half-life framework with METR's exponential growth analysis, we can now predict specific reliability thresholds for AI automation.</p>
+
+        <p>The key insight is that AI agents currently fail at a constant rate per unit time (following a half-life model similar to radioactive decay), but this failure rate is improving exponentially—doubling in capability every 7 months. This creates predictable thresholds: current models (2025) can handle 50-minute tasks at 50% reliability, but achieving 90% reliability requires limiting tasks to just 7 minutes. By 2030, we project AI will handle month-long tasks, fundamentally transforming software development and business operations.</p>
+    </div>
+
+    <div class="eli5-box">
+        <h3>🎯 ELI5: The Core Concept</h3>
+        <p>Imagine AI agents are like runners who get exponentially more tired as they run. Right now, they can run for about 50 minutes before having a 50% chance of collapsing. But here's the catch: to have a 90% chance of finishing, they can only run for 7 minutes. The good news? Every 7 months, AI agents can run twice as far before getting tired. So what takes 50 minutes today at 50% success will take 100 minutes in 7 months, 200 minutes in 14 months, and so on.</p>
+    </div>
+
+    <h2>Part 1: The Half-Life Framework</h2>
+
+    <p>Toby Ord's analysis introduces a powerful conceptual framework: AI agent performance follows survival analysis patterns similar to radioactive decay. Just as radioactive atoms have a constant probability of decay per unit time, AI agents have a constant probability of failure per minute of operation.</p>
+
+    <div class="figure">
+        <img src="https://images.squarespace-cdn.com/content/v1/562652dbe4b05bbfdc596fd7/3ac5cc96-1407-48a0-80e4-ab8a226e3d6c/Figure+1.png" alt="METR results on task length">
+        <div class="figure-caption">Figure 1: METR's results showing exponential growth in the length of tasks AI agents can reliably complete. Every 7 months, frontier AI agents can solve tasks approximately twice as long.</div>
+    </div>
+
+    <h3>The Mathematics of Failure</h3>
+
+    <p>The half-life model reveals that AI systems experience what Ord calls a "constant hazard rate"—each minute of operation carries the same probability of failure, regardless of how long the agent has been running. This creates an exponential decay curve for success probability:</p>
+
+    <div class="formula">
+        P(success) = e^(-λt)<br>
+        where λ = ln(2) / half_life<br>
+        and t = task duration
+    </div>
+
+    <p>This mathematical relationship has profound implications for reliability engineering. It means that small increases in task duration lead to dramatic decreases in reliability. More importantly, it provides a quantitative framework for understanding exactly how much we need to reduce task duration to achieve target reliability levels.</p>
+
+    <div class="key-finding">
+        <h3>Critical Reliability Thresholds</h3>
+        <p>The exponential decay model reveals sharp reliability cliffs that every AI engineer must understand:</p>
+        <ul>
+            <li><strong>80% reliability:</strong> Requires task duration of only 1/3 the half-life</li>
+            <li><strong>90% reliability:</strong> Requires task duration of only 1/7 the half-life</li>
+            <li><strong>99% reliability:</strong> Requires task duration of only 1/70 the half-life</li>
+            <li><strong>99.9% reliability:</strong> Requires task duration of only 1/700 the half-life</li>
+        </ul>
+        <p>This explains why AI agents that seem "almost there" for long tasks still fail catastrophically—the difference between 50% and 90% success isn't linear, it's exponential.</p>
+    </div>
+
+    <h3>Why AI Lacks Error Recovery</h3>
+
+    <p>The constant hazard rate suggests current AI systems fundamentally lack error recovery mechanisms. Unlike humans who can recognize mistakes and backtrack, AI agents compound errors forward. Once an agent makes a mistake, it rarely recovers—each subsequent action builds on the flawed foundation. This is why breaking tasks into smaller, independently verifiable chunks is so critical for current systems.</p>
+
+    <div class="figure">
+        <img src="https://images.squarespace-cdn.com/content/v1/562652dbe4b05bbfdc596fd7/0eed5814-5ddb-49a9-9ed1-2052bcc794f4/Figure+2.png" alt="Test suite composition">
+        <div class="figure-caption">Figure 2: Test suite composition across different benchmarks, showing the distribution of software engineering, cybersecurity, reasoning, and ML tasks organized by human completion time.</div>
+    </div>
+
+    <h2>Part 2: METR's Exponential Growth Analysis</h2>
+
+    <p>While Ord's half-life model explains why AI fails, METR's comprehensive study of 13 frontier models from 2019-2025 reveals how fast this is improving. Their research introduces a critical metric: the "50% task-completion time horizon"—the duration of tasks (measured in human time) that AI can complete with 50% reliability.</p>
+
+    <div class="figure">
+        <img src="https://arxiv.org/html/2503.14499v2/x2.png" alt="METR Methodology">
+        <div class="figure-caption">Figure 3: METR's three-step methodology for measuring AI agent time horizons, from task creation through human/AI evaluation to statistical modeling.</div>
+    </div>
+
+    <h3>The Seven-Month Doubling Time</h3>
+
+    <p>METR's analysis reveals remarkably consistent exponential growth: the 50% time horizon has doubled approximately every 7 months for the past 6 years. This isn't just incremental improvement—it's compound growth that fundamentally changes what's possible:</p>
+
+    <div class="timeline-box">
+        <h3>AI Capability Timeline</h3>
+        <div class="timeline-item">
+            <span class="timeline-date">2019:</span> ~3 minutes (Early GPT models, basic interactions)
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">2021:</span> ~12 minutes (GPT-3, short coding tasks)
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">2023:</span> ~25 minutes (ChatGPT/Claude, moderate complexity)
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">2025 (Current):</span> ~50 minutes (Claude 3.7 Sonnet, complex tasks)
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">2027 (Projected):</span> ~3.5 hours (Half-day automation)
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">2030 (Projected):</span> ~1 month (Project-level automation)
+        </div>
+    </div>
+
+    <h3>What's Driving the Improvements?</h3>
+
+    <p>METR's qualitative analysis identifies three key drivers of capability improvement:</p>
+
+    <div class="methodology-box">
+        <h3>Capability Drivers</h3>
+        <ol>
+            <li><strong>Enhanced Logical Reasoning:</strong> Better chain-of-thought processing, multi-step planning, and problem decomposition abilities</li>
+            <li><strong>Improved Tool Utilization:</strong> More sophisticated use of APIs, code execution environments, and external resources</li>
+            <li><strong>Greater Reliability:</strong> Better adaptation to unexpected outputs and self-correction mechanisms (though still limited)</li>
+        </ol>
+    </div>
+
+    <p>Interestingly, the improvements aren't coming from longer context windows or more parameters alone—they're emerging from better reasoning architectures and training methodologies. This suggests the trend may continue even as we approach scaling limits.</p>
+
+    <h2>Part 3: Synthesis - Predicting Reliability Thresholds</h2>
+
+    <p>By combining both frameworks, we can now predict when specific use cases become viable. The key insight is that while the half-life (50% success duration) is growing exponentially, the reliability requirements for different applications create distinct adoption thresholds.</p>
+
+    <div class="insight-box">
+        <h3>The Unified Model</h3>
+        <p>Combining both frameworks gives us a powerful predictive model:</p>
+        <div class="formula">
+            Task_Duration(year) = 50min × 2^((year-2025)×12/7)<br>
+            Reliability(duration, year) = e^(-duration / Task_Duration(year))
+        </div>
+        <p>This allows us to calculate exactly when any given task at any reliability threshold becomes feasible.</p>
+    </div>
+
+    <h3>Reliability Projections by Use Case</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Use Case</th>
+                <th>Required Reliability</th>
+                <th>Max Task Duration</th>
+                <th>Viable Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Code Review Assistant</td>
+                <td>80%</td>
+                <td>15 minutes</td>
+                <td>Now</td>
+                <td><span class="badge badge-success">Ready</span></td>
+            </tr>
+            <tr>
+                <td>Bug Fix Automation</td>
+                <td>90%</td>
+                <td>7 minutes</td>
+                <td>Now</td>
+                <td><span class="badge badge-success">Ready</span></td>
+            </tr>
+            <tr>
+                <td>Test Generation</td>
+                <td>85%</td>
+                <td>10 minutes</td>
+                <td>Now</td>
+                <td><span class="badge badge-success">Ready</span></td>
+            </tr>
+            <tr>
+                <td>Feature Implementation</td>
+                <td>80%</td>
+                <td>2 hours</td>
+                <td>2026</td>
+                <td><span class="badge badge-warning">Soon</span></td>
+            </tr>
+            <tr>
+                <td>Full Sprint Automation</td>
+                <td>90%</td>
+                <td>1 day</td>
+                <td>2028</td>
+                <td><span class="badge badge-danger">Future</span></td>
+            </tr>
+            <tr>
+                <td>Project Management</td>
+                <td>99%</td>
+                <td>1 week</td>
+                <td>2030+</td>
+                <td><span class="badge badge-danger">Future</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>The Reliability Cliff Phenomenon</h3>
+
+    <p>The exponential nature of both curves creates what we call "reliability cliffs"—sharp transitions where tasks go from impossible to trivial. A task that's completely infeasible today might become 90% reliable just 14 months later. This creates unique challenges for organizations trying to plan their AI adoption strategies.</p>
+
+    <p>Consider a 4-hour task that currently has near-zero success rate. By 2027, when the 50% horizon reaches 3.5 hours, this task will suddenly achieve ~40% success. Just 7 months later, it will reach 67% success. This rapid transition from "impossible" to "reliable" will happen across thousands of business processes simultaneously.</p>
+
+    <h2>Part 4: Practical Engineering Implications</h2>
+
+    <h3>The Seven-Minute Rule</h3>
+
+    <div class="key-finding">
+        <h3>Current Best Practice (2025)</h3>
+        <p>For 90% reliability with current frontier models, decompose all tasks into subtasks that can complete in under 7 minutes. This is the fundamental constraint that should guide all production AI system design today.</p>
+    </div>
+
+    <p>This constraint has profound implications for system architecture. Rather than giving an AI agent a complex task like "implement a new feature," successful systems break this into discrete, verifiable subtasks: "analyze requirements" (5 min), "design data model" (5 min), "implement model class" (7 min), "write unit tests" (5 min), etc.</p>
+
+    <h3>Architecture Patterns for Current Reliability</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Pattern</th>
+                <th>Description</th>
+                <th>Reliability Improvement</th>
+                <th>Use Case</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Task Decomposition</strong></td>
+                <td>Break into <5 minute subtasks</td>
+                <td>2-3× improvement</td>
+                <td>All complex tasks</td>
+            </tr>
+            <tr>
+                <td><strong>Parallel Ensemble</strong></td>
+                <td>Run 3 agents, take majority vote</td>
+                <td>90% → 97%</td>
+                <td>Critical decisions</td>
+            </tr>
+            <tr>
+                <td><strong>Human Checkpoints</strong></td>
+                <td>Review every 15-30 minutes</td>
+                <td>Catches cascade failures</td>
+                <td>Long-running tasks</td>
+            </tr>
+            <tr>
+                <td><strong>State Verification</strong></td>
+                <td>Test after each subtask</td>
+                <td>Early error detection</td>
+                <td>Stateful operations</td>
+            </tr>
+            <tr>
+                <td><strong>Rollback Capability</strong></td>
+                <td>Checkpoint before changes</td>
+                <td>Recovery from failures</td>
+                <td>Production systems</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Common Anti-Patterns to Avoid</h3>
+
+    <p>Understanding the half-life model helps identify several anti-patterns that doom AI projects to failure:</p>
+
+    <ol>
+        <li><strong>The Marathon Task:</strong> Giving AI agents hours-long tasks without decomposition. With current models, a 3-hour task has <1% success rate.</li>
+        <li><strong>The Context Stuffing:</strong> Believing that larger context windows solve reliability. The half-life model shows failure rate is time-based, not context-based.</li>
+        <li><strong>The Success Extrapolation:</strong> Assuming that 80% success on 10-minute tasks means 64% on 20-minute tasks. In reality, it's exponential decay to ~40%.</li>
+        <li><strong>The Single Point of Failure:</strong> Running one agent for critical tasks. Use ensemble methods for important operations.</li>
+    </ol>
+
+    <h2>Part 5: Organizational Readiness Timeline</h2>
+
+    <p>Based on our unified model, organizations should plan their AI adoption strategy around these reliability thresholds:</p>
+
+    <div class="timeline-box">
+        <h3>Investment Roadmap</h3>
+        <div class="timeline-item">
+            <span class="timeline-date">Now (2025):</span><br>
+            <strong>Invest in:</strong> Code review, test generation, documentation, bug triage<br>
+            <strong>ROI:</strong> 20-40% developer productivity gains<br>
+            <strong>Requirements:</strong> Human oversight, task decomposition
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">2026-2027:</span><br>
+            <strong>Prepare for:</strong> Feature implementation, refactoring, multi-file changes<br>
+            <strong>ROI:</strong> 2-3× developer velocity on routine tasks<br>
+            <strong>Requirements:</strong> Robust testing infrastructure, rollback systems
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">2028-2030:</span><br>
+            <strong>Plan for:</strong> Sprint automation, complex debugging, system design<br>
+            <strong>ROI:</strong> 10× productivity on well-defined projects<br>
+            <strong>Requirements:</strong> New development workflows, AI-first architecture
+        </div>
+    </div>
+
+    <h3>The Competitive Advantage Window</h3>
+
+    <p>The exponential growth creates narrow windows of competitive advantage. Organizations that adopt AI capabilities 6-12 months early in each wave gain significant advantages, but waiting too long means competitors achieve the same capabilities. The key is identifying when reliability crosses the threshold for your specific use cases.</p>
+
+    <div class="insight-box">
+        <h3>Strategic Planning Framework</h3>
+        <p>For any critical business process:</p>
+        <ol>
+            <li>Measure the actual time skilled humans take to complete it</li>
+            <li>Determine your required reliability threshold</li>
+            <li>Use the model to predict when AI will achieve that threshold</li>
+            <li>Begin preparation 12-18 months before the threshold date</li>
+        </ol>
+    </div>
+
+    <h2>Part 6: Limitations and Open Questions</h2>
+
+    <h3>Model Limitations</h3>
+
+    <p>While our unified model provides valuable predictions, several limitations must be acknowledged:</p>
+
+    <div class="methodology-box">
+        <h3>Known Limitations</h3>
+        <ul>
+            <li><strong>Benchmark vs. Reality:</strong> Real-world tasks often have hidden complexity not captured in benchmarks</li>
+            <li><strong>Unstructured Problems:</strong> Tasks without clear success criteria remain difficult to measure</li>
+            <li><strong>Compounding Errors:</strong> The model assumes independent failure probability, but errors often cascade</li>
+            <li><strong>Human Factors:</strong> Doesn't account for human-AI collaboration dynamics</li>
+            <li><strong>Paradigm Shifts:</strong> Assumes continued exponential growth without fundamental breakthroughs</li>
+        </ul>
+    </div>
+
+    <h3>Open Research Questions</h3>
+
+    <p>Several critical questions remain unanswered and represent active areas of research:</p>
+
+    <ol>
+        <li><strong>Can we change the hazard rate itself?</strong> Current models have a constant failure rate per minute. Can architectural innovations create models with decreasing hazard rates (improving reliability over time)?</li>
+        <li><strong>What happens at the scaling limit?</strong> Will the 7-month doubling continue, slow down, or hit a wall?</li>
+        <li><strong>How do we measure creative tasks?</strong> The model works well for well-defined tasks but struggles with open-ended creative work.</li>
+        <li><strong>Can memory systems break the half-life constraint?</strong> Could external memory or retrieval systems fundamentally change the failure dynamics?</li>
+    </ol>
+
+    <h2>Part 7: Future Implications</h2>
+
+    <h3>The 2030 Inflection Point</h3>
+
+    <p>Our model suggests 2030 represents a critical inflection point where month-long tasks become automatable. This isn't just quantitative improvement—it's a qualitative shift in what's possible. Month-long tasks include:</p>
+
+    <ul>
+        <li>Complete software modules from specification to deployment</li>
+        <li>Comprehensive security audits and penetration testing</li>
+        <li>Full research projects with literature review and experimentation</li>
+        <li>End-to-end business process redesigns</li>
+    </ul>
+
+    <p>Organizations that haven't adapted their workflows by this point will face existential competitive pressure. The difference between companies leveraging month-long AI automation and those limited to day-long tasks will be similar to the current gap between digitized and paper-based businesses.</p>
+
+    <h3>The Path to AGI?</h3>
+
+    <p>Interestingly, the half-life model provides a quantitative framework for thinking about artificial general intelligence (AGI). Human professionals can maintain performance over years-long projects. If the 7-month doubling continues, AI would match this around 2035-2040. However, this assumes no fundamental breakthroughs in error recovery or memory systems.</p>
+
+    <div class="eli5-box">
+        <h3>What This Means for Society</h3>
+        <p>The convergence of exponential growth with predictable reliability thresholds creates a unique moment in history. We can now predict, with reasonable confidence, when specific cognitive tasks will become automatable. This isn't science fiction—it's engineering planning with quantifiable error bounds. Organizations, educational institutions, and governments that understand these dynamics can prepare proactively rather than react defensively.</p>
+    </div>
+
+    <div class="conclusion-box">
+        <h2>Conclusion</h2>
+        <p>The synthesis of Ord's half-life framework with METR's growth analysis provides the first quantitative model for predicting AI reliability thresholds. Current AI agents fail at a constant rate per minute (half-life model), but this rate improves exponentially, doubling every 7 months.</p>
+
+        <p>For practitioners today, the message is clear: design systems around 7-minute subtasks for 90% reliability. For strategic planners, the roadmap is equally clear: prepare now for the capabilities coming in 2-3 years, not the limitations of today.</p>
+
+        <p>The exponential curves create both opportunity and urgency. The organizations that understand these dynamics—that recognize we're not approaching a plateau but riding an exponential curve—will define the next decade of technological progress.</p>
+
+        <p><strong>The question isn't whether AI will become reliable enough for your use case. It's whether you'll be ready when it does.</strong></p>
+    </div>
+
+    <div class="source-box">
+        <h3>Primary Sources</h3>
+        <p>
+            <a href="https://www.tobyord.com/writing/half-life" target="_blank">Toby Ord: "Is there a Half-Life for the Success Rates of AI Agents?"</a><br>
+            <em>Analysis of AI agent failure patterns using survival analysis and constant hazard rate models.</em>
         </p>
-    </footer>
+        <p>
+            <a href="https://arxiv.org/html/2503.14499v2" target="_blank">METR: "Measuring AI Ability to Complete Long Tasks"</a><br>
+            <em>Comprehensive study of 13 frontier models showing exponential growth in task completion capabilities.</em>
+        </p>
+    </div>
+
+    <div class="navigation">
+        <a href="../index.html">← Home</a>
+        <a href="../agent/index.html">Agent Reliability</a>
+        <a href="../rag/index.html">RAG Patterns</a>
+        <a href="../research-papers/index.html">Research Papers</a>
+        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+    </div>
 </body>
 </html>
