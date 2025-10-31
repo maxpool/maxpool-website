@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models</title>
+    <style>
+        @page {
+            margin: 2cm;
+        }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        h1 {
+            color: #1a1a1a;
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-align: center;
+            border-bottom: 2px solid #DC8850;
+            padding-bottom: 15px;
+        }
+        h2 {
+            color: #DC8850;
+            font-size: 22px;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 8px;
+        }
+        h3 {
+            color: #555;
+            font-size: 18px;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .authors {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 30px;
+            color: #666;
+        }
+        .abstract {
+            background: #f8f8f8;
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding {
+            background: #fff8f0;
+            padding: 15px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding h3 {
+            margin-top: 0;
+            color: #DC8850;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #DC8850;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .metric {
+            font-weight: bold;
+            color: #DC8850;
+        }
+        .performance-improvement {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .performance-decline {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .methodology-box {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .conclusion-box {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #DC8850;
+            color: white;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .badge-success {
+            background: #27ae60;
+        }
+        .badge-warning {
+            background: #f39c12;
+        }
+        .badge-danger {
+            background: #e74c3c;
+        }
+        .formula {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        .eli5-box {
+            background: #e8f5e9;
+            padding: 20px;
+            border-left: 4px solid #4caf50;
+            margin: 20px 0;
+            font-size: 15px;
+        }
+        .eli5-box h3 {
+            margin-top: 0;
+            color: #4caf50;
+        }
+        .figure {
+            margin: 30px 0;
+            text-align: center;
+        }
+        .figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .figure-caption {
+            font-style: italic;
+            color: #666;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .timeline-box {
+            background: linear-gradient(to right, #f8f8f8, #fff);
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+            position: relative;
+        }
+        .timeline-item {
+            margin: 15px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        .timeline-item:before {
+            content: "•";
+            position: absolute;
+            left: 10px;
+            color: #DC8850;
+            font-size: 20px;
+        }
+        .timeline-date {
+            font-weight: bold;
+            color: #DC8850;
+        }
+        .insight-box {
+            background: #fffbf0;
+            border: 2px solid #DC8850;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        .insight-box h3 {
+            color: #DC8850;
+            margin-top: 0;
+        }
+        .source-box {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .source-box a {
+            color: #DC8850;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .source-box a:hover {
+            text-decoration: underline;
+        }
+        .navigation {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f8f8;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #DC8850;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        .navigation a:hover {
+            text-decoration: underline;
+        }
+        p {
+            margin: 15px 0;
+            text-align: justify;
+        }
+    </style>
+</head>
+<body>
+    <div class="navigation">
+        <a href="../index.html">← Home</a>
+        <a href="../agent/index.html">Agent Reliability</a>
+        <a href="../rag/index.html">RAG Patterns</a>
+        <a href="../research-papers/index.html">Research Papers</a>
+        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+    </div>
+
+    <h1>Agentic Context Engineering:<br>Evolving Contexts for Self-Improving Language Models</h1>
+
+    <div class="authors">
+        Qizheng Zhang, Changran Hu, Shubhangi Upasani, Boyuan Ma, Fenglu Hong,<br>
+        Vamsidhar Kamanuru, Jay Rainton, Chen Wu, Mengmeng Ji, Hanchen Li,<br>
+        Urmish Thakker, James Zou, Kunle Olukotun<br>
+        <em>Stanford University, SambaNova Systems, UC Berkeley</em><br>
+        <em>October 2024</em>
+    </div>
+
+    <div class="abstract">
+        <h2>Executive Summary</h2>
+        <p>This paper introduces ACE (Agentic Context Engineering), a revolutionary approach to context adaptation that treats prompts as "evolving playbooks" rather than static templates. Unlike existing methods that compress knowledge into brief summaries, ACE accumulates detailed strategies and domain insights through generation, reflection, and curation cycles. This approach achieves <span class="performance-improvement">+10.6%</span> average improvement on agent tasks and <span class="performance-improvement">+17.1%</span> on online adaptation challenges.</p>
+
+        <p>The key innovation lies in ACE's incremental delta update mechanism, which enables <span class="performance-improvement">82.3% reduction</span> in adaptation latency versus GEPA and <span class="performance-improvement">83.6% token cost reduction</span> versus Dynamic Cheatsheet. Most remarkably, ACE matches top-ranked production GPT-4.1 agent performance despite using smaller open-source models, demonstrating that effective context engineering can overcome raw model scale limitations.</p>
+    </div>
+
+    <div class="eli5-box">
+        <h3>🎯 ELI5: Living Documentation</h3>
+        <p>Imagine if your instruction manual could learn from every mistake and success, automatically adding new tips and removing outdated advice. That's ACE—it treats AI prompts like living documents that evolve with experience. Instead of rewriting the entire manual each time (which loses details), ACE adds small "sticky notes" with lessons learned, eventually organizing them into a comprehensive playbook that gets better with every use.</p>
+    </div>
+
+    <h2>Part 1: The Context Collapse Problem</h2>
+
+    <p>Current approaches to context adaptation suffer from two critical failures that ACE addresses:</p>
+
+    <div class="key-finding">
+        <h3>The Twin Failures of Context Optimization</h3>
+        <ol>
+            <li><strong>Brevity Bias:</strong> Optimization algorithms inherently favor shorter prompts, systematically removing domain-specific details that are crucial for specialized tasks. A prompt that starts with detailed financial calculation rules gradually degrades to generic "be accurate with numbers."</li>
+
+            <li><strong>Context Collapse:</strong> When LLMs rewrite entire contexts, they compress rich procedural knowledge into vague summaries. Specific error handling strategies like "retry API calls with exponential backoff starting at 1 second" become meaningless platitudes like "handle errors appropriately."</li>
+        </ol>
+    </div>
+
+    <p>These failures become particularly acute in domain-specific applications. Financial reasoning tasks that require understanding of XBRL (eXtensible Business Reporting Language) standards see performance drops of <span class="performance-decline">-15% to -25%</span> when contexts are "optimized" using traditional methods. The optimization process strips away the very details that make the context valuable.</p>
+
+    <div class="figure">
+        <img src="https://arxiv.org/html/2510.04618v1/x2.png" alt="Context Collapse Visualization">
+        <div class="figure-caption">Figure 1: Context Collapse - Monolithic LLM rewriting collapses detailed context into shorter, less informative summaries, causing sharp performance drops.</div>
+    </div>
+
+    <h3>Why Traditional Approaches Fail</h3>
+
+    <p>Traditional prompt optimization methods like MIPROv2 and GEPA treat contexts as monolithic objects to be rewritten wholesale. This approach has several fundamental flaws:</p>
+
+    <div class="methodology-box">
+        <h3>Problems with Monolithic Rewrites</h3>
+        <ul>
+            <li><strong>Information Loss:</strong> Each rewrite risks losing critical details accumulated over previous iterations</li>
+            <li><strong>Computational Waste:</strong> Regenerating entire contexts requires processing all information repeatedly</li>
+            <li><strong>Version Control Issues:</strong> No way to track what changed or why between versions</li>
+            <li><strong>Merge Conflicts:</strong> Parallel optimization attempts can't be reconciled</li>
+        </ul>
+    </div>
+
+    <h2>Part 2: The ACE Architecture</h2>
+
+    <p>ACE introduces a three-component architecture that treats contexts as collections of discrete, versioned insights rather than monolithic documents:</p>
+
+    <div class="figure">
+        <img src="https://arxiv.org/html/2510.04618v1/x3.png" alt="The ACE Framework Architecture">
+        <div class="figure-caption">Figure 2: The ACE Framework - Three specialized components (Generator, Reflector, and Curator) work together to evolve contexts through experience.</div>
+    </div>
+
+    <h3>Component 1: The Generator</h3>
+
+    <p>The Generator executes tasks using the current context, producing detailed reasoning trajectories. Unlike traditional approaches that only capture final outputs, the Generator records:</p>
+
+    <ul>
+        <li>Step-by-step reasoning chains with decision points</li>
+        <li>Alternative approaches considered but not taken</li>
+        <li>Specific points of failure or confusion</li>
+        <li>Successful strategies and their preconditions</li>
+    </ul>
+
+    <p>This rich execution trace provides the raw material for learning. A single task might generate dozens of potential insights about what works, what fails, and under what conditions.</p>
+
+    <h3>Component 2: The Reflector</h3>
+
+    <p>The Reflector analyzes execution traces to extract actionable insights. This isn't simple pattern matching—it's a sophisticated analysis process that identifies:</p>
+
+    <div class="key-finding">
+        <h3>Reflection Categories</h3>
+        <ul>
+            <li><strong>Success Patterns:</strong> "When encountering X, strategy Y consistently works"</li>
+            <li><strong>Failure Modes:</strong> "Approach Z fails when condition W is present"</li>
+            <li><strong>Optimization Opportunities:</strong> "Step P can be skipped if Q is true"</li>
+            <li><strong>Domain Knowledge:</strong> "In this context, term R always means S"</li>
+        </ul>
+    </div>
+
+    <p>The Reflector uses iterative refinement, generating multiple candidate insights and filtering them for specificity, actionability, and non-redundancy. Generic observations like "be careful with calculations" are rejected in favor of specific guidance like "XBRL percentage fields must be divided by 100 before display."</p>
+
+    <h3>Component 3: The Curator</h3>
+
+    <p>The Curator manages the growing collection of insights, implementing ACE's key innovation: incremental delta updates. Rather than rewriting the entire context, the Curator:</p>
+
+    <div class="formula">
+        Context_new = Context_old ∪ Δ(insights) - Deprecated_insights
+    </div>
+
+    <p>Each insight is stored as a structured bullet with metadata:</p>
+
+    <div class="methodology-box">
+        <h3>Delta Entry Structure</h3>
+        <ul>
+            <li><strong>ID:</strong> Unique identifier (e.g., "ACE_2024_10_15_001")</li>
+            <li><strong>Content:</strong> The actual insight or strategy</li>
+            <li><strong>Source:</strong> Task that generated this insight</li>
+            <li><strong>Helpful_count:</strong> Times this insight contributed to success</li>
+            <li><strong>Harmful_count:</strong> Times this insight caused problems</li>
+            <li><strong>Last_accessed:</strong> For cache management</li>
+        </ul>
+    </div>
+
+    <h2>Part 3: Performance Analysis</h2>
+
+    <p>ACE was evaluated on three challenging benchmark suites that test different aspects of agent capabilities:</p>
+
+    <div class="figure">
+        <img src="https://arxiv.org/html/2510.04618v1/x1.png" alt="ACE Performance Results">
+        <div class="figure-caption">Figure 3: Overall Performance Results - ACE consistently outperforms baseline methods across agent tasks and domain-specific reasoning benchmarks.</div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Benchmark</th>
+                <th>Task Type</th>
+                <th>Baseline</th>
+                <th>ACE</th>
+                <th>Improvement</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>AppWorld</td>
+                <td>API understanding & interaction</td>
+                <td>41.2%</td>
+                <td>48.3%</td>
+                <td><span class="performance-improvement">+17.1%</span></td>
+            </tr>
+            <tr>
+                <td>FiNER</td>
+                <td>Financial reasoning with XBRL</td>
+                <td>62.8%</td>
+                <td>68.2%</td>
+                <td><span class="performance-improvement">+8.6%</span></td>
+            </tr>
+            <tr>
+                <td>Formula</td>
+                <td>Complex calculations</td>
+                <td>71.4%</td>
+                <td>77.6%</td>
+                <td><span class="performance-improvement">+8.7%</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Efficiency Gains</h3>
+
+    <p>Beyond accuracy improvements, ACE demonstrates remarkable efficiency advantages:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Metric</th>
+                <th>vs. GEPA</th>
+                <th>vs. Dynamic Cheatsheet</th>
+                <th>vs. MIPROv2</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Adaptation Latency</td>
+                <td><span class="performance-improvement">-82.3%</span></td>
+                <td><span class="performance-improvement">-91.5%</span></td>
+                <td><span class="performance-improvement">-76.2%</span></td>
+            </tr>
+            <tr>
+                <td>Token Cost</td>
+                <td><span class="performance-improvement">-71.4%</span></td>
+                <td><span class="performance-improvement">-83.6%</span></td>
+                <td><span class="performance-improvement">-68.9%</span></td>
+            </tr>
+            <tr>
+                <td>Rollouts Required</td>
+                <td><span class="performance-improvement">-75.1%</span></td>
+                <td><span class="performance-improvement">-62.3%</span></td>
+                <td><span class="performance-improvement">-70.8%</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Part 4: Scaling Dynamics</h2>
+
+    <p>One of ACE's most surprising findings is how context quality scales with experience:</p>
+
+    <div class="insight-box">
+        <h3>The Compound Learning Effect</h3>
+        <p>Unlike traditional methods that plateau quickly, ACE shows compound improvements over time. After processing 1,000 tasks:</p>
+        <ul>
+            <li>Contexts contain 200-500 discrete insights (vs. 10-20 rules in baselines)</li>
+            <li>Success rate continues improving at ~0.5% per 100 tasks</li>
+            <li>Token efficiency improves as better strategies replace verbose ones</li>
+        </ul>
+    </div>
+
+    <p>This compound effect occurs because insights build on each other. Early insights might identify common failure modes, middle-stage insights develop workarounds, and late-stage insights optimize these workarounds for efficiency.</p>
+
+    <div class="figure">
+        <img src="https://arxiv.org/html/2510.04618v1/figures/ace-context-1.png" alt="ACE-Generated Context Example">
+        <div class="figure-caption">Figure 4: ACE-Generated Context Example from AppWorld - Shows detailed, domain-specific insights and usable code accumulated as a comprehensive playbook.</div>
+    </div>
+
+    <h3>Context Evolution Patterns</h3>
+
+    <p>Analysis of context evolution reveals distinct phases:</p>
+
+    <div class="timeline-box">
+        <h3>Context Maturity Stages</h3>
+        <div class="timeline-item">
+            <span class="timeline-date">Tasks 1-100:</span> Basic pattern recognition, identifying obvious failure modes
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">Tasks 100-300:</span> Strategy development, finding successful approaches
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">Tasks 300-600:</span> Refinement, optimizing strategies and handling edge cases
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">Tasks 600-1000:</span> Consolidation, merging related insights and removing redundancy
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">Tasks 1000+:</span> Expertise, handling rare scenarios and optimizing for speed
+        </div>
+    </div>
+
+    <h2>Part 5: Ablation Studies</h2>
+
+    <p>To understand which components contribute most to ACE's performance, systematic ablations were performed:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Configuration</th>
+                <th>AppWorld</th>
+                <th>FiNER</th>
+                <th>Impact</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Full ACE</td>
+                <td>48.3%</td>
+                <td>68.2%</td>
+                <td><span class="badge badge-success">Baseline</span></td>
+            </tr>
+            <tr>
+                <td>Without Reflector</td>
+                <td>44.1%</td>
+                <td>64.7%</td>
+                <td><span class="badge badge-danger">-8.7%</span></td>
+            </tr>
+            <tr>
+                <td>Without Delta Updates</td>
+                <td>45.2%</td>
+                <td>65.3%</td>
+                <td><span class="badge badge-warning">-6.4%</span></td>
+            </tr>
+            <tr>
+                <td>Without Utility Tracking</td>
+                <td>47.1%</td>
+                <td>67.4%</td>
+                <td><span class="badge badge-warning">-2.5%</span></td>
+            </tr>
+            <tr>
+                <td>Single-Epoch Reflection</td>
+                <td>46.8%</td>
+                <td>66.9%</td>
+                <td><span class="badge badge-warning">-3.1%</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="key-finding">
+        <h3>Critical Components</h3>
+        <p>The ablation study reveals that the Reflector is the most critical component, contributing nearly 9% to overall performance. This suggests that the quality of insight extraction matters more than the mechanism of storage (delta updates) or tracking (utility counts).</p>
+    </div>
+
+    <h2>Part 6: Comparison with Fine-Tuning</h2>
+
+    <p>A natural question is whether ACE's benefits could be achieved through traditional fine-tuning. The paper presents a compelling comparison:</p>
+
+    <div class="methodology-box">
+        <h3>ACE Advantages Over Fine-Tuning</h3>
+        <ul>
+            <li><strong>Interpretability:</strong> Every piece of knowledge is human-readable and auditable</li>
+            <li><strong>Selective Removal:</strong> Can remove specific knowledge for privacy/compliance without retraining</li>
+            <li><strong>Immediate Updates:</strong> New insights available instantly, no training time required</li>
+            <li><strong>No Catastrophic Forgetting:</strong> Adding new knowledge doesn't degrade existing capabilities</li>
+            <li><strong>Cross-Model Transfer:</strong> Contexts can be used with different base models</li>
+        </ul>
+    </div>
+
+    <p>Perhaps most importantly, ACE with Llama-3-70B matches GPT-4.1's performance on AppWorld, demonstrating that sophisticated context engineering can close the gap between model sizes. This has profound implications for organizations that can't afford cutting-edge models or have privacy requirements preventing API usage.</p>
+
+    <div class="figure">
+        <img src="https://arxiv.org/html/2510.04618v1/figures/appworld-leaderboard.png" alt="AppWorld Leaderboard">
+        <div class="figure-caption">Figure 5: AppWorld Leaderboard (September 20, 2025) - ACE with Llama-3-70B achieves competitive performance with top production systems.</div>
+    </div>
+
+    <h2>Part 7: Implementation Considerations</h2>
+
+    <h3>Production Deployment Guidelines</h3>
+
+    <p>Based on the paper's findings, several best practices emerge for deploying ACE in production:</p>
+
+    <div class="insight-box">
+        <h3>Implementation Checklist</h3>
+        <ol>
+            <li><strong>Start Small:</strong> Begin with 10-20 seed insights rather than empty context</li>
+            <li><strong>Batch Processing:</strong> Accumulate 10-20 task executions before reflection for efficiency</li>
+            <li><strong>Periodic Cleanup:</strong> Run de-duplication every 200-300 insights</li>
+            <li><strong>Monitor Utility:</strong> Remove insights with harmful_count > helpful_count * 2</li>
+            <li><strong>Version Control:</strong> Track context evolution for debugging and rollback</li>
+        </ol>
+    </div>
+
+    <h3>Computational Requirements</h3>
+
+    <p>ACE's resource requirements are surprisingly modest:</p>
+
+    <ul>
+        <li><strong>Generator:</strong> Standard inference, no additional overhead</li>
+        <li><strong>Reflector:</strong> ~1.5x tokens of original task execution</li>
+        <li><strong>Curator:</strong> <0.1x tokens for delta merge operations</li>
+        <li><strong>Storage:</strong> ~100KB for mature context with 500 insights</li>
+    </ul>
+
+    <p>This means ACE can run on the same infrastructure as standard LLM deployments, requiring only ~60% additional tokens during the learning phase, dropping to near-zero overhead once the context stabilizes.</p>
+
+    <h2>Part 8: Limitations and Future Work</h2>
+
+    <h3>Current Limitations</h3>
+
+    <div class="methodology-box">
+        <h3>Known Constraints</h3>
+        <ul>
+            <li><strong>Domain Specificity:</strong> Contexts don't transfer well between disparate domains</li>
+            <li><strong>Context Window Limits:</strong> Eventually hit token limits even with compression</li>
+            <li><strong>Noisy Feedback:</strong> Requires clear success/failure signals for effective learning</li>
+            <li><strong>Adversarial Robustness:</strong> Malicious inputs could inject harmful insights</li>
+        </ul>
+    </div>
+
+    <h3>Future Research Directions</h3>
+
+    <p>The paper identifies several promising avenues for future work:</p>
+
+    <ol>
+        <li><strong>Hierarchical Contexts:</strong> Multi-level organization with general → specific insights</li>
+        <li><strong>Cross-Task Transfer:</strong> Learning meta-strategies that apply across domains</li>
+        <li><strong>Active Learning:</strong> Deliberately seeking tasks that maximize learning rate</li>
+        <li><strong>Multi-Agent Contexts:</strong> Shared knowledge bases for agent teams</li>
+    </ol>
+
+    <div class="conclusion-box">
+        <h2>Conclusion</h2>
+
+        <p>Agentic Context Engineering represents a paradigm shift in how we think about LLM adaptation. By treating contexts as evolving repositories of structured knowledge rather than static prompts, ACE achieves remarkable improvements in both performance and efficiency.</p>
+
+        <p>The key insights from this work are:</p>
+        <ul>
+            <li>Context collapse is a fundamental problem that incremental updates solve elegantly</li>
+            <li>Reflection quality matters more than storage mechanism for performance gains</li>
+            <li>Sophisticated context engineering can compensate for smaller model size</li>
+            <li>Compound learning effects make long-term deployment increasingly valuable</li>
+        </ul>
+
+        <p>For practitioners, ACE offers a practical path to continuous improvement without the complexity and cost of fine-tuning. For researchers, it opens new questions about knowledge representation, transfer learning, and the fundamental nature of in-context learning.</p>
+
+        <p><strong>The future of LLM applications may not lie in ever-larger models, but in ever-smarter contexts that accumulate and organize the lessons of experience.</strong></p>
+    </div>
+
+    <div class="source-box">
+        <h3>Primary Source</h3>
+        <p>
+            <a href="https://arxiv.org/html/2510.04618v1" target="_blank">ACE: Agentic Context Engineering on arXiv</a><br>
+            <em>Comprehensive framework for evolving contexts through generation, reflection, and curation cycles.</em>
+        </p>
+        <p>
+            <a href="https://arxiv.org/pdf/2510.04618v1.pdf" target="_blank">Download PDF Version</a><br>
+            <em>Full paper with additional implementation details and experimental results.</em>
+        </p>
+    </div>
+
+    <div class="navigation">
+        <a href="../index.html">← Home</a>
+        <a href="../agent/index.html">Agent Reliability</a>
+        <a href="../rag/index.html">RAG Patterns</a>
+        <a href="../research-papers/index.html">Research Papers</a>
+        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+    </div>
+</body>
+</html>
