@@ -488,23 +488,40 @@
                 </div>
 
                 <div class="flow-step" data-step="1">
-                    <h4>Client Sends Request to Master</h4>
-                    <p>Client translates (filename, byte offset) into (filename, chunk index) and sends to master.</p>
+                    <h4>Client → Master: "Where is this file?"</h4>
+                    <p>
+                        Client converts (filename="/search/web-crawl.dat", byte offset=1MB) into (filename, chunk index=0).<br>
+                        Sends request to master.
+                    </p>
                 </div>
 
                 <div class="flow-step" data-step="2">
-                    <h4>Master Returns Chunk Locations</h4>
-                    <p>Master replies with chunk handle and locations of all replicas. Client caches this info.</p>
+                    <h4>Master → Client: "Here are 3 locations"</h4>
+                    <p>
+                        Master responds with:<br>
+                        • Chunk handle (unique ID)<br>
+                        • 3 chunk server addresses that have this chunk<br>
+                        <br>
+                        Client <strong>caches this info</strong> for 5+ minutes.
+                    </p>
                 </div>
 
                 <div class="flow-step" data-step="3">
-                    <h4>Client Contacts Chunk Server Directly</h4>
-                    <p>Client picks the closest replica (often same network switch) and sends read request.</p>
+                    <h4>Client → Chunk Server: "Send me the data"</h4>
+                    <p>
+                        Client picks the <strong>closest</strong> chunk server (often same rack for low latency).<br>
+                        Sends: (chunk handle, byte range).
+                    </p>
                 </div>
 
                 <div class="flow-step" data-step="4">
-                    <h4>Chunk Server Returns Data</h4>
-                    <p>Chunk server reads from its local Linux file system and sends data back to client.</p>
+                    <h4>Chunk Server → Client: Returns data</h4>
+                    <p>
+                        Chunk server reads from its local Linux file system.<br>
+                        Sends data directly back to client.<br>
+                        <br>
+                        <strong>Note:</strong> Master never sees your data!
+                    </p>
                 </div>
 
                 <div class="concept-box">
@@ -527,19 +544,33 @@
             </div>
             <div class="content">
                 <p style="font-size: 1.05em; line-height: 1.6; margin-bottom: 15px;">
-                    Writes are trickier than reads because we have 3 replicas that need to stay in sync. GFS uses a clever trick:
-                    one replica becomes the <strong>"primary"</strong> (given a lease by the master) and controls the order of all writes.
+                    Writes are more complex because we have 3 replicas that must stay in sync.
                 </p>
 
                 <div class="concept-box">
-                    <h4>🔑 Key Insight: Separate Data Flow from Control Flow</h4>
+                    <h4>Key Idea: Primary + Secondaries</h4>
                     <p>
-                        GFS does something clever—it <strong>separates pushing data from applying writes</strong>. First, data is pushed to all
-                        replicas (in a pipelined chain for speed). <em>Then</em>, the client tells the primary "apply the write now." The primary
-                        picks an order and tells secondaries "apply in this order." This means expensive data transfer happens once, but control
-                        over ordering is centralized.
+                        One replica becomes the <strong>"primary"</strong> (gets a lease from master).<br>
+                        The primary decides the <strong>order</strong> of all write operations.<br>
+                        Other replicas are "secondaries" that follow the primary's order.
                     </p>
                 </div>
+
+                <div class="concept-box">
+                    <h4>🔑 Clever Optimization</h4>
+                    <p>
+                        GFS separates <strong>data flow</strong> from <strong>control flow</strong>:<br>
+                        <br>
+                        <strong>Data flow:</strong> Push data to all replicas (in pipeline for speed)<br>
+                        <strong>Control flow:</strong> Primary tells everyone when/how to write<br>
+                        <br>
+                        Result: Expensive data transfer happens once, but writes stay ordered.
+                    </p>
+                </div>
+
+                <p style="font-size: 1.05em; line-height: 1.6; margin: 20px 0;">
+                    Let's walk through writing 10MB of data to a file:
+                </p>
 
                 <div class="diagram">
                     <svg viewBox="0 0 900 550" xmlns="http://www.w3.org/2000/svg">
@@ -628,48 +659,67 @@
                     <div class="diagram-caption">Write flow: Data pushed to all replicas, then primary orders the mutations</div>
                 </div>
 
-                <div class="concept-box">
-                    <h4>🔄 Decoupling Data Flow from Control Flow</h4>
+                <div class="flow-step" data-step="1">
+                    <h4>Client → Master: "Where should I write?"</h4>
                     <p>
-                        GFS separates data transfer (step 3) from write commands (step 4-5). Data is pushed to all replicas
-                        in a pipelined fashion to utilize network bandwidth fully. The primary then controls when and in what
-                        order mutations actually happen.
+                        Client asks master for chunk locations.<br>
+                        If no primary exists yet, master picks one replica and grants it a <strong>lease</strong> (becomes primary for 60 seconds).
                     </p>
                 </div>
 
-                <div class="flow-step" data-step="1">
-                    <h4>Client Asks Master for Chunk Locations</h4>
-                    <p>If no primary exists, master grants a lease to one replica (becomes primary).</p>
-                </div>
-
                 <div class="flow-step" data-step="2">
-                    <h4>Master Returns Primary and Secondary Locations</h4>
-                    <p>Client caches this info for future writes to the same chunk.</p>
+                    <h4>Master → Client: "Write to these 3 servers"</h4>
+                    <p>
+                        Master responds with:<br>
+                        • Primary address<br>
+                        • 2 secondary addresses<br>
+                        <br>
+                        Client caches this for future writes.
+                    </p>
                 </div>
 
                 <div class="flow-step" data-step="3">
-                    <h4>Client Pushes Data to All Replicas</h4>
-                    <p>Data flows in a pipelined chain (not from client to each replica independently). Each chunk server forwards to next.</p>
+                    <h4>Client → All Replicas: Pushes Data (pipelined)</h4>
+                    <p>
+                        Client sends 10MB to closest chunk server.<br>
+                        That server forwards to next server while writing to its own disk.<br>
+                        Creates a <strong>pipeline</strong> for efficiency.<br>
+                        <br>
+                        <strong>Key:</strong> Data pushed, but NOT written yet!
+                    </p>
                 </div>
 
                 <div class="flow-step" data-step="4">
-                    <h4>Client Sends Write Request to Primary</h4>
-                    <p>Once all replicas acknowledge receiving data, client sends write command to primary.</p>
+                    <h4>Client → Primary: "Write it now!"</h4>
+                    <p>
+                        After all replicas say "data received", client sends write command to primary.<br>
+                        Command = "Write the data I just pushed at offset X"
+                    </p>
                 </div>
 
                 <div class="flow-step" data-step="5">
-                    <h4>Primary Forwards Request to Secondaries</h4>
-                    <p>Primary assigns serial numbers to mutations and applies them in order. Forwards same order to secondaries.</p>
+                    <h4>Primary → Secondaries: "Write in this order"</h4>
+                    <p>
+                        Primary assigns a serial number (e.g., #42).<br>
+                        Writes to its own disk.<br>
+                        Tells secondaries: "Apply write #42"
+                    </p>
                 </div>
 
                 <div class="flow-step" data-step="6">
-                    <h4>Secondaries Reply to Primary</h4>
-                    <p>Each secondary signals completion after applying the mutation.</p>
+                    <h4>Secondaries → Primary: "Done!"</h4>
+                    <p>
+                        Each secondary applies the write.<br>
+                        Sends ACK back to primary.
+                    </p>
                 </div>
 
                 <div class="flow-step" data-step="7">
-                    <h4>Primary Replies to Client</h4>
-                    <p>Success if all replicas completed. Otherwise, error returned and client retries.</p>
+                    <h4>Primary → Client: "Success!" (or error)</h4>
+                    <p>
+                        If all 3 replicas succeeded: return success.<br>
+                        If any failed: return error (client retries).
+                    </p>
                 </div>
             </div>
         </div>
