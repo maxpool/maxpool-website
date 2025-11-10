@@ -178,16 +178,29 @@
             </div>
             <div class="content">
                 <p style="font-size: 1.05em; line-height: 1.6; margin-bottom: 15px;">
-                    Google File System (GFS) is a distributed file system designed to handle petabytes of data across thousands of commodity servers.
-                    Published in 2003, it revolutionized large-scale storage by treating component failures as normal rather than exceptional.
+                    Google File System (GFS) is Google's distributed file system built to store petabytes of data across thousands of
+                    cheap commodity servers. Published in 2003, it changed how we think about large-scale storage.
                 </p>
 
                 <div class="concept-box">
-                    <h4>🏗️ Core Design Assumptions</h4>
+                    <h4>🎯 The Core Problem</h4>
                     <p>
-                        <strong>Expect constant failures</strong> from disks, networks, and servers. <strong>Optimize for large files</strong> (multi-GB)
-                        and <strong>sequential appends</strong> rather than random writes. <strong>Co-design applications and file system</strong> together—
-                        relaxing strict POSIX compliance for better performance and simpler implementation.
+                        Traditional file systems assume failures are rare and use expensive, reliable hardware. At Google's scale
+                        (thousands of servers), <strong>something is always failing</strong>—disks die, network cards break, entire
+                        servers crash. GFS treats failure as the normal state, not an exception.
+                    </p>
+                </div>
+
+                <div class="concept-box">
+                    <h4>🏗️ Design Philosophy</h4>
+                    <p style="margin-bottom: 10px;">
+                        GFS makes specific assumptions about workload:
+                    </p>
+                    <p>
+                        <strong>Large files:</strong> Multi-GB files (web crawl data, indices) not millions of tiny files.<br>
+                        <strong>Append-heavy:</strong> Most writes append new data (like logs), random writes are rare.<br>
+                        <strong>Relaxed consistency:</strong> Applications can handle some consistency quirks for better performance.<br>
+                        <strong>High throughput > Low latency:</strong> Moving large amounts of data matters more than fast individual operations.
                     </p>
                 </div>
 
@@ -287,18 +300,33 @@
                     <div class="diagram-caption">GFS Architecture: Single master coordinates, clients communicate directly with chunk servers for data</div>
                 </div>
 
-                <p style="font-size: 1.05em; line-height: 1.6; margin: 20px 0;">
-                    <strong>Master Server:</strong> Single coordinator storing all metadata (namespace, file-to-chunk mapping, access control).
-                    <strong>Chunk Servers:</strong> Store 64MB chunks as Linux files—can scale to thousands per cluster.
-                    <strong>GFS Clients:</strong> Application libraries that handle master/chunk server communication.
+                <h4 style="margin: 25px 0 15px 0; font-size: 1.2em;">Three Key Components</h4>
+
+                <p style="font-size: 1.05em; line-height: 1.6; margin-bottom: 12px;">
+                    <strong>1. Master Server (Single server)</strong><br>
+                    Stores ALL metadata in RAM: file names, directory structure, which chunks belong to which files, where chunks are located.
+                    Think of it as the "phone book"—you ask it where your data is, but it never touches the actual data.
+                </p>
+
+                <p style="font-size: 1.05em; line-height: 1.6; margin-bottom: 12px;">
+                    <strong>2. Chunk Servers (Thousands per cluster)</strong><br>
+                    Store the actual data. Files are split into fixed-size 64MB chunks. Each chunk is stored as a plain Linux file on
+                    3 different chunk servers (for reliability). These are commodity Linux boxes with regular hard drives.
+                </p>
+
+                <p style="font-size: 1.05em; line-height: 1.6; margin-bottom: 20px;">
+                    <strong>3. GFS Client (Library in your app)</strong><br>
+                    When you read/write a file, the client library asks the master "where is this chunk?", gets back a list of chunk servers,
+                    then talks directly to those chunk servers to move data. The master never sees your data.
                 </p>
 
                 <div class="concept-box">
                     <h4>💡 Why 64MB Chunks?</h4>
                     <p>
-                        GFS uses unusually large chunks (64MB vs typical 4KB blocks). This reduces the number of interactions
-                        with the master, reduces network overhead, and is perfect for sequential reads/writes. However, it can
-                        lead to "hot spots" for small files that fit in a single chunk.
+                        Most file systems use 4KB blocks. GFS uses 64MB chunks—that's 16,000x larger! This means:
+                        <strong>Fewer metadata entries</strong> (one 1GB file = only 16 chunks to track), <strong>fewer master interactions</strong>
+                        (get chunk location once, then read/write 64MB), and <strong>perfect for sequential ops</strong> (reading logs, processing data).
+                        Downside: a tiny 1KB file still takes one chunk server's slot.
                     </p>
                 </div>
             </div>
@@ -365,10 +393,20 @@
 
                 <div class="concept-box">
                     <h4>⚡ Avoiding the Master Bottleneck</h4>
+                    <p style="margin-bottom: 10px;">
+                        "Wait, won't a single master become a bottleneck?" Good question! Here's how GFS avoids it:
+                    </p>
                     <p>
-                        <strong>Master handles metadata only, never data</strong>—clients get chunk locations then communicate directly with chunk servers.
-                        <strong>64 bytes of metadata per 64MB chunk</strong> enables keeping everything in RAM for fast access. <strong>Operation log</strong>
-                        persisted to disk allows second-level recovery. The single master architecture simplifies design without creating a data transfer bottleneck.
+                        <strong>1. Metadata only:</strong> Clients ask master "where is chunk X?" Master responds with locations. Then client
+                        talks <em>directly</em> to chunk servers for actual data. Master never sees your data flowing through it.
+                    </p>
+                    <p>
+                        <strong>2. Tiny metadata:</strong> Each 64MB chunk needs only ~64 bytes of metadata. So 100TB of data = only ~100MB of metadata.
+                        All fits in RAM for instant lookups.
+                    </p>
+                    <p>
+                        <strong>3. Client caching:</strong> Once you get chunk locations, cache them for minutes. Most operations don't need to
+                        ask the master at all.
                     </p>
                 </div>
             </div>
@@ -449,12 +487,12 @@
                 </div>
 
                 <div class="concept-box">
-                    <h4>🚀 Read Optimizations</h4>
+                    <h4>🚀 Why Reads Are Fast</h4>
                     <p>
-                        <strong>Client caching:</strong> Chunk locations cached for 5+ minutes to avoid repeated master queries.
-                        <strong>Batch requests:</strong> Multi-chunk reads handled in single master interaction.
-                        <strong>Replica selection:</strong> Clients pick closest replica by network topology.
-                        Data flows directly from chunk server to client—master never touches actual data.
+                        <strong>Caching:</strong> After first read, client caches chunk locations for 5+ minutes. No need to ask master again.<br>
+                        <strong>Batching:</strong> Reading a large file? Ask master for all chunk locations in one request.<br>
+                        <strong>Replica selection:</strong> Each chunk has 3 copies. Client picks the closest one (often same rack = low latency).<br>
+                        <strong>Direct transfer:</strong> Data flows chunk server → client. Master just gave directions, not involved in transfer.
                     </p>
                 </div>
             </div>
@@ -467,10 +505,20 @@
                 <div class="subtitle-section">Understanding the primary-secondary replication model</div>
             </div>
             <div class="content">
-                <p style="font-size: 1.05em; margin-bottom: 20px;">
-                    Writes are more complex than reads because GFS must ensure all replicas are consistent.
-                    GFS uses a <strong>lease mechanism</strong> where one replica becomes the "primary" and orders all mutations.
+                <p style="font-size: 1.05em; line-height: 1.6; margin-bottom: 15px;">
+                    Writes are trickier than reads because we have 3 replicas that need to stay in sync. GFS uses a clever trick:
+                    one replica becomes the <strong>"primary"</strong> (given a lease by the master) and controls the order of all writes.
                 </p>
+
+                <div class="concept-box">
+                    <h4>🔑 Key Insight: Separate Data Flow from Control Flow</h4>
+                    <p>
+                        GFS does something clever—it <strong>separates pushing data from applying writes</strong>. First, data is pushed to all
+                        replicas (in a pipelined chain for speed). <em>Then</em>, the client tells the primary "apply the write now." The primary
+                        picks an order and tells secondaries "apply in this order." This means expensive data transfer happens once, but control
+                        over ordering is centralized.
+                    </p>
+                </div>
 
                 <div class="diagram">
                     <svg viewBox="0 0 900 550" xmlns="http://www.w3.org/2000/svg">
@@ -612,10 +660,20 @@
                 <div class="subtitle-section">Understanding GFS's relaxed consistency guarantees</div>
             </div>
             <div class="content">
-                <p style="font-size: 1.05em; margin-bottom: 20px;">
-                    GFS provides a <strong>relaxed consistency model</strong> to achieve high performance. This was a controversial
-                    choice but suitable for Google's workloads.
+                <p style="font-size: 1.05em; line-height: 1.6; margin-bottom: 15px;">
+                    GFS makes a controversial trade-off: <strong>relaxed consistency</strong> for better performance. This means GFS doesn't
+                    guarantee perfect synchronization across replicas after every write. Sounds scary? It works because Google's applications
+                    are designed to handle it.
                 </p>
+
+                <div class="concept-box">
+                    <h4>🤔 What's the Problem?</h4>
+                    <p>
+                        Imagine 2 clients writing to the same chunk simultaneously. Traditional systems lock the file, handle writes sequentially—slow
+                        but safe. GFS lets both writes happen concurrently. All replicas see the <em>same</em> data (consistent), but it might be
+                        fragments from both writes mixed together (undefined). You need application-level logic to make sense of it.
+                    </p>
+                </div>
 
                 <div class="table-wrapper">
                     <table>
@@ -653,18 +711,25 @@
 
                 <div class="concept-box">
                     <h4>📝 Record Append: The Star Operation</h4>
+                    <p style="margin-bottom: 10px;">
+                        This is GFS's secret weapon! Instead of writing at a specific location, you say "append this record to the file."
+                        GFS picks where to put it and <strong>guarantees atomic append</strong>—your record is written completely or not at all.
+                    </p>
                     <p>
-                        GFS's record append operation is atomic and is the workhorse for Google's applications. It appends data
-                        atomically at an offset chosen by GFS (not client). This makes it perfect for multiple producers writing
-                        to the same file concurrently (e.g., merge operation results, producer-consumer queues).
+                        <strong>Example:</strong> 100 MapReduce workers all appending results to one output file. With record append, they all write
+                        concurrently without coordination. GFS ensures each record lands completely. Yes, there might be gaps or duplicate records
+                        (from retries), but you get <em>massive parallelism</em> instead of serialized writes.
                     </p>
                 </div>
 
-                <p style="font-size: 1.05em; line-height: 1.6; margin: 20px 0;">
-                    Applications handle relaxed consistency with <strong>checksums</strong> to detect corruption and <strong>unique IDs</strong>
-                    to identify duplicates. Most use <strong>record append</strong> (stronger guarantees) over regular writes. Readers filter out
-                    padding and duplicates. This pushes complexity to applications but enables system simplicity and performance.
-                </p>
+                <div class="concept-box">
+                    <h4>🛠️ How Applications Handle It</h4>
+                    <p>
+                        Google's apps use simple tricks: <strong>Checksums</strong> in each record catch corruption. <strong>Unique IDs</strong>
+                        let you detect and skip duplicates. <strong>Reader-side filtering</strong> ignores padding bytes. The application does a bit
+                        more work, but GFS stays simple and fast. Trade-off worth it for Google's workloads.
+                    </p>
+                </div>
 
                 <div class="pros-cons">
                     <div class="pros">
@@ -696,8 +761,10 @@
                 <div class="subtitle-section">How GFS handles constant failures</div>
             </div>
             <div class="content">
-                <p style="font-size: 1.05em; margin-bottom: 20px;">
-                    At Google's scale, machine failures are continuous. GFS was designed from day one to handle failures as normal operations.
+                <p style="font-size: 1.05em; line-height: 1.6; margin-bottom: 15px;">
+                    With thousands of servers, <strong>failures happen every day</strong>. A disk dies, a server crashes, a network switch fails.
+                    Traditional systems treat these as emergencies. GFS treats them as Tuesday. The system automatically detects and recovers from
+                    failures without human intervention.
                 </p>
 
                 <div class="comparison-grid">
