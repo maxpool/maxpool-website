@@ -11,8 +11,8 @@
             background: #f8f9fa;
             border: 2px solid #e0e0e0;
             border-radius: 12px;
-            padding: 30px;
-            margin: 30px 0;
+            padding: 20px;
+            margin: 20px 0;
             text-align: center;
         }
 
@@ -31,14 +31,24 @@
         .concept-box {
             background: linear-gradient(135deg, #fff8f0 0%, #fef5e7 100%);
             border-left: 4px solid var(--accent-warm);
-            padding: 20px;
-            margin: 20px 0;
+            padding: 15px 20px;
+            margin: 15px 0;
             border-radius: 8px;
         }
 
         .concept-box h4 {
             color: var(--accent-warm);
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .concept-box p {
             margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .concept-box p:last-child {
+            margin-bottom: 0;
         }
 
         .flow-step {
@@ -71,33 +81,34 @@
         .comparison-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
+            gap: 15px;
+            margin: 15px 0;
         }
 
         .comparison-item {
             background: white;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
-            padding: 20px;
+            padding: 15px;
         }
 
         .comparison-item h4 {
             color: var(--accent-warm);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+            font-size: 1.05em;
         }
 
         .pros-cons {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin: 20px 0;
+            gap: 15px;
+            margin: 15px 0;
         }
 
         .pros, .cons {
             background: white;
             border-radius: 8px;
-            padding: 20px;
+            padding: 15px;
         }
 
         .pros {
@@ -166,37 +177,17 @@
                 <div class="subtitle-section">The fundamentals and why it matters</div>
             </div>
             <div class="content">
-                <p style="font-size: 1.1em; line-height: 1.8; margin-bottom: 20px;">
-                    Google File System (GFS) is a distributed file system developed by Google to handle massive amounts of data
-                    across thousands of commodity servers. Published in 2003, it revolutionized how we think about storing and
-                    processing large-scale data.
+                <p style="font-size: 1.05em; line-height: 1.6; margin-bottom: 15px;">
+                    Google File System (GFS) is a distributed file system designed to handle petabytes of data across thousands of commodity servers.
+                    Published in 2003, it revolutionized large-scale storage by treating component failures as normal rather than exceptional.
                 </p>
 
                 <div class="concept-box">
-                    <h4>🎯 Key Problem It Solves</h4>
+                    <h4>🏗️ Core Design Assumptions</h4>
                     <p>
-                        Traditional file systems couldn't handle Google's scale: petabytes of data, thousands of servers,
-                        and constant hardware failures. GFS was designed to make failure handling automatic, not exceptional.
-                    </p>
-                </div>
-
-                <div class="concept-box">
-                    <h4>🏗️ Core Design Principles</h4>
-                    <p style="line-height: 1.8; margin-bottom: 15px;">
-                        When Google's engineers sat down to design GFS, they made some radical decisions based on their unique workload.
-                        Instead of treating component failures as rare events requiring human intervention, they designed the system to
-                        <strong>expect failures constantly</strong>. With thousands of commodity machines, something is always failing—a disk,
-                        a network card, or an entire server.
-                    </p>
-                    <p style="line-height: 1.8; margin-bottom: 15px;">
-                        The system is optimized for <strong>large files</strong> in the multi-gigabyte range, not millions of tiny files.
-                        This was perfect for Google's workloads like web crawl data, search indices, and MapReduce jobs. Most operations are
-                        <strong>sequential appends</strong> rather than random writes—think of log files or data pipelines where you're continuously
-                        adding new data to the end.
-                    </p>
-                    <p style="line-height: 1.8;">
-                        Finally, Google <strong>co-designed</strong> both the applications and the file system APIs together. This gave them
-                        flexibility to relax certain guarantees (like strict POSIX compliance) in exchange for better performance and simpler implementation.
+                        <strong>Expect constant failures</strong> from disks, networks, and servers. <strong>Optimize for large files</strong> (multi-GB)
+                        and <strong>sequential appends</strong> rather than random writes. <strong>Co-design applications and file system</strong> together—
+                        relaxing strict POSIX compliance for better performance and simpler implementation.
                     </p>
                 </div>
 
@@ -296,20 +287,10 @@
                     <div class="diagram-caption">GFS Architecture: Single master coordinates, clients communicate directly with chunk servers for data</div>
                 </div>
 
-                <p style="font-size: 1.05em; line-height: 1.8; margin: 30px 0;">
-                    GFS has three main types of components working together. The <strong>Master Server</strong> acts as the coordinator,
-                    storing all file system metadata like the namespace (file and directory names), access control lists, and the mapping
-                    from files to chunks. Think of it as the "brain" that knows where everything is.
-                </p>
-
-                <p style="font-size: 1.05em; line-height: 1.8; margin: 30px 0;">
-                    The <strong>Chunk Servers</strong> are the workhorses that actually store your data. They break files into 64MB chunks
-                    and store them as regular Linux files on their local disks. There can be thousands of these servers in a cluster.
-                </p>
-
-                <p style="font-size: 1.05em; line-height: 1.8; margin: 30px 0;">
-                    Finally, <strong>GFS Clients</strong> are libraries linked into your applications. They handle all the communication with
-                    the master and chunk servers, translating your read/write requests into the appropriate GFS operations.
+                <p style="font-size: 1.05em; line-height: 1.6; margin: 20px 0;">
+                    <strong>Master Server:</strong> Single coordinator storing all metadata (namespace, file-to-chunk mapping, access control).
+                    <strong>Chunk Servers:</strong> Store 64MB chunks as Linux files—can scale to thousands per cluster.
+                    <strong>GFS Clients:</strong> Application libraries that handle master/chunk server communication.
                 </p>
 
                 <div class="concept-box">
@@ -384,21 +365,10 @@
 
                 <div class="concept-box">
                     <h4>⚡ Avoiding the Master Bottleneck</h4>
-                    <p style="line-height: 1.8; margin-bottom: 15px;">
-                        You might wonder: "If there's only one master, won't it become a bottleneck?" Google solved this brilliantly with
-                        a simple principle: <strong>the master only handles metadata, never actual data</strong>. When you want to read a file,
-                        the client asks the master "where is this file?" and the master responds with chunk locations. Then the client talks
-                        directly to the chunk servers to get the actual data.
-                    </p>
-                    <p style="line-height: 1.8; margin-bottom: 15px;">
-                        The metadata is incredibly compact—each 64MB chunk requires only about 64 bytes of metadata. This means the master
-                        can keep <strong>everything in RAM</strong> for lightning-fast access. Even with petabytes of data, the metadata fits
-                        comfortably in the memory of a single server.
-                    </p>
-                    <p style="line-height: 1.8;">
-                        For durability, the master maintains an <strong>operation log</strong> that's persisted to disk and replicated to other
-                        machines. If the master crashes, it can recover quickly by replaying this log. The beauty is that recovery takes just
-                        seconds because the metadata is so small.
+                    <p>
+                        <strong>Master handles metadata only, never data</strong>—clients get chunk locations then communicate directly with chunk servers.
+                        <strong>64 bytes of metadata per 64MB chunk</strong> enables keeping everything in RAM for fast access. <strong>Operation log</strong>
+                        persisted to disk allows second-level recovery. The single master architecture simplifies design without creating a data transfer bottleneck.
                     </p>
                 </div>
             </div>
@@ -479,23 +449,12 @@
                 </div>
 
                 <div class="concept-box">
-                    <h4>🚀 Smart Optimizations for Fast Reads</h4>
-                    <p style="line-height: 1.8; margin-bottom: 15px;">
-                        GFS clients are smart about minimizing overhead. Once a client gets chunk locations from the master, it
-                        <strong>caches this information</strong> for future reads. This means you only talk to the master once, even if
-                        you read the same file multiple times. The cache is typically valid for minutes, which works great since chunk
-                        locations rarely change.
-                    </p>
-                    <p style="line-height: 1.8; margin-bottom: 15px;">
-                        Clients can also <strong>batch requests</strong>—if you're reading a large file that spans multiple chunks, the
-                        client can ask for all the chunk locations in a single request to the master. This dramatically reduces the number
-                        of round trips.
-                    </p>
-                    <p style="line-height: 1.8;">
-                        When choosing which replica to read from, the client picks the <strong>closest one</strong> based on network topology.
-                        Often this means reading from a server on the same network switch, which minimizes network latency. And remember—the
-                        data flows directly from chunk server to client, never through the master, keeping that single master from becoming
-                        a bandwidth bottleneck.
+                    <h4>🚀 Read Optimizations</h4>
+                    <p>
+                        <strong>Client caching:</strong> Chunk locations cached for 5+ minutes to avoid repeated master queries.
+                        <strong>Batch requests:</strong> Multi-chunk reads handled in single master interaction.
+                        <strong>Replica selection:</strong> Clients pick closest replica by network topology.
+                        Data flows directly from chunk server to client—master never touches actual data.
                     </p>
                 </div>
             </div>
@@ -701,18 +660,10 @@
                     </p>
                 </div>
 
-                <p style="font-size: 1.05em; line-height: 1.8; margin: 30px 0;">
-                    So how do applications deal with this relaxed consistency? Google's applications have learned to work with it through
-                    a few key techniques. They embed <strong>checksums</strong> in their records to detect any corruption. Each record also
-                    gets a <strong>unique identifier</strong>, which helps applications detect and ignore duplicates that might appear due to
-                    retries after failures.
-                </p>
-
-                <p style="font-size: 1.05em; line-height: 1.8; margin: 30px 0;">
-                    Most applications <strong>prefer using record append</strong> over regular writes because it has stronger guarantees—your
-                    data will be written atomically at least once. When reading, applications perform <strong>reader-side filtering</strong>,
-                    skipping over any padding bytes or duplicate records. Yes, this pushes some complexity to the application layer, but it's
-                    a reasonable trade-off for the simplicity and performance GFS provides at the system level.
+                <p style="font-size: 1.05em; line-height: 1.6; margin: 20px 0;">
+                    Applications handle relaxed consistency with <strong>checksums</strong> to detect corruption and <strong>unique IDs</strong>
+                    to identify duplicates. Most use <strong>record append</strong> (stronger guarantees) over regular writes. Readers filter out
+                    padding and duplicates. This pushes complexity to applications but enables system simplicity and performance.
                 </p>
 
                 <div class="pros-cons">
@@ -818,19 +769,10 @@
                     </table>
                 </div>
 
-                <p style="font-size: 1.05em; line-height: 1.8; margin: 30px 0;">
-                    The system is designed with <strong>no single point of failure</strong>. The master's state is replicated to multiple
-                    machines, and each chunk exists on at least three chunk servers. If anything fails, there are backups ready to take over.
-                    What's remarkable is the <strong>automatic recovery</strong>—the system continuously monitors itself and self-heals without
-                    requiring human intervention. When a disk fails or a server goes down, GFS automatically creates new replicas to maintain
-                    the target replication level.
-                </p>
-
-                <p style="font-size: 1.05em; line-height: 1.8; margin: 30px 0;">
-                    <strong>Checksums are everywhere</strong> in GFS. Every 64KB block has a checksum, allowing the system to detect corruption
-                    whether it comes from a failing disk, network errors, or even memory issues. When corruption is detected, GFS simply reads
-                    from a different replica and creates a new copy. Each chunk also has a <strong>version number</strong> that increments with
-                    each modification, making it easy to detect stale replicas that may have missed updates due to being temporarily offline.
+                <p style="font-size: 1.05em; line-height: 1.6; margin: 20px 0;">
+                    <strong>No single point of failure:</strong> Master state replicated, chunks have 3+ replicas. <strong>Automatic recovery:</strong>
+                    System self-heals when failures occur. <strong>Checksums on every 64KB block</strong> detect corruption from disk/network/memory.
+                    <strong>Version numbers</strong> identify stale replicas that missed updates.
                 </p>
             </div>
         </div>
@@ -895,17 +837,10 @@
                     </p>
                 </div>
 
-                <p style="font-size: 1.05em; line-height: 1.8; margin: 30px 0;">
-                    GFS employs several clever optimizations to squeeze out maximum performance. Clients <strong>batch multiple operations</strong>
-                    together to reduce the number of expensive RPCs to the master. Once a client retrieves chunk locations, it caches them for
-                    five minutes or more—this <strong>location caching</strong> means most reads and writes don't need to bother the master at all.
-                </p>
-
-                <p style="font-size: 1.05em; line-height: 1.8; margin: 30px 0;">
-                    When writing data, GFS uses <strong>pipelined writes</strong> where data flows through chunk servers in a chain topology. Each
-                    server forwards data to the next while simultaneously writing to its own disk, making efficient use of network bandwidth. Finally,
-                    instead of immediately deleting files, GFS uses <strong>lazy space reclamation</strong>—garbage collection runs during idle periods,
-                    which provides an undelete capability and simplifies the system design.
+                <p style="font-size: 1.05em; line-height: 1.6; margin: 20px 0;">
+                    <strong>Batch operations:</strong> Multiple operations grouped to reduce master RPCs. <strong>Pipelined writes:</strong> Data flows through
+                    chunk servers in chain—each forwards while writing to disk. <strong>Lazy space reclamation:</strong> Garbage collection during idle periods
+                    provides undelete capability.
                 </p>
 
                 <div class="diagram">
@@ -953,32 +888,19 @@
             <div class="content">
                 <div class="concept-box">
                     <h4>✅ What GFS Got Right</h4>
-                    <p style="line-height: 1.8; margin-bottom: 15px;">
-                        GFS made several brilliant design decisions that have stood the test of time. The idea of <strong>designing for failure</strong>
-                        from day one—treating component failures as normal rather than exceptional—proved absolutely essential at scale. Using
-                        <strong>large 64MB chunks</strong> reduced the master's metadata overhead dramatically, allowing one server to manage petabytes of data.
-                    </p>
-                    <p style="line-height: 1.8; margin-bottom: 15px;">
-                        The <strong>single master</strong> architecture simplified the design enormously and made it possible to make global decisions about
-                        data placement and load balancing. The crucial <strong>separation of control and data flows</strong> meant the master never became
-                        a data transfer bottleneck. And the <strong>record append</strong> operation turned out to be the perfect primitive for Google's
-                        workloads—simple, efficient, and naturally supporting concurrent writers.
+                    <p>
+                        <strong>Design for failure:</strong> Treating failures as normal proved essential at scale. <strong>Large 64MB chunks:</strong> Dramatically
+                        reduced metadata overhead. <strong>Single master:</strong> Simplified design, enabled global decisions. <strong>Separation of control/data:</strong>
+                        Prevented master data bottleneck. <strong>Record append:</strong> Perfect primitive for concurrent writes.
                     </p>
                 </div>
 
                 <div class="concept-box">
                     <h4>⚠️ Limitations & Challenges</h4>
-                    <p style="line-height: 1.8; margin-bottom: 15px;">
-                        Of course, no system is perfect. The <strong>single master eventually became a scaling limitation</strong> for metadata-heavy
-                        workloads, especially those involving many small files. When you have millions of tiny files, each one creates metadata overhead,
-                        and all those requests funnel through one master server. This created <strong>hot spots</strong> where a single popular file could
-                        overload the chunk server storing it.
-                    </p>
-                    <p style="line-height: 1.8;">
-                        The <strong>relaxed consistency model</strong> required applications to be carefully designed with checksums, unique IDs, and
-                        duplicate filtering. While this was acceptable for Google's workloads, it made GFS unsuitable for applications expecting strong
-                        consistency. Finally, operations teams had to <strong>manually tune</strong> replication factors and make decisions about chunk
-                        placement, which didn't scale well as the system grew.
+                    <p>
+                        <strong>Single master limits scale:</strong> Metadata bottleneck for many small files. <strong>Hot spots:</strong> Popular small files
+                        overload single chunk server. <strong>Relaxed consistency:</strong> Requires application-level checksums, IDs, duplicate filtering.
+                        <strong>Manual tuning:</strong> Operations teams must configure replication factors and placement.
                     </p>
                 </div>
 
@@ -1019,22 +941,11 @@
                 </div>
 
                 <div class="concept-box">
-                    <h4>🌍 Impact on the Industry</h4>
-                    <p style="line-height: 1.8; margin-bottom: 15px;">
-                        GFS's influence on the tech industry cannot be overstated. When Google published the GFS paper in 2003, it
-                        <strong>directly inspired the creation of Hadoop HDFS</strong>—Yahoo engineers built an open-source implementation
-                        that closely mirrored GFS's design, making these ideas accessible to everyone.
-                    </p>
-                    <p style="line-height: 1.8; margin-bottom: 15px;">
-                        The paper <strong>popularized distributed file systems</strong> and showed they could actually work at massive scale.
-                        Before GFS, many engineers were skeptical that you could build reliable storage from thousands of unreliable commodity servers.
-                        The <strong>design patterns</strong> GFS introduced—like the master-worker architecture and separating control from data flows—are
-                        now standard techniques taught in distributed systems courses.
-                    </p>
-                    <p style="line-height: 1.8;">
-                        Perhaps most importantly, GFS <strong>changed how we think about failure handling</strong>. The idea that failure is continuous
-                        and should be designed for from the start, rather than being an edge case to handle later, has become fundamental to how we build
-                        large-scale distributed systems today.
+                    <h4>🌍 Industry Impact</h4>
+                    <p>
+                        <strong>Inspired Hadoop HDFS:</strong> Yahoo engineers created open-source implementation. <strong>Popularized distributed filesystems:</strong>
+                        Proved reliable storage from unreliable commodity servers at scale. <strong>Design patterns:</strong> Master-worker architecture,
+                        control/data separation now standard. <strong>Failure handling philosophy:</strong> Design for continuous failure from day one became fundamental.
                     </p>
                 </div>
             </div>
