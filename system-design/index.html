@@ -3,147 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google File System (GFS) - System Design Guide</title>
+    <title>System Design Papers - Maxpool</title>
     <link rel="stylesheet" href="../design-system.css">
     <style>
-        /* Diagram styles */
-        .diagram {
-            background: #f8f9fa;
-            border: 2px solid #e0e0e0;
+        .paper-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .paper-card {
+            background: white;
             border-radius: 12px;
-            padding: 20px;
-            margin: 20px 0;
-            text-align: center;
+            padding: 25px;
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-base);
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            border: 2px solid transparent;
         }
 
-        .diagram svg {
-            max-width: 100%;
-            height: auto;
+        .paper-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent-warm);
         }
 
-        .diagram-caption {
-            margin-top: 15px;
-            font-size: 0.9em;
-            color: var(--text-secondary);
-            font-style: italic;
-        }
-
-        .concept-box {
-            background: linear-gradient(135deg, #fff8f0 0%, #fef5e7 100%);
-            border-left: 4px solid var(--accent-warm);
-            padding: 15px 20px;
-            margin: 15px 0;
-            border-radius: 8px;
-        }
-
-        .concept-box h4 {
+        .paper-company {
+            font-size: 0.85em;
             color: var(--accent-warm);
-            margin-bottom: 8px;
-            font-size: 1.1em;
-        }
-
-        .concept-box p {
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             margin-bottom: 10px;
+        }
+
+        .paper-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .paper-description {
+            font-size: 0.95em;
+            color: var(--text-secondary);
             line-height: 1.6;
+            margin-bottom: 15px;
         }
 
-        .concept-box p:last-child {
-            margin-bottom: 0;
-        }
-
-        .flow-step {
-            background: white;
-            border: 2px solid var(--accent-cool);
-            border-radius: 8px;
-            padding: 15px;
-            margin: 10px 0;
-            position: relative;
-            padding-left: 60px;
-        }
-
-        .flow-step::before {
-            content: attr(data-step);
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: var(--accent-cool);
-            color: white;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
+        .paper-tags {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin: 15px 0;
-        }
-
-        .comparison-item {
-            background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 15px;
-        }
-
-        .comparison-item h4 {
+        .paper-tag {
+            font-size: 0.75em;
+            padding: 4px 10px;
+            background: rgba(220, 136, 80, 0.1);
             color: var(--accent-warm);
-            margin-bottom: 8px;
-            font-size: 1.05em;
+            border-radius: 12px;
+            font-weight: 500;
         }
 
-        .pros-cons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin: 15px 0;
+        .coming-soon {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
-        .pros, .cons {
-            background: white;
-            border-radius: 8px;
-            padding: 15px;
+        .coming-soon:hover {
+            transform: none;
+            border-color: transparent;
         }
 
-        .pros {
-            border: 2px solid var(--metric-low);
-        }
-
-        .cons {
-            border: 2px solid var(--metric-high);
-        }
-
-        .pros h4 {
-            color: var(--metric-low);
-        }
-
-        .cons h4 {
-            color: var(--metric-high);
-        }
-
-        .code-snippet {
-            background: #2d2d2d;
-            color: #f8f8f2;
-            padding: 20px;
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-            overflow-x: auto;
-            margin: 20px 0;
+        .coming-soon-badge {
+            display: inline-block;
+            font-size: 0.75em;
+            padding: 4px 10px;
+            background: var(--text-muted);
+            color: white;
+            border-radius: 12px;
+            margin-left: 8px;
         }
 
         @media (max-width: 768px) {
-            .pros-cons {
-                grid-template-columns: 1fr;
-            }
-
-            .comparison-grid {
+            .paper-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -151,13 +99,12 @@
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <div class="main-header">
             <div class="header-content">
                 <a href="../" class="nav-home">← Home</a>
                 <div class="header-left">
-                    <h1 class="heading-2">Google File System (GFS)</h1>
-                    <div class="subtitle-section">Understanding Google's groundbreaking distributed file system</div>
+                    <h1 class="heading-2">System Design Papers</h1>
+                    <div class="subtitle-section">Master distributed systems with visual guides to foundational papers</div>
                 </div>
                 <div class="cta">
                     <div>
@@ -170,913 +117,182 @@
             </div>
         </div>
 
-        <!-- Section 1: Introduction -->
         <div class="section">
-            <div class="section-header">
-                <div class="section-title heading-3">What is Google File System?</div>
-                <div class="subtitle-section">The fundamentals and why it matters</div>
-            </div>
             <div class="content">
-                <p style="font-size: 1.05em; line-height: 1.6; margin-bottom: 15px;">
-                    Google File System (GFS) is Google's distributed file system built to store petabytes of data across thousands of
-                    cheap commodity servers. Published in 2003, it changed how we think about large-scale storage.
+                <h2 style="font-size: 1.5em; margin-bottom: 10px; color: var(--accent-warm);">Google</h2>
+                <p style="margin-bottom: 25px; color: var(--text-secondary);">
+                    Foundational papers that shaped modern distributed systems
                 </p>
 
-                <div class="concept-box">
-                    <h4>🎯 The Core Problem</h4>
-                    <p>
-                        Traditional file systems assume failures are rare and use expensive, reliable hardware. At Google's scale
-                        (thousands of servers), <strong>something is always failing</strong>—disks die, network cards break, entire
-                        servers crash. GFS treats failure as the normal state, not an exception.
-                    </p>
-                </div>
+                <div class="paper-grid">
+                    <a href="gfs.html" class="paper-card">
+                        <div class="paper-company">Google • 2003</div>
+                        <div class="paper-title">Google File System (GFS)</div>
+                        <div class="paper-description">
+                            Distributed file system for large-scale data processing. Learn how Google stores petabytes across
+                            thousands of commodity servers with automatic failure handling.
+                        </div>
+                        <div class="paper-tags">
+                            <span class="paper-tag">Storage</span>
+                            <span class="paper-tag">Fault Tolerance</span>
+                            <span class="paper-tag">Large Scale</span>
+                        </div>
+                    </a>
 
-                <div class="concept-box">
-                    <h4>🏗️ Design Philosophy</h4>
-                    <p style="margin-bottom: 10px;">
-                        GFS makes specific assumptions about workload:
-                    </p>
-                    <p>
-                        <strong>Large files:</strong> Multi-GB files (web crawl data, indices) not millions of tiny files.<br>
-                        <strong>Append-heavy:</strong> Most writes append new data (like logs), random writes are rare.<br>
-                        <strong>Relaxed consistency:</strong> Applications can handle some consistency quirks for better performance.<br>
-                        <strong>High throughput > Low latency:</strong> Moving large amounts of data matters more than fast individual operations.
-                    </p>
-                </div>
-
-                <div class="comparison-grid">
-                    <div class="comparison-item">
-                        <h4>Traditional File System</h4>
-                        <ul style="font-size: 0.9em; color: var(--text-secondary);">
-                            <li>Optimized for small files</li>
-                            <li>Failure is exceptional</li>
-                            <li>Random read/write focus</li>
-                            <li>Single server or small cluster</li>
-                        </ul>
+                    <div class="paper-card coming-soon">
+                        <div class="paper-company">Google • 2004</div>
+                        <div class="paper-title">
+                            MapReduce
+                            <span class="coming-soon-badge">Coming Soon</span>
+                        </div>
+                        <div class="paper-description">
+                            Simplified data processing on large clusters. The programming model that democratized
+                            big data processing.
+                        </div>
+                        <div class="paper-tags">
+                            <span class="paper-tag">Data Processing</span>
+                            <span class="paper-tag">Distributed Computing</span>
+                        </div>
                     </div>
-                    <div class="comparison-item">
-                        <h4>Google File System</h4>
-                        <ul style="font-size: 0.9em; color: var(--text-secondary);">
-                            <li>Optimized for large files (GB+)</li>
-                            <li>Failure is continuous</li>
-                            <li>Sequential append focus</li>
-                            <li>Thousands of servers</li>
-                        </ul>
+
+                    <div class="paper-card coming-soon">
+                        <div class="paper-company">Google • 2006</div>
+                        <div class="paper-title">
+                            BigTable
+                            <span class="coming-soon-badge">Coming Soon</span>
+                        </div>
+                        <div class="paper-description">
+                            Distributed storage system for structured data. NoSQL database designed to scale to
+                            petabytes across thousands of machines.
+                        </div>
+                        <div class="paper-tags">
+                            <span class="paper-tag">NoSQL</span>
+                            <span class="paper-tag">Storage</span>
+                        </div>
+                    </div>
+
+                    <div class="paper-card coming-soon">
+                        <div class="paper-company">Google • 2012</div>
+                        <div class="paper-title">
+                            Spanner
+                            <span class="coming-soon-badge">Coming Soon</span>
+                        </div>
+                        <div class="paper-description">
+                            Globally-distributed database with external consistency. First system to distribute data
+                            at global scale with strong consistency.
+                        </div>
+                        <div class="paper-tags">
+                            <span class="paper-tag">SQL</span>
+                            <span class="paper-tag">Global Distribution</span>
+                            <span class="paper-tag">Consistency</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 style="font-size: 1.5em; margin: 50px 0 10px 0; color: var(--accent-warm);">Amazon</h2>
+                <p style="margin-bottom: 25px; color: var(--text-secondary);">
+                    Battle-tested systems powering AWS and Amazon.com
+                </p>
+
+                <div class="paper-grid">
+                    <div class="paper-card coming-soon">
+                        <div class="paper-company">Amazon • 2007</div>
+                        <div class="paper-title">
+                            Dynamo
+                            <span class="coming-soon-badge">Coming Soon</span>
+                        </div>
+                        <div class="paper-description">
+                            Highly available key-value store. Learn about eventual consistency, consistent hashing,
+                            and how to build for 99.99% availability.
+                        </div>
+                        <div class="paper-tags">
+                            <span class="paper-tag">NoSQL</span>
+                            <span class="paper-tag">High Availability</span>
+                            <span class="paper-tag">Eventual Consistency</span>
+                        </div>
+                    </div>
+
+                    <div class="paper-card coming-soon">
+                        <div class="paper-company">Amazon • 2017</div>
+                        <div class="paper-title">
+                            Amazon Aurora
+                            <span class="coming-soon-badge">Coming Soon</span>
+                        </div>
+                        <div class="paper-description">
+                            Cloud-native relational database. Separation of compute and storage, with 6-way
+                            replication for durability.
+                        </div>
+                        <div class="paper-tags">
+                            <span class="paper-tag">SQL</span>
+                            <span class="paper-tag">Cloud Native</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 style="font-size: 1.5em; margin: 50px 0 10px 0; color: var(--accent-warm);">Meta</h2>
+                <p style="margin-bottom: 25px; color: var(--text-secondary);">
+                    Systems built to handle billions of users
+                </p>
+
+                <div class="paper-grid">
+                    <div class="paper-card coming-soon">
+                        <div class="paper-company">Meta • 2010</div>
+                        <div class="paper-title">
+                            Cassandra
+                            <span class="coming-soon-badge">Coming Soon</span>
+                        </div>
+                        <div class="paper-description">
+                            Distributed NoSQL database combining Dynamo and BigTable. Powers Facebook's inbox
+                            search and more.
+                        </div>
+                        <div class="paper-tags">
+                            <span class="paper-tag">NoSQL</span>
+                            <span class="paper-tag">Wide Column</span>
+                        </div>
+                    </div>
+
+                    <div class="paper-card coming-soon">
+                        <div class="paper-company">Meta • 2013</div>
+                        <div class="paper-title">
+                            TAO
+                            <span class="coming-soon-badge">Coming Soon</span>
+                        </div>
+                        <div class="paper-description">
+                            Distributed graph database for social graphs. Handles Facebook's social graph queries
+                            with billions of nodes and trillions of edges.
+                        </div>
+                        <div class="paper-tags">
+                            <span class="paper-tag">Graph Database</span>
+                            <span class="paper-tag">Caching</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 style="font-size: 1.5em; margin: 50px 0 10px 0; color: var(--accent-warm);">Open Source</h2>
+                <p style="margin-bottom: 25px; color: var(--text-secondary);">
+                    Community-driven innovations
+                </p>
+
+                <div class="paper-grid">
+                    <div class="paper-card coming-soon">
+                        <div class="paper-company">Apache • 2006</div>
+                        <div class="paper-title">
+                            Kafka
+                            <span class="coming-soon-badge">Coming Soon</span>
+                        </div>
+                        <div class="paper-description">
+                            Distributed event streaming platform. Learn how LinkedIn built a system that handles
+                            trillions of messages per day.
+                        </div>
+                        <div class="paper-tags">
+                            <span class="paper-tag">Event Streaming</span>
+                            <span class="paper-tag">Pub/Sub</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Section 2: High-Level Architecture -->
-        <div class="section">
-            <div class="section-header">
-                <div class="section-title heading-3">High-Level Architecture</div>
-                <div class="subtitle-section">Understanding the master-chunk server model</div>
-            </div>
-            <div class="content">
-                <div class="diagram">
-                    <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Client -->
-                        <rect x="50" y="50" width="120" height="80" fill="#4A90E2" rx="8"/>
-                        <text x="110" y="95" text-anchor="middle" fill="white" font-size="16" font-weight="bold">GFS Client</text>
-
-                        <!-- Master -->
-                        <rect x="340" y="50" width="120" height="80" fill="#E74C3C" rx="8"/>
-                        <text x="400" y="85" text-anchor="middle" fill="white" font-size="16" font-weight="bold">Master</text>
-                        <text x="400" y="105" text-anchor="middle" fill="white" font-size="12">(Single Server)</text>
-
-                        <!-- Chunk Servers -->
-                        <rect x="50" y="250" width="120" height="80" fill="#27AE60" rx="8"/>
-                        <text x="110" y="285" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Chunk Server</text>
-                        <text x="110" y="305" text-anchor="middle" fill="white" font-size="12">Replica 1</text>
-
-                        <rect x="240" y="250" width="120" height="80" fill="#27AE60" rx="8"/>
-                        <text x="300" y="285" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Chunk Server</text>
-                        <text x="300" y="305" text-anchor="middle" fill="white" font-size="12">Replica 2</text>
-
-                        <rect x="430" y="250" width="120" height="80" fill="#27AE60" rx="8"/>
-                        <text x="490" y="285" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Chunk Server</text>
-                        <text x="490" y="305" text-anchor="middle" fill="white" font-size="12">Replica 3</text>
-
-                        <rect x="620" y="250" width="120" height="80" fill="#27AE60" rx="8"/>
-                        <text x="680" y="285" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Chunk Server</text>
-                        <text x="680" y="305" text-anchor="middle" fill="white" font-size="12">Replica N</text>
-
-                        <!-- Linux File System -->
-                        <rect x="50" y="380" width="120" height="60" fill="#95A5A6" rx="8"/>
-                        <text x="110" y="415" text-anchor="middle" fill="white" font-size="12">Linux FS</text>
-
-                        <rect x="240" y="380" width="120" height="60" fill="#95A5A6" rx="8"/>
-                        <text x="300" y="415" text-anchor="middle" fill="white" font-size="12">Linux FS</text>
-
-                        <rect x="430" y="380" width="120" height="60" fill="#95A5A6" rx="8"/>
-                        <text x="490" y="415" text-anchor="middle" fill="white" font-size="12">Linux FS</text>
-
-                        <rect x="620" y="380" width="120" height="60" fill="#95A5A6" rx="8"/>
-                        <text x="680" y="415" text-anchor="middle" fill="white" font-size="12">Linux FS</text>
-
-                        <!-- Arrows -->
-                        <!-- Client to Master -->
-                        <path d="M 170 90 L 340 90" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
-                        <text x="255" y="80" font-size="12" fill="#333">1. Metadata</text>
-
-                        <!-- Client to Chunk Servers -->
-                        <path d="M 110 130 L 110 250" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
-                        <text x="120" y="190" font-size="12" fill="#333">2. Data</text>
-
-                        <!-- Chunk Servers to Linux FS -->
-                        <path d="M 110 330 L 110 380" stroke="#666" stroke-width="2" fill="none"/>
-                        <path d="M 300 330 L 300 380" stroke="#666" stroke-width="2" fill="none"/>
-                        <path d="M 490 330 L 490 380" stroke="#666" stroke-width="2" fill="none"/>
-                        <path d="M 680 330 L 680 380" stroke="#666" stroke-width="2" fill="none"/>
-
-                        <!-- Arrow marker definition -->
-                        <defs>
-                            <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-                                <polygon points="0 0, 10 3, 0 6" fill="#333"/>
-                            </marker>
-                        </defs>
-                    </svg>
-                    <div class="diagram-caption">GFS Architecture: Single master coordinates, clients communicate directly with chunk servers for data</div>
-                </div>
-
-                <h4 style="margin: 25px 0 15px 0; font-size: 1.2em;">Three Key Components</h4>
-
-                <p style="font-size: 1.05em; line-height: 1.6; margin-bottom: 12px;">
-                    <strong>1. Master Server (Single server)</strong><br>
-                    Stores ALL metadata in RAM: file names, directory structure, which chunks belong to which files, where chunks are located.
-                    Think of it as the "phone book"—you ask it where your data is, but it never touches the actual data.
-                </p>
-
-                <p style="font-size: 1.05em; line-height: 1.6; margin-bottom: 12px;">
-                    <strong>2. Chunk Servers (Thousands per cluster)</strong><br>
-                    Store the actual data. Files are split into fixed-size 64MB chunks. Each chunk is stored as a plain Linux file on
-                    3 different chunk servers (for reliability). These are commodity Linux boxes with regular hard drives.
-                </p>
-
-                <p style="font-size: 1.05em; line-height: 1.6; margin-bottom: 20px;">
-                    <strong>3. GFS Client (Library in your app)</strong><br>
-                    When you read/write a file, the client library asks the master "where is this chunk?", gets back a list of chunk servers,
-                    then talks directly to those chunk servers to move data. The master never sees your data.
-                </p>
-
-                <div class="concept-box">
-                    <h4>💡 Why 64MB Chunks?</h4>
-                    <p>
-                        Most file systems use 4KB blocks. GFS uses 64MB chunks—that's 16,000x larger! This means:
-                        <strong>Fewer metadata entries</strong> (one 1GB file = only 16 chunks to track), <strong>fewer master interactions</strong>
-                        (get chunk location once, then read/write 64MB), and <strong>perfect for sequential ops</strong> (reading logs, processing data).
-                        Downside: a tiny 1KB file still takes one chunk server's slot.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Section 3: The Master Server -->
-        <div class="section">
-            <div class="section-header">
-                <div class="section-title heading-3">The Master Server</div>
-                <div class="subtitle-section">Single point of coordination, not bottleneck</div>
-            </div>
-            <div class="content">
-                <p style="font-size: 1.05em; margin-bottom: 20px;">
-                    The master is the brain of GFS. It maintains all metadata but <strong>never</strong> moves actual file data through itself.
-                </p>
-
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="width: 30%">Master Responsibility</th>
-                                <th style="width: 50%">Description</th>
-                                <th style="width: 20%">Storage</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><span class="technique-name">Namespace Management</span></td>
-                                <td class="description">File and directory names, directory tree structure</td>
-                                <td><span class="metric complexity-low">Persistent</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="technique-name">Chunk Location</span></td>
-                                <td class="description">Which chunk servers have which chunks</td>
-                                <td><span class="metric complexity-medium">In-Memory</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="technique-name">Access Control</span></td>
-                                <td class="description">File permissions and security</td>
-                                <td><span class="metric complexity-low">Persistent</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="technique-name">Chunk Lease Management</span></td>
-                                <td class="description">Grants leases to primary replicas for mutations</td>
-                                <td><span class="metric complexity-medium">In-Memory</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="technique-name">Garbage Collection</span></td>
-                                <td class="description">Lazy deletion of orphaned chunks</td>
-                                <td><span class="metric complexity-high">Background</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="concept-box">
-                    <h4>🔑 Why Store Chunk Locations in Memory?</h4>
-                    <p>
-                        The master doesn't persist chunk locations to disk. Instead, it asks chunk servers for their chunks
-                        at startup and via heartbeat messages. This simplifies consistency - the chunk servers are the single
-                        source of truth for what chunks they have.
-                    </p>
-                </div>
-
-                <div class="concept-box">
-                    <h4>⚡ Avoiding the Master Bottleneck</h4>
-                    <p style="margin-bottom: 10px;">
-                        "Wait, won't a single master become a bottleneck?" Good question! Here's how GFS avoids it:
-                    </p>
-                    <p>
-                        <strong>1. Metadata only:</strong> Clients ask master "where is chunk X?" Master responds with locations. Then client
-                        talks <em>directly</em> to chunk servers for actual data. Master never sees your data flowing through it.
-                    </p>
-                    <p>
-                        <strong>2. Tiny metadata:</strong> Each 64MB chunk needs only ~64 bytes of metadata. So 100TB of data = only ~100MB of metadata.
-                        All fits in RAM for instant lookups.
-                    </p>
-                    <p>
-                        <strong>3. Client caching:</strong> Once you get chunk locations, cache them for minutes. Most operations don't need to
-                        ask the master at all.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Section 4: Read Operation Flow -->
-        <div class="section">
-            <div class="section-header">
-                <div class="section-title heading-3">How Reads Work</div>
-                <div class="subtitle-section">Step-by-step data retrieval process</div>
-            </div>
-            <div class="content">
-                <div class="diagram">
-                    <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Client -->
-                        <rect x="50" y="50" width="100" height="60" fill="#4A90E2" rx="8"/>
-                        <text x="100" y="85" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Client</text>
-
-                        <!-- Master -->
-                        <rect x="350" y="50" width="100" height="60" fill="#E74C3C" rx="8"/>
-                        <text x="400" y="85" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Master</text>
-
-                        <!-- Chunk Server -->
-                        <rect x="650" y="50" width="100" height="60" fill="#27AE60" rx="8"/>
-                        <text x="700" y="75" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Chunk</text>
-                        <text x="700" y="95" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Server</text>
-
-                        <!-- Step 1: Client to Master -->
-                        <path d="M 150 80 L 350 80" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead2)"/>
-                        <text x="230" y="70" font-size="12" fill="#333" font-weight="bold">1. Request</text>
-                        <text x="200" y="100" font-size="11" fill="#666">(filename, byte range)</text>
-
-                        <!-- Step 2: Master to Client -->
-                        <path d="M 350 100 L 150 100" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead2)"/>
-                        <text x="230" y="130" font-size="12" fill="#333" font-weight="bold">2. Response</text>
-                        <text x="180" y="150" font-size="11" fill="#666">(chunk handle, locations)</text>
-
-                        <!-- Step 3: Client to Chunk Server -->
-                        <path d="M 150 120 Q 400 250 650 120" stroke="#27AE60" stroke-width="3" fill="none" marker-end="url(#arrowhead3)"/>
-                        <text x="360" y="240" font-size="12" fill="#27AE60" font-weight="bold">3. Read Data</text>
-                        <text x="330" y="260" font-size="11" fill="#27AE60">(chunk handle, byte range)</text>
-
-                        <!-- Step 4: Chunk Server to Client -->
-                        <path d="M 650 140 Q 400 300 150 140" stroke="#27AE60" stroke-width="3" fill="none" marker-end="url(#arrowhead3)"/>
-                        <text x="360" y="310" font-size="12" fill="#27AE60" font-weight="bold">4. Return Data</text>
-
-                        <!-- Arrow markers -->
-                        <defs>
-                            <marker id="arrowhead2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-                                <polygon points="0 0, 10 3, 0 6" fill="#333"/>
-                            </marker>
-                            <marker id="arrowhead3" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-                                <polygon points="0 0, 10 3, 0 6" fill="#27AE60"/>
-                            </marker>
-                        </defs>
-                    </svg>
-                    <div class="diagram-caption">Read flow: Client asks master for locations, then reads directly from chunk server</div>
-                </div>
-
-                <div class="flow-step" data-step="1">
-                    <h4>Client Sends Request to Master</h4>
-                    <p>Client translates (filename, byte offset) into (filename, chunk index) and sends to master.</p>
-                </div>
-
-                <div class="flow-step" data-step="2">
-                    <h4>Master Returns Chunk Locations</h4>
-                    <p>Master replies with chunk handle and locations of all replicas. Client caches this info.</p>
-                </div>
-
-                <div class="flow-step" data-step="3">
-                    <h4>Client Contacts Chunk Server Directly</h4>
-                    <p>Client picks the closest replica (often same network switch) and sends read request.</p>
-                </div>
-
-                <div class="flow-step" data-step="4">
-                    <h4>Chunk Server Returns Data</h4>
-                    <p>Chunk server reads from its local Linux file system and sends data back to client.</p>
-                </div>
-
-                <div class="concept-box">
-                    <h4>🚀 Why Reads Are Fast</h4>
-                    <p>
-                        <strong>Caching:</strong> After first read, client caches chunk locations for 5+ minutes. No need to ask master again.<br>
-                        <strong>Batching:</strong> Reading a large file? Ask master for all chunk locations in one request.<br>
-                        <strong>Replica selection:</strong> Each chunk has 3 copies. Client picks the closest one (often same rack = low latency).<br>
-                        <strong>Direct transfer:</strong> Data flows chunk server → client. Master just gave directions, not involved in transfer.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Section 5: Write Operation Flow -->
-        <div class="section">
-            <div class="section-header">
-                <div class="section-title heading-3">How Writes Work</div>
-                <div class="subtitle-section">Understanding the primary-secondary replication model</div>
-            </div>
-            <div class="content">
-                <p style="font-size: 1.05em; line-height: 1.6; margin-bottom: 15px;">
-                    Writes are trickier than reads because we have 3 replicas that need to stay in sync. GFS uses a clever trick:
-                    one replica becomes the <strong>"primary"</strong> (given a lease by the master) and controls the order of all writes.
-                </p>
-
-                <div class="concept-box">
-                    <h4>🔑 Key Insight: Separate Data Flow from Control Flow</h4>
-                    <p>
-                        GFS does something clever—it <strong>separates pushing data from applying writes</strong>. First, data is pushed to all
-                        replicas (in a pipelined chain for speed). <em>Then</em>, the client tells the primary "apply the write now." The primary
-                        picks an order and tells secondaries "apply in this order." This means expensive data transfer happens once, but control
-                        over ordering is centralized.
-                    </p>
-                </div>
-
-                <div class="diagram">
-                    <svg viewBox="0 0 900 550" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Client -->
-                        <rect x="50" y="50" width="100" height="60" fill="#4A90E2" rx="8"/>
-                        <text x="100" y="85" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Client</text>
-
-                        <!-- Master -->
-                        <rect x="400" y="50" width="100" height="60" fill="#E74C3C" rx="8"/>
-                        <text x="450" y="85" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Master</text>
-
-                        <!-- Primary -->
-                        <rect x="250" y="250" width="120" height="70" fill="#F39C12" rx="8"/>
-                        <text x="310" y="275" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Primary</text>
-                        <text x="310" y="295" text-anchor="middle" fill="white" font-size="12">(Lease Holder)</text>
-
-                        <!-- Secondary 1 -->
-                        <rect x="450" y="250" width="100" height="70" fill="#27AE60" rx="8"/>
-                        <text x="500" y="280" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Secondary</text>
-                        <text x="500" y="300" text-anchor="middle" fill="white" font-size="11">Replica 1</text>
-
-                        <!-- Secondary 2 -->
-                        <rect x="620" y="250" width="100" height="70" fill="#27AE60" rx="8"/>
-                        <text x="670" y="280" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Secondary</text>
-                        <text x="670" y="300" text-anchor="middle" fill="white" font-size="11">Replica 2</text>
-
-                        <!-- Step 1 -->
-                        <path d="M 150 80 L 400 80" stroke="#333" stroke-width="2" marker-end="url(#arrowhead4)"/>
-                        <text x="240" y="70" font-size="11" fill="#333">1. Which chunkserver?</text>
-
-                        <!-- Step 2 -->
-                        <path d="M 400 100 L 150 100" stroke="#333" stroke-width="2" marker-end="url(#arrowhead4)"/>
-                        <text x="200" y="120" font-size="11" fill="#333">2. Primary + secondaries</text>
-
-                        <!-- Step 3a: Push data to all -->
-                        <path d="M 100 110 L 310 250" stroke="#9B59B6" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead5)"/>
-                        <path d="M 100 110 L 500 250" stroke="#9B59B6" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead5)"/>
-                        <path d="M 100 110 L 670 250" stroke="#9B59B6" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead5)"/>
-                        <text x="30" y="180" font-size="11" fill="#9B59B6" font-weight="bold">3. Push data</text>
-                        <text x="30" y="195" font-size="10" fill="#9B59B6">(to all replicas)</text>
-
-                        <!-- Step 4 -->
-                        <path d="M 150 90 L 310 250" stroke="#E74C3C" stroke-width="2" marker-end="url(#arrowhead6)"/>
-                        <text x="180" y="170" font-size="11" fill="#E74C3C" font-weight="bold">4. Write request</text>
-                        <text x="180" y="185" font-size="10" fill="#E74C3C">(to primary)</text>
-
-                        <!-- Step 5 -->
-                        <path d="M 370 285 L 450 285" stroke="#F39C12" stroke-width="2" marker-end="url(#arrowhead7)"/>
-                        <text x="380" y="275" font-size="10" fill="#F39C12">5. Forward</text>
-                        <path d="M 370 285 L 560 285" stroke="#F39C12" stroke-width="2"/>
-                        <path d="M 560 285 L 620 285" stroke="#F39C12" stroke-width="2" marker-end="url(#arrowhead7)"/>
-
-                        <!-- Step 6 -->
-                        <path d="M 450 305 L 370 305" stroke="#27AE60" stroke-width="2" marker-end="url(#arrowhead8)"/>
-                        <text x="380" y="340" font-size="10" fill="#27AE60">6. ACK</text>
-                        <path d="M 620 305 L 560 305" stroke="#27AE60" stroke-width="2"/>
-                        <path d="M 560 305 L 370 305" stroke="#27AE60" stroke-width="2"/>
-
-                        <!-- Step 7 -->
-                        <path d="M 250 285 L 150 110" stroke="#27AE60" stroke-width="2" marker-end="url(#arrowhead8)"/>
-                        <text x="140" y="200" font-size="11" fill="#27AE60" font-weight="bold">7. Reply to client</text>
-
-                        <!-- Labels -->
-                        <text x="450" y="470" text-anchor="middle" font-size="12" fill="#666" font-style="italic">
-                            Data flows in pipeline, control flows from primary to secondaries
-                        </text>
-
-                        <defs>
-                            <marker id="arrowhead4" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-                                <polygon points="0 0, 10 3, 0 6" fill="#333"/>
-                            </marker>
-                            <marker id="arrowhead5" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-                                <polygon points="0 0, 10 3, 0 6" fill="#9B59B6"/>
-                            </marker>
-                            <marker id="arrowhead6" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-                                <polygon points="0 0, 10 3, 0 6" fill="#E74C3C"/>
-                            </marker>
-                            <marker id="arrowhead7" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-                                <polygon points="0 0, 10 3, 0 6" fill="#F39C12"/>
-                            </marker>
-                            <marker id="arrowhead8" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-                                <polygon points="0 0, 10 3, 0 6" fill="#27AE60"/>
-                            </marker>
-                        </defs>
-                    </svg>
-                    <div class="diagram-caption">Write flow: Data pushed to all replicas, then primary orders the mutations</div>
-                </div>
-
-                <div class="concept-box">
-                    <h4>🔄 Decoupling Data Flow from Control Flow</h4>
-                    <p>
-                        GFS separates data transfer (step 3) from write commands (step 4-5). Data is pushed to all replicas
-                        in a pipelined fashion to utilize network bandwidth fully. The primary then controls when and in what
-                        order mutations actually happen.
-                    </p>
-                </div>
-
-                <div class="flow-step" data-step="1">
-                    <h4>Client Asks Master for Chunk Locations</h4>
-                    <p>If no primary exists, master grants a lease to one replica (becomes primary).</p>
-                </div>
-
-                <div class="flow-step" data-step="2">
-                    <h4>Master Returns Primary and Secondary Locations</h4>
-                    <p>Client caches this info for future writes to the same chunk.</p>
-                </div>
-
-                <div class="flow-step" data-step="3">
-                    <h4>Client Pushes Data to All Replicas</h4>
-                    <p>Data flows in a pipelined chain (not from client to each replica independently). Each chunk server forwards to next.</p>
-                </div>
-
-                <div class="flow-step" data-step="4">
-                    <h4>Client Sends Write Request to Primary</h4>
-                    <p>Once all replicas acknowledge receiving data, client sends write command to primary.</p>
-                </div>
-
-                <div class="flow-step" data-step="5">
-                    <h4>Primary Forwards Request to Secondaries</h4>
-                    <p>Primary assigns serial numbers to mutations and applies them in order. Forwards same order to secondaries.</p>
-                </div>
-
-                <div class="flow-step" data-step="6">
-                    <h4>Secondaries Reply to Primary</h4>
-                    <p>Each secondary signals completion after applying the mutation.</p>
-                </div>
-
-                <div class="flow-step" data-step="7">
-                    <h4>Primary Replies to Client</h4>
-                    <p>Success if all replicas completed. Otherwise, error returned and client retries.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Section 6: Consistency Model -->
-        <div class="section">
-            <div class="section-header">
-                <div class="section-title heading-3">Consistency Model</div>
-                <div class="subtitle-section">Understanding GFS's relaxed consistency guarantees</div>
-            </div>
-            <div class="content">
-                <p style="font-size: 1.05em; line-height: 1.6; margin-bottom: 15px;">
-                    GFS makes a controversial trade-off: <strong>relaxed consistency</strong> for better performance. This means GFS doesn't
-                    guarantee perfect synchronization across replicas after every write. Sounds scary? It works because Google's applications
-                    are designed to handle it.
-                </p>
-
-                <div class="concept-box">
-                    <h4>🤔 What's the Problem?</h4>
-                    <p>
-                        Imagine 2 clients writing to the same chunk simultaneously. Traditional systems lock the file, handle writes sequentially—slow
-                        but safe. GFS lets both writes happen concurrently. All replicas see the <em>same</em> data (consistent), but it might be
-                        fragments from both writes mixed together (undefined). You need application-level logic to make sense of it.
-                    </p>
-                </div>
-
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="width: 25%">Operation Type</th>
-                                <th style="width: 35%">Consistency Guarantee</th>
-                                <th style="width: 40%">What It Means</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><span class="technique-name">Write (Serial Success)</span></td>
-                                <td class="description"><span class="metric accuracy-high">Defined</span></td>
-                                <td>All clients see the same data. Write fully succeeded.</td>
-                            </tr>
-                            <tr>
-                                <td><span class="technique-name">Concurrent Writes</span></td>
-                                <td class="description"><span class="metric accuracy-medium">Consistent but Undefined</span></td>
-                                <td>All clients see same data, but it may be fragments from multiple writes.</td>
-                            </tr>
-                            <tr>
-                                <td><span class="technique-name">Failed Write</span></td>
-                                <td class="description"><span class="metric accuracy-low">Inconsistent</span></td>
-                                <td>Different clients may see different data.</td>
-                            </tr>
-                            <tr>
-                                <td><span class="technique-name">Record Append</span></td>
-                                <td class="description"><span class="metric accuracy-high">Defined (at least once)</span></td>
-                                <td>Data written atomically at least once, possibly with gaps or duplicates.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="concept-box">
-                    <h4>📝 Record Append: The Star Operation</h4>
-                    <p style="margin-bottom: 10px;">
-                        This is GFS's secret weapon! Instead of writing at a specific location, you say "append this record to the file."
-                        GFS picks where to put it and <strong>guarantees atomic append</strong>—your record is written completely or not at all.
-                    </p>
-                    <p>
-                        <strong>Example:</strong> 100 MapReduce workers all appending results to one output file. With record append, they all write
-                        concurrently without coordination. GFS ensures each record lands completely. Yes, there might be gaps or duplicate records
-                        (from retries), but you get <em>massive parallelism</em> instead of serialized writes.
-                    </p>
-                </div>
-
-                <div class="concept-box">
-                    <h4>🛠️ How Applications Handle It</h4>
-                    <p>
-                        Google's apps use simple tricks: <strong>Checksums</strong> in each record catch corruption. <strong>Unique IDs</strong>
-                        let you detect and skip duplicates. <strong>Reader-side filtering</strong> ignores padding bytes. The application does a bit
-                        more work, but GFS stays simple and fast. Trade-off worth it for Google's workloads.
-                    </p>
-                </div>
-
-                <div class="pros-cons">
-                    <div class="pros">
-                        <h4>✅ Benefits of Relaxed Consistency</h4>
-                        <ul style="font-size: 0.95em; line-height: 1.8;">
-                            <li>Higher performance and throughput</li>
-                            <li>Simpler distributed coordination</li>
-                            <li>Works well for append-heavy workloads</li>
-                            <li>Easier to scale to thousands of machines</li>
-                        </ul>
-                    </div>
-                    <div class="cons">
-                        <h4>❌ Challenges</h4>
-                        <ul style="font-size: 0.95em; line-height: 1.8;">
-                            <li>Applications must handle inconsistencies</li>
-                            <li>Not suitable for all workloads</li>
-                            <li>Requires careful application design</li>
-                            <li>Debugging can be harder</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Section 7: Fault Tolerance -->
-        <div class="section">
-            <div class="section-header">
-                <div class="section-title heading-3">Fault Tolerance</div>
-                <div class="subtitle-section">How GFS handles constant failures</div>
-            </div>
-            <div class="content">
-                <p style="font-size: 1.05em; line-height: 1.6; margin-bottom: 15px;">
-                    With thousands of servers, <strong>failures happen every day</strong>. A disk dies, a server crashes, a network switch fails.
-                    Traditional systems treat these as emergencies. GFS treats them as Tuesday. The system automatically detects and recovers from
-                    failures without human intervention.
-                </p>
-
-                <div class="comparison-grid">
-                    <div class="comparison-item">
-                        <h4>🔄 Chunk Replication</h4>
-                        <p style="font-size: 0.9em; color: var(--text-secondary); margin-top: 10px;">
-                            Default 3 replicas per chunk. Master continuously monitors and recreates replicas when count drops below target.
-                        </p>
-                    </div>
-                    <div class="comparison-item">
-                        <h4>📊 Master Replication</h4>
-                        <p style="font-size: 0.9em; color: var(--text-secondary); margin-top: 10px;">
-                            Operation log and checkpoints replicated to multiple machines. Shadow masters provide read-only access during failures.
-                        </p>
-                    </div>
-                    <div class="comparison-item">
-                        <h4>💓 Heartbeat Messages</h4>
-                        <p style="font-size: 0.9em; color: var(--text-secondary); margin-top: 10px;">
-                            Master and chunk servers exchange regular heartbeats. Master detects failures and takes action within seconds.
-                        </p>
-                    </div>
-                    <div class="comparison-item">
-                        <h4>🗑️ Garbage Collection</h4>
-                        <p style="font-size: 0.9em; color: var(--text-secondary); margin-top: 10px;">
-                            Deleted files aren't removed immediately. Lazy garbage collection provides undelete capability and simplifies system design.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="concept-box">
-                    <h4>⚡ Fast Recovery</h4>
-                    <p>
-                        Both master and chunk servers are designed to restore state and restart in seconds. Master state is small
-                        enough to fit in memory, and chunk servers just need to scan their local disks to report chunk inventory.
-                    </p>
-                </div>
-
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="width: 30%">Failure Type</th>
-                                <th style="width: 40%">Detection</th>
-                                <th style="width: 30%">Recovery</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><span class="technique-name">Chunk Server Down</span></td>
-                                <td class="description">Heartbeat timeout (~minutes)</td>
-                                <td>Master re-replicates under-replicated chunks</td>
-                            </tr>
-                            <tr>
-                                <td><span class="technique-name">Master Down</span></td>
-                                <td class="description">External monitoring</td>
-                                <td>Restart or promote shadow master (~seconds)</td>
-                            </tr>
-                            <tr>
-                                <td><span class="technique-name">Data Corruption</span></td>
-                                <td class="description">Checksums on each 64KB block</td>
-                                <td>Read from another replica, re-replicate</td>
-                            </tr>
-                            <tr>
-                                <td><span class="technique-name">Network Partition</span></td>
-                                <td class="description">Lease expiration</td>
-                                <td>Primary lease expires, new primary elected</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <p style="font-size: 1.05em; line-height: 1.6; margin: 20px 0;">
-                    <strong>No single point of failure:</strong> Master state replicated, chunks have 3+ replicas. <strong>Automatic recovery:</strong>
-                    System self-heals when failures occur. <strong>Checksums on every 64KB block</strong> detect corruption from disk/network/memory.
-                    <strong>Version numbers</strong> identify stale replicas that missed updates.
-                </p>
-            </div>
-        </div>
-
-        <!-- Section 8: Performance & Scale -->
-        <div class="section">
-            <div class="section-header">
-                <div class="section-title heading-3">Performance & Scale</div>
-                <div class="subtitle-section">Real-world numbers and bottlenecks</div>
-            </div>
-            <div class="content">
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="width: 35%">Metric</th>
-                                <th style="width: 35%">Typical Value</th>
-                                <th style="width: 30%">Notes</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><span class="technique-name">Chunk Size</span></td>
-                                <td class="description">64 MB</td>
-                                <td>Unusually large, optimizes for sequential ops</td>
-                            </tr>
-                            <tr>
-                                <td><span class="technique-name">Replication Factor</span></td>
-                                <td class="description">3x</td>
-                                <td>Configurable per file/directory</td>
-                            </tr>
-                            <tr>
-                                <td><span class="technique-name">Master Metadata</span></td>
-                                <td class="description">&lt;64 bytes per chunk</td>
-                                <td>Enables master to hold petabytes of metadata in RAM</td>
-                            </tr>
-                            <tr>
-                                <td><span class="technique-name">Read Throughput</span></td>
-                                <td class="description">~75 MB/s per client</td>
-                                <td>Limited by client network, not GFS</td>
-                            </tr>
-                            <tr>
-                                <td><span class="technique-name">Write Throughput</span></td>
-                                <td class="description">~35 MB/s per client</td>
-                                <td>Lower due to 3x replication</td>
-                            </tr>
-                            <tr>
-                                <td><span class="technique-name">Append Throughput</span></td>
-                                <td class="description">~13 MB/s per client</td>
-                                <td>Multiple clients can append concurrently</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="concept-box">
-                    <h4>🎯 Master as Potential Bottleneck</h4>
-                    <p>
-                        While GFS avoids making the master a data bottleneck, it can become a metadata bottleneck with many
-                        small files or very high operation rates. Google addressed this in later systems (like Colossus) with
-                        multiple masters and sharded metadata.
-                    </p>
-                </div>
-
-                <p style="font-size: 1.05em; line-height: 1.6; margin: 20px 0;">
-                    <strong>Batch operations:</strong> Multiple operations grouped to reduce master RPCs. <strong>Pipelined writes:</strong> Data flows through
-                    chunk servers in chain—each forwards while writing to disk. <strong>Lazy space reclamation:</strong> Garbage collection during idle periods
-                    provides undelete capability.
-                </p>
-
-                <div class="diagram">
-                    <svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Title -->
-                        <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">
-                            Typical GFS Cluster Scale (circa 2003)
-                        </text>
-
-                        <!-- Boxes -->
-                        <rect x="50" y="80" width="200" height="80" fill="#E74C3C" rx="8"/>
-                        <text x="150" y="110" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Master Servers</text>
-                        <text x="150" y="140" text-anchor="middle" fill="white" font-size="24" font-weight="bold">1-10</text>
-
-                        <rect x="300" y="80" width="200" height="80" fill="#27AE60" rx="8"/>
-                        <text x="400" y="110" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Chunk Servers</text>
-                        <text x="400" y="140" text-anchor="middle" fill="white" font-size="24" font-weight="bold">1000+</text>
-
-                        <rect x="550" y="80" width="200" height="80" fill="#4A90E2" rx="8"/>
-                        <text x="650" y="110" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Storage Capacity</text>
-                        <text x="650" y="140" text-anchor="middle" fill="white" font-size="24" font-weight="bold">100+ TB</text>
-
-                        <!-- Stats -->
-                        <text x="150" y="210" text-anchor="middle" font-size="12" fill="#666">
-                            (includes shadow replicas)
-                        </text>
-                        <text x="400" y="210" text-anchor="middle" font-size="12" fill="#666">
-                            commodity Linux machines
-                        </text>
-                        <text x="650" y="210" text-anchor="middle" font-size="12" fill="#666">
-                            per cluster
-                        </text>
-                    </svg>
-                    <div class="diagram-caption">GFS was designed to scale to thousands of machines in a single cluster</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Section 9: Lessons & Trade-offs -->
-        <div class="section">
-            <div class="section-header">
-                <div class="section-title heading-3">Key Lessons & Trade-offs</div>
-                <div class="subtitle-section">What worked, what didn't, and what came next</div>
-            </div>
-            <div class="content">
-                <div class="concept-box">
-                    <h4>✅ What GFS Got Right</h4>
-                    <p>
-                        <strong>Design for failure:</strong> Treating failures as normal proved essential at scale. <strong>Large 64MB chunks:</strong> Dramatically
-                        reduced metadata overhead. <strong>Single master:</strong> Simplified design, enabled global decisions. <strong>Separation of control/data:</strong>
-                        Prevented master data bottleneck. <strong>Record append:</strong> Perfect primitive for concurrent writes.
-                    </p>
-                </div>
-
-                <div class="concept-box">
-                    <h4>⚠️ Limitations & Challenges</h4>
-                    <p>
-                        <strong>Single master limits scale:</strong> Metadata bottleneck for many small files. <strong>Hot spots:</strong> Popular small files
-                        overload single chunk server. <strong>Relaxed consistency:</strong> Requires application-level checksums, IDs, duplicate filtering.
-                        <strong>Manual tuning:</strong> Operations teams must configure replication factors and placement.
-                    </p>
-                </div>
-
-                <div class="concept-box">
-                    <h4>🔄 Evolution: From GFS to Colossus</h4>
-                    <p>
-                        Google eventually replaced GFS with Colossus (next-gen GFS), which addressed key limitations:
-                    </p>
-                    <ul style="margin-top: 10px; margin-left: 20px;">
-                        <li>Multiple masters with sharded metadata (no single bottleneck)</li>
-                        <li>Automatic replication policy management</li>
-                        <li>Better small file performance</li>
-                        <li>Reed-Solomon encoding instead of full replication for cold data</li>
-                    </ul>
-                </div>
-
-                <div class="pros-cons">
-                    <div class="pros">
-                        <h4>✅ Best Use Cases for GFS-Style Systems</h4>
-                        <ul style="font-size: 0.95em; line-height: 1.8;">
-                            <li>Large sequential writes (logs, data pipelines)</li>
-                            <li>Append-heavy workloads</li>
-                            <li>Large file storage (GB+ files)</li>
-                            <li>Batch processing systems</li>
-                            <li>High throughput over low latency</li>
-                        </ul>
-                    </div>
-                    <div class="cons">
-                        <h4>❌ Not Ideal For</h4>
-                        <ul style="font-size: 0.95em; line-height: 1.8;">
-                            <li>Small file storage (millions of KB files)</li>
-                            <li>Random write-heavy workloads</li>
-                            <li>Low-latency requirements (&lt;10ms)</li>
-                            <li>POSIX compliance needed</li>
-                            <li>Strong consistency requirements</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="concept-box">
-                    <h4>🌍 Industry Impact</h4>
-                    <p>
-                        <strong>Inspired Hadoop HDFS:</strong> Yahoo engineers created open-source implementation. <strong>Popularized distributed filesystems:</strong>
-                        Proved reliable storage from unreliable commodity servers at scale. <strong>Design patterns:</strong> Master-worker architecture,
-                        control/data separation now standard. <strong>Failure handling philosophy:</strong> Design for continuous failure from day one became fundamental.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Section 10: Quick Reference -->
-        <div class="section">
-            <div class="section-header">
-                <div class="section-title heading-3">Quick Reference</div>
-                <div class="subtitle-section">Key facts at a glance</div>
-            </div>
-            <div class="content">
-                <div class="comparison-grid">
-                    <div class="comparison-item">
-                        <h4>📅 Timeline</h4>
-                        <ul style="font-size: 0.9em; color: var(--text-secondary); list-style: none; padding: 0;">
-                            <li><strong>2000-2002:</strong> Development</li>
-                            <li><strong>2003:</strong> Paper published (SOSP)</li>
-                            <li><strong>2003-2010s:</strong> Production use</li>
-                            <li><strong>2010s:</strong> Replaced by Colossus</li>
-                        </ul>
-                    </div>
-                    <div class="comparison-item">
-                        <h4>👥 Authors</h4>
-                        <ul style="font-size: 0.9em; color: var(--text-secondary); list-style: none; padding: 0;">
-                            <li>Sanjay Ghemawat</li>
-                            <li>Howard Gobioff</li>
-                            <li>Shun-Tak Leung</li>
-                            <li><em>Google, Inc.</em></li>
-                        </ul>
-                    </div>
-                    <div class="comparison-item">
-                        <h4>🔗 Key Concepts</h4>
-                        <ul style="font-size: 0.9em; color: var(--text-secondary);">
-                            <li>Single master architecture</li>
-                            <li>Large chunk size (64MB)</li>
-                            <li>Relaxed consistency</li>
-                            <li>Record append operation</li>
-                        </ul>
-                    </div>
-                    <div class="comparison-item">
-                        <h4>📚 Related Systems</h4>
-                        <ul style="font-size: 0.9em; color: var(--text-secondary);">
-                            <li>Hadoop HDFS (open-source)</li>
-                            <li>Colossus (Google's successor)</li>
-                            <li>Azure Storage</li>
-                            <li>AWS S3</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="insights">
-                    <h3>Further Reading 📖</h3>
-                    <ul>
-                        <li><strong>Original Paper:</strong> "The Google File System" (SOSP 2003)</li>
-                        <li><strong>Follow-up:</strong> "GFS: Evolution on Fast-forward" (ACM Queue 2009)</li>
-                        <li><strong>Related:</strong> "Bigtable: A Distributed Storage System" (OSDI 2006)</li>
-                        <li><strong>Related:</strong> "MapReduce: Simplified Data Processing" (OSDI 2004)</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer -->
         <div class="footer">
             <h3>GenAI Community</h3>
             <p>Join our community for more system design resources and discussions</p>
