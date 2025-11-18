@@ -1,142 +1,333 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maxpool</title>
-    <meta name="description" content="Learn production-grade AI engineering">
+    <title>Maxpool — Production AI Engineering</title>
+    <meta name="description" content="Battle-tested techniques for building production AI systems">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
     <style>
+        :root {
+            --bg: #050505;
+            --fg: #EDEDED;
+            --fg-muted: #666666;
+            --fg-dark: #333333;
+            --border: #222222;
+            --border-light: #333333;
+            --accent: #FFFFFF;
+            --grid: #111111;
+
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            cursor: none;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background: var(--bg);
+            color: var(--fg);
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
-            background: #000000;
-            min-height: 100vh;
-            position: relative;
+            font-family: var(--font-sans);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
-            color: #FFFFFF;
         }
 
-        /* Custom cursor */
-        .cursor {
-            position: fixed;
-            width: 20px;
-            height: 20px;
-            background: #FFFFFF;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 10000;
-            mix-blend-mode: difference;
-            transition: transform 0.1s ease;
+        /* Utilities */
+        .mono {
+            font-family: var(--font-mono);
         }
 
-        .cursor-follower {
-            position: fixed;
-            width: 40px;
-            height: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            transition: all 0.3s ease;
-            transform: translate(-50%, -50%);
+        .flex {
+            display: flex;
         }
 
-        .cursor.hover {
-            transform: scale(2.5);
-            background: #FFFFFF;
-            mix-blend-mode: exclusion;
+        .items-center {
+            align-items: center;
         }
 
-        /* Animated gradient background */
-        .gradient-bg {
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .grid {
+            display: grid;
+        }
+
+        /* Background Grid */
+        .bg-grid {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background:
-                radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.03) 0%, transparent 50%),
-                linear-gradient(180deg, #000000 0%, #0A0A0A 100%);
-            z-index: 1;
-        }
-
-        /* Noise texture overlay */
-        .noise {
-            position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: url('data:image/svg+xml,%3Csvg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="turbulence" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.02"/%3E%3C/svg%3E');
+            background-image:
+                linear-gradient(var(--grid) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
             pointer-events: none;
-            opacity: 0.03;
-            z-index: 2;
-            animation: noise 8s steps(10) infinite;
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+            -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
         }
 
-        @keyframes noise {
-            0%, 100% { transform: translate(0, 0); }
-            10% { transform: translate(-5%, -10%); }
-            20% { transform: translate(-15%, 5%); }
-            30% { transform: translate(7%, -25%); }
-            40% { transform: translate(-5%, 25%); }
-            50% { transform: translate(-15%, 10%); }
-            60% { transform: translate(15%, 0%); }
-            70% { transform: translate(0%, 15%); }
-            80% { transform: translate(3%, 20%); }
-            90% { transform: translate(-10%, 10%); }
-        }
-
-        /* Interactive particle grid */
-        .particle-grid {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 3;
-        }
-
-        .particle {
+        /* Minimal Header */
+        .top-bar {
             position: absolute;
-            width: 1px;
-            height: 1px;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        /* Navigation */
-        .nav {
-            position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            padding: 30px 60px;
-            z-index: 1000;
-            mix-blend-mode: difference;
-            animation: navReveal 1s cubic-bezier(0.16, 1, 0.3, 1);
+            width: 100%;
+            padding: 24px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
         }
 
-        @keyframes navReveal {
-            0% {
-                transform: translateY(-100px);
-                opacity: 0;
-            }
-            100% {
-                transform: translateY(0);
-                opacity: 1;
-            }
+        .logo {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--fg);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .nav-content {
+        .logo::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--fg);
+        }
+
+        .nav-links a {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--fg-muted);
+            text-decoration: none;
+            margin-left: 24px;
+            transition: color 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-links a:hover {
+            color: var(--fg);
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .hero-label {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--fg-muted);
+            margin-bottom: 24px;
+            display: block;
+            opacity: 0;
+            animation: fadeUp 0.8s var(--ease) forwards;
+        }
+
+        h1 {
+            font-size: clamp(48px, 8vw, 120px);
+            font-weight: 500;
+            line-height: 0.9;
+            letter-spacing: -0.04em;
+            margin-bottom: 40px;
+            max-width: 1200px;
+        }
+
+        h1 span {
+            display: block;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 1s var(--ease) forwards;
+        }
+
+        h1 span:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        h1 span:nth-child(2) {
+            animation-delay: 0.2s;
+            color: var(--fg-muted);
+        }
+
+        .hero-desc {
+            font-size: 18px;
+            color: var(--fg-muted);
+            max-width: 500px;
+            margin-bottom: 60px;
+            opacity: 0;
+            animation: fadeUp 1s var(--ease) 0.4s forwards;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            opacity: 0;
+            animation: fadeUp 1s var(--ease) 0.5s forwards;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            height: 48px;
+            padding: 0 24px;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            text-decoration: none;
+            border: 1px solid var(--border);
+            color: var(--fg);
+            background: transparent;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .btn:hover {
+            background: var(--fg);
+            color: var(--bg);
+            border-color: var(--fg);
+        }
+
+        .btn-primary {
+            background: var(--fg);
+            color: var(--bg);
+            border-color: var(--fg);
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--fg);
+        }
+
+        /* Section Headers */
+        .section-header {
+            padding: 120px 40px 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 400;
+            letter-spacing: -0.02em;
+        }
+
+        .section-meta {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--fg-muted);
+        }
+
+        /* Grid Layout */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            border-bottom: 1px solid var(--border);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .card {
+            text-decoration: none;
+            color: var(--fg);
+            padding: 40px;
+            border-right: 1px solid var(--border);
+            transition: background 0.2s;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: relative;
+        }
+
+        .card:hover {
+            background: #0A0A0A;
+        }
+
+        .card:hover .card-arrow {
+            transform: translate(4px, -4px);
+            opacity: 1;
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 60px;
+        }
+
+        .card-icon {
+            width: 32px;
+            height: 32px;
+            color: var(--fg);
+        }
+
+        .card-arrow {
+            opacity: 0;
+            transition: all 0.2s var(--ease);
+            color: var(--fg-muted);
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .card-desc {
+            font-size: 15px;
+            color: var(--fg-muted);
+            line-height: 1.6;
+            max-width: 90%;
+        }
+
+        .card-meta {
+            margin-top: auto;
+            padding-top: 32px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--fg-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Footer */
+        footer {
+            padding: 80px 40px;
             max-width: 1400px;
             margin: 0 auto;
             display: flex;
@@ -144,741 +335,265 @@
             align-items: center;
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 900;
-            color: #FFFFFF;
-            text-decoration: none;
-            letter-spacing: -0.02em;
-            position: relative;
-            transition: all 0.3s ease;
-            cursor: none;
+        .footer-copy {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--fg-dark);
         }
 
-        .logo::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #FFFFFF;
-            transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .logo:hover::after {
-            width: 100%;
-        }
-
-        .nav-cta {
-            display: inline-block;
-            padding: 12px 30px;
-            color: #000000;
-            background: #FFFFFF;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            letter-spacing: 0.02em;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            overflow: hidden;
-            cursor: none;
-        }
-
-        .nav-cta::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: #000000;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .nav-cta:hover {
-            color: #FFFFFF;
-        }
-
-        .nav-cta:hover::before {
-            width: 300%;
-            height: 300%;
-        }
-
-        .nav-cta span {
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Hero Section */
-        .hero {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-        }
-
-        .hero-content {
-            text-align: center;
-            position: relative;
-            z-index: 2;
-            padding: 0 20px;
-        }
-
-        .hero-title {
-            font-size: clamp(4rem, 12vw, 10rem);
-            font-weight: 900;
-            letter-spacing: -0.04em;
-            line-height: 0.9;
-            margin-bottom: 20px;
-            position: relative;
-            display: inline-block;
-            animation: titleReveal 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .hero-title span {
-            display: inline-block;
-            position: relative;
-            animation: letterFloat 6s ease-in-out infinite;
-        }
-
-        .hero-title span:nth-child(1) { animation-delay: 0s; }
-        .hero-title span:nth-child(2) { animation-delay: 0.1s; }
-        .hero-title span:nth-child(3) { animation-delay: 0.2s; }
-        .hero-title span:nth-child(4) { animation-delay: 0.3s; }
-        .hero-title span:nth-child(5) { animation-delay: 0.4s; }
-        .hero-title span:nth-child(6) { animation-delay: 0.5s; }
-        .hero-title span:nth-child(7) { animation-delay: 0.6s; }
-
-        @keyframes letterFloat {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        @keyframes titleReveal {
-            0% {
-                transform: translateY(100px);
+        /* Animations */
+        @keyframes fadeUp {
+            from {
                 opacity: 0;
-                filter: blur(10px);
+                transform: translateY(20px);
             }
-            100% {
-                transform: translateY(0);
+
+            to {
                 opacity: 1;
-                filter: blur(0);
-            }
-        }
-
-        /* Glitch effect on title */
-        .hero-title::before,
-        .hero-title::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-        }
-
-        .hero-title:hover::before {
-            animation: glitch1 0.3s infinite;
-            color: #FF0000;
-            opacity: 0.8;
-            z-index: -1;
-        }
-
-        .hero-title:hover::after {
-            animation: glitch2 0.3s infinite;
-            color: #00FFFF;
-            opacity: 0.8;
-            z-index: -1;
-        }
-
-        @keyframes glitch1 {
-            0%, 100% {
-                clip-path: inset(0 0 100% 0);
-                transform: translate(0);
-            }
-            20% {
-                clip-path: inset(20% 0 30% 0);
-                transform: translate(-2px, 2px);
-            }
-            40% {
-                clip-path: inset(50% 0 20% 0);
-                transform: translate(2px, -2px);
-            }
-            60% {
-                clip-path: inset(80% 0 5% 0);
-                transform: translate(-1px, 1px);
-            }
-            80% {
-                clip-path: inset(10% 0 60% 0);
-                transform: translate(1px, -1px);
-            }
-        }
-
-        @keyframes glitch2 {
-            0%, 100% {
-                clip-path: inset(100% 0 0 0);
-                transform: translate(0);
-            }
-            20% {
-                clip-path: inset(60% 0 20% 0);
-                transform: translate(2px, -1px);
-            }
-            40% {
-                clip-path: inset(20% 0 60% 0);
-                transform: translate(-2px, 1px);
-            }
-            60% {
-                clip-path: inset(70% 0 10% 0);
-                transform: translate(1px, -2px);
-            }
-            80% {
-                clip-path: inset(30% 0 50% 0);
-                transform: translate(-1px, 2px);
-            }
-        }
-
-        .hero-subtitle {
-            font-size: clamp(1rem, 2vw, 1.5rem);
-            font-weight: 400;
-            color: rgba(255, 255, 255, 0.7);
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            animation: subtitleReveal 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
-        }
-
-        @keyframes subtitleReveal {
-            0% {
-                transform: translateY(30px);
-                opacity: 0;
-                letter-spacing: 0.5em;
-            }
-            100% {
                 transform: translateY(0);
-                opacity: 1;
-                letter-spacing: 0.2em;
             }
         }
 
-        /* Cards Section */
-        .cards-section {
-            position: relative;
-            z-index: 10;
-            padding: 100px 60px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 2px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 2px;
-            position: relative;
-        }
-
-        .card {
-            background: #000000;
-            padding: 60px 40px;
-            position: relative;
-            overflow: hidden;
-            text-decoration: none;
-            color: #FFFFFF;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            cursor: none;
-            display: flex;
-            flex-direction: column;
-            transform-style: preserve-3d;
-            perspective: 1000px;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.05) 100%);
+        .reveal {
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transform: translateY(20px);
+            transition: all 0.8s var(--ease);
         }
 
-        .card:hover::before {
+        .reveal.active {
             opacity: 1;
+            transform: translateY(0);
         }
 
-        /* Magnetic effect on hover */
-        .card-inner {
-            position: relative;
-            z-index: 1;
-            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .card:hover .card-inner {
-            transform: translateZ(20px);
-        }
-
-        .card-number {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.3);
-            margin-bottom: 30px;
-            font-weight: 500;
-            font-family: 'SF Mono', 'Monaco', monospace;
-        }
-
-        .card h3 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 20px;
-            letter-spacing: -0.02em;
-            line-height: 1;
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover h3 {
-            transform: translateX(10px);
-        }
-
-        .card p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: rgba(255, 255, 255, 0.6);
-            margin-bottom: 30px;
-            flex-grow: 1;
-        }
-
-        .card-link {
-            display: inline-flex;
-            align-items: center;
-            color: #FFFFFF;
-            font-weight: 600;
-            text-decoration: none;
-            position: relative;
-            cursor: none;
-        }
-
-        .card-link::after {
-            content: '→';
-            margin-left: 10px;
-            transition: transform 0.3s ease;
-            display: inline-block;
-        }
-
-        .card:hover .card-link::after {
-            transform: translateX(5px);
-        }
-
-        /* Reveal animation for cards */
-        .card {
-            animation: cardReveal 1s cubic-bezier(0.16, 1, 0.3, 1) both;
-        }
-
-        .card:nth-child(1) { animation-delay: 0.1s; }
-        .card:nth-child(2) { animation-delay: 0.2s; }
-        .card:nth-child(3) { animation-delay: 0.3s; }
-        .card:nth-child(4) { animation-delay: 0.4s; }
-        .card:nth-child(5) { animation-delay: 0.5s; }
-        .card:nth-child(6) { animation-delay: 0.6s; }
-        .card:nth-child(7) { animation-delay: 0.7s; }
-        .card:nth-child(8) { animation-delay: 0.8s; }
-
-        @keyframes cardReveal {
-            0% {
-                opacity: 0;
-                transform: translateY(60px) scale(0.9);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        /* Morphing blob */
-        .morph-blob {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 600px;
-            height: 600px;
-            filter: blur(100px);
-            opacity: 0.1;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .morph-blob svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        /* Footer */
-        footer {
-            position: relative;
-            z-index: 10;
-            padding: 60px;
-            text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        footer p {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 0.9rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-
-        /* Scroll indicator */
-        .scroll-indicator {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20px;
-            height: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            padding-top: 5px;
-        }
-
-        .scroll-indicator::before {
-            content: '';
-            width: 2px;
-            height: 8px;
-            background: #FFFFFF;
-            border-radius: 2px;
-            animation: scroll 2s infinite;
-        }
-
-        @keyframes scroll {
-            0% {
-                transform: translateY(0);
-                opacity: 0;
-            }
-            50% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(10px);
-                opacity: 0;
-            }
-        }
-
-        /* Mobile responsive */
+        /* Mobile */
         @media (max-width: 768px) {
-            .nav {
-                padding: 20px 30px;
+            h1 {
+                font-size: 48px;
             }
 
-            .hero-title {
-                font-size: clamp(3rem, 15vw, 6rem);
-            }
-
-            .cards-section {
-                padding: 60px 20px;
-            }
-
-            .cards-grid {
+            .content-grid {
                 grid-template-columns: 1fr;
             }
 
             .card {
-                padding: 40px 30px;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
             }
 
-            .card h3 {
-                font-size: 2rem;
+            .top-bar {
+                padding: 20px;
             }
 
-            .cursor,
-            .cursor-follower {
+            .hero {
+                padding: 0 20px;
+            }
+
+            .section-header {
+                padding: 80px 20px 40px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            .card {
+                padding: 32px 20px;
+            }
+
+            footer {
+                padding: 40px 20px;
+                flex-direction: column;
+                gap: 24px;
+                align-items: flex-start;
+            }
+
+            .nav-links {
                 display: none;
             }
 
-            * {
-                cursor: auto;
-            }
-
-            .nav-cta,
-            .logo,
-            .card,
-            .card-link {
-                cursor: pointer;
-            }
+            /* Simplify for mobile */
         }
     </style>
 </head>
+
 <body>
-    <!-- Gradient background -->
-    <div class="gradient-bg"></div>
+    <div class="bg-grid"></div>
 
-    <!-- Noise texture -->
-    <div class="noise"></div>
-
-    <!-- Interactive particle grid -->
-    <div class="particle-grid" id="particleGrid"></div>
-
-    <!-- Custom cursor -->
-    <div class="cursor" id="cursor"></div>
-    <div class="cursor-follower" id="cursorFollower"></div>
-
-    <!-- Morphing blob -->
-    <div class="morph-blob">
-        <svg viewBox="0 0 500 500">
-            <defs>
-                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.8" />
-                    <stop offset="100%" style="stop-color:#808080;stop-opacity:0.8" />
-                </linearGradient>
-            </defs>
-            <path fill="url(#gradient)">
-                <animate attributeName="d"
-                    dur="20s"
-                    repeatCount="indefinite"
-                    values="M440.5,320.5Q418,391,355.5,449.5Q293,508,226,450.5Q159,393,99,349Q39,305,31.5,229.5Q24,154,89,104.5Q154,55,225.5,68Q297,81,357.5,111.5Q418,142,440.5,211Q463,280,440.5,320.5Z;
-                            M453.78747,319.98894Q416.97789,389.97789,353.96683,436.87838Q290.95577,483.77887,223.95577,447.43366Q156.95577,411.08845,105.64373,365.97789Q54.33169,320.86732,62.67444,252.61056Q71.01719,184.3538,113.01965,135.21007Q155.02211,86.06634,220.52211,66.46683Q286.02211,46.86732,335.5,91.94472Q384.97789,137.02211,437.78747,193.51106Q490.59704,250,453.78747,319.98894Z;
-                            M411.39826,313.90633Q402.59677,377.81265,342.92059,407.63957Q283.24442,437.46649,215.13648,432.5428Q147.02853,427.61911,82.23325,380.9572Q17.43796,334.29529,20.45223,250.83809Q23.46649,167.38089,82.5856,115.05707Q141.70471,62.73325,212.19045,63.73015Q282.67618,64.72705,352.67308,84.79839Q422.66998,104.86972,421.43486,177.43486Q420.19974,250,411.39826,313.90633Z;
-                            M440.5,320.5Q418,391,355.5,449.5Q293,508,226,450.5Q159,393,99,349Q39,305,31.5,229.5Q24,154,89,104.5Q154,55,225.5,68Q297,81,357.5,111.5Q418,142,440.5,211Q463,280,440.5,320.5Z"
-                />
-            </path>
-        </svg>
+    <div class="top-bar">
+        <a href="/" class="logo">MAXPOOL</a>
+        <nav class="nav-links">
+            <a href="#resources">Resources</a>
+            <a href="https://github.com/pratikbarjatya/maxpool" target="_blank">GitHub</a>
+            <a href="https://join.maxpool.dev" target="_blank">Join Community</a>
+        </nav>
     </div>
 
-    <!-- Navigation -->
-    <nav class="nav">
-        <div class="nav-content">
-            <a href="/" class="logo">MAXPOOL</a>
-            <a href="https://join.maxpool.dev" target="_blank" class="nav-cta">
-                <span>JOIN COMMUNITY</span>
-            </a>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
     <section class="hero">
-        <div class="hero-content">
-            <h1 class="hero-title" data-text="MAXPOOL">
-                <span>M</span><span>A</span><span>X</span><span>P</span><span>O</span><span>O</span><span>L</span>
-            </h1>
-            <p class="hero-subtitle">Learn Production-Grade AI Engineering</p>
-        </div>
-        <div class="scroll-indicator"></div>
-    </section>
-
-    <!-- Cards Section -->
-    <section class="cards-section">
-        <div class="cards-grid">
-            <a href="agent/" class="card">
-                <div class="card-inner">
-                    <span class="card-number">01</span>
-                    <h3>Agent Reliability</h3>
-                    <p>Complete comparison of 25+ methods to improve AI agent consistency, from basic prompting to advanced ensemble approaches.</p>
-                    <span class="card-link">Explore</span>
-                </div>
-            </a>
-
-            <a href="rag/" class="card">
-                <div class="card-inner">
-                    <span class="card-number">02</span>
-                    <h3>RAG Implementation</h3>
-                    <p>Deep dive into Retrieval-Augmented Generation architectures, from basic RAG to advanced multi-hop and speculative approaches.</p>
-                    <span class="card-link">Explore</span>
-                </div>
-            </a>
-
-            <a href="agent-architecture/vector-db/" class="card">
-                <div class="card-inner">
-                    <span class="card-number">03</span>
-                    <h3>Vector Databases</h3>
-                    <p>Production playbook for similarity search: embedding quality, index trade-offs, reference architectures, and platform comparisons.</p>
-                    <span class="card-link">Explore</span>
-                </div>
-            </a>
-
-            <a href="frameworks/" class="card">
-                <div class="card-inner">
-                    <span class="card-number">04</span>
-                    <h3>Agent Frameworks</h3>
-                    <p>Comprehensive analysis of agent orchestration frameworks with verified GitHub stars, performance benchmarks, and production capabilities.</p>
-                    <span class="card-link">Explore</span>
-                </div>
-            </a>
-
-            <a href="research-papers/" class="card">
-                <div class="card-inner">
-                    <span class="card-number">05</span>
-                    <h3>Research Papers</h3>
-                    <p>Curated collection of breakthrough AI papers with implementation insights, practical applications, and performance benchmarks from real deployments.</p>
-                    <span class="card-link">Explore</span>
-                </div>
-            </a>
-
-            <a href="llm-testing/" class="card">
-                <div class="card-inner">
-                    <span class="card-number">06</span>
-                    <h3>How to Test a LLM</h3>
-                    <p>Complete testing methodology for LLMs: evaluation metrics, benchmark suites, edge case discovery, and production monitoring strategies.</p>
-                    <span class="card-link">Explore</span>
-                </div>
-            </a>
-
-            <a href="career/" class="card">
-                <div class="card-inner">
-                    <span class="card-number">07</span>
-                    <h3>AI Career Guide</h3>
-                    <p>Strategic career roadmaps for AI engineers, researchers, and leaders based on Andrej Karpathy's insights. Navigate the decade-long path to AGI with depth over breadth.</p>
-                    <span class="card-link">Explore</span>
-                </div>
-            </a>
-
-            <a href="llm-design/" class="card">
-                <div class="card-inner">
-                    <span class="card-number">08</span>
-                    <h3>LLM Architecture Design</h3>
-                    <p>Master modern transformer architectures from GPT to DeepSeek. Deep dive into attention mechanisms, MoE design, and the innovations driving 10x efficiency gains.</p>
-                    <span class="card-link">Explore</span>
-                </div>
+        <span class="hero-label">/// SYSTEM_READY</span>
+        <h1>
+            <span>Build Reliable</span>
+            <span>AI Systems at Scale</span>
+        </h1>
+        <p class="hero-desc">
+            Battle-tested techniques, architectures, and frameworks from real production deployments. No fluff.
+        </p>
+        <div class="hero-actions">
+            <a href="#resources" class="btn btn-primary">Explore Resources</a>
+            <a href="https://github.com/pratikbarjatya/maxpool" target="_blank" class="btn">
+                GitHub Repo
             </a>
         </div>
     </section>
 
-    <!-- Footer -->
+    <div class="section-header" id="resources">
+        <h2 class="section-title">Production Guides</h2>
+        <span class="section-meta">INDEX_V1.0</span>
+    </div>
+
+    <div class="content-grid">
+        <a href="agent/" class="card reveal">
+            <div class="card-top">
+                <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <path d="M9 9h6M9 12h6M9 15h4" />
+                </svg>
+                <svg class="card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.5">
+                    <path d="M7 17L17 7M17 7H7M17 7V17" />
+                </svg>
+            </div>
+            <h3 class="card-title">Agent Reliability</h3>
+            <p class="card-desc">
+                Comparison of 25+ methods to improve AI agent consistency. From basic prompting to advanced ensembles.
+            </p>
+            <div class="card-meta">/// FEATURED_GUIDE</div>
+        </a>
+
+        <a href="rag/" class="card reveal">
+            <div class="card-top">
+                <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path
+                        d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                    <line x1="12" y1="22.08" x2="12" y2="12" />
+                </svg>
+                <svg class="card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.5">
+                    <path d="M7 17L17 7M17 7H7M17 7V17" />
+                </svg>
+            </div>
+            <h3 class="card-title">RAG Implementation</h3>
+            <p class="card-desc">
+                Deep dive into Retrieval-Augmented Generation. From basic RAG to advanced multi-hop architectures.
+            </p>
+            <div class="card-meta">/// ARCHITECTURE</div>
+        </a>
+
+        <a href="agent-architecture/vector-db/" class="card reveal">
+            <div class="card-top">
+                <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path
+                        d="M4 7v10c0 2.21 3.58 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.58 4 8 4s8-1.79 8-4M4 7c0-2.21 3.58-4 8-4s8 1.79 8 4m0 5c0 2.21-3.58 4-8 4s-8-1.79-8-4" />
+                </svg>
+                <svg class="card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.5">
+                    <path d="M7 17L17 7M17 7H7M17 7V17" />
+                </svg>
+            </div>
+            <h3 class="card-title">Vector Databases</h3>
+            <p class="card-desc">
+                Production playbook for similarity search. Embedding quality, index trade-offs, and benchmarks.
+            </p>
+            <div class="card-meta">/// INFRASTRUCTURE</div>
+        </a>
+
+        <a href="frameworks/" class="card reveal">
+            <div class="card-top">
+                <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="2" y1="12" x2="22" y2="12" />
+                    <path
+                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                </svg>
+                <svg class="card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.5">
+                    <path d="M7 17L17 7M17 7H7M17 7V17" />
+                </svg>
+            </div>
+            <h3 class="card-title">Agent Frameworks</h3>
+            <p class="card-desc">
+                Comprehensive analysis of agent orchestration frameworks. Capabilities, stars, and production readiness.
+            </p>
+            <div class="card-meta">/// ECOSYSTEM</div>
+        </a>
+
+        <a href="research-papers/" class="card reveal">
+            <div class="card-top">
+                <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                    <line x1="16" y1="13" x2="8" y2="13" />
+                    <line x1="16" y1="17" x2="8" y2="17" />
+                    <polyline points="10 9 9 9 8 9" />
+                </svg>
+                <svg class="card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.5">
+                    <path d="M7 17L17 7M17 7H7M17 7V17" />
+                </svg>
+            </div>
+            <h3 class="card-title">Research Papers</h3>
+            <p class="card-desc">
+                Curated collection of breakthrough AI papers. Implementation insights and key takeaways.
+            </p>
+            <div class="card-meta">/// RESEARCH</div>
+        </a>
+
+        <a href="llm-testing/" class="card reveal">
+            <div class="card-top">
+                <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                    <polyline points="22 4 12 14.01 9 11.01" />
+                </svg>
+                <svg class="card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.5">
+                    <path d="M7 17L17 7M17 7H7M17 7V17" />
+                </svg>
+            </div>
+            <h3 class="card-title">LLM Testing</h3>
+            <p class="card-desc">
+                Complete testing methodology. Evaluation metrics, benchmark suites, and monitoring.
+            </p>
+            <div class="card-meta">/// QA_OPS</div>
+        </a>
+    </div>
+
     <footer>
-        <p>Discover the best practices in GenAI engineering</p>
+        <div class="footer-copy">
+            © 2025 MAXPOOL. ALL SYSTEMS NOMINAL.
+        </div>
+        <div class="nav-links">
+            <a href="https://github.com/maxpool" target="_blank">GitHub</a>
+        </div>
     </footer>
 
     <script>
-        // Custom cursor
-        const cursor = document.getElementById('cursor');
-        const cursorFollower = document.getElementById('cursorFollower');
-        const interactiveElements = document.querySelectorAll('a, button');
+        // Intersection Observer for reveal animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
 
-        let mouseX = 0, mouseY = 0;
-        let cursorX = 0, cursorY = 0;
-        let followerX = 0, followerY = 0;
-
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-
-            // Update CSS variables for gradient
-            document.querySelector('.gradient-bg').style.setProperty('--mouse-x', `${(e.clientX / window.innerWidth) * 100}%`);
-            document.querySelector('.gradient-bg').style.setProperty('--mouse-y', `${(e.clientY / window.innerHeight) * 100}%`);
-        });
-
-        // Smooth cursor animation
-        function animateCursor() {
-            cursorX += (mouseX - cursorX) * 0.2;
-            cursorY += (mouseY - cursorY) * 0.2;
-            cursor.style.transform = `translate(${cursorX - 10}px, ${cursorY - 10}px)`;
-
-            followerX += (mouseX - followerX) * 0.1;
-            followerY += (mouseY - followerY) * 0.1;
-            cursorFollower.style.left = `${followerX}px`;
-            cursorFollower.style.top = `${followerY}px`;
-
-            requestAnimationFrame(animateCursor);
-        }
-        animateCursor();
-
-        // Cursor hover effects
-        interactiveElements.forEach(elem => {
-            elem.addEventListener('mouseenter', () => {
-                cursor.classList.add('hover');
-                cursorFollower.style.transform = 'translate(-50%, -50%) scale(1.5)';
-            });
-
-            elem.addEventListener('mouseleave', () => {
-                cursor.classList.remove('hover');
-                cursorFollower.style.transform = 'translate(-50%, -50%) scale(1)';
-            });
-        });
-
-        // Particle grid
-        const particleGrid = document.getElementById('particleGrid');
-        const cols = Math.floor(window.innerWidth / 50);
-        const rows = Math.floor(window.innerHeight / 50);
-
-        for (let i = 0; i < cols; i++) {
-            for (let j = 0; j < rows; j++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-                particle.style.left = `${i * 50}px`;
-                particle.style.top = `${j * 50}px`;
-                particleGrid.appendChild(particle);
-            }
-        }
-
-        // Particle interaction
-        document.addEventListener('mousemove', (e) => {
-            const particles = document.querySelectorAll('.particle');
-            particles.forEach(particle => {
-                const rect = particle.getBoundingClientRect();
-                const distance = Math.hypot(e.clientX - rect.left, e.clientY - rect.top);
-
-                if (distance < 100) {
-                    const angle = Math.atan2(e.clientY - rect.top, e.clientX - rect.left);
-                    const force = (100 - distance) / 10;
-                    particle.style.transform = `translate(${-Math.cos(angle) * force}px, ${-Math.sin(angle) * force}px) scale(${1 + force / 10})`;
-                    particle.style.opacity = 1 - (distance / 200);
-                } else {
-                    particle.style.transform = 'translate(0, 0) scale(1)';
-                    particle.style.opacity = 0.5;
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
                 }
             });
-        });
+        }, observerOptions);
 
-        // Parallax scrolling
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const hero = document.querySelector('.hero-content');
-            const morphBlob = document.querySelector('.morph-blob');
-
-            if (hero) {
-                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
-                hero.style.opacity = 1 - (scrolled / 1000);
-            }
-
-            if (morphBlob) {
-                morphBlob.style.transform = `translate(-50%, -50%) scale(${1 + scrolled * 0.001})`;
-            }
-        });
-
-        // Card magnetic effect
-        const cards = document.querySelectorAll('.card');
-        cards.forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-
-                const rotateX = (y - centerY) / 10;
-                const rotateY = (centerX - x) / 10;
-
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
-            });
-
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
-            });
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
         });
     </script>
 </body>
+
 </html>
