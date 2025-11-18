@@ -15,19 +15,20 @@
 
     <style>
         :root {
-            --bg: #050505;
-            --fg: #EDEDED;
-            --fg-muted: #666666;
+            --bg: #020202;
+            --fg: #EAEAEA;
+            --fg-muted: #888888;
             --fg-dark: #333333;
-            --border: #222222;
-            --border-light: #333333;
+            --border: #151515;
+            --border-highlight: #333333;
             --accent: #FFFFFF;
-            --grid: #111111;
+            --grid: #0A0A0A;
 
             --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
 
-            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-elastic: cubic-bezier(0.5, 1.25, 0.2, 1.1);
         }
 
         * {
@@ -40,13 +41,34 @@
             scroll-behavior: smooth;
             background: var(--bg);
             color: var(--fg);
+            font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+            cursor: crosshair;
         }
 
         body {
             font-family: var(--font-sans);
-            line-height: 1.5;
+            line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        ::selection {
+            background: var(--fg);
+            color: var(--bg);
+        }
+
+        /* Noise Overlay */
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9000;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
         /* Utilities */
@@ -70,6 +92,10 @@
             display: grid;
         }
 
+        .relative {
+            position: relative;
+        }
+
         /* Background Grid */
         .bg-grid {
             position: fixed;
@@ -80,143 +106,198 @@
             background-image:
                 linear-gradient(var(--grid) 1px, transparent 1px),
                 linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-            background-size: 40px 40px;
+            background-size: 60px 60px;
             z-index: -1;
             pointer-events: none;
-            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
-            -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+            mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 90%);
+            -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 90%);
         }
 
-        /* Minimal Header */
-        .top-bar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 24px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        /* Floating Navbar */
+        .nav-container {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
             z-index: 100;
+            width: auto;
         }
 
-        .logo {
-            font-family: var(--font-mono);
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--fg);
-            text-decoration: none;
-            letter-spacing: -0.02em;
+        .nav-pill {
+            background: rgba(10, 10, 10, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 8px 8px;
+            border-radius: 100px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 4px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
-        .logo::before {
-            content: '';
-            width: 8px;
-            height: 8px;
-            background: var(--fg);
-        }
-
-        .nav-links a {
+        .nav-logo {
             font-family: var(--font-mono);
             font-size: 12px;
+            font-weight: 600;
+            color: var(--fg);
+            text-decoration: none;
+            padding: 8px 16px;
+            background: var(--fg);
+            color: var(--bg);
+            border-radius: 100px;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-link {
+            font-family: var(--font-mono);
+            font-size: 11px;
             color: var(--fg-muted);
             text-decoration: none;
-            margin-left: 24px;
-            transition: color 0.2s;
+            padding: 8px 16px;
+            border-radius: 100px;
+            transition: all 0.2s;
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
 
-        .nav-links a:hover {
+        .nav-link:hover {
             color: var(--fg);
+            background: rgba(255, 255, 255, 0.05);
         }
 
         /* Hero */
         .hero {
-            min-height: 90vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             padding: 0 40px;
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             position: relative;
+            overflow: hidden;
         }
 
-        .hero-label {
+        .hero-meta {
             font-family: var(--font-mono);
-            font-size: 12px;
+            font-size: 10px;
             color: var(--fg-muted);
-            margin-bottom: 24px;
-            display: block;
+            margin-bottom: 40px;
+            display: flex;
+            gap: 20px;
             opacity: 0;
-            animation: fadeUp 0.8s var(--ease) forwards;
+            animation: fadeUp 1s var(--ease-out) forwards;
+        }
+
+        .hero-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .hero-meta span::before {
+            content: '';
+            width: 4px;
+            height: 4px;
+            background: var(--fg-muted);
+            border-radius: 50%;
         }
 
         h1 {
-            font-size: clamp(48px, 8vw, 120px);
+            font-size: clamp(60px, 9vw, 160px);
             font-weight: 500;
-            line-height: 0.9;
-            letter-spacing: -0.04em;
-            margin-bottom: 40px;
-            max-width: 1200px;
+            line-height: 0.85;
+            letter-spacing: -0.05em;
+            margin-bottom: 60px;
+            max-width: 1400px;
+            mix-blend-mode: lighten;
         }
 
-        h1 span {
+        h1 .line {
             display: block;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeUp 1s var(--ease) forwards;
+            overflow: hidden;
         }
 
-        h1 span:nth-child(1) {
+        h1 .word {
+            display: inline-block;
+            transform: translateY(100%);
+            animation: revealText 1.2s var(--ease-out) forwards;
+        }
+
+        h1 .line:nth-child(1) .word {
             animation-delay: 0.1s;
         }
 
-        h1 span:nth-child(2) {
+        h1 .line:nth-child(2) .word {
             animation-delay: 0.2s;
             color: var(--fg-muted);
         }
 
         .hero-desc {
-            font-size: 18px;
+            font-size: 20px;
             color: var(--fg-muted);
             max-width: 500px;
-            margin-bottom: 60px;
+            margin-bottom: 80px;
             opacity: 0;
-            animation: fadeUp 1s var(--ease) 0.4s forwards;
+            animation: fadeUp 1.2s var(--ease-out) 0.4s forwards;
+            font-weight: 300;
+            line-height: 1.5;
         }
 
         .hero-actions {
             display: flex;
-            gap: 16px;
+            gap: 24px;
             opacity: 0;
-            animation: fadeUp 1s var(--ease) 0.5s forwards;
+            animation: fadeUp 1.2s var(--ease-out) 0.5s forwards;
         }
 
+        /* Magnetic Button */
         .btn {
             display: inline-flex;
             align-items: center;
-            height: 48px;
-            padding: 0 24px;
+            justify-content: center;
+            height: 56px;
+            padding: 0 40px;
             font-family: var(--font-mono);
-            font-size: 13px;
+            font-size: 12px;
             text-decoration: none;
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-highlight);
             color: var(--fg);
-            background: transparent;
-            transition: all 0.2s;
+            background: rgba(255, 255, 255, 0.01);
+            transition: all 0.3s var(--ease-out);
             text-transform: uppercase;
-            letter-spacing: 0.02em;
+            letter-spacing: 0.05em;
+            position: relative;
+            overflow: hidden;
+            border-radius: 2px;
+        }
+
+        .btn-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--fg);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s var(--ease-out);
+            z-index: 0;
+        }
+
+        .btn span {
+            position: relative;
+            z-index: 1;
+            mix-blend-mode: difference;
         }
 
         .btn:hover {
-            background: var(--fg);
-            color: var(--bg);
-            border-color: var(--fg);
+            border-color: transparent;
+        }
+
+        .btn:hover .btn-bg {
+            transform: scaleX(1);
         }
 
         .btn-primary {
@@ -225,15 +306,29 @@
             border-color: var(--fg);
         }
 
-        .btn-primary:hover {
-            background: transparent;
+        .btn-primary .btn-bg {
+            background: var(--bg);
+            transform: scaleX(0);
+        }
+
+        .btn-primary:hover .btn-bg {
+            transform: scaleX(1);
+        }
+
+        .btn-primary span {
+            mix-blend-mode: normal;
+            color: var(--bg);
+            transition: color 0.3s;
+        }
+
+        .btn-primary:hover span {
             color: var(--fg);
         }
 
         /* Section Headers */
         .section-header {
-            padding: 120px 40px 60px;
-            max-width: 1400px;
+            padding: 180px 40px 60px;
+            max-width: 1600px;
             margin: 0 auto;
             border-bottom: 1px solid var(--border);
             display: flex;
@@ -242,93 +337,158 @@
         }
 
         .section-title {
-            font-size: 24px;
-            font-weight: 400;
-            letter-spacing: -0.02em;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--fg);
+            box-shadow: 0 0 10px var(--fg);
         }
 
         .section-meta {
             font-family: var(--font-mono);
-            font-size: 12px;
+            font-size: 11px;
             color: var(--fg-muted);
+            letter-spacing: 0.05em;
         }
 
         /* Grid Layout */
         .content-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
             border-bottom: 1px solid var(--border);
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
         }
 
         .card {
             text-decoration: none;
             color: var(--fg);
-            padding: 40px;
+            padding: 64px;
             border-right: 1px solid var(--border);
-            transition: background 0.2s;
+            border-bottom: 1px solid var(--border);
             display: flex;
             flex-direction: column;
             height: 100%;
             position: relative;
+            background: transparent;
+            margin-bottom: -1px;
+            overflow: hidden;
+            transition: transform 0.4s var(--ease-out);
         }
 
-        .card:hover {
-            background: #0A0A0A;
+        /* Border Shine Effect */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.04), transparent 40%);
+            opacity: 0;
+            transition: opacity 0.4s;
+            pointer-events: none;
+            z-index: 0;
         }
 
-        .card:hover .card-arrow {
-            transform: translate(4px, -4px);
+        .card:hover::before {
             opacity: 1;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         .card-top {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 60px;
+            margin-bottom: 100px;
         }
 
         .card-icon {
             width: 32px;
             height: 32px;
             color: var(--fg);
+            opacity: 0.6;
+            transition: all 0.4s var(--ease-out);
+        }
+
+        .card:hover .card-icon {
+            opacity: 1;
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
         }
 
         .card-arrow {
-            opacity: 0;
-            transition: all 0.2s var(--ease);
-            color: var(--fg-muted);
+            opacity: 0.2;
+            transition: all 0.4s var(--ease-out);
+            color: var(--fg);
+            transform: rotate(-45deg);
+        }
+
+        .card:hover .card-arrow {
+            opacity: 1;
+            transform: rotate(0deg) translate(4px, -4px);
         }
 
         .card-title {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 400;
-            margin-bottom: 12px;
-            letter-spacing: -0.02em;
+            margin-bottom: 20px;
+            letter-spacing: -0.03em;
         }
 
         .card-desc {
-            font-size: 15px;
+            font-size: 16px;
             color: var(--fg-muted);
             line-height: 1.6;
             max-width: 90%;
+            font-weight: 300;
         }
 
         .card-meta {
             margin-top: auto;
-            padding-top: 32px;
+            padding-top: 48px;
             font-family: var(--font-mono);
-            font-size: 11px;
+            font-size: 10px;
             color: var(--fg-dark);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-meta::before {
+            content: '';
+            width: 100%;
+            height: 1px;
+            background: var(--border);
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.4s;
         }
 
         /* Footer */
         footer {
-            padding: 80px 40px;
-            max-width: 1400px;
+            padding: 120px 40px;
+            max-width: 1600px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
@@ -337,15 +497,16 @@
 
         .footer-copy {
             font-family: var(--font-mono);
-            font-size: 12px;
+            font-size: 11px;
             color: var(--fg-dark);
+            letter-spacing: 0.05em;
         }
 
         /* Animations */
         @keyframes fadeUp {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(40px);
             }
 
             to {
@@ -354,10 +515,20 @@
             }
         }
 
+        @keyframes revealText {
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+
         .reveal {
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.8s var(--ease);
+            transform: translateY(40px);
+            transition: all 1s var(--ease-out);
         }
 
         .reveal.active {
@@ -369,6 +540,7 @@
         @media (max-width: 768px) {
             h1 {
                 font-size: 48px;
+                margin-bottom: 40px;
             }
 
             .content-grid {
@@ -377,69 +549,78 @@
 
             .card {
                 border-right: none;
-                border-bottom: 1px solid var(--border);
+                padding: 40px 24px;
             }
 
-            .top-bar {
-                padding: 20px;
+            .nav-container {
+                top: auto;
+                bottom: 24px;
+                width: 90%;
+            }
+
+            .nav-pill {
+                width: 100%;
+                justify-content: space-between;
             }
 
             .hero {
-                padding: 0 20px;
+                padding: 0 24px;
             }
 
             .section-header {
-                padding: 80px 20px 40px;
+                padding: 100px 24px 32px;
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 16px;
             }
 
-            .card {
-                padding: 32px 20px;
-            }
-
             footer {
-                padding: 40px 20px;
+                padding: 60px 24px 120px;
+                /* Extra padding for bottom nav */
                 flex-direction: column;
                 gap: 24px;
                 align-items: flex-start;
             }
-
-            .nav-links {
-                display: none;
-            }
-
-            /* Simplify for mobile */
         }
     </style>
 </head>
 
 <body>
+    <div class="noise"></div>
     <div class="bg-grid"></div>
 
-    <div class="top-bar">
-        <a href="/" class="logo">MAXPOOL</a>
-        <nav class="nav-links">
-            <a href="#resources">Resources</a>
-            <a href="https://github.com/pratikbarjatya/maxpool" target="_blank">GitHub</a>
-            <a href="https://join.maxpool.dev" target="_blank">Join Community</a>
+    <div class="nav-container">
+        <nav class="nav-pill">
+            <a href="/" class="nav-logo">MAXPOOL</a>
+            <div class="flex">
+                <a href="#resources" class="nav-link">Resources</a>
+                <a href="https://github.com/maxpool" target="_blank" class="nav-link">GitHub</a>
+                <a href="https://join.maxpool.dev" target="_blank" class="nav-link">Join Community</a>
+            </div>
         </nav>
     </div>
 
     <section class="hero">
-        <span class="hero-label">/// SYSTEM_READY</span>
+        <div class="hero-meta">
+            <span>SYSTEM_READY</span>
+            <span>V2.0.4</span>
+            <span>Loading LLM</span>
+        </div>
         <h1>
-            <span>Build Reliable</span>
-            <span>AI Systems at Scale</span>
+            <span class="line"><span class="word">Build Reliable</span></span>
+            <span class="line"><span class="word">AI Systems at Scale</span></span>
         </h1>
         <p class="hero-desc">
             Battle-tested techniques, architectures, and frameworks from real production deployments. No fluff.
         </p>
         <div class="hero-actions">
-            <a href="#resources" class="btn btn-primary">Explore Resources</a>
-            <a href="https://github.com/pratikbarjatya/maxpool" target="_blank" class="btn">
-                GitHub Repo
+            <a href="#resources" class="btn btn-primary">
+                <div class="btn-bg"></div>
+                <span>Explore Resources</span>
+            </a>
+            <a href="https://github.com/maxpool" target="_blank" class="btn">
+                <div class="btn-bg"></div>
+                <span>GitHub Repo</span>
             </a>
         </div>
     </section>
@@ -449,120 +630,134 @@
         <span class="section-meta">INDEX_V1.0</span>
     </div>
 
-    <div class="content-grid">
+    <div class="content-grid" id="cards-container">
         <a href="agent/" class="card reveal">
-            <div class="card-top">
-                <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <rect x="3" y="3" width="18" height="18" rx="2" />
-                    <path d="M9 9h6M9 12h6M9 15h4" />
-                </svg>
-                <svg class="card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="1.5">
-                    <path d="M7 17L17 7M17 7H7M17 7V17" />
-                </svg>
+            <div class="card-content">
+                <div class="card-top">
+                    <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                        <path d="M9 9h6M9 12h6M9 15h4" />
+                    </svg>
+                    <svg class="card-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.5">
+                        <path d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
+                </div>
+                <h3 class="card-title">Agent Reliability</h3>
+                <p class="card-desc">
+                    Comparison of 25+ methods to improve AI agent consistency. From basic prompting to advanced
+                    ensembles.
+                </p>
+                <div class="card-meta">/// FEATURED_GUIDE</div>
             </div>
-            <h3 class="card-title">Agent Reliability</h3>
-            <p class="card-desc">
-                Comparison of 25+ methods to improve AI agent consistency. From basic prompting to advanced ensembles.
-            </p>
-            <div class="card-meta">/// FEATURED_GUIDE</div>
         </a>
 
         <a href="rag/" class="card reveal">
-            <div class="card-top">
-                <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path
-                        d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                    <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-                    <line x1="12" y1="22.08" x2="12" y2="12" />
-                </svg>
-                <svg class="card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="1.5">
-                    <path d="M7 17L17 7M17 7H7M17 7V17" />
-                </svg>
+            <div class="card-content">
+                <div class="card-top">
+                    <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path
+                            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                        <line x1="12" y1="22.08" x2="12" y2="12" />
+                    </svg>
+                    <svg class="card-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.5">
+                        <path d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
+                </div>
+                <h3 class="card-title">RAG Implementation</h3>
+                <p class="card-desc">
+                    Deep dive into Retrieval-Augmented Generation. From basic RAG to advanced multi-hop architectures.
+                </p>
+                <div class="card-meta">/// ARCHITECTURE</div>
             </div>
-            <h3 class="card-title">RAG Implementation</h3>
-            <p class="card-desc">
-                Deep dive into Retrieval-Augmented Generation. From basic RAG to advanced multi-hop architectures.
-            </p>
-            <div class="card-meta">/// ARCHITECTURE</div>
         </a>
 
         <a href="agent-architecture/vector-db/" class="card reveal">
-            <div class="card-top">
-                <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path
-                        d="M4 7v10c0 2.21 3.58 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.58 4 8 4s8-1.79 8-4M4 7c0-2.21 3.58-4 8-4s8 1.79 8 4m0 5c0 2.21-3.58 4-8 4s-8-1.79-8-4" />
-                </svg>
-                <svg class="card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="1.5">
-                    <path d="M7 17L17 7M17 7H7M17 7V17" />
-                </svg>
+            <div class="card-content">
+                <div class="card-top">
+                    <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path
+                            d="M4 7v10c0 2.21 3.58 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.58 4 8 4s8-1.79 8-4M4 7c0-2.21 3.58-4 8-4s8 1.79 8 4m0 5c0 2.21-3.58 4-8 4s-8-1.79-8-4" />
+                    </svg>
+                    <svg class="card-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.5">
+                        <path d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
+                </div>
+                <h3 class="card-title">Vector Databases</h3>
+                <p class="card-desc">
+                    Production playbook for similarity search. Embedding quality, index trade-offs, and benchmarks.
+                </p>
+                <div class="card-meta">/// INFRASTRUCTURE</div>
             </div>
-            <h3 class="card-title">Vector Databases</h3>
-            <p class="card-desc">
-                Production playbook for similarity search. Embedding quality, index trade-offs, and benchmarks.
-            </p>
-            <div class="card-meta">/// INFRASTRUCTURE</div>
         </a>
 
         <a href="frameworks/" class="card reveal">
-            <div class="card-top">
-                <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="2" y1="12" x2="22" y2="12" />
-                    <path
-                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-                </svg>
-                <svg class="card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="1.5">
-                    <path d="M7 17L17 7M17 7H7M17 7V17" />
-                </svg>
+            <div class="card-content">
+                <div class="card-top">
+                    <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="2" y1="12" x2="22" y2="12" />
+                        <path
+                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                    </svg>
+                    <svg class="card-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.5">
+                        <path d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
+                </div>
+                <h3 class="card-title">Agent Frameworks</h3>
+                <p class="card-desc">
+                    Comprehensive analysis of agent orchestration frameworks. Capabilities, stars, and production
+                    readiness.
+                </p>
+                <div class="card-meta">/// ECOSYSTEM</div>
             </div>
-            <h3 class="card-title">Agent Frameworks</h3>
-            <p class="card-desc">
-                Comprehensive analysis of agent orchestration frameworks. Capabilities, stars, and production readiness.
-            </p>
-            <div class="card-meta">/// ECOSYSTEM</div>
         </a>
 
         <a href="research-papers/" class="card reveal">
-            <div class="card-top">
-                <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                    <polyline points="14 2 14 8 20 8" />
-                    <line x1="16" y1="13" x2="8" y2="13" />
-                    <line x1="16" y1="17" x2="8" y2="17" />
-                    <polyline points="10 9 9 9 8 9" />
-                </svg>
-                <svg class="card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="1.5">
-                    <path d="M7 17L17 7M17 7H7M17 7V17" />
-                </svg>
+            <div class="card-content">
+                <div class="card-top">
+                    <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                        <polyline points="10 9 9 9 8 9" />
+                    </svg>
+                    <svg class="card-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.5">
+                        <path d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
+                </div>
+                <h3 class="card-title">Research Papers</h3>
+                <p class="card-desc">
+                    Curated collection of breakthrough AI papers. Implementation insights and key takeaways.
+                </p>
+                <div class="card-meta">/// RESEARCH</div>
             </div>
-            <h3 class="card-title">Research Papers</h3>
-            <p class="card-desc">
-                Curated collection of breakthrough AI papers. Implementation insights and key takeaways.
-            </p>
-            <div class="card-meta">/// RESEARCH</div>
         </a>
 
         <a href="llm-testing/" class="card reveal">
-            <div class="card-top">
-                <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                    <polyline points="22 4 12 14.01 9 11.01" />
-                </svg>
-                <svg class="card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="1.5">
-                    <path d="M7 17L17 7M17 7H7M17 7V17" />
-                </svg>
+            <div class="card-content">
+                <div class="card-top">
+                    <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                        <polyline points="22 4 12 14.01 9 11.01" />
+                    </svg>
+                    <svg class="card-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.5">
+                        <path d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
+                </div>
+                <h3 class="card-title">LLM Testing</h3>
+                <p class="card-desc">
+                    Complete testing methodology. Evaluation metrics, benchmark suites, and monitoring.
+                </p>
+                <div class="card-meta">/// QA_OPS</div>
             </div>
-            <h3 class="card-title">LLM Testing</h3>
-            <p class="card-desc">
-                Complete testing methodology. Evaluation metrics, benchmark suites, and monitoring.
-            </p>
-            <div class="card-meta">/// QA_OPS</div>
         </a>
     </div>
 
@@ -571,7 +766,8 @@
             © 2025 MAXPOOL. ALL SYSTEMS NOMINAL.
         </div>
         <div class="nav-links">
-            <a href="https://github.com/maxpool" target="_blank">GitHub</a>
+            <a href="https://github.com/maxpool" target="_blank" class="nav-link"
+                style="color: var(--fg-dark)">GitHub</a>
         </div>
     </footer>
 
@@ -590,8 +786,57 @@
             });
         }, observerOptions);
 
-        document.querySelectorAll('.reveal').forEach(el => {
+        document.querySelectorAll('.reveal').forEach((el, index) => {
+            el.style.transitionDelay = `${index * 0.1}s`;
             observer.observe(el);
+        });
+
+        // Card Hover Effect (Mouse tracking for border shine)
+        document.getElementById('cards-container').onmousemove = e => {
+            for (const card of document.getElementsByClassName("card")) {
+                const rect = card.getBoundingClientRect(),
+                    x = e.clientX - rect.left,
+                    y = e.clientY - rect.top;
+
+                card.style.setProperty("--mouse-x", `${x}px`);
+                card.style.setProperty("--mouse-y", `${y}px`);
+            };
+        }
+
+        // Text Scramble Effect
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        let interval = null;
+
+        document.querySelectorAll('.hero-meta span').forEach(element => {
+            element.onmouseover = event => {
+                let iteration = 0;
+
+                clearInterval(interval);
+
+                interval = setInterval(() => {
+                    event.target.innerText = event.target.innerText
+                        .split("")
+                        .map((letter, index) => {
+                            if (index < iteration) {
+                                return event.target.dataset.value[index];
+                            }
+
+                            return letters[Math.floor(Math.random() * 26)]
+                        })
+                        .join("");
+
+                    if (iteration >= event.target.dataset.value.length) {
+                        clearInterval(interval);
+                    }
+
+                    iteration += 1 / 3;
+                }, 30);
+            }
+        });
+
+        // Store original text for scramble effect
+        document.querySelectorAll('.hero-meta span').forEach(el => {
+            el.dataset.value = el.innerText;
         });
     </script>
 </body>
