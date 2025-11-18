@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ilya's Favorite Papers - AI Learning Path</title>
+    <style>
+        @page {
+            margin: 2cm;
+        }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        h1 {
+            color: #1a1a1a;
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-align: center;
+            border-bottom: 2px solid #DC8850;
+            padding-bottom: 15px;
+        }
+        h2 {
+            color: #DC8850;
+            font-size: 22px;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 8px;
+        }
+        h3 {
+            color: #555;
+            font-size: 18px;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .authors {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 30px;
+            color: #666;
+        }
+        .abstract {
+            background: #f8f8f8;
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding {
+            background: #fff8f0;
+            padding: 15px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding h3 {
+            margin-top: 0;
+            color: #DC8850;
+        }
+        .paper-card {
+            background: linear-gradient(to right, #f8f8f8, #fff);
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .paper-card h3 {
+            margin-top: 0;
+            color: #DC8850;
+        }
+        .paper-title {
+            font-weight: bold;
+            color: #1a1a1a;
+            font-size: 16px;
+        }
+        .paper-authors {
+            font-style: italic;
+            color: #666;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        .paper-summary {
+            margin: 10px 0;
+        }
+        .key-learnings {
+            background: #e8f5e9;
+            padding: 12px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .key-learnings h4 {
+            margin: 0 0 8px 0;
+            color: #4caf50;
+            font-size: 14px;
+        }
+        .key-learnings ul {
+            margin: 5px 0;
+            padding-left: 20px;
+        }
+        .key-learnings li {
+            margin: 4px 0;
+            font-size: 14px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #DC8850;
+            color: white;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .badge-foundations {
+            background: #3498db;
+        }
+        .badge-architecture {
+            background: #9b59b6;
+        }
+        .badge-attention {
+            background: #e74c3c;
+        }
+        .badge-rnn {
+            background: #f39c12;
+        }
+        .badge-advanced {
+            background: #1abc9c;
+        }
+        .badge-optimization {
+            background: #34495e;
+        }
+        .badge-theory {
+            background: #16a085;
+        }
+        .badge-complexity {
+            background: #8e44ad;
+        }
+        .eli5-box {
+            background: #e8f5e9;
+            padding: 20px;
+            border-left: 4px solid #4caf50;
+            margin: 20px 0;
+            font-size: 15px;
+        }
+        .eli5-box h3 {
+            margin-top: 0;
+            color: #4caf50;
+        }
+        .navigation {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f8f8;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #DC8850;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        .navigation a:hover {
+            text-decoration: underline;
+        }
+        p {
+            margin: 15px 0;
+            text-align: justify;
+        }
+        .section-intro {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-style: italic;
+        }
+        .link-button {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #DC8850;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 13px;
+            margin: 5px 5px 0 0;
+        }
+        .link-button:hover {
+            background: #c47a43;
+        }
+    </style>
+</head>
+<body>
+    <div class="navigation">
+        <a href="../index.html">← Home</a>
+        <a href="../agent/index.html">Agent Reliability</a>
+        <a href="../rag/index.html">RAG Patterns</a>
+        <a href="index.html">Research Papers</a>
+        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+    </div>
+
+    <h1>Ilya's Favorite Papers<br>A Curated Learning Path for AI</h1>
+
+    <div class="authors">
+        Curated by Ilya Sutskever (Former Chief Scientist, OpenAI)<br>
+        <em>Recommended to John Carmack in 2019</em>
+    </div>
+
+    <div class="abstract">
+        <h2>About This Collection</h2>
+        <p>In 2019, Ilya Sutskever—former Chief Scientist at OpenAI and one of the leading figures of the Google Brain era—sent computer scientist John Carmack a carefully curated list of ~40 papers to learn about AI. This collection represents a masterclass in AI education from one of the field's most influential researchers.</p>
+
+        <p>These papers span the foundations of deep learning, from convolutional networks and recurrent architectures to attention mechanisms and transformers. They also venture into information theory, complexity science, and philosophical foundations of artificial intelligence. Together, they form a comprehensive curriculum for understanding modern AI.</p>
+    </div>
+
+    <div class="eli5-box">
+        <h3>🎯 How to Use This Guide</h3>
+        <p>This collection is organized into thematic sections, progressing from foundational concepts to advanced techniques and theoretical principles. Each paper includes a brief summary and key learnings to help you extract the most important insights. Whether you're a beginner or experienced practitioner, you can follow the path sequentially or jump to sections that interest you most.</p>
+    </div>
+
+    <h2><span class="badge badge-foundations">Foundations</span> Building Blocks of Deep Learning</h2>
+
+    <div class="section-intro">
+        Start here to understand the core concepts that revolutionized computer vision and established deep learning as a dominant paradigm. These papers demonstrate how neural networks learn hierarchical representations and why depth matters.
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">CS231n: Convolutional Neural Networks for Visual Recognition</div>
+        <div class="paper-authors">Stanford University Course</div>
+        <a href="http://cs231n.stanford.edu/" target="_blank" class="link-button">Course Website</a>
+
+        <div class="paper-summary">
+            <p>Stanford's flagship deep learning course covering convolutional neural networks from first principles. Provides hands-on implementation experience with backpropagation, optimization, and modern architectures.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>How convolutions capture spatial hierarchies in images</li>
+                <li>Backpropagation mechanics and computational graphs</li>
+                <li>Practical training techniques: batch normalization, dropout, data augmentation</li>
+                <li>Architecture patterns: VGG, ResNet, and their design principles</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">ImageNet Classification with Deep Convolutional Neural Networks</div>
+        <div class="paper-authors">Alex Krizhevsky, Ilya Sutskever, Geoffrey E. Hinton (2012)</div>
+        <a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf" target="_blank" class="link-button">Paper</a>
+
+        <div class="paper-summary">
+            <p>AlexNet—the breakthrough that launched the deep learning revolution. Won ImageNet 2012 by a massive margin, demonstrating that deep CNNs could dramatically outperform traditional computer vision methods.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>GPU acceleration made training large networks practical (60× speedup)</li>
+                <li>ReLU activation enables faster training than sigmoid/tanh</li>
+                <li>Dropout prevents overfitting in large networks</li>
+                <li>Data augmentation (translations, reflections) improves generalization</li>
+                <li>Depth matters: 8 layers achieved unprecedented accuracy</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">Understanding LSTM Networks</div>
+        <div class="paper-authors">Christopher Olah (2015)</div>
+        <a href="https://colah.github.io/posts/2015-08-Understanding-LSTMs/" target="_blank" class="link-button">Blog Post</a>
+
+        <div class="paper-summary">
+            <p>The definitive visual explanation of Long Short-Term Memory networks. Breaks down the architecture's gates and cell states with intuitive diagrams, making complex concepts accessible.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>The vanishing gradient problem limits standard RNNs to short-term dependencies</li>
+                <li>LSTM's cell state acts as a "memory highway" preserving information across time</li>
+                <li>Forget gate decides what information to discard from cell state</li>
+                <li>Input gate controls what new information to store</li>
+                <li>Output gate determines what to output based on cell state</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2><span class="badge badge-architecture">Core Architectures</span> Modern Network Design</h2>
+
+    <div class="section-intro">
+        These papers introduced architectural innovations that became standard practice. ResNets solved the degradation problem in very deep networks, while dilated convolutions enabled efficient receptive field expansion.
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">Deep Residual Learning for Image Recognition</div>
+        <div class="paper-authors">Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun (2015)</div>
+        <a href="https://arxiv.org/abs/1512.03385" target="_blank" class="link-button">ArXiv</a>
+
+        <div class="paper-summary">
+            <p>ResNets revolutionized deep learning by introducing skip connections, enabling networks with 100+ layers. Won ImageNet 2015 and became the most influential architecture of the 2010s.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>Deep networks aren't harder to optimize—they're harder to learn identity mappings</li>
+                <li>Skip connections (residual connections) let gradients flow directly to earlier layers</li>
+                <li>Learning residuals F(x) instead of H(x) is easier: H(x) = F(x) + x</li>
+                <li>Enabled training networks 8× deeper (152 vs 19 layers) with lower error</li>
+                <li>Bottleneck design (1×1, 3×3, 1×1) reduces parameters while maintaining performance</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">Identity Mappings in Deep Residual Networks</div>
+        <div class="paper-authors">Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun (2016)</div>
+        <a href="https://arxiv.org/abs/1603.05027" target="_blank" class="link-button">ArXiv</a>
+
+        <div class="paper-summary">
+            <p>Follow-up analysis revealing that "clean" identity paths (pre-activation ResNets) enable even deeper and more accurate networks by ensuring unimpeded gradient flow.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>Pre-activation (BN-ReLU-Conv) outperforms post-activation (Conv-BN-ReLU)</li>
+                <li>Identity shortcuts must be "clean"—no activations or normalization on skip connections</li>
+                <li>Enables training networks exceeding 1000 layers</li>
+                <li>Provides theoretical analysis: identity shortcuts create ensemble-like behavior</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">Multi-Scale Context Aggregation by Dilated Convolutions</div>
+        <div class="paper-authors">Fisher Yu, Vladlen Koltun (2015)</div>
+        <a href="https://arxiv.org/abs/1511.07122" target="_blank" class="link-button">ArXiv</a>
+
+        <div class="paper-summary">
+            <p>Introduced dilated (atrous) convolutions for dense prediction tasks. Enables exponential receptive field expansion without losing resolution or adding parameters.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>Dilated convolutions insert "holes" to increase receptive field without pooling</li>
+                <li>Maintains spatial resolution for dense prediction (segmentation, detection)</li>
+                <li>Multi-scale context aggregation improves boundary delineation</li>
+                <li>Became standard in semantic segmentation architectures</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2><span class="badge badge-attention">Attention & Transformers</span> The Revolution in Sequence Modeling</h2>
+
+    <div class="section-intro">
+        Attention mechanisms fundamentally changed how models process sequences. These papers trace the evolution from additive attention in NMT to the self-attention of Transformers—the architecture that powers modern LLMs.
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">Neural Machine Translation by Jointly Learning to Align and Translate</div>
+        <div class="paper-authors">Dzmitry Bahdanau, Kyunghyun Cho, Yoshua Bengio (2014)</div>
+        <a href="https://arxiv.org/abs/1409.0473" target="_blank" class="link-button">ArXiv</a>
+
+        <div class="paper-summary">
+            <p>Introduced attention mechanisms for sequence-to-sequence models. Solved the bottleneck problem where encoders had to compress entire sentences into fixed-size vectors.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>Attention lets decoders focus on relevant encoder states at each step</li>
+                <li>Alignment weights are learned, not hand-coded</li>
+                <li>Dramatically improves translation quality on long sentences</li>
+                <li>Attention weights provide interpretability—shows what model "looks at"</li>
+                <li>Foundation for all subsequent attention mechanisms</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">Attention Is All You Need</div>
+        <div class="paper-authors">Ashish Vaswani, Noam Shazeer, Niki Parmar, et al. (2017)</div>
+        <a href="https://arxiv.org/abs/1706.03762" target="_blank" class="link-button">ArXiv</a>
+
+        <div class="paper-summary">
+            <p>The Transformer architecture—arguably the most important paper in modern AI. Replaced recurrence with self-attention, enabling parallel training and scaling to billions of parameters.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>Self-attention computes relationships between all positions in parallel</li>
+                <li>Multi-head attention captures different types of relationships</li>
+                <li>Positional encodings inject sequence order information</li>
+                <li>Layer normalization and residual connections stabilize deep models</li>
+                <li>Achieved SOTA on translation with 1/10th training cost of RNN models</li>
+                <li>Became foundation for BERT, GPT, and all modern LLMs</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">The Annotated Transformer</div>
+        <div class="paper-authors">Sasha Rush, et al. (2018)</div>
+        <a href="http://nlp.seas.harvard.edu/2018/04/03/attention.html" target="_blank" class="link-button">Blog</a>
+        <a href="https://github.com/harvardnlp/annotated-transformer" target="_blank" class="link-button">Code</a>
+
+        <div class="paper-summary">
+            <p>Line-by-line implementation guide to the Transformer paper. Combines paper walkthrough with working PyTorch code, making the architecture accessible and reproducible.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>Attention is just Q×K^T scaled dot product followed by softmax</li>
+                <li>Feed-forward networks apply same transformation to each position independently</li>
+                <li>Label smoothing and warmup learning rate schedules improve training</li>
+                <li>Practical implementation details often omitted from papers</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2><span class="badge badge-rnn">Recurrent Networks</span> Sequential Processing and Memory</h2>
+
+    <div class="section-intro">
+        Before Transformers dominated, RNNs were the workhorse for sequential data. These papers explore their capabilities, limitations, and extensions with external memory.
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">The Unreasonable Effectiveness of Recurrent Neural Networks</div>
+        <div class="paper-authors">Andrej Karpathy (2015)</div>
+        <a href="http://karpathy.github.io/2015/05/21/rnn-effectiveness/" target="_blank" class="link-button">Blog</a>
+        <a href="https://github.com/karpathy/char-rnn" target="_blank" class="link-button">Code</a>
+
+        <div class="paper-summary">
+            <p>Influential blog post demonstrating the surprising capabilities of character-level RNNs. Shows how simple models can learn complex structures like code syntax and LaTeX formatting.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>Character-level models can generate syntactically valid code and markup</li>
+                <li>RNNs learn hierarchical structure without explicit structure in input</li>
+                <li>Temperature parameter controls generation randomness vs coherence</li>
+                <li>Visualizing activations reveals learned representations (quote detection, line length, etc.)</li>
+                <li>Simple architectures + lots of data often beats complex approaches</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">Recurrent Neural Network Regularization</div>
+        <div class="paper-authors">Wojciech Zaremba, Ilya Sutskever, Oriol Vinyals (2014)</div>
+        <a href="https://arxiv.org/abs/1409.2329" target="_blank" class="link-button">ArXiv</a>
+        <a href="https://github.com/wojzaremba/lstm" target="_blank" class="link-button">Code</a>
+
+        <div class="paper-summary">
+            <p>Demonstrates that dropout in RNNs should only be applied to non-recurrent connections. Established best practices for regularizing recurrent models.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>Standard dropout on recurrent connections hurts performance</li>
+                <li>Apply dropout only to input→hidden and hidden→output connections</li>
+                <li>Enables training large LSTMs (1500 hidden units) without overfitting</li>
+                <li>Achieved state-of-the-art on Penn Treebank language modeling</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">Neural Turing Machines</div>
+        <div class="paper-authors">Alex Graves, Greg Wayne, Ivo Danihelka (2014)</div>
+        <a href="https://arxiv.org/abs/1410.5401" target="_blank" class="link-button">ArXiv</a>
+
+        <div class="paper-summary">
+            <p>Extends neural networks with external memory that can be read from and written to via differentiable attention. Learns algorithmic tasks like sorting and copying through gradient descent.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>Neural networks can learn algorithm-like behaviors if given appropriate memory structures</li>
+                <li>Content-based and location-based addressing enable flexible memory access</li>
+                <li>Differentiable attention makes external memory trainable with backprop</li>
+                <li>Successfully learns copy, sort, and associative recall tasks</li>
+                <li>Inspired later memory-augmented architectures (Differentiable Neural Computer)</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2><span class="badge badge-advanced">Advanced Architectures</span> Specialized Neural Modules</h2>
+
+    <div class="section-intro">
+        These papers introduce specialized architectures for structured data, relational reasoning, and complex input/output mappings.
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">Pointer Networks</div>
+        <div class="paper-authors">Oriol Vinyals, Meire Fortunato, Navdeep Jauregui-Borda (2015)</div>
+        <a href="https://arxiv.org/abs/1506.03134" target="_blank" class="link-button">ArXiv</a>
+
+        <div class="paper-summary">
+            <p>Introduces attention mechanism for variable-length output dictionaries. Instead of predicting from fixed vocabulary, the network "points" to input positions.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>Attention can serve as output mechanism, not just for reading encoder states</li>
+                <li>Solves combinatorial problems: convex hull, Delaunay triangulation, TSP</li>
+                <li>Output dictionary size adapts to input length</li>
+                <li>Foundation for copy mechanisms in seq2seq models</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">Neural Message Passing for Quantum Chemistry</div>
+        <div class="paper-authors">Justin Gilmer, Samuel S. Schoenholz, Patrick F. Riley, Oriol Vinyals, George E. Dahl (2017)</div>
+        <a href="https://arxiv.org/abs/1704.01212" target="_blank" class="link-button">ArXiv</a>
+
+        <div class="paper-summary">
+            <p>Unifies various graph neural network architectures under a message passing framework. Demonstrates effectiveness on molecular property prediction.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>Graph convolutions generalize CNNs to irregular structures</li>
+                <li>Message passing: nodes aggregate information from neighbors iteratively</li>
+                <li>Unified framework helps understand GNN variants (GCN, GraphSAGE, etc.)</li>
+                <li>Achieved competitive results on quantum chemistry benchmarks</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">A simple neural network module for relational reasoning</div>
+        <div class="paper-authors">Adam Santoro, David Raposo, David G.T. Barrett, et al. (2017)</div>
+        <a href="https://arxiv.org/abs/1706.01427" target="_blank" class="link-button">ArXiv</a>
+
+        <div class="paper-summary">
+            <p>Relation Networks (RNs) explicitly compute relations between all pairs of objects. Achieves superhuman performance on CLEVR visual reasoning benchmark.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>Relational reasoning requires comparing all object pairs</li>
+                <li>Simple architecture: g(o_i, o_j) applied to all pairs, then aggregated</li>
+                <li>Dramatically outperforms CNNs on relational tasks</li>
+                <li>Demonstrates importance of architectural inductive biases</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">Relational recurrent neural networks</div>
+        <div class="paper-authors">Adam Santoro, Ryan Faulkner, David Raposo, et al. (2018)</div>
+        <a href="https://arxiv.org/abs/1806.01822" target="_blank" class="link-button">ArXiv</a>
+
+        <div class="paper-summary">
+            <p>Extends RNNs with relational memory core that performs attention-like operations over memory slots. Improves performance on tasks requiring flexible memory access.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>Memory-as-attention: each memory slot attends to all others</li>
+                <li>Enables flexible binding and retrieval of relational information</li>
+                <li>Outperforms LSTMs on reasoning tasks (bAbI, Mini PacMan)</li>
+                <li>Shows benefits of structured memory over single hidden state</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2><span class="badge badge-optimization">Training & Scaling</span> Making Large Models Practical</h2>
+
+    <div class="section-intro">
+        As models grew larger, new training techniques became essential. These papers address parallelism, stability, and curriculum learning for complex tasks.
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">GPipe: Easy Scaling with Micro-Batch Pipeline Parallelism</div>
+        <div class="paper-authors">Yanping Huang, Youlong Cheng, Ankur Bapna, et al. (2019)</div>
+        <a href="https://arxiv.org/abs/1811.06965" target="_blank" class="link-button">ArXiv</a>
+
+        <div class="paper-summary">
+            <p>Efficient pipeline parallelism library enabling training of very large models across multiple accelerators. Achieved state-of-the-art on ImageNet and translation.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>Pipeline parallelism splits model across devices, processes micro-batches sequentially</li>
+                <li>Re-computation during backward pass trades computation for memory</li>
+                <li>Enabled training models 25× larger than memory-constrained single-device limit</li>
+                <li>Trained 557M parameter AmoebaNet on ImageNet (84.3% top-1 accuracy)</li>
+                <li>Nearly linear speedup with up to 8 accelerators</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">Order Matters: Sequence to sequence for sets</div>
+        <div class="paper-authors">Oriol Vinyals, Samy Bengio, Manjunath Kudlur (2015)</div>
+        <a href="https://arxiv.org/abs/1511.06391" target="_blank" class="link-button">ArXiv</a>
+
+        <div class="paper-summary">
+            <p>Demonstrates that seq2seq models can learn to handle sets (unordered inputs) by training on multiple random permutations. Solves problems like sorting through learned attention patterns.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>Neural networks can learn permutation invariance through data augmentation</li>
+                <li>Read-process-write framework with attention handles variable-size inputs/outputs</li>
+                <li>Successfully learns sorting and TSP-like problems</li>
+                <li>Order of processing affects learning—curriculum matters</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">Deep Speech 2: End-to-End Speech Recognition in English and Mandarin</div>
+        <div class="paper-authors">Dario Amodei, Sundaram Ananthanarayanan, Rishita Anubhai, et al. (2015)</div>
+        <a href="https://arxiv.org/abs/1512.02595" target="_blank" class="link-button">ArXiv</a>
+
+        <div class="paper-summary">
+            <p>Large-scale production speech recognition system using end-to-end deep learning. Demonstrates that same architecture works across languages with minimal changes.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>End-to-end learning (audio → text) outperforms pipeline approaches</li>
+                <li>RNNs + CTC loss enable training without phoneme-level alignment</li>
+                <li>Data scale matters: 11,940 hours of labeled speech</li>
+                <li>Batch normalization critical for training stability</li>
+                <li>Same architecture achieves SOTA in both English and Mandarin</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2><span class="badge badge-theory">Theory & Principles</span> Learning, Compression, and Generalization</h2>
+
+    <div class="section-intro">
+        These papers explore theoretical foundations: how to balance model complexity with data fit, the connection between compression and learning, and empirical laws governing neural network scaling.
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">Keeping Neural Networks Simple by Minimizing the Description Length of the Weights</div>
+        <div class="paper-authors">Geoffrey E. Hinton, Drew van Camp (1993)</div>
+        <a href="https://www.cs.toronto.edu/~hinton/absps/colt93.pdf" target="_blank" class="link-button">Paper</a>
+
+        <div class="paper-summary">
+            <p>Foundational work connecting information theory to neural network learning. Proposes Minimum Description Length (MDL) principle for regularization.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>Good models compress both model and data efficiently</li>
+                <li>MDL principle: minimize description length of weights + description length of data given weights</li>
+                <li>Provides principled foundation for regularization</li>
+                <li>Connects to Bayesian inference and PAC learning</li>
+                <li>Influenced modern compression-based approaches to generalization</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">Variational Lossy Autoencoder</div>
+        <div class="paper-authors">Xi Chen, Diederik P. Kingma, Tim Salimans, et al. (2016)</div>
+        <a href="https://arxiv.org/abs/1611.02731" target="_blank" class="link-button">ArXiv</a>
+
+        <div class="paper-summary">
+            <p>Addresses "posterior collapse" problem in VAEs where decoder ignores latent code. Introduces learnable rate control and improved optimization.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>Posterior collapse occurs when decoder is too powerful—ignores latent variables</li>
+                <li>Free bits technique: ensure minimum KL divergence per latent dimension</li>
+                <li>Balancing reconstruction and regularization critical for meaningful representations</li>
+                <li>Demonstrates importance of optimization details in generative models</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">Scaling Laws for Neural Language Models</div>
+        <div class="paper-authors">Jared Kaplan, Sam McCandlish, Tom Henighan, et al. (2020)</div>
+        <a href="https://arxiv.org/abs/2001.08361" target="_blank" class="link-button">ArXiv</a>
+
+        <div class="paper-summary">
+            <p>Empirical study revealing smooth power-law relationships between model performance and scale (parameters, data, compute). Fundamentally changed how AI labs think about model development.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>Performance scales as power law with model size: L(N) ∝ N^(-α)</li>
+                <li>Similar power laws hold for dataset size and compute</li>
+                <li>Model size and data size should scale together—increasing one without the other suboptimal</li>
+                <li>Early stopping based on validation loss is inefficient—train to convergence</li>
+                <li>Very large models underperform if undertrained</li>
+                <li>Provided blueprint for GPT-3 and subsequent large language models</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">A Tutorial Introduction to the Minimum Description Length Principle</div>
+        <div class="paper-authors">Peter Grünwald (2004)</div>
+        <a href="https://arxiv.org/abs/math/0406077" target="_blank" class="link-button">ArXiv</a>
+
+        <div class="paper-summary">
+            <p>Comprehensive introduction to MDL principle for model selection. Connects information theory, statistics, and machine learning through the lens of compression.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>MDL principle: best model minimizes total description length (model + data|model)</li>
+                <li>Provides unified framework for comparing different model classes</li>
+                <li>Naturally handles model complexity vs fit tradeoff</li>
+                <li>Two-part code MDL vs sophisticated MDL approaches</li>
+                <li>Connections to Kolmogorov complexity and algorithmic information theory</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2><span class="badge badge-complexity">Information Theory & Complexity</span> Fundamental Limits and Philosophical Foundations</h2>
+
+    <div class="section-intro">
+        These works explore deep questions about information, complexity, and computation. They provide philosophical grounding and connect AI to broader scientific principles.
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">Kolmogorov Complexity and Algorithmic Randomness</div>
+        <div class="paper-authors">A. Shen, V. A. Uspensky, N. Vereshchagin (2017)</div>
+        <a href="https://www.lirmm.fr/~ashen/kolmbook-eng.pdf" target="_blank" class="link-button">Book</a>
+
+        <div class="paper-summary">
+            <p>Comprehensive textbook on Kolmogorov complexity—the length of the shortest program that produces a given string. Provides formal foundation for concepts of information and randomness.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>Kolmogorov complexity K(x) = length of shortest program producing x</li>
+                <li>Incompressible strings are algorithmically random</li>
+                <li>K(x) is uncomputable but provides theoretical foundation</li>
+                <li>Relates to information theory: K(x) ≈ entropy in many cases</li>
+                <li>Provides precise definitions of "simplicity" and "pattern"</li>
+                <li>Minimum description length is practical approximation of K(x)</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">The First Law of Complexodynamics</div>
+        <div class="paper-authors">Scott Aaronson (2011)</div>
+        <a href="https://www.scottaaronson.com/papers/complexdyn.pdf" target="_blank" class="link-button">Blog</a>
+
+        <div class="paper-summary">
+            <p>Playful yet profound exploration of how entropy and complexity evolve in physical systems. Discusses why complexity increases then decreases over time.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>"Complexity increases, then decreases"—systems evolve from simple to complex to simple</li>
+                <li>Connects thermodynamics, computation, and cosmology</li>
+                <li>Early universe: low entropy, low complexity</li>
+                <li>Middle phase: structure formation increases complexity</li>
+                <li>Heat death: maximum entropy, zero complexity</li>
+                <li>Provides intuition for why interesting structure exists temporarily</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">Quantifying the Rise and Fall of Complexity in Closed Systems: The Coffee Automaton</div>
+        <div class="paper-authors">Scott Aaronson, Sean M. Carroll, Lauren Ouellette (2014)</div>
+        <a href="https://arxiv.org/abs/1405.6903" target="_blank" class="link-button">ArXiv</a>
+
+        <div class="paper-summary">
+            <p>Concrete model (coffee mixing in cream) demonstrating how complexity evolves in thermodynamic systems. Uses cellular automata to make abstract concepts precise.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>Complexity can be quantified using various measures (entropy, pattern length)</li>
+                <li>Coffee automaton provides toy model of thermodynamic evolution</li>
+                <li>Initial state: low entropy, low complexity (separated coffee and cream)</li>
+                <li>Intermediate: high complexity (swirling patterns)</li>
+                <li>Final: high entropy, low complexity (uniform mixture)</li>
+                <li>Illustrates why structure formation is transient phenomenon</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="paper-card">
+        <div class="paper-title">Machine Super Intelligence</div>
+        <div class="paper-authors">Shane Legg (2008)</div>
+        <a href="https://www.vetta.org/documents/Machine_Super_Intelligence.pdf" target="_blank" class="link-button">PhD Thesis</a>
+
+        <div class="paper-summary">
+            <p>Shane Legg's PhD thesis exploring formal definitions of intelligence and paths to machine superintelligence. Legg would go on to co-found DeepMind with Demis Hassabis.</p>
+        </div>
+
+        <div class="key-learnings">
+            <h4>Key Learnings:</h4>
+            <ul>
+                <li>Universal intelligence defined via performance across all computable environments</li>
+                <li>AIXI: theoretical optimal agent (but incomputable)</li>
+                <li>Intelligence requires balancing exploration vs exploitation</li>
+                <li>Takeoff scenarios: slow vs fast paths to superintelligence</li>
+                <li>Safety considerations for advanced AI systems</li>
+                <li>Established theoretical framework that influenced AI safety research</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="key-finding">
+        <h3>Why This Collection Matters</h3>
+        <p>Ilya Sutskever's paper selection reveals his philosophy on learning AI: start with solid foundations (CNNs, RNNs), understand architectural innovations (ResNets, attention), master the transformative Transformer architecture, and ground everything in information theory and first principles.</p>
+
+        <p>Unlike many AI curricula that focus solely on techniques, this collection emphasizes:</p>
+        <ul>
+            <li><strong>Theory</strong>: Information theory, complexity, and compression as learning foundations</li>
+            <li><strong>Fundamentals</strong>: Deep understanding of core architectures before chasing latest trends</li>
+            <li><strong>Progression</strong>: Building from basic CNNs/RNNs to Transformers to specialized modules</li>
+            <li><strong>Philosophy</strong>: Questions about intelligence, randomness, and computational limits</li>
+        </ul>
+
+        <p>This isn't just a technical reading list—it's a window into how one of AI's leading researchers thinks about the field.</p>
+    </div>
+
+    <div class="navigation">
+        <a href="../index.html">← Home</a>
+        <a href="../agent/index.html">Agent Reliability</a>
+        <a href="../rag/index.html">RAG Patterns</a>
+        <a href="index.html">Research Papers</a>
+        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+    </div>
+</body>
+</html>

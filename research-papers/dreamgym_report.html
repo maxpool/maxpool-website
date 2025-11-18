@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DreamGym: Scaling Agent Learning via Experience Synthesis</title>
+    <style>
+        @page {
+            margin: 2cm;
+        }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        h1 {
+            color: #1a1a1a;
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-align: center;
+            border-bottom: 2px solid #DC8850;
+            padding-bottom: 15px;
+        }
+        h2 {
+            color: #DC8850;
+            font-size: 22px;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 8px;
+        }
+        h3 {
+            color: #555;
+            font-size: 18px;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .authors {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 30px;
+            color: #666;
+        }
+        .abstract {
+            background: #f8f8f8;
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding {
+            background: #fff8f0;
+            padding: 15px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding h3 {
+            margin-top: 0;
+            color: #DC8850;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #DC8850;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .metric {
+            font-weight: bold;
+            color: #DC8850;
+        }
+        .performance-improvement {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .performance-decline {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .methodology-box {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .conclusion-box {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #DC8850;
+            color: white;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .badge-success {
+            background: #27ae60;
+        }
+        .badge-warning {
+            background: #f39c12;
+        }
+        .badge-danger {
+            background: #e74c3c;
+        }
+        .formula {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        .eli5-box {
+            background: #e8f5e9;
+            padding: 20px;
+            border-left: 4px solid #4caf50;
+            margin: 20px 0;
+            font-size: 15px;
+        }
+        .eli5-box h3 {
+            margin-top: 0;
+            color: #4caf50;
+        }
+        .figure {
+            margin: 30px 0;
+            text-align: center;
+        }
+        .figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .figure-caption {
+            font-style: italic;
+            color: #666;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .insight-box {
+            background: #fffbf0;
+            border: 2px solid #DC8850;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        .insight-box h3 {
+            color: #DC8850;
+            margin-top: 0;
+        }
+        .source-box {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .source-box a {
+            color: #DC8850;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .source-box a:hover {
+            text-decoration: underline;
+        }
+        .navigation {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f8f8;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #DC8850;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        .navigation a:hover {
+            text-decoration: underline;
+        }
+        p {
+            margin: 15px 0;
+            text-align: justify;
+        }
+        .component-box {
+            background: linear-gradient(to right, #f8f8f8, #fff);
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="navigation">
+        <a href="../index.html">← Home</a>
+        <a href="../agent/index.html">Agent Reliability</a>
+        <a href="../rag/index.html">RAG Patterns</a>
+        <a href="index.html">Research Papers</a>
+        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+    </div>
+
+    <h1>Scaling Agent Learning via Experience Synthesis<br>The DreamGym Framework</h1>
+
+    <div class="authors">
+        Zhaorun Chen, Zhuokai Zhao, Kai Zhang, Bo Liu, Qi Qi, Yifan Wu, Tarun Kalluri, Sara Cao,<br>
+        Yuanhao Xiong, Haibo Tong, Huaxiu Yao, Hengduo Li, Jiacheng Zhu, Xian Li, Dawn Song, Bo Li,<br>
+        Jason Weston, Dat Huynh<br>
+        <em>Meta Superintelligence Labs, FAIR at Meta, University of Chicago, UC Berkeley</em><br>
+        <em>November 2025 | arXiv:2511.03773</em>
+    </div>
+
+    <div class="abstract">
+        <h2>Executive Summary</h2>
+        <p>DreamGym introduces a breakthrough approach to training AI agents through synthetic experience synthesis. Rather than relying on expensive real-world interactions, DreamGym creates a reasoning-based "experience model" that simulates environment dynamics, enabling scalable reinforcement learning for autonomous agents at a fraction of the cost.</p>
+
+        <p>The framework addresses four critical challenges in agent training: costly rollouts, limited task diversity, unreliable reward signals, and infrastructure complexity. By distilling environment dynamics into step-by-step reasoning, DreamGym achieves over 30% improvement on non-RL-ready tasks like WebArena while matching state-of-the-art performance on traditional benchmarks—using only synthetic experiences.</p>
+    </div>
+
+    <div class="eli5-box">
+        <h3>🎯 ELI5: The Core Concept</h3>
+        <p>Imagine teaching a robot to navigate a shopping website. Traditionally, the robot would need to click through thousands of real web pages, which is slow and expensive. DreamGym creates a "mental simulator"—an AI that imagines what happens when the robot clicks different buttons. The robot practices in this imaginary world millions of times, learning quickly and cheaply. When it finally goes to the real website, it already knows what to do. It's like practicing driving in a video game before getting behind the wheel of a real car.</p>
+    </div>
+
+    <h2>The Problem: Why Training AI Agents is So Hard</h2>
+
+    <p>Training autonomous AI agents with reinforcement learning (RL) faces fundamental barriers that have limited practical adoption:</p>
+
+    <div class="key-finding">
+        <h3>Four Critical Challenges</h3>
+        <ul>
+            <li><strong>Prohibitive Cost:</strong> Real environments involve long interaction sequences and high computational cost per step. Collecting sufficient data for modern RL algorithms is expensive.</li>
+            <li><strong>Limited Task Diversity:</strong> Most environments provide only a static set of tasks, while RL requires broad task coverage for effective exploration.</li>
+            <li><strong>Unstable Rewards:</strong> Dynamic environments like web pages produce noisy, sparse, or false feedback that hinders stable learning.</li>
+            <li><strong>Infrastructure Complexity:</strong> Existing systems are heterogeneous, often requiring Docker or VMs, making large-batch sampling engineering-intensive.</li>
+        </ul>
+    </div>
+
+    <p>These limitations make building general-purpose, scalable RL systems an open challenge. For instance, WebArena—a realistic web navigation benchmark—is so costly to run at scale that even large research labs struggle to perform extensive RL training on it.</p>
+
+    <h2>The DreamGym Solution: Experience Synthesis</h2>
+
+    <p>DreamGym reframes the problem: instead of requiring perfect environment simulation, it focuses on synthesizing <em>experiences that are sufficiently diverse, informative, and causally grounded</em> to enable learning. The key insight is that agent training doesn't need perfectly realistic environments—it needs interaction data that teaches the right skills.</p>
+
+    <div class="component-box">
+        <h3>Three Core Components</h3>
+
+        <p><span class="badge">1</span> <strong>Reasoning Experience Model:</strong> A scalable LLM-based model that operates in abstract textual state space. Rather than reproducing raw HTML or pixel data, it synthesizes clean, informative state representations. The model uses chain-of-thought reasoning to predict next states and rewards, maintaining causal consistency across multi-turn interactions.</p>
+
+        <p><span class="badge">2</span> <strong>Experience Replay Buffer:</strong> Initialized with offline real-world data and continuously enriched with synthetic trajectories. The buffer retrieves similar past experiences to guide current predictions, improving factuality and reducing hallucinations. It co-evolves with the agent policy to stay aligned.</p>
+
+        <p><span class="badge">3</span> <strong>Curriculum Task Generator:</strong> Identifies valuable tasks using reward entropy as a proxy for challenge level. Tasks with high entropy (50/50 success rate) provide maximum information gain. The generator produces progressively harder variations, creating an adaptive curriculum.</p>
+    </div>
+
+    <h3>How It Works: The Training Loop</h3>
+
+    <ol>
+        <li><strong>Agent takes action:</strong> The policy selects an action based on current state</li>
+        <li><strong>Experience model predicts:</strong> Using CoT reasoning, interaction history, and retrieved examples, the model predicts the next state and reward</li>
+        <li><strong>Trajectory collection:</strong> Multi-turn rollouts are collected entirely within DreamGym</li>
+        <li><strong>Policy update:</strong> Standard RL algorithms (PPO or GRPO) update the agent policy</li>
+        <li><strong>Curriculum expansion:</strong> High-entropy tasks are identified and varied to generate new challenging tasks</li>
+        <li><strong>Repeat:</strong> The cycle continues until convergence or budget is reached</li>
+    </ol>
+
+    <div class="methodology-box">
+        <h3>Training the Experience Model</h3>
+        <p>The experience model is surprisingly data-efficient to train. For WebArena, only 4,800 offline trajectories were needed. For WebShop, 3,600 trajectories sufficed. Each transition is annotated with reasoning traces generated by a strong teacher LLM, then fine-tuned via supervised learning with a joint objective:</p>
+        <div class="formula">
+            L_SFT = -log P(reasoning | context) - log P(next_state | reasoning, context)
+        </div>
+        <p>This ensures the model learns both to generate faithful reasoning and to leverage that reasoning for consistent state prediction.</p>
+    </div>
+
+    <h2>Experimental Results: Dramatic Improvements</h2>
+
+    <h3>Non-RL-Ready Environments: WebArena</h3>
+
+    <p>WebArena represents realistic web navigation across e-commerce, forums, GitLab, and content management systems. Its infrastructure makes large-scale RL training impractical—requiring expensive AWS servers with manual resets and suffering from unreliable evaluation functions.</p>
+
+    <div class="key-finding">
+        <h3>WebArena Performance (Over 30% Improvement)</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>Training Method</th>
+                    <th>Success Rate</th>
+                    <th>Real Data Used</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Llama-3.2-3B</td>
+                    <td>SFT (baseline)</td>
+                    <td>6.1%</td>
+                    <td>20K transitions</td>
+                </tr>
+                <tr>
+                    <td>Llama-3.2-3B</td>
+                    <td>Traditional GRPO</td>
+                    <td>7.3%</td>
+                    <td>80K transitions</td>
+                </tr>
+                <tr>
+                    <td>Llama-3.2-3B</td>
+                    <td><strong>DreamGym</strong></td>
+                    <td class="performance-improvement">13.3%</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>Llama-3.1-8B</td>
+                    <td>Traditional PPO</td>
+                    <td>4.8%</td>
+                    <td>80K transitions</td>
+                </tr>
+                <tr>
+                    <td>Llama-3.1-8B</td>
+                    <td><strong>DreamGym</strong></td>
+                    <td class="performance-improvement">10.9%</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>Qwen-2.5-7B</td>
+                    <td><strong>DreamGym</strong></td>
+                    <td class="performance-improvement">10.0%</td>
+                    <td>0</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p>DreamGym provides the <em>only viable approach</em> for RL-based training on WebArena, delivering 82% to 127% relative improvement over baselines while using zero real environment interactions.</p>
+
+    <h3>RL-Ready Environments: Matching SOTA with Pure Synthesis</h3>
+
+    <p>On WebShop (e-commerce reasoning) and ALFWorld (embodied control), DreamGym demonstrates that synthetic training alone can match traditional RL methods:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Environment</th>
+                <th>Model</th>
+                <th>Traditional RL</th>
+                <th>DreamGym (0 real data)</th>
+                <th>DreamGym-S2R (5K real data)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td rowspan="2">WebShop</td>
+                <td>Llama-3.1-8B</td>
+                <td>65.0% (GRPO)</td>
+                <td>63.9%</td>
+                <td class="performance-improvement">75.0%</td>
+            </tr>
+            <tr>
+                <td>Qwen-2.5-7B</td>
+                <td>68.1% (PPO)</td>
+                <td>65.0%</td>
+                <td class="performance-improvement">73.7%</td>
+            </tr>
+            <tr>
+                <td rowspan="2">ALFWorld</td>
+                <td>Llama-3.1-8B</td>
+                <td>70.9% (GRPO)</td>
+                <td>66.3%</td>
+                <td class="performance-improvement">75.9%</td>
+            </tr>
+            <tr>
+                <td>Qwen-2.5-7B</td>
+                <td>81.1% (PPO)</td>
+                <td>72.7%</td>
+                <td class="performance-improvement">79.9%</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Sim-to-Real Transfer: Best of Both Worlds</h3>
+
+    <p>DreamGym-S2R (sim-to-real) combines synthetic pretraining with limited real-world fine-tuning. Agents first train entirely in DreamGym, acquiring broad knowledge across diverse curriculum tasks, then transfer to real environments for final polish.</p>
+
+    <div class="key-finding">
+        <h3>Dramatic Efficiency Gains</h3>
+        <ul>
+            <li><span class="badge-success">40%+ performance improvement</span> compared to training from scratch in real environments</li>
+            <li><span class="badge-success">90% reduction</span> in real-world data requirements (5K vs 80K transitions)</li>
+            <li><span class="badge-success">3-5× faster training</span> by reducing real environment rollout time</li>
+        </ul>
+        <p>This provides a scalable warm-start strategy: bootstrap with cheap synthetic data, then fine-tune with minimal real interactions.</p>
+    </div>
+
+    <h2>Why Does This Work? Theoretical Insights</h2>
+
+    <p>DreamGym includes a theoretical analysis proving that policies trained in synthetic environments can achieve guaranteed improvement in real environments, under mild assumptions.</p>
+
+    <div class="insight-box">
+        <h3>Policy Improvement Guarantee</h3>
+        <p>The key insight: performance in the real environment depends on two learnable error terms:</p>
+        <ul>
+            <li><strong>Reward Accuracy (ε_R):</strong> How faithfully the experience model's rewards reflect real outcomes</li>
+            <li><strong>Domain Consistency (ε_P):</strong> How well synthetic state distributions match real environment dynamics</li>
+        </ul>
+        <p>Critically, these do NOT require perfect state reconstruction. The synthetic environment needs only to provide domain-consistent transitions and correct learning signals—not pixel-perfect simulation.</p>
+        <div class="formula">
+            J_real(π') ≥ J_synthetic(π') - 2(ε_R/(1-γ) + 2γR_max*ε_P/(1-γ)²)
+        </div>
+        <p>This validates the design philosophy: focus on learning-relevant signals, not raw state fidelity.</p>
+    </div>
+
+    <h2>Ablation Studies: What Matters Most?</h2>
+
+    <h3>Component Analysis</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Configuration</th>
+                <th>WebShop Success %</th>
+                <th>WebArena Success %</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Full DreamGym</strong></td>
+                <td>63.9</td>
+                <td>13.3</td>
+            </tr>
+            <tr>
+                <td>w/o Experience Replay</td>
+                <td>59.2 (-4.7)</td>
+                <td>9.7 (-3.6)</td>
+            </tr>
+            <tr>
+                <td>w/o Experience Reasoning</td>
+                <td>55.8 (-8.1)</td>
+                <td>7.3 (-6.0)</td>
+            </tr>
+            <tr>
+                <td>w/o Task Generation</td>
+                <td>57.3 (-6.6)</td>
+                <td>7.3 (-6.0)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p><strong>Key Takeaways:</strong></p>
+    <ul>
+        <li><strong>Reasoning is critical:</strong> Removing CoT reasoning causes the largest drop, confirming that explicit step-by-step prediction maintains consistency and reduces hallucination</li>
+        <li><strong>Curriculum matters:</strong> Without adaptive task generation, agents plateau quickly—the replay buffer saturates with low-entropy, repetitive tasks</li>
+        <li><strong>Replay buffer prevents drift:</strong> Retrieving similar past experiences grounds predictions in real data, improving factuality</li>
+    </ul>
+
+    <h3>Data Efficiency: How Much Offline Data is Needed?</h3>
+
+    <p>Surprisingly little. The experience model achieves competitive performance with just 2,000-10,000 offline transitions:</p>
+
+    <ul>
+        <li><strong>WebShop:</strong> Llama-3.1-8B reaches 50% success rate with only 10K samples</li>
+        <li><strong>WebArena:</strong> Even 2K samples enable substantial improvements over baselines</li>
+        <li><strong>Smaller models:</strong> Llama-3.2-3B (smaller backbone) reaches 55% on WebShop with 20K samples</li>
+    </ul>
+
+    <p>This data efficiency comes from operating in abstract state space—rather than learning raw HTML or pixel dynamics, the model learns high-level semantic transitions.</p>
+
+    <h2>Cross-Domain Transfer: How General Are Learned Policies?</h2>
+
+    <p>DreamGym demonstrates remarkable generalization within similar domains:</p>
+
+    <div class="key-finding">
+        <h3>Transfer Learning Results</h3>
+        <ul>
+            <li><strong>WebShop → WebArena:</strong> A policy trained on WebShop (e-commerce) transfers to WebArena (general web navigation) and outperforms SFT baselines trained directly on WebArena</li>
+            <li><strong>WebArena → WebShop:</strong> Bidirectional transfer works—WebArena training transfers back to WebShop with superior performance</li>
+            <li><strong>Web → Embodied Control (ALFWorld):</strong> Transfer fails when the domain gap is too large, indicating limits of current meta-representations</li>
+        </ul>
+    </div>
+
+    <p>This suggests DreamGym learns domain-agnostic behavioral priors within similar task families, rather than memorizing task-specific patterns.</p>
+
+    <h2>Practical Engineering Implications</h2>
+
+    <h3>When Should You Use DreamGym?</h3>
+
+    <div class="component-box">
+        <h3>Ideal Use Cases</h3>
+        <ul>
+            <li><span class="badge-success">High-cost environments</span> Real interactions are expensive (e.g., web agents requiring cloud infrastructure)</li>
+            <li><span class="badge-success">Non-RL-ready tasks</span> Environments lack reliable reset mechanisms or produce unstable rewards</li>
+            <li><span class="badge-success">Task diversity needed</span> Static task sets limit exploration—curriculum generation helps</li>
+            <li><span class="badge-success">Warm-start scenarios</span> You have limited real-world budget but need strong initialization (DreamGym-S2R)</li>
+        </ul>
+    </div>
+
+    <h3>Implementation Considerations</h3>
+
+    <p><strong>Computational Requirements:</strong> Experiments used 8 nodes with A100 GPUs and 4 nodes with H100 GPUs. However, the abstract state space makes experience model training surprisingly efficient—most compute goes to policy training, not environment simulation.</p>
+
+    <p><strong>Hyperparameters:</strong> The framework includes a hyperparameter λ that bounds the proportion of synthetic tasks per iteration, balancing original task coverage with curriculum-driven exploration. Typical values: λ ∈ [0.2, 0.5].</p>
+
+    <p><strong>Experience Model Choice:</strong> All main results use Llama-3.1-8B as the experience model backbone. Smaller models (3B) work but with reduced performance. Domain-specific pretraining (like WebDreamer for web tasks) helps at low data scales but converges to similar performance with more data.</p>
+
+    <h2>Limitations and Future Directions</h2>
+
+    <div class="methodology-box">
+        <h3>Known Limitations</h3>
+        <ul>
+            <li><strong>Single-environment focus:</strong> Current work trains separate experience models per environment. A universal world model could enable zero-shot transfer.</li>
+            <li><strong>Domain gaps:</strong> Transfer fails across very different domains (e.g., web → robotics). Better meta-representations needed.</li>
+            <li><strong>Long-horizon tasks:</strong> Experiments focus on tasks completable in 10-50 steps. Scaling to multi-hour tasks remains open.</li>
+            <li><strong>Benchmark vs. reality:</strong> Real-world tasks may have hidden complexity not captured in current benchmarks.</li>
+        </ul>
+    </div>
+
+    <h3>Future Research Directions</h3>
+
+    <ol>
+        <li><strong>Universal experience models:</strong> Train a single model across multiple environments to enable cross-domain transfer and zero-shot adaptation</li>
+        <li><strong>Improved curriculum learning:</strong> Beyond reward entropy, incorporate novelty search, surprise, or intrinsic motivation for task generation</li>
+        <li><strong>Memory and error recovery:</strong> Integrate external memory systems to enable agents to recognize and correct mistakes, potentially breaking the constant hazard rate</li>
+        <li><strong>Multi-agent scenarios:</strong> Extend to competitive or cooperative settings where multiple agents interact</li>
+        <li><strong>Real-world deployment:</strong> Test on production systems beyond academic benchmarks</li>
+    </ol>
+
+    <div class="conclusion-box">
+        <h2>Conclusion</h2>
+        <p>DreamGym represents a paradigm shift in agent training: moving from expensive real-environment sampling to scalable synthetic experience synthesis. By focusing on learning-relevant signals rather than perfect simulation, it achieves dramatic improvements in both cost and performance.</p>
+
+        <p>The framework's success validates a key insight: <strong>agent training doesn't require perfectly realistic environments, but rather interaction data that is sufficiently diverse, informative, and causally grounded.</strong> This opens the door to training general-purpose agents at scale, previously limited by infrastructure and cost constraints.</p>
+
+        <p>For practitioners, the message is clear: invest in experience models for high-cost or non-RL-ready environments. For researchers, the challenge is extending these ideas to universal world models that enable zero-shot adaptation across arbitrary domains. The era of scalable agent learning via experience synthesis has begun.</p>
+    </div>
+
+    <div class="source-box">
+        <h3>Primary Source</h3>
+        <p>
+            <a href="https://arxiv.org/abs/2511.03773" target="_blank">Chen et al.: "Scaling Agent Learning via Experience Synthesis"</a><br>
+            <em>arXiv:2511.03773 [cs.AI], November 2025</em>
+        </p>
+        <p>
+            <strong>Authors:</strong> Zhaorun Chen, Zhuokai Zhao, Kai Zhang, Bo Liu, Qi Qi, Yifan Wu, Tarun Kalluri, Sara Cao, Yuanhao Xiong, Haibo Tong, Huaxiu Yao, Hengduo Li, Jiacheng Zhu, Xian Li, Dawn Song, Bo Li, Jason Weston, Dat Huynh
+        </p>
+        <p>
+            <strong>Affiliations:</strong> Meta Superintelligence Labs, FAIR at Meta, University of Chicago, UC Berkeley
+        </p>
+    </div>
+
+    <div class="navigation">
+        <a href="../index.html">← Home</a>
+        <a href="../agent/index.html">Agent Reliability</a>
+        <a href="../rag/index.html">RAG Patterns</a>
+        <a href="index.html">Research Papers</a>
+        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+    </div>
+</body>
+</html>
