@@ -56,7 +56,7 @@
         /* Main layout */
         .container {
             display: grid;
-            grid-template-columns: 42% 58%;
+            grid-template-columns: 40% 60%;
             height: 100vh;
             width: 100vw;
         }
@@ -89,7 +89,7 @@
 
         .logo {
             font-family: var(--font-mono);
-            font-size: 14px;
+            font-size: 18px;
             font-weight: 600;
             color: var(--text-secondary);
             margin-bottom: 48px;
@@ -99,12 +99,12 @@
         }
 
         .headline {
-            margin-bottom: 32px;
+            margin-bottom: 48px;
         }
 
         .headline-line {
             display: block;
-            font-size: clamp(42px, 5vw, 64px);
+            font-size: clamp(64px, 7vw, 100px);
             font-weight: 800;
             line-height: 1;
             letter-spacing: -0.04em;
@@ -122,11 +122,11 @@
         .headline-line:nth-child(3) span { animation-delay: 0.5s; color: var(--text-muted); }
 
         .tagline {
-            font-size: 17px;
+            font-size: 22px;
             color: var(--text-secondary);
-            margin-bottom: 48px;
-            max-width: 340px;
-            line-height: 1.6;
+            margin-bottom: 56px;
+            max-width: 440px;
+            line-height: 1.5;
             opacity: 0;
             animation: fadeIn 0.8s ease forwards 0.8s;
         }
@@ -144,11 +144,11 @@
         .cta {
             display: inline-flex;
             align-items: center;
-            gap: 12px;
-            padding: 16px 28px;
+            gap: 16px;
+            padding: 22px 44px;
             background: transparent;
             color: var(--text);
-            font-size: 15px;
+            font-size: 18px;
             font-weight: 600;
             text-decoration: none;
             border-radius: 50px;
@@ -164,8 +164,8 @@
         }
 
         .cta svg {
-            width: 18px;
-            height: 18px;
+            width: 22px;
+            height: 22px;
             transition: transform 0.4s;
         }
 
@@ -227,12 +227,12 @@
 
         .stat-value {
             font-family: var(--font-mono);
-            font-size: 24px;
+            font-size: 40px;
             font-weight: 700;
         }
 
         .stat-label {
-            font-size: 11px;
+            font-size: 14px;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.08em;
@@ -245,7 +245,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 40px;
+            padding: 48px;
             position: relative;
             overflow: hidden;
         }
@@ -263,9 +263,9 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             grid-template-rows: repeat(2, 1fr);
-            gap: 12px;
+            gap: 20px;
             width: 100%;
-            max-width: 720px;
+            max-width: 1000px;
             height: auto;
             aspect-ratio: 3 / 2;
         }
@@ -273,8 +273,8 @@
         .card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 28px 24px;
+            border-radius: 20px;
+            padding: 36px 32px;
             text-decoration: none;
             color: var(--text);
             display: flex;
@@ -326,19 +326,19 @@
 
         .card-number {
             font-family: var(--font-mono);
-            font-size: 11px;
+            font-size: 15px;
             color: var(--text-muted);
-            margin-bottom: 12px;
+            margin-bottom: 20px;
         }
 
         .card-title {
-            font-size: 17px;
+            font-size: 24px;
             font-weight: 600;
             letter-spacing: -0.01em;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
             transition: color 0.3s;
         }
 
@@ -347,8 +347,8 @@
         }
 
         .card-title svg {
-            width: 14px;
-            height: 14px;
+            width: 22px;
+            height: 22px;
             opacity: 0;
             transform: translate(-4px, 4px);
             transition: all 0.3s;
@@ -361,7 +361,7 @@
         }
 
         .card-desc {
-            font-size: 13px;
+            font-size: 17px;
             color: var(--text-secondary);
             line-height: 1.5;
             margin-top: auto;
