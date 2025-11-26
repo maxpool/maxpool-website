@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Continuous Thought Machines: Neural Synchronization for Emergent Intelligence</title>
+    <style>
+        @page {
+            margin: 2cm;
+        }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        h1 {
+            color: #1a1a1a;
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-align: center;
+            border-bottom: 2px solid #DC8850;
+            padding-bottom: 15px;
+        }
+        h2 {
+            color: #DC8850;
+            font-size: 22px;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 8px;
+        }
+        h3 {
+            color: #555;
+            font-size: 18px;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .authors {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 30px;
+            color: #666;
+        }
+        .abstract {
+            background: #f8f8f8;
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding {
+            background: #fff8f0;
+            padding: 15px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding h3 {
+            margin-top: 0;
+            color: #DC8850;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #DC8850;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .metric {
+            font-weight: bold;
+            color: #DC8850;
+        }
+        .performance-improvement {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .performance-decline {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .methodology-box {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .conclusion-box {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #DC8850;
+            color: white;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .badge-success {
+            background: #27ae60;
+        }
+        .badge-warning {
+            background: #f39c12;
+        }
+        .badge-danger {
+            background: #e74c3c;
+        }
+        .formula {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        .eli5-box {
+            background: #e8f5e9;
+            padding: 20px;
+            border-left: 4px solid #4caf50;
+            margin: 20px 0;
+            font-size: 15px;
+        }
+        .eli5-box h3 {
+            margin-top: 0;
+            color: #4caf50;
+        }
+        .figure {
+            margin: 30px 0;
+            text-align: center;
+        }
+        .figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .figure-caption {
+            font-style: italic;
+            color: #666;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .timeline-box {
+            background: linear-gradient(to right, #f8f8f8, #fff);
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+            position: relative;
+        }
+        .timeline-item {
+            margin: 15px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        .timeline-item:before {
+            content: "•";
+            position: absolute;
+            left: 10px;
+            color: #DC8850;
+            font-size: 20px;
+        }
+        .timeline-date {
+            font-weight: bold;
+            color: #DC8850;
+        }
+        .insight-box {
+            background: #fffbf0;
+            border: 2px solid #DC8850;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        .insight-box h3 {
+            color: #DC8850;
+            margin-top: 0;
+        }
+        .source-box {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .source-box a {
+            color: #DC8850;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .source-box a:hover {
+            text-decoration: underline;
+        }
+        .navigation {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f8f8;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #DC8850;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        .navigation a:hover {
+            text-decoration: underline;
+        }
+        p {
+            margin: 15px 0;
+            text-align: justify;
+        }
+        .bio-box {
+            background: #f0fff4;
+            padding: 15px;
+            border-left: 4px solid #27ae60;
+            margin: 20px 0;
+        }
+        .bio-box h3 {
+            margin-top: 0;
+            color: #27ae60;
+        }
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .comparison-item {
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .comparison-item h4 {
+            margin-top: 0;
+            color: #DC8850;
+        }
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navigation">
+        <a href="../index.html">← Home</a>
+        <a href="../agent/index.html">Agent Reliability</a>
+        <a href="../rag/index.html">RAG Patterns</a>
+        <a href="../research-papers/index.html">Research Papers</a>
+        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+    </div>
+
+    <h1>Continuous Thought Machines<br>Neural Synchronization for Emergent Intelligence</h1>
+
+    <div class="authors">
+        Luke Darlow, Ciaran Regan, Sebastian Risi, Jeffrey Seely, Llion Jones<br>
+        Sakana AI<br>
+        <em>May 2025</em>
+    </div>
+
+    <div class="abstract">
+        <h2>Executive Summary</h2>
+        <p>This paper introduces <strong>Continuous Thought Machines (CTM)</strong>, a revolutionary neural architecture that treats temporal dynamics as a fundamental computational primitive rather than an abstraction to be eliminated. Unlike standard neural networks that process information in discrete, static layers, CTMs allow "thought" to unfold over an internal time dimension, using <strong>neural synchronization patterns</strong> as the core representation for taking actions.</p>
+
+        <p>The results are remarkable: CTMs achieve <span class="performance-improvement">6× generalization</span> beyond training distribution on maze navigation (trained on 39×39, solves 99×99), demonstrate <span class="performance-improvement">near-perfect accuracy</span> on cumulative parity where LSTMs fail, show <span class="performance-improvement">better-than-human calibration</span> on image classification, and exhibit emergent behaviors like adaptive compute allocation and interpretable "thinking" trajectories—all without explicitly designing for these capabilities.</p>
+
+        <p>The key insight is that by allowing neurons to maintain individual temporal histories and learn per-neuron dynamics through Neuron-Level Models (NLMs), CTMs bridge computational efficiency with biological plausibility, opening new research directions for systems exhibiting more human-like intelligence.</p>
+    </div>
+
+    <div class="eli5-box">
+        <h3>🎯 ELI5: What is a Continuous Thought Machine?</h3>
+        <p>Imagine your brain as an orchestra. In a standard neural network, every musician plays their note simultaneously in one instant—there's no melody, just a single chord. In a Continuous Thought Machine, the orchestra plays over time: violins start, then cellos join in, patterns emerge between instruments, and the final piece emerges from how they <em>synchronize</em> together over time. The CTM watches which neurons "fire together" across time and uses that synchronization pattern—not just the final notes—to make decisions. This is closer to how real brains work, where timing and rhythm of neural activity carry meaningful information.</p>
+    </div>
+
+    <h2>Part 1: The Core Innovation—Time as Computation</h2>
+
+    <p>Standard neural networks treat computation as instantaneous: input goes in, activations propagate through layers, output comes out. Time exists only for processing sequential data. But this fundamentally differs from biological neural systems, where <strong>when</strong> a neuron fires matters as much as <strong>whether</strong> it fires.</p>
+
+    <div class="figure">
+        <img src="https://pub.sakana.ai/ctm/assets/png/architecture.jpeg" alt="CTM Architecture Diagram">
+        <div class="figure-caption">Figure 1: The Continuous Thought Machine architecture. Data enters through synapse models (left), flows through neurons that maintain temporal histories processed by individual NLMs, and outputs derive from synchronization patterns (right). The key innovation is the internal recurrence timeline T where "thought" unfolds independently from data sequences.</div>
+    </div>
+
+    <h3>The Three Pillars of CTM Architecture</h3>
+
+    <div class="key-finding">
+        <h3>1. Decoupled Internal Time Dimension</h3>
+        <p>CTM introduces an internal recurrence timeline t ∈ {1,...,T} that is <strong>completely independent</strong> from any sequential data structure. Even for a single static image, the CTM processes it over multiple internal "ticks," allowing iterative refinement of representations. This internal time enables the model to "think" about inputs rather than just react to them.</p>
+    </div>
+
+    <div class="key-finding">
+        <h3>2. Neuron-Level Models (NLMs)</h3>
+        <p>Each neuron receives its own private MLP that processes its historical pre-activations. Unlike standard recurrent networks where all neurons share the same recurrence weights, NLMs allow each neuron to develop its own unique temporal dynamics. This is analogous to how biological neurons have different time constants and response properties.</p>
+    </div>
+
+    <div class="key-finding">
+        <h3>3. Synchronization-Based Representation</h3>
+        <p>Rather than using raw activations, CTM computes a <strong>synchronization matrix</strong> S<sup>t</sup> = Z<sup>t</sup> · (Z<sup>t</sup>)<sup>⊺</sup> that captures how pairs of neurons correlate over time. This matrix—representing which neurons "fire together"—is the fundamental representation used for outputs and attention. This mirrors biological findings that neural synchronization carries meaningful information.</p>
+    </div>
+
+    <h3>Mathematical Formulation</h3>
+
+    <div class="formula">
+        Pre-activations: a<sup>t</sup> = f<sub>θsyn</sub>(concat(z<sup>t</sup>, o<sup>t</sup>)) ∈ ℝ<sup>D</sup><br><br>
+        Post-activations: z<sub>d</sub><sup>(t+1)</sup> = g<sub>θd</sub>(A<sub>d</sub><sup>t</sup>) — each neuron has its own NLM g<sub>θd</sub><br><br>
+        Synchronization: S<sup>t</sup> = Z<sup>t</sup> · (Z<sup>t</sup>)<sup>⊺</sup> ∈ ℝ<sup>D×D</sup><br><br>
+        History maintained as FIFO lists of length M for each neuron
+    </div>
+
+    <div class="bio-box">
+        <h3>🧬 Biological Inspiration</h3>
+        <p>The CTM architecture draws from multiple neuroscience principles:</p>
+        <ul>
+            <li><strong>Spike-Timing-Dependent Plasticity (STDP):</strong> Learning depends on precise timing relationships between neural firing</li>
+            <li><strong>Neural Oscillations:</strong> Brain rhythms (gamma, theta, alpha) coordinate information processing</li>
+            <li><strong>Temporal Coding:</strong> Information encoded in when neurons fire, not just firing rates</li>
+            <li><strong>Traveling Waves:</strong> Activity patterns propagate spatially through neural tissue</li>
+        </ul>
+    </div>
+
+    <h2>Part 2: The Training Dynamics—Learning When to Decide</h2>
+
+    <p>A critical innovation in CTM is how it handles training across internal time steps. Rather than forcing the network to produce correct outputs at a fixed time, CTM dynamically selects the optimal moments for evaluation.</p>
+
+    <h3>Dynamic Loss Selection</h3>
+
+    <p>The CTM training objective combines two key time points:</p>
+
+    <div class="formula">
+        t<sub>1</sub> = argmin<sub>t</sub>(L<sup>t</sup>) — the tick with minimum loss<br>
+        t<sub>2</sub> = argmax<sub>t</sub>(C<sup>t</sup>) — the tick with maximum certainty<br><br>
+        Final Loss: L = (L<sup>t₁</sup> + L<sup>t₂</sup>) / 2
+    </div>
+
+    <div class="insight-box">
+        <h3>Why This Matters: Curriculum Learning Emerges Naturally</h3>
+        <p>This loss formulation creates <strong>emergent curriculum learning</strong>. Early in training, easy examples achieve low loss quickly (low t<sub>1</sub>), while hard examples need more internal steps. As training progresses, the model learns to use more internal computation for difficult inputs and less for easy ones. The certainty term (t<sub>2</sub>) ensures the model develops confidence in its decisions.</p>
+    </div>
+
+    <h2>Part 3: ImageNet Classification—Seeing Models Think</h2>
+
+    <p>The first major experiment applies CTM to ImageNet classification, revealing interpretable "thinking" processes and exceptional calibration properties.</p>
+
+    <div class="figure">
+        <img src="https://pub.sakana.ai/ctm/assets/png/imagenet/accuracy_types_5.svg" alt="Top-5 accuracy across internal ticks">
+        <div class="figure-caption">Figure 2: Top-5 accuracy evolution across internal ticks on ImageNet. Both CTM and LSTM improve with more internal processing time, but CTM shows smoother progression and higher final accuracy.</div>
+    </div>
+
+    <h3>Interpretable Attention Patterns</h3>
+
+    <p>Unlike black-box models, CTM's attention maps reveal <strong>how</strong> the model processes images over time. The attention starts broad, covering the entire image, then progressively focuses on discriminative regions. This mirrors human visual attention: we first take in the whole scene, then focus on relevant details.</p>
+
+    <div class="key-finding">
+        <h3>Better-Than-Human Calibration</h3>
+        <p>On CIFAR-10, CTM achieves calibration superior to human performance. When the model says it's 80% confident, it's correct 80% of the time. This is crucial for real-world deployment where knowing <em>when you don't know</em> is as important as knowing the answer.</p>
+    </div>
+
+    <div class="figure">
+        <img src="https://pub.sakana.ai/ctm/assets/png/cifar10/calibration.svg" alt="Calibration comparison">
+        <div class="figure-caption">Figure 3: Calibration curves comparing CTM, Feed-forward networks, LSTMs, and human performance on CIFAR-10. The CTM (purple) achieves nearly perfect calibration, outperforming even human annotators in matching confidence to accuracy.</div>
+    </div>
+
+    <h3>Neural Dynamics Visualization</h3>
+
+    <p>When visualizing CTM neuron activations over time, rich dynamics emerge spontaneously:</p>
+
+    <div class="comparison-grid">
+        <div class="comparison-item">
+            <h4>CTM Dynamics</h4>
+            <p>Shows periodic activity, traveling waves, and multi-scale temporal structure—all without any explicit design for periodicity. Different neurons develop different characteristic patterns.</p>
+        </div>
+        <div class="comparison-item">
+            <h4>LSTM Dynamics</h4>
+            <p>Shows relatively monotonic evolution toward a fixed point. Less temporal structure and diversity across neurons.</p>
+        </div>
+    </div>
+
+    <div class="figure">
+        <img src="https://pub.sakana.ai/ctm/assets/png/cifar10/dynamics_atm.png" alt="CTM neural dynamics">
+        <div class="figure-caption">Figure 4: CTM neural dynamics visualization showing rich temporal structure including periodic oscillations, traveling waves, and multi-scale patterns that emerge without explicit design.</div>
+    </div>
+
+    <h2>Part 4: Maze Navigation—Building World Models</h2>
+
+    <p>The maze navigation task demonstrates CTM's ability to build internal world models and generalize far beyond training distribution.</p>
+
+    <div class="figure">
+        <img src="https://pub.sakana.ai/ctm/assets/png/mazes/acc.svg" alt="Maze training accuracy">
+        <div class="figure-caption">Figure 5: Training curves for maze navigation showing CTM achieving near-perfect validation accuracy, while baseline approaches struggle to converge.</div>
+    </div>
+
+    <h3>Extraordinary Generalization</h3>
+
+    <div class="key-finding">
+        <h3>6× Beyond Training Distribution</h3>
+        <p>CTMs trained on <span class="metric">39×39 mazes</span> (path lengths ~100) successfully solve <span class="metric">99×99 mazes</span>—a <span class="performance-improvement">6× increase</span> in problem complexity. This isn't just slight extrapolation; it's solving fundamentally larger problems than ever seen in training.</p>
+    </div>
+
+    <div class="figure">
+        <img src="https://pub.sakana.ai/ctm/assets/png/mazes/accuracy_vs_pathlength.svg" alt="Accuracy vs path length">
+        <div class="figure-caption">Figure 6: Generalization performance showing accuracy remains high even for path lengths far exceeding training distribution. CTM maintains strong performance while baselines degrade rapidly.</div>
+    </div>
+
+    <h3>How Does It Work? Internal World Model</h3>
+
+    <p>Analysis of the attention patterns reveals that CTM builds an <strong>internal world model</strong> of the maze. The attention literally traces the solution path from start to finish, showing the model has learned the underlying structure of maze navigation rather than memorizing patterns.</p>
+
+    <div class="insight-box">
+        <h3>No Positional Encoding Required</h3>
+        <p>Unlike Transformers that require explicit positional encodings, CTM solves mazes without any position information. The temporal dynamics themselves provide the necessary structure for understanding spatial relationships. This suggests the internal time dimension serves as a universal computational scaffold.</p>
+    </div>
+
+    <h2>Part 5: Cumulative Parity—Testing Algorithmic Reasoning</h2>
+
+    <p>The cumulative parity task tests whether models can perform sequential algorithmic reasoning: given a sequence of bits, output the running XOR at each position.</p>
+
+    <div class="figure">
+        <img src="https://pub.sakana.ai/ctm/assets/png/parity/accuracy_comparison.svg" alt="Parity task accuracy">
+        <div class="figure-caption">Figure 7: Accuracy during training on the cumulative parity task. CTM (with sufficient internal ticks) achieves near-perfect accuracy, while LSTMs plateau at poor performance regardless of capacity.</div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Model</th>
+                <th>Internal Ticks</th>
+                <th>Final Accuracy</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>LSTM</td>
+                <td>N/A</td>
+                <td><span class="performance-decline">~20%</span></td>
+                <td>Struggles regardless of capacity</td>
+            </tr>
+            <tr>
+                <td>CTM</td>
+                <td>10</td>
+                <td>~40%</td>
+                <td>Insufficient thinking time</td>
+            </tr>
+            <tr>
+                <td>CTM</td>
+                <td>25</td>
+                <td>~70%</td>
+                <td>Improving with more ticks</td>
+            </tr>
+            <tr>
+                <td>CTM</td>
+                <td>75+</td>
+                <td><span class="performance-improvement">~100%</span></td>
+                <td>Near-perfect performance</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="figure">
+        <img src="https://pub.sakana.ai/ctm/assets/png/parity/accuracy_vs_thinking_time.svg" alt="Accuracy vs thinking time">
+        <div class="figure-caption">Figure 8: The relationship between internal computation (thinking time) and accuracy on cumulative parity. More internal ticks enable increasingly accurate algorithmic reasoning.</div>
+    </div>
+
+    <h3>Emergent Planning Behavior</h3>
+
+    <div class="key-finding">
+        <h3>Backward Attention—The Model Plans Ahead</h3>
+        <p>Analysis of attention patterns reveals something striking: the CTM's attention moves <strong>backward</strong> through the sequence. Instead of processing left-to-right like typical sequential models, CTM appears to "plan" by looking ahead to upcoming bits. This emergent bidirectional processing wasn't designed—it emerged from the architecture's freedom to allocate attention over internal time.</p>
+    </div>
+
+    <h2>Part 6: Q&A MNIST—Memory and Reasoning</h2>
+
+    <p>The Q&A MNIST task tests memory: the model sees a sequence of digit images, then must answer questions like "What was the 3rd digit?" or "Was any digit greater than 5?"</p>
+
+    <div class="figure">
+        <img src="https://pub.sakana.ai/ctm/assets/png/qamnist/qamnist_example.svg" alt="Q&A MNIST task example">
+        <div class="figure-caption">Figure 9: Q&A MNIST task structure. The model observes a sequence of digits, then must answer memory-based questions about the sequence without seeing the digits again.</div>
+    </div>
+
+    <div class="figure">
+        <img src="https://pub.sakana.ai/ctm/assets/png/qamnist/accuracy_comparison.svg" alt="Q&A MNIST accuracy comparison">
+        <div class="figure-caption">Figure 10: Accuracy comparison between CTM and LSTM on Q&A MNIST across different sequence lengths and question types.</div>
+    </div>
+
+    <h3>Generalization to Longer Sequences</h3>
+
+    <p>The generalization grids reveal how well models trained on shorter sequences perform on longer ones:</p>
+
+    <div class="comparison-grid">
+        <div class="comparison-item">
+            <h4>CTM (10 internal ticks)</h4>
+            <p>Strong generalization pattern with high accuracy maintained across sequence length variations. The synchronization-based memory provides robust recall.</p>
+        </div>
+        <div class="comparison-item">
+            <h4>LSTM (10 internal ticks)</h4>
+            <p>Performance degrades more rapidly with increased sequence length. Traditional recurrent memory struggles with out-of-distribution lengths.</p>
+        </div>
+    </div>
+
+    <h2>Part 7: Sorting Numbers—Adaptive Computation</h2>
+
+    <p>The sorting task reveals CTM's ability to allocate computation adaptively based on problem difficulty.</p>
+
+    <div class="figure">
+        <img src="https://pub.sakana.ai/ctm/assets/png/sort/mean_wait_times.svg" alt="Mean wait times for sorting">
+        <div class="figure-caption">Figure 11: Mean "wait times" (internal ticks before output) across different output positions in the sorting task.</div>
+    </div>
+
+    <h3>Emergent Difficulty Estimation</h3>
+
+    <div class="key-finding">
+        <h3>The Model Knows What's Hard</h3>
+        <p>Analysis reveals that CTM's "wait time" before outputting each sorted element correlates with the <strong>gap between consecutive sorted values</strong>. When two numbers are close together (harder to order), the model takes more internal ticks to decide. When numbers are far apart (easy), it decides quickly. This difficulty-aware computation wasn't trained—it emerged naturally.</p>
+    </div>
+
+    <div class="figure">
+        <img src="https://pub.sakana.ai/ctm/assets/png/sort/waittimes_vs_delta.jpeg" alt="Wait times vs gaps">
+        <div class="figure-caption">Figure 12: Relationship between wait times and gaps between consecutive sorted numbers. Smaller gaps (harder decisions) lead to longer thinking times.</div>
+    </div>
+
+    <div class="figure">
+        <img src="https://pub.sakana.ai/ctm/assets/png/sort/acc_vs_stddev.svg" alt="Sorting generalization">
+        <div class="figure-caption">Figure 13: Generalization performance on sorting lists with different standard deviations than training. CTM maintains robust performance across distribution shifts.</div>
+    </div>
+
+    <h2>Part 8: Ablation Studies—What Really Matters?</h2>
+
+    <h3>Model Width and Neuron Diversity</h3>
+
+    <div class="figure">
+        <img src="https://pub.sakana.ai/ctm/assets/png/cifar100/ablation_width_acc.svg" alt="Accuracy vs model width">
+        <div class="figure-caption">Figure 14: Test accuracy on CIFAR-100 as model width increases. Wider models achieve higher accuracy, with diminishing returns at larger widths.</div>
+    </div>
+
+    <p>Analysis of neuron similarity reveals why width helps: wider models develop <strong>more diverse neuron behaviors</strong>. With more neurons, each can specialize for different temporal patterns, creating a richer representational space.</p>
+
+    <h3>Internal Ticks and Accuracy</h3>
+
+    <div class="figure">
+        <img src="https://pub.sakana.ai/ctm/assets/png/cifar100/ablation_steps_acc.svg" alt="Accuracy vs internal ticks">
+        <div class="figure-caption">Figure 15: Test accuracy as a function of internal ticks during evaluation. Performance improves with more thinking time, plateauing around 15-25 ticks for image classification.</div>
+    </div>
+
+    <div class="methodology-box">
+        <h3>Key Findings from Ablations</h3>
+        <ul>
+            <li><strong>More ticks = better accuracy</strong> up to a task-dependent ceiling (15-25 for images, 75+ for algorithmic tasks)</li>
+            <li><strong>Wider models develop more diverse neurons</strong> with different temporal response patterns</li>
+            <li><strong>NLM history length M</strong> provides diminishing returns beyond M=8-16</li>
+            <li><strong>Synchronization matrix</strong> is essential—removing it dramatically hurts performance</li>
+        </ul>
+    </div>
+
+    <h2>Part 9: Reinforcement Learning—Continuous-Time Agents</h2>
+
+    <p>CTM extends to reinforcement learning, maintaining continuous activation histories across environment steps.</p>
+
+    <div class="figure">
+        <img src="https://pub.sakana.ai/ctm/assets/png/rl/episode_lengths_avg.png" alt="MiniGrid training curves">
+        <div class="figure-caption">Figure 16: Episode length (lower is better) during training on MiniGrid Four Rooms navigation. CTM achieves comparable performance to LSTM baselines while providing the interpretability benefits of the CTM architecture.</div>
+    </div>
+
+    <p>The key insight is that CTM's internal time can persist across environment steps, allowing the agent to maintain "trains of thought" that span multiple actions. This is more biologically plausible than resetting hidden states at each step.</p>
+
+    <h2>Part 10: Implications and Future Directions</h2>
+
+    <h3>What CTM Teaches Us About Intelligence</h3>
+
+    <div class="insight-box">
+        <h3>Time Is Not Just a Convenience—It's Computational</h3>
+        <p>The success of CTM suggests that temporal dynamics are not merely a biological quirk to be abstracted away, but a <strong>fundamental computational resource</strong>. By allowing information to evolve over internal time, CTM achieves capabilities that elude architectures treating computation as instantaneous:</p>
+        <ul>
+            <li><strong>Adaptive computation:</strong> Harder problems automatically get more processing</li>
+            <li><strong>Emergent planning:</strong> Backward attention enables looking ahead</li>
+            <li><strong>World models:</strong> Internal simulations build without explicit design</li>
+            <li><strong>Calibration:</strong> Uncertainty estimation arises from temporal uncertainty</li>
+        </ul>
+    </div>
+
+    <h3>Comparison to Other Approaches</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Feature</th>
+                <th>Standard NN</th>
+                <th>LSTM/RNN</th>
+                <th>Transformer</th>
+                <th>CTM</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Internal computation time</td>
+                <td>Fixed (depth)</td>
+                <td>Tied to sequence</td>
+                <td>Fixed (layers)</td>
+                <td><span class="performance-improvement">Adaptive</span></td>
+            </tr>
+            <tr>
+                <td>Per-neuron dynamics</td>
+                <td>No</td>
+                <td>No (shared weights)</td>
+                <td>No</td>
+                <td><span class="performance-improvement">Yes (NLMs)</span></td>
+            </tr>
+            <tr>
+                <td>Synchronization representation</td>
+                <td>No</td>
+                <td>No</td>
+                <td>Partial (attention)</td>
+                <td><span class="performance-improvement">Yes</span></td>
+            </tr>
+            <tr>
+                <td>Biological plausibility</td>
+                <td>Low</td>
+                <td>Medium</td>
+                <td>Low</td>
+                <td><span class="performance-improvement">High</span></td>
+            </tr>
+            <tr>
+                <td>Interpretability</td>
+                <td>Low</td>
+                <td>Medium</td>
+                <td>Medium</td>
+                <td><span class="performance-improvement">High</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Future Research Directions</h3>
+
+    <div class="timeline-box">
+        <h3>Open Questions and Opportunities</h3>
+        <div class="timeline-item">
+            <span class="timeline-date">Scaling:</span> How do CTM properties change with model size? Do emergent behaviors become more sophisticated?
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">Language:</span> Can CTM's temporal dynamics improve language model reasoning and calibration?
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">Multimodal:</span> Does synchronization provide natural binding for multimodal representations?
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">Continual Learning:</span> Can persistent temporal dynamics enable better lifelong learning?
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">Neuroscience:</span> Do CTM dynamics predict biological neural phenomena?
+        </div>
+    </div>
+
+    <div class="conclusion-box">
+        <h2>Conclusion</h2>
+        <p>Continuous Thought Machines represent a fundamental rethinking of neural network computation. By embracing temporal dynamics rather than abstracting them away, CTM achieves:</p>
+
+        <ul>
+            <li><strong>6× generalization</strong> beyond training distribution on maze navigation</li>
+            <li><strong>Near-perfect accuracy</strong> on algorithmic tasks where LSTMs fail</li>
+            <li><strong>Better-than-human calibration</strong> on image classification</li>
+            <li><strong>Emergent adaptive computation</strong> matching difficulty to thinking time</li>
+            <li><strong>Interpretable processing</strong> with visible attention trajectories</li>
+        </ul>
+
+        <p>The key insight is that neural synchronization—how neurons fire together over time—provides a rich representational space that standard architectures miss. Rather than computing instant answers, CTMs <em>think</em> about their inputs, developing answers through temporal evolution.</p>
+
+        <p><strong>For practitioners:</strong> CTM suggests that adding internal recurrence with per-neuron dynamics can unlock capabilities beyond what static architectures achieve. The success of synchronization-based representations hints at fundamentally new approaches to representation learning.</p>
+
+        <p><strong>For researchers:</strong> This work opens a new paradigm where time is a first-class computational citizen. The emergent behaviors—planning, calibration, adaptive compute—suggest we're just scratching the surface of what temporal neural architectures can achieve.</p>
+    </div>
+
+    <div class="source-box">
+        <h3>Primary Source</h3>
+        <p>
+            <a href="https://pub.sakana.ai/ctm/" target="_blank">Sakana AI: "Continuous Thought Machines"</a><br>
+            <em>Full interactive paper with visualizations and demos.</em>
+        </p>
+        <p>
+            <a href="https://pub.sakana.ai/ctm/paper" target="_blank">PDF Version</a><br>
+            <em>Technical report with full mathematical details.</em>
+        </p>
+        <p>
+            <a href="https://github.com/SakanaAI/continuous-thought-machines" target="_blank">GitHub Repository</a><br>
+            <em>Open-source implementation and experiment code.</em>
+        </p>
+        <p>
+            <a href="https://arxiv.org/abs/2505.05522" target="_blank">arXiv: 2505.05522</a><br>
+            <em>Academic preprint version.</em>
+        </p>
+    </div>
+
+    <div class="navigation">
+        <a href="../index.html">← Home</a>
+        <a href="../agent/index.html">Agent Reliability</a>
+        <a href="../rag/index.html">RAG Patterns</a>
+        <a href="../research-papers/index.html">Research Papers</a>
+        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+    </div>
+</body>
+</html>
