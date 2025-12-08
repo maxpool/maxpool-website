@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Measuring Agents in Production - Empirical Study of 306 Practitioners</title>
+    <style>
+        @page {
+            margin: 2cm;
+        }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        h1 {
+            color: #1a1a1a;
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-align: center;
+            border-bottom: 2px solid #DC8850;
+            padding-bottom: 15px;
+        }
+        h2 {
+            color: #DC8850;
+            font-size: 22px;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 8px;
+        }
+        h3 {
+            color: #555;
+            font-size: 18px;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .authors {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 30px;
+            color: #666;
+        }
+        .abstract {
+            background: #f8f8f8;
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding {
+            background: #fff8f0;
+            padding: 15px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding h3 {
+            margin-top: 0;
+            color: #DC8850;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #DC8850;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .metric {
+            font-weight: bold;
+            color: #DC8850;
+        }
+        .performance-improvement {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .performance-decline {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .methodology-box {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .conclusion-box {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #DC8850;
+            color: white;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .badge-success {
+            background: #27ae60;
+        }
+        .badge-warning {
+            background: #f39c12;
+        }
+        .badge-danger {
+            background: #e74c3c;
+        }
+        .formula {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        .eli5-box {
+            background: #e8f5e9;
+            padding: 20px;
+            border-left: 4px solid #4caf50;
+            margin: 20px 0;
+            font-size: 15px;
+        }
+        .eli5-box h3 {
+            margin-top: 0;
+            color: #4caf50;
+        }
+        .figure {
+            margin: 30px 0;
+            text-align: center;
+        }
+        .figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .figure-caption {
+            font-style: italic;
+            color: #666;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .timeline-box {
+            background: linear-gradient(to right, #f8f8f8, #fff);
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+            position: relative;
+        }
+        .timeline-item {
+            margin: 15px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        .timeline-item:before {
+            content: "•";
+            position: absolute;
+            left: 10px;
+            color: #DC8850;
+            font-size: 20px;
+        }
+        .timeline-date {
+            font-weight: bold;
+            color: #DC8850;
+        }
+        .insight-box {
+            background: #fffbf0;
+            border: 2px solid #DC8850;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        .insight-box h3 {
+            color: #DC8850;
+            margin-top: 0;
+        }
+        .source-box {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .source-box a {
+            color: #DC8850;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .source-box a:hover {
+            text-decoration: underline;
+        }
+        .navigation {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f8f8;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #DC8850;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        .navigation a:hover {
+            text-decoration: underline;
+        }
+        p {
+            margin: 15px 0;
+            text-align: justify;
+        }
+    </style>
+</head>
+<body>
+    <div class="navigation">
+        <a href="../index.html">← Home</a>
+        <a href="../agent/index.html">Agent Reliability</a>
+        <a href="../rag/index.html">RAG Patterns</a>
+        <a href="../research-papers/index.html">Research Papers</a>
+        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+    </div>
+
+    <h1>Measuring Agents in Production<br>An Empirical Study of 306 Practitioners</h1>
+
+    <div class="authors">
+        Melissa Z. Pan, Negar Arabzadeh, Riccardo Cogo, Yuxuan Zhu, Alexander Xiong et al.<br>
+        UC Berkeley, Stanford, IBM Research, UIUC, Intesa Sanpaolo<br>
+        <em>December 2024</em>
+    </div>
+
+    <div class="abstract">
+        <h2>Executive Summary</h2>
+        <p>This landmark empirical study surveys <span class="metric">306 practitioners</span> and conducts <span class="metric">20 in-depth interviews</span> across <span class="metric">26 application domains</span> to understand how AI agents actually work in production. The findings challenge common assumptions: <span class="metric">68%</span> of production agents execute at most 10 steps before requiring human intervention, <span class="metric">70%</span> rely on prompting off-the-shelf models instead of weight tuning, and <span class="metric">74%</span> depend primarily on human evaluation rather than automated benchmarks.</p>
+
+        <p>The core insight is that successful production teams deliberately trade capability for controllability. They accept limited autonomy in exchange for reliability, using constrained architectures with predefined workflows (<span class="metric">80%</span> of deployments) rather than open-ended autonomous agents. Despite the common claim that "95% of agent deployments fail," this research shows practitioners successfully deploy reliable systems serving real users through environmental and operational constraints.</p>
+    </div>
+
+    <div class="eli5-box">
+        <h3>🎯 ELI5: Production Agents vs Research Agents</h3>
+        <p>Imagine the difference between a self-driving car in a research demo versus one actually transporting passengers. Research demos show cars navigating complex cities autonomously. But real taxi services? They run on fixed routes, have human backup drivers, and pull over if anything seems off. Production AI agents work the same way—they're deliberately "dumbed down" to be predictable and safe, not impressive and autonomous. Teams discovered that a reliable agent doing 5 simple steps is worth more than an impressive one that fails unpredictably on step 47.</p>
+    </div>
+
+    <div class="figure">
+        <img src="https://arxiv.org/html/2512.04123v1/x1.png" alt="Reasons for building agents">
+        <div class="figure-caption">Figure 1: Why organizations build agents—73% cite productivity and efficiency gains as the primary motivation, far outpacing automation (54.1%) or cost reduction (43.2%).</div>
+    </div>
+
+    <h2>Part 1: The Reality Gap in Agent Research</h2>
+
+    <p>Agent research has produced remarkable demonstrations—systems that browse the web, write code, and complete multi-step tasks autonomously. Yet the gap between research benchmarks and production deployment remains vast. This study provides the first large-scale empirical evidence of what actually works when AI agents serve real users.</p>
+
+    <div class="key-finding">
+        <h3>The Autonomy-Reliability Tradeoff</h3>
+        <p>The most striking finding is that production agents are deliberately constrained:</p>
+        <ul>
+            <li><strong>68%</strong> execute ≤10 steps before human intervention</li>
+            <li><strong>46.7%</strong> execute ≤5 steps—essentially glorified assistants</li>
+            <li><strong>80%</strong> use predefined static workflows, not open-ended planning</li>
+            <li><strong>85%</strong> build custom implementations rather than using agent frameworks</li>
+        </ul>
+        <p>Teams have learned that controllability beats capability. A reliable 5-step agent delivers more value than an unreliable 50-step one.</p>
+    </div>
+
+    <div class="figure">
+        <img src="https://arxiv.org/html/2512.04123v1/x2.png" alt="Application domains">
+        <div class="figure-caption">Figure 2: Distribution across 26 application domains—finance (39.1%), technology (24.6%), and corporate services (23.2%) lead adoption, but agents span healthcare, legal, retail, and beyond.</div>
+    </div>
+
+    <h3>Who's Actually Using Agents?</h3>
+
+    <p>Contrary to the focus on coding assistants in research, production agents serve diverse industries. <span class="metric">92.5%</span> serve human end-users rather than other systems, and <span class="metric">66%</span> allow response times of minutes or longer—suggesting complex, high-value tasks rather than real-time interactions.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Domain</th>
+                <th>Percentage</th>
+                <th>Key Use Cases</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Finance</td>
+                <td><span class="metric">39.1%</span></td>
+                <td>Document processing, compliance, risk analysis</td>
+            </tr>
+            <tr>
+                <td>Technology</td>
+                <td><span class="metric">24.6%</span></td>
+                <td>DevOps, code review, infrastructure management</td>
+            </tr>
+            <tr>
+                <td>Corporate Services</td>
+                <td><span class="metric">23.2%</span></td>
+                <td>HR workflows, procurement, internal tools</td>
+            </tr>
+            <tr>
+                <td>Healthcare</td>
+                <td><span class="metric">7.2%</span></td>
+                <td>Clinical documentation, research synthesis</td>
+            </tr>
+            <tr>
+                <td>Other</td>
+                <td><span class="metric">5.9%</span></td>
+                <td>Legal, retail, manufacturing, education</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Part 2: Technical Patterns That Work</h2>
+
+    <p>The study reveals surprisingly simple technical approaches dominate production. The sophisticated techniques emphasized in research—fine-tuning, complex planning, multi-agent systems—are rarely used in successful deployments.</p>
+
+    <div class="figure">
+        <img src="https://arxiv.org/html/2512.04123v1/x9.png" alt="Model selection patterns">
+        <div class="figure-caption">Figure 3: Model selection in production—70% use off-the-shelf models without weight tuning. Prompting dominates over fine-tuning.</div>
+    </div>
+
+    <div class="methodology-box">
+        <h3>What Production Teams Actually Use</h3>
+        <ul>
+            <li><strong>Prompting over tuning:</strong> <span class="metric">70%</span> use off-the-shelf models; <span class="metric">79%</span> rely on manual prompt construction</li>
+            <li><strong>Custom over frameworks:</strong> <span class="metric">85%</span> build custom implementations; only <span class="metric">15%</span> use frameworks like LangChain</li>
+            <li><strong>Static over dynamic:</strong> <span class="metric">80%</span> use predefined workflows; open-ended autonomy is rare</li>
+            <li><strong>Human-in-loop:</strong> <span class="metric">74%</span> rely primarily on human evaluation for quality assurance</li>
+        </ul>
+    </div>
+
+    <div class="key-finding">
+        <h3>The Framework Paradox</h3>
+        <p>Despite the proliferation of agent frameworks (LangChain, AutoGPT, CrewAI), <span class="metric">85%</span> of successful production systems are custom-built. Interview participants cited three reasons:</p>
+        <ul>
+            <li><strong>Control:</strong> Frameworks abstract away details teams need to manage</li>
+            <li><strong>Debugging:</strong> Custom code is easier to trace and fix</li>
+            <li><strong>Performance:</strong> Frameworks add overhead for features not needed</li>
+        </ul>
+        <p>As one practitioner noted: "We tried [framework X] but couldn't debug failures. We rebuilt in plain Python in a week and never looked back."</p>
+    </div>
+
+    <div class="figure">
+        <img src="https://arxiv.org/html/2512.04123v1/x14.png" alt="Framework adoption">
+        <div class="figure-caption">Figure 4: Framework adoption patterns—custom implementations dominate (85%), with LangChain leading among framework users. Most teams avoid framework abstractions for production reliability.</div>
+    </div>
+
+    <h2>Part 3: The Evaluation Crisis</h2>
+
+    <p>Perhaps the most concerning finding: production agent evaluation remains immature. Teams struggle to measure whether their agents actually work, relying heavily on human judgment rather than automated metrics.</p>
+
+    <div class="figure">
+        <img src="https://arxiv.org/html/2512.04123v1/x15.png" alt="Evaluation practices">
+        <div class="figure-caption">Figure 5: Evaluation practices in production—74% rely primarily on human-in-the-loop evaluation. Only 25% use any formal benchmarks.</div>
+    </div>
+
+    <div class="insight-box">
+        <h3>The Benchmark Gap</h3>
+        <p>Research emphasizes benchmark performance (SWE-bench, WebArena, etc.), but production teams find these largely irrelevant:</p>
+        <ul>
+            <li><span class="metric">75%</span> evaluate without formal benchmarks</li>
+            <li><span class="metric">25%</span> build custom benchmarks from scratch using internal data</li>
+            <li><span class="metric">52%</span> use LLM-as-judge, but <strong>always</strong> combined with human verification</li>
+            <li>A/B testing and direct user feedback dominate over offline evaluation</li>
+        </ul>
+        <p>"Production tasks are highly domain-specific; public benchmarks are rarely applicable."</p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Evaluation Method</th>
+                <th>Usage Rate</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Human-in-the-loop</td>
+                <td><span class="metric">74%</span></td>
+                <td>Primary method for most teams</td>
+            </tr>
+            <tr>
+                <td>LLM-as-judge</td>
+                <td><span class="metric">52%</span></td>
+                <td>Always with human verification</td>
+            </tr>
+            <tr>
+                <td>A/B testing</td>
+                <td><span class="metric">~50%</span></td>
+                <td>Online evaluation preferred</td>
+            </tr>
+            <tr>
+                <td>Custom benchmarks</td>
+                <td><span class="metric">25%</span></td>
+                <td>Built from internal data</td>
+            </tr>
+            <tr>
+                <td>Public benchmarks</td>
+                <td><span class="performance-decline">&lt;10%</span></td>
+                <td>Used only in early development</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Part 4: Top Challenges and Solutions</h2>
+
+    <p>The study identifies reliability as the dominant challenge (<span class="metric">37.9%</span> cite it as their top technical focus), followed by evaluation difficulties. Interestingly, latency—often emphasized in research—impacts only <span class="metric">14.8%</span> as a critical blocker.</p>
+
+    <div class="figure">
+        <img src="https://arxiv.org/html/2512.04123v1/x18.png" alt="Deployment challenges">
+        <div class="figure-caption">Figure 6: Impact of latency on deployment decisions—only 14.8% cite it as a critical blocker. Most production use cases tolerate minutes-long response times.</div>
+    </div>
+
+    <div class="key-finding">
+        <h3>How Teams Achieve Reliability</h3>
+        <p>Rather than solving reliability through better models, successful teams constrain the problem:</p>
+        <ul>
+            <li><strong>Limited autonomy:</strong> Fewer steps = fewer failure points</li>
+            <li><strong>Predefined workflows:</strong> Static paths are predictable and debuggable</li>
+            <li><strong>Human checkpoints:</strong> Regular intervention catches errors before cascading</li>
+            <li><strong>Constrained tools:</strong> Limited tool access reduces attack surface</li>
+            <li><strong>Domain specialization:</strong> Narrow scope enables thorough testing</li>
+        </ul>
+    </div>
+
+    <div class="insight-box">
+        <h3>The Engineering Pattern: Trade Capability for Controllability</h3>
+        <p>The study reveals a consistent engineering philosophy: successful production agents deliberately sacrifice capability for reliability. Teams that tried to build highly autonomous agents failed; teams that built constrained, predictable systems succeeded. This mirrors patterns in other high-stakes engineering domains—aviation, medical devices, nuclear systems—where reliability trumps capability.</p>
+    </div>
+
+    <h2>Part 5: Implications for Agent Development</h2>
+
+    <p>This research suggests the agent field may be over-indexing on autonomy benchmarks while under-investing in reliability engineering. The path to production isn't more capable agents—it's more controllable ones.</p>
+
+    <div class="methodology-box">
+        <h3>Recommendations for Practitioners</h3>
+        <ul>
+            <li><strong>Start constrained:</strong> Begin with 3-5 step workflows, expand only when proven reliable</li>
+            <li><strong>Build custom:</strong> Frameworks add complexity; plain code is easier to debug</li>
+            <li><strong>Embrace human-in-loop:</strong> Don't fight it—design for it from the start</li>
+            <li><strong>Create domain benchmarks:</strong> Public benchmarks won't measure your success</li>
+            <li><strong>Measure business impact:</strong> User satisfaction matters more than benchmark scores</li>
+        </ul>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Research Focus</th>
+                <th>Production Reality</th>
+                <th>Gap</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Long autonomous trajectories</td>
+                <td>≤10 steps with human checkpoints</td>
+                <td><span class="performance-decline">Major</span></td>
+            </tr>
+            <tr>
+                <td>Fine-tuned specialist models</td>
+                <td>Prompted off-the-shelf models</td>
+                <td><span class="performance-decline">Major</span></td>
+            </tr>
+            <tr>
+                <td>Agent frameworks</td>
+                <td>Custom implementations</td>
+                <td><span class="performance-decline">Major</span></td>
+            </tr>
+            <tr>
+                <td>Automated evaluation</td>
+                <td>Human-in-the-loop verification</td>
+                <td><span class="performance-decline">Major</span></td>
+            </tr>
+            <tr>
+                <td>Public benchmarks</td>
+                <td>Domain-specific custom benchmarks</td>
+                <td><span class="performance-decline">Major</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="conclusion-box">
+        <h2>Conclusion</h2>
+        <p>This empirical study of 306 practitioners provides the first large-scale evidence of what works in production AI agents. The findings are humbling for the research community: the sophisticated techniques emphasized in papers—complex planning, fine-tuning, multi-agent systems—are largely absent from successful deployments.</p>
+        <p>Instead, production success comes from engineering discipline:</p>
+        <ul>
+            <li><span class="metric">68%</span> of agents run ≤10 steps before human intervention</li>
+            <li><span class="metric">70%</span> use off-the-shelf models with careful prompting</li>
+            <li><span class="metric">85%</span> are custom-built, avoiding framework abstractions</li>
+            <li><span class="metric">74%</span> rely on human evaluation, not automated benchmarks</li>
+            <li><span class="metric">80%</span> use static workflows, not open-ended autonomy</li>
+        </ul>
+        <p>The path to production isn't building more capable agents—it's building more reliable ones. Teams that accept constraints and design for human oversight succeed where those chasing autonomy fail.</p>
+    </div>
+
+    <div class="source-box">
+        <h3>Primary Sources</h3>
+        <p>
+            <a href="https://arxiv.org/abs/2512.04123" target="_blank">Measuring Agents in Production</a><br>
+            <em>Pan, Arabzadeh, Cogo, Zhu, Xiong et al., December 2024</em>
+        </p>
+        <p>
+            <a href="https://arxiv.org/html/2512.04123v1" target="_blank">ArXiv HTML Version</a><br>
+            <em>Full paper with figures and appendices</em>
+        </p>
+    </div>
+
+    <div class="navigation">
+        <a href="../index.html">← Home</a>
+        <a href="../agent/index.html">Agent Reliability</a>
+        <a href="../rag/index.html">RAG Patterns</a>
+        <a href="../research-papers/index.html">Research Papers</a>
+        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+    </div>
+</body>
+</html>
