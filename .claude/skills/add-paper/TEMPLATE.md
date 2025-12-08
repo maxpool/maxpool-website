@@ -497,13 +497,46 @@ This is the complete HTML template for research papers. Copy this structure and 
 
 ## Figure Patterns
 
-### Standard Figure
+### Standard Figure (with sizing)
+
+**IMPORTANT**: Always use `width: 100%; max-width: Xpx;` — not just `max-width` alone!
+(`max-width` alone won't scale up small images)
+
 ```html
+<!-- Full width for complex architecture diagrams -->
 <div class="figure">
-    <img src="[URL]" alt="[Description]">
+    <img src="[URL]" alt="[Description]" style="width: 100%;">
+    <div class="figure-caption">Figure N: [Caption]</div>
+</div>
+
+<!-- Default for most paper figures (RECOMMENDED) -->
+<div class="figure">
+    <img src="[URL]" alt="[Description]" style="width: 100%; max-width: 800px;">
+    <div class="figure-caption">Figure N: [Caption]</div>
+</div>
+
+<!-- Smaller width only for simple diagrams -->
+<div class="figure">
+    <img src="[URL]" alt="[Description]" style="width: 100%; max-width: 650px;">
     <div class="figure-caption">Figure N: [Caption]</div>
 </div>
 ```
+
+### Image Sizing Guide
+
+| Figure Type | Style | When to Use |
+|-------------|-------|-------------|
+| Architecture diagrams | `style="max-width: 100%;"` | Complex diagrams with many components |
+| **Most paper figures** | `style="max-width: 800px;"` | **Default** - bar charts, results, comparisons |
+| Charts with legends | `style="max-width: 750px;"` | Pie charts, distribution charts |
+| Simple diagrams | `style="max-width: 650px;"` | Flowcharts, concept illustrations |
+| Small icons/symbols | `style="max-width: 500px;"` | Very simple figures |
+
+**Rules:**
+1. Academic figures are high-resolution → **use 800px as default**
+2. Lots of small text/labels → use 100% width
+3. Only use smaller sizes (500-650px) for genuinely small diagrams
+4. **Too small is worse than too large**
 
 ### ArXiv HTML Figures
 Figures from ArXiv HTML pages typically have URLs like:
@@ -517,13 +550,13 @@ https://paper-assets.alphaxiv.org/figures/[paper-id]/img-[N].jpeg
 
 Example:
 ```html
-<img src="https://paper-assets.alphaxiv.org/figures/2509.25370v1/img-2.jpeg" alt="Framework Overview">
+<img src="https://paper-assets.alphaxiv.org/figures/2509.25370v1/img-2.jpeg" alt="Framework Overview" style="max-width: 650px;">
 ```
 
 ### Placeholder for Missing Images
 ```html
 <div class="figure">
-    <div style="background: #f8f8f8; padding: 40px; border: 2px dashed #DC8850; border-radius: 5px; min-height: 200px; display: flex; justify-content: center; align-items: center;">
+    <div style="background: #f8f8f8; padding: 40px; border: 2px dashed #DC8850; border-radius: 5px; min-height: 200px; display: flex; justify-content: center; align-items: center; max-width: 650px; margin: 0 auto;">
         <div style="text-align: center;">
             <h4 style="color: #DC8850;">[Diagram Title]</h4>
             <p>[Description of what would be shown]</p>

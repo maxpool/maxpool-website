@@ -51,7 +51,7 @@ From the paper content, identify:
 4. **Benchmarks/Datasets** - What was tested and where
 5. **Figure URLs** - Extract image URLs from the HTML for inclusion
 
-### Step 3: Extract Figure URLs
+### Step 3: Extract Figure URLs and Determine Sizing
 
 For ArXiv HTML pages, figures are typically at:
 - Direct `<img>` tags in the HTML content
@@ -61,6 +61,53 @@ For AlphaXiv papers, use pattern:
 ```
 https://paper-assets.alphaxiv.org/figures/[paper-id]/img-[N].jpeg
 ```
+
+#### Image Sizing Guidelines
+
+**IMPORTANT**: Paper figures vary greatly in size. Apply appropriate sizing based on content type:
+
+| Figure Type | Recommended Width | Usage |
+|-------------|-------------------|-------|
+| Architecture diagrams | `max-width: 100%` | Full width for complex diagrams |
+| Most paper figures | `max-width: 800px` | **Default** - bar charts, results, comparisons |
+| Charts with legends | `max-width: 750px` | Pie charts, distribution charts |
+| Tables as images | `max-width: 800px` | Comparison tables, results |
+| Simple diagrams | `max-width: 650px` | Flowcharts, concept illustrations |
+| Very small figures | `max-width: 500px` | Icons, simple symbols |
+
+**Apply sizing using inline style on the `<img>` tag:**
+
+**IMPORTANT**: Use `width: 100%; max-width: Xpx;` — not just `max-width` alone!
+- `max-width` alone won't scale up small images
+- `width: 100%` makes the image fill its container
+- `max-width` then caps it at a reasonable size
+
+```html
+<!-- Full width for architecture diagrams -->
+<div class="figure">
+    <img src="..." alt="..." style="width: 100%;">
+    <div class="figure-caption">Figure 1: System Architecture</div>
+</div>
+
+<!-- Default for most figures (RECOMMENDED) -->
+<div class="figure">
+    <img src="..." alt="..." style="width: 100%; max-width: 800px;">
+    <div class="figure-caption">Figure 2: Performance Results</div>
+</div>
+
+<!-- Smaller figures -->
+<div class="figure">
+    <img src="..." alt="..." style="width: 100%; max-width: 650px;">
+    <div class="figure-caption">Figure 3: Concept Diagram</div>
+</div>
+```
+
+**Rules of thumb:**
+1. Academic paper figures are usually high-resolution → use **800px as default**
+2. If the figure has lots of small text/labels → use 100% width
+3. Only constrain to 500-650px for genuinely small/simple diagrams
+4. **When in doubt, use `max-width: 800px`** — too small is worse than too large
+5. Always keep `max-width: 100%` in the base CSS to prevent overflow
 
 ### Step 4: Generate HTML File
 
