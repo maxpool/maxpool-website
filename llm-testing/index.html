@@ -5,7 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Testing Framework for New Coding Models</title>
     <link rel="stylesheet" href="../design-system.css">
+    <script src="../components.js"></script>
     <style>
+        .page-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .page-title h1 {
+            color: #1a1a1a;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .page-title .subtitle {
+            color: #666;
+            font-size: 16px;
+        }
         .query-example {
             background: #FAF9F7;
             border-left: 3px solid #DC8850;
@@ -143,22 +157,11 @@
 </head>
 <body>
     <div class="container">
-        <div class="main-header">
-            <div class="header-content">
-                <a href="../" class="nav-home">← Home</a>
-                <div class="header-left">
-                    <h1 class="heading-2">Testing Framework for New Coding Models</h1>
-                    <div class="subtitle-section">Structured approach to evaluate LLMs across multiple dimensions with practical benchmarks</div>
-                </div>
-                <div class="cta">
-                    <div>
-                        <div class="cta-label">GenAI Community</div>
-                        <a href="https://join.maxpool.dev" target="_blank" class="cta-link">
-                            join.maxpool.dev �
-                        </a>
-                    </div>
-                </div>
-            </div>
+        <div id="nav"></div>
+
+        <div class="page-title">
+            <h1>Testing Framework for New Coding Models</h1>
+            <div class="subtitle">Structured approach to evaluate LLMs across multiple dimensions with practical benchmarks</div>
         </div>
 
         <!-- Core Testing Dimensions -->
@@ -517,6 +520,8 @@
                 </ol>
             </div>
         </div>
+
+        <div id="footer"></div>
     </div>
 </body>
 </html>

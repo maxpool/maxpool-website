@@ -124,32 +124,11 @@
             text-align: center;
             margin: 15px 0;
         }
-        .navigation {
-            text-align: center;
-            margin: 30px 0;
-            padding: 20px;
-            background: #f8f8f8;
-            border-radius: 5px;
-        }
-        .navigation a {
-            color: #DC8850;
-            text-decoration: none;
-            margin: 0 15px;
-            font-weight: bold;
-        }
-        .navigation a:hover {
-            text-decoration: underline;
-        }
     </style>
+    <script src="../components.js"></script>
 </head>
 <body>
-    <div class="navigation">
-        <a href="../index.html">← Home</a>
-        <a href="../agent/index.html">Agent Reliability</a>
-        <a href="../rag/index.html">RAG Patterns</a>
-        <a href="../research-papers/index.html">Research Papers</a>
-        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
-    </div>
+    <div id="nav"></div>
 
     <h1>Curse of Instructions: Large Language Models Cannot Follow Multiple Instructions at Once</h1>
 
@@ -438,16 +417,6 @@
         <li>ManyIFEval Benchmark Dataset (https://openreview.net/forum?id=R6q67CDBCH)</li>
     </ul>
 
-    <div style="margin-top: 50px; padding-top: 20px; border-top: 2px solid #e0e0e0; text-align: center; color: #666; font-size: 12px;">
-        <p>Report compiled for AI Agent Engineering Research Collection</p>
-        <p>For more resources, visit <a href="https://join.maxpool.dev" style="color: #DC8850;">join.maxpool.dev</a></p>
-    </div>
-    <div class="navigation">
-        <a href="../index.html">← Home</a>
-        <a href="../agent/index.html">Agent Reliability</a>
-        <a href="../rag/index.html">RAG Patterns</a>
-        <a href="../research-papers/index.html">Research Papers</a>
-        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
-    </div>
+    <div id="footer"></div>
 </body>
 </html>

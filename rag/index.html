@@ -5,9 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RAG Implementation Patterns - Developer Guide</title>
     <link rel="stylesheet" href="../design-system.css">
+    <script src="../components.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <style>
         /* Page-specific styles */
+        .page-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .page-title h1 {
+            color: #1a1a1a;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .page-title .subtitle {
+            color: #666;
+            font-size: 16px;
+        }
         .architecture-diagram {
             background: var(--bg-card-hover);
             border: 2px solid var(--anthropic-primary);
@@ -19,7 +33,7 @@
             font-size: 0.9em;
             line-height: 1.8;
         }
-        
+
         .mermaid-container {
             background: var(--bg-card);
             border: 2px solid var(--anthropic-primary);
@@ -28,14 +42,14 @@
             margin: var(--spacing-lg) 0;
             text-align: center;
         }
-        
+
         .diagram-title {
             font-weight: 600;
             margin-bottom: var(--spacing-md);
             color: var(--text-primary);
             font-size: 1.1em;
         }
-        
+
         .diagram-features {
             background: var(--bg-card-hover);
             border-radius: var(--radius-md);
@@ -43,26 +57,26 @@
             margin-top: var(--spacing-lg);
             text-align: left;
         }
-        
+
         .diagram-features h4 {
             color: var(--text-primary);
             margin-bottom: var(--spacing-sm);
             font-size: 1em;
         }
-        
+
         .diagram-features ul {
             list-style: none;
             padding-left: 0;
             font-size: 0.9em;
         }
-        
+
         .diagram-features li {
             padding: 6px 0;
             padding-left: var(--spacing-lg);
             position: relative;
             line-height: 1.4;
         }
-        
+
         .diagram-features li:before {
             content: "•";
             position: absolute;
@@ -74,22 +88,11 @@
 </head>
 <body>
     <div class="container">
-        <div class="main-header">
-            <div class="header-content">
-                <a href="../" class="nav-home">← Home</a>
-                <div class="header-left">
-                    <h1 class="heading-2">RAG Implementation Patterns</h1>
-                    <div class="subtitle-section">Comprehensive guide to Retrieval-Augmented Generation architectures</div>
-                </div>
-                <div class="cta">
-                    <div>
-                        <div class="cta-label">GenAI Community</div>
-                        <a href="https://join.maxpool.dev" target="_blank" class="cta-link">
-                            join.maxpool.dev →
-                        </a>
-                    </div>
-                </div>
-            </div>
+        <div id="nav"></div>
+
+        <div class="page-title">
+            <h1>RAG Implementation Patterns</h1>
+            <div class="subtitle">Comprehensive guide to Retrieval-Augmented Generation architectures</div>
         </div>
         
         <!-- Section 1: RAG Architecture Patterns -->
@@ -701,17 +704,11 @@ flowchart TD
             </div>
         </div>
         
-        <div class="footer">
-            <h3>GenAI Community</h3>
-            <p>Join our community for more AI development resources and discussions</p>
-            <a href="https://join.maxpool.dev" target="_blank" class="btn-outline">
-                Visit join.maxpool.dev →
-            </a>
-        </div>
+        <div id="footer"></div>
     </div>
-    
+
     <script>
-        mermaid.initialize({ 
+        mermaid.initialize({
             startOnLoad: true,
             theme: 'default',
             flowchart: {

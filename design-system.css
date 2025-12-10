@@ -116,7 +116,7 @@ body {
 .heading-3 {
   font-size: 1.8rem;
   font-weight: 700;
-  color: var(--text-light);
+  color: var(--text-primary);
 }
 
 .heading-4 {
@@ -135,7 +135,7 @@ body {
 
 .subtitle-section {
   font-size: 0.95rem;
-  opacity: 0.9;
+  color: var(--text-secondary);
   margin-top: var(--spacing-sm);
 }
 
@@ -178,10 +178,10 @@ body {
 }
 
 .section-header {
-  background: linear-gradient(135deg, var(--bg-dark-secondary) 0%, #3A3938 100%);
-  color: var(--text-light);
+  background: var(--bg-card);
+  color: var(--text-primary);
   padding: var(--spacing-lg) var(--spacing-2xl);
-  border-bottom: 2px solid var(--anthropic-primary);
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .header-content {

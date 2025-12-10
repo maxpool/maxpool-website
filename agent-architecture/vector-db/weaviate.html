@@ -5,7 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weaviate Production Playbook - Vector Database Engineering</title>
     <link rel="stylesheet" href="../../design-system.css">
+    <script src="../../components.js"></script>
     <style>
+        .page-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .page-title h1 {
+            color: #1a1a1a;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .page-title .subtitle {
+            color: #666;
+            font-size: 16px;
+        }
         .performance-metric {
             background: #fef7ed;
             color: #92400e;
@@ -119,24 +133,11 @@
 </head>
 <body>
     <div class="container">
-        <div class="main-header">
-            <div class="header-content">
-                <a href="./" class="nav-home">← Vector DB</a>
-                <div class="header-left">
-                    <h1 class="heading-2">Weaviate Production Playbook</h1>
-                    <div class="subtitle-section">
-                        Enterprise deployment guide for Weaviate vector database - architecture, performance, and operational excellence
-                    </div>
-                </div>
-                <div class="cta">
-                    <div>
-                        <div class="cta-label">GenAI Community</div>
-                        <a href="https://join.maxpool.dev" target="_blank" class="cta-link">
-                            join.maxpool.dev →
-                        </a>
-                    </div>
-                </div>
-            </div>
+        <div id="nav"></div>
+
+        <div class="page-title">
+            <h1>Weaviate Production Playbook</h1>
+            <div class="subtitle">Enterprise deployment guide for Weaviate vector database - architecture, performance, and operational excellence</div>
         </div>
 
         <!-- Platform Overview Section -->
@@ -723,13 +724,7 @@
             </div>
         </div>
 
-        <div class="footer">
-            <h3>GenAI Community</h3>
-            <p>Share benchmarks, runbooks, and incident retros with peers building retrieval infrastructure.</p>
-            <a href="https://join.maxpool.dev" target="_blank" class="btn-outline">
-                Visit join.maxpool.dev →
-            </a>
-        </div>
+        <div id="footer"></div>
     </div>
 </body>
 </html>
