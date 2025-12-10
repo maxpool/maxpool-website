@@ -88,14 +88,15 @@
         }
 
         .logo {
-            font-family: var(--font-mono);
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-secondary);
             margin-bottom: 48px;
-            letter-spacing: 0.02em;
             opacity: 0;
             animation: fadeIn 0.8s ease forwards 0.2s;
+        }
+
+        .logo img {
+            height: 80px;
+            width: auto;
+            border-radius: 12px;
         }
 
         .headline {
@@ -456,7 +457,9 @@
     <div class="container">
         <!-- LEFT PANEL -->
         <div class="left-panel">
-            <div class="logo">maxpool</div>
+            <div class="logo">
+                <img src="images/maxpool_logo_color.jpeg" alt="Maxpool">
+            </div>
 
             <h1 class="headline">
                 <span class="headline-line"><span>Ship</span></span>
@@ -470,7 +473,7 @@
                 <div class="cta-border"></div>
                 <div class="cta-fill"></div>
                 <a href="https://join.maxpool.dev" target="_blank" class="cta">
-                    <span>Join the community</span>
+                    <span>Join the Maxpool community</span>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
