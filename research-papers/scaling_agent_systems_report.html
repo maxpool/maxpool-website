@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Towards a Science of Scaling Agent Systems - Quantitative Principles for Multi-Agent Coordination</title>
+    <style>
+        @page {
+            margin: 2cm;
+        }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px 20px 20px 20px;
+            background: white;
+        }
+        h1 {
+            color: #1a1a1a;
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-align: center;
+            border-bottom: 2px solid #DC8850;
+            padding-bottom: 15px;
+        }
+        h2 {
+            color: #DC8850;
+            font-size: 22px;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 8px;
+        }
+        h3 {
+            color: #555;
+            font-size: 18px;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .authors {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 30px;
+            color: #666;
+        }
+        .abstract {
+            background: #f8f8f8;
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding {
+            background: #fff8f0;
+            padding: 15px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding h3 {
+            margin-top: 0;
+            color: #DC8850;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #DC8850;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .metric {
+            font-weight: bold;
+            color: #DC8850;
+        }
+        .performance-improvement {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .performance-decline {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .methodology-box {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .conclusion-box {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #DC8850;
+            color: white;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .badge-success {
+            background: #27ae60;
+        }
+        .badge-warning {
+            background: #f39c12;
+        }
+        .badge-danger {
+            background: #e74c3c;
+        }
+        .formula {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        .eli5-box {
+            background: #e8f5e9;
+            padding: 20px;
+            border-left: 4px solid #4caf50;
+            margin: 20px 0;
+            font-size: 15px;
+        }
+        .eli5-box h3 {
+            margin-top: 0;
+            color: #4caf50;
+        }
+        .figure {
+            margin: 30px 0;
+            text-align: center;
+        }
+        .figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .figure-caption {
+            font-style: italic;
+            color: #666;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .timeline-box {
+            background: linear-gradient(to right, #f8f8f8, #fff);
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+            position: relative;
+        }
+        .timeline-item {
+            margin: 15px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        .timeline-item:before {
+            content: "•";
+            position: absolute;
+            left: 10px;
+            color: #DC8850;
+            font-size: 20px;
+        }
+        .timeline-date {
+            font-weight: bold;
+            color: #DC8850;
+        }
+        .insight-box {
+            background: #fffbf0;
+            border: 2px solid #DC8850;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        .insight-box h3 {
+            color: #DC8850;
+            margin-top: 0;
+        }
+        .source-box {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .source-box a {
+            color: #DC8850;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .source-box a:hover {
+            text-decoration: underline;
+        }
+        p {
+            margin: 15px 0;
+            text-align: justify;
+        }
+    </style>
+    <script src="../components.js"></script>
+</head>
+<body>
+    <div id="nav"></div>
+
+    <h1>Towards a Science of Scaling Agent Systems<br>Quantitative Principles for Multi-Agent Coordination</h1>
+
+    <div class="authors">
+        Yubin Kim, Ken Gu, Chanwoo Park, Samuel Schmidgall, Yuzhe Yang, Xuhai Xu, Yilun Du et al.<br>
+        Google Research, Google DeepMind, MIT<br>
+        <em>December 2025</em>
+    </div>
+
+    <div class="abstract">
+        <h2>Executive Summary</h2>
+        <p>This landmark study establishes quantitative scaling principles for agent systems through controlled evaluation across <span class="metric">180 configurations</span> spanning three LLM families (OpenAI, Google, Anthropic) and four benchmarks. The central finding challenges the "more agents is better" assumption: multi-agent systems demonstrate highly heterogeneous performance ranging from <span class="performance-improvement">+81% improvement</span> to <span class="performance-decline">-70% degradation</span> depending entirely on task structure.</p>
+
+        <p>The research introduces a predictive mixed-effects model achieving <span class="metric">R²=0.513</span> cross-validation accuracy without dataset-specific parameters, identifying three dominant effects: the tool-coordination trade-off, capability saturation ceiling at <span class="metric">~45% baseline accuracy</span>, and architecture-dependent error amplification ranging from <span class="metric">4.4×</span> (centralized) to <span class="metric">17.2×</span> (independent). The model predicts optimal architectures for <span class="metric">87%</span> of held-out configurations.</p>
+
+        <p>This work moves agent deployment from heuristic "add more agents" guidance to principled, measurement-driven architecture selection based on task properties and coordination metrics.</p>
+    </div>
+
+    <div class="eli5-box">
+        <h3>🎯 ELI5: When Does Teamwork Help?</h3>
+        <p>Imagine you're moving furniture. For moving a couch, two people are better than one—you can coordinate and lift together. But for packing books into boxes? Adding helpers creates chaos: people bump into each other, grab the same books, and waste time coordinating. The same happens with AI agents. Financial analysis (like moving a couch) benefits from multiple agents dividing spreadsheets and verifying each other's math. But web browsing (like packing books) gets worse with more agents—they visit the same pages, contradict each other, and waste compute coordinating. This paper provides the math to predict which tasks are "couch moves" vs "book packing" before you build anything.</p>
+    </div>
+
+    <div class="figure">
+        <img src="https://arxiv.org/html/2512.08296v1/x1.png" alt="Agent scaling across model intelligence and system architectures" style="width: 100%; max-width: 800px;">
+        <div class="figure-caption">Figure 1: Agent scaling across model intelligence (x-axis) and system architectures. Performance changes (e.g., +8.1%, -4.6%) show MAS improvement/degradation versus single-agent baseline. Multi-agent benefits are highly task- and architecture-dependent.</div>
+    </div>
+
+    <h2>Part 1: The Multi-Agent Scaling Question</h2>
+
+    <p>Prior claims like "More agents is all you need" lack empirical support. Practitioners face a critical gap: when does multi-agent coordination provide value versus simple single-agent approaches? This study addresses that gap through the largest controlled evaluation of agent architectures to date.</p>
+
+    <div class="key-finding">
+        <h3>The Core Problem</h3>
+        <p>The field has conflated two distinct phenomena:</p>
+        <ul>
+            <li><strong>Agentic tasks:</strong> Requiring sustained environmental interaction, partial observability, and adaptive strategy refinement</li>
+            <li><strong>Non-agentic benchmarks:</strong> Static reasoning without feedback loops</li>
+        </ul>
+        <p>Previous multi-agent evaluations on non-agentic benchmarks showed diminishing returns as base models improved. But truly agentic tasks—with tool use, environment interaction, and iterative refinement—remain understudied.</p>
+    </div>
+
+    <h3>Study Design</h3>
+
+    <p>The evaluation spans <span class="metric">180 controlled configurations</span> with standardized tools, prompts, and metrics to isolate architectural effects:</p>
+
+    <div class="methodology-box">
+        <h3>Experimental Setup</h3>
+        <ul>
+            <li><strong>LLM Families:</strong> OpenAI (GPT-5-nano/mini/full), Google (Gemini 2.0/2.5 Flash/Pro), Anthropic (Claude Sonnet 3.7/4.0/4.5)</li>
+            <li><strong>Benchmarks:</strong> BrowseComp-Plus (web), Finance-Agent (analysis), PlanCraft (Minecraft planning), WorkBench (business tasks)</li>
+            <li><strong>Architectures:</strong> 5 canonical designs from single-agent to hybrid multi-agent</li>
+            <li><strong>Controls:</strong> Token-matched budgets (mean 4,800 per trial), standardized tool interfaces</li>
+        </ul>
+    </div>
+
+    <h2>Part 2: Five Canonical Architectures</h2>
+
+    <p>The study formally defines an agent system as 𝒮=(A,E,C,Ω) comprising agents (A), shared environment (E), communication topology (C), and orchestration policy (Ω). Five architectures represent the spectrum from isolated to highly coordinated:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Architecture</th>
+                <th>Agents</th>
+                <th>Communication</th>
+                <th>Complexity</th>
+                <th>Use Case</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Single-Agent (SAS)</strong></td>
+                <td>1</td>
+                <td>None</td>
+                <td>O(k)</td>
+                <td>Sequential reasoning, simple tasks</td>
+            </tr>
+            <tr>
+                <td><strong>Independent MAS</strong></td>
+                <td>n</td>
+                <td>None</td>
+                <td>O(nk)</td>
+                <td>Embarrassingly parallel tasks</td>
+            </tr>
+            <tr>
+                <td><strong>Decentralized MAS</strong></td>
+                <td>n</td>
+                <td>Peer-to-peer mesh</td>
+                <td>O(dnk)</td>
+                <td>Collaborative exploration</td>
+            </tr>
+            <tr>
+                <td><strong>Centralized MAS</strong></td>
+                <td>n+1</td>
+                <td>Hub-and-spoke</td>
+                <td>O(rnk)</td>
+                <td>Structured verification tasks</td>
+            </tr>
+            <tr>
+                <td><strong>Hybrid MAS</strong></td>
+                <td>n+m</td>
+                <td>Hierarchical + peer</td>
+                <td>O((r+d)nk)</td>
+                <td>Complex multi-phase tasks</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="insight-box">
+        <h3>Communication vs. Coordination</h3>
+        <p>A critical distinction emerges: <strong>Communication</strong> is message passing between agents; <strong>Coordination</strong> is strategic direction through task decomposition and progress monitoring. Independent MAS has neither. Decentralized MAS has communication but limited coordination. Centralized MAS has both, with an orchestrator managing the coordination layer.</p>
+    </div>
+
+    <h2>Part 3: Domain-Dependent Results</h2>
+
+    <p>The headline finding: MAS performance is <strong>not uniformly positive or negative</strong>. The mean improvement across all configurations is <span class="performance-decline">-3.5%</span> (95% CI: [-18.6%, +25.7%]) with massive variance (σ=45.2%). Task structure determines everything.</p>
+
+    <div class="figure">
+        <img src="https://arxiv.org/html/2512.08296v1/x7.png" alt="Comparative performance across benchmarks" style="width: 100%; max-width: 800px;">
+        <div class="figure-caption">Figure 2: Comparative performance of single-agent vs multi-agent systems across four benchmarks. Finance Agent shows strong MAS benefits while PlanCraft shows universal degradation.</div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Benchmark</th>
+                <th>Best MAS Architecture</th>
+                <th>Improvement vs SAS</th>
+                <th>Worst MAS Architecture</th>
+                <th>Degradation vs SAS</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Finance Agent</strong></td>
+                <td>Centralized</td>
+                <td><span class="performance-improvement">+80.9%</span></td>
+                <td>Independent</td>
+                <td><span class="performance-decline">-12.3%</span></td>
+            </tr>
+            <tr>
+                <td><strong>WorkBench</strong></td>
+                <td>Decentralized</td>
+                <td><span class="performance-improvement">+5.7%</span></td>
+                <td>Centralized</td>
+                <td><span class="performance-decline">-1.2%</span></td>
+            </tr>
+            <tr>
+                <td><strong>BrowseComp-Plus</strong></td>
+                <td>Decentralized</td>
+                <td><span class="performance-improvement">+9.2%</span></td>
+                <td>Centralized</td>
+                <td><span class="performance-improvement">+0.2%</span></td>
+            </tr>
+            <tr>
+                <td><strong>PlanCraft</strong></td>
+                <td>Hybrid</td>
+                <td><span class="performance-decline">-39%</span></td>
+                <td>Independent</td>
+                <td><span class="performance-decline">-70%</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="key-finding">
+        <h3>Why Finance Agent Succeeds, PlanCraft Fails</h3>
+        <p><strong>Finance Agent</strong> benefits from MAS because:</p>
+        <ul>
+            <li>Tasks are naturally parallelizable (analyze different spreadsheets)</li>
+            <li>Structured numerical outputs facilitate verification</li>
+            <li>Clear subtask boundaries enable clean task decomposition</li>
+        </ul>
+        <p><strong>PlanCraft</strong> suffers because:</p>
+        <ul>
+            <li>Sequential dependencies between crafting steps</li>
+            <li>Shared state (inventory) creates coordination conflicts</li>
+            <li>Errors compound rapidly through the dependency chain</li>
+        </ul>
+    </div>
+
+    <h2>Part 4: The Scaling Principle</h2>
+
+    <p>The research introduces a quantitative model predicting when MAS helps or hurts, achieving <span class="metric">R²=0.513</span> on held-out data—explaining over half the variance without any dataset-specific parameters.</p>
+
+    <div class="formula">
+        Δ Performance = f(Intelligence, Tools, Agents, Baseline) + Interaction Terms<br>
+        <em>Complete model: 20 parameters including 9 key interactions</em>
+    </div>
+
+    <h3>Key Interaction Effects</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Interaction</th>
+                <th>Coefficient (β)</th>
+                <th>p-value</th>
+                <th>Interpretation</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Efficiency-Tools Trade-off</strong></td>
+                <td><span class="performance-decline">-0.330</span></td>
+                <td>&lt;0.001</td>
+                <td>Tool-heavy tasks suffer from MAS overhead</td>
+            </tr>
+            <tr>
+                <td><strong>Baseline Paradox</strong></td>
+                <td><span class="performance-decline">-0.408</span></td>
+                <td>&lt;0.001</td>
+                <td>High SAS performance leaves little room for MAS gains</td>
+            </tr>
+            <tr>
+                <td><strong>Overhead-Complexity</strong></td>
+                <td><span class="performance-decline">-0.141</span></td>
+                <td>&lt;0.001</td>
+                <td>Coordination overhead scales non-linearly with task complexity</td>
+            </tr>
+            <tr>
+                <td><strong>Error Propagation</strong></td>
+                <td><span class="performance-decline">-0.097</span></td>
+                <td>0.007</td>
+                <td>Errors propagate more severely in tool-rich environments</td>
+            </tr>
+            <tr>
+                <td><strong>Intelligence Quadratic</strong></td>
+                <td><span class="performance-improvement">+0.256</span></td>
+                <td>0.010</td>
+                <td>Accelerating returns at higher capability levels</td>
+            </tr>
+            <tr>
+                <td><strong>Redundancy Benefit</strong></td>
+                <td><span class="performance-improvement">+0.041</span></td>
+                <td>0.040</td>
+                <td>Marginal positive effect with agent scaling</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="insight-box">
+        <h3>The 45% Threshold</h3>
+        <p>A critical decision boundary emerges at <span class="metric">~45% single-agent baseline accuracy</span>. Below this threshold, coordination can provide substantial gains. Above it, the "capability saturation ceiling" kicks in—the single agent already solves most cases, leaving limited room for MAS improvement while still incurring coordination overhead.</p>
+        <p>This threshold is derived from the model's β ratios without dataset-specific parameters, making it generalizable across domains.</p>
+    </div>
+
+    <div class="figure">
+        <img src="https://arxiv.org/html/2512.08296v1/x8.png" alt="Cost-performance trade-offs" style="width: 100%; max-width: 800px;">
+        <div class="figure-caption">Figure 3: Cost-performance trade-offs across model families. Family-dependent coordination efficacy patterns emerge—OpenAI shows consistent MAS gains; Anthropic shows higher variance with coordination overhead sensitivity.</div>
+    </div>
+
+    <h2>Part 5: Error Dynamics & Coordination Overhead</h2>
+
+    <p>Multi-agent systems don't just add compute—they fundamentally change error dynamics. The study reveals dramatic differences in how architectures amplify or absorb errors.</p>
+
+    <h3>Error Amplification by Architecture</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Architecture</th>
+                <th>Error Amplification</th>
+                <th>Coordination Overhead</th>
+                <th>Turns (vs SAS baseline)</th>
+                <th>Efficiency (Ec)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Single-Agent (SAS)</strong></td>
+                <td><span class="metric">1.0×</span> (baseline)</td>
+                <td>0%</td>
+                <td>7.2 (1.0×)</td>
+                <td>0.466</td>
+            </tr>
+            <tr>
+                <td><strong>Independent MAS</strong></td>
+                <td><span class="performance-decline">17.2×</span></td>
+                <td>58%</td>
+                <td>11.4 (1.6×)</td>
+                <td>0.234</td>
+            </tr>
+            <tr>
+                <td><strong>Decentralized MAS</strong></td>
+                <td><span class="performance-decline">7.8×</span></td>
+                <td>263%</td>
+                <td>26.1 (3.6×)</td>
+                <td>0.132</td>
+            </tr>
+            <tr>
+                <td><strong>Centralized MAS</strong></td>
+                <td><span class="metric">4.4×</span></td>
+                <td>285%</td>
+                <td>27.7 (3.8×)</td>
+                <td>0.120</td>
+            </tr>
+            <tr>
+                <td><strong>Hybrid MAS</strong></td>
+                <td><span class="metric">5.1×</span></td>
+                <td>515%</td>
+                <td>44.3 (6.2×)</td>
+                <td>0.074</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="key-finding">
+        <h3>Why Independent MAS Fails Universally</h3>
+        <p>Independent MAS shows <span class="performance-decline">17.2× error amplification</span>—the worst of any architecture—because it has no inter-agent verification mechanism. Agents make independent mistakes that compound without any correction layer. The study recommends <strong>avoiding Independent MAS entirely</strong> in production deployments.</p>
+        <p>In contrast, Centralized MAS achieves only <span class="metric">4.4× amplification</span> because the orchestrator provides a validation bottleneck that catches errors before propagation.</p>
+    </div>
+
+    <h3>Error Categories by Architecture</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Error Type</th>
+                <th>SAS Baseline</th>
+                <th>Best MAS Reduction</th>
+                <th>Which Architecture</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Logical Contradiction</td>
+                <td>12.3-18.7%</td>
+                <td><span class="performance-improvement">-36.4%</span> (to 9.1%)</td>
+                <td>Centralized</td>
+            </tr>
+            <tr>
+                <td>Numerical Drift</td>
+                <td>20.9-24.1%</td>
+                <td><span class="performance-improvement">-12.4%</span> (to 18.3%)</td>
+                <td>Centralized/Decentralized</td>
+            </tr>
+            <tr>
+                <td>Context Omission</td>
+                <td>15.8-25.2%</td>
+                <td><span class="performance-improvement">-66.8%</span> (to 8.3%)</td>
+                <td>Centralized</td>
+            </tr>
+            <tr>
+                <td>Coordination Failure</td>
+                <td>0% (N/A)</td>
+                <td><span class="performance-decline">+12.4%</span></td>
+                <td>Hybrid (worst)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="insight-box">
+        <h3>The Optimal Coordination Band</h3>
+        <p>Success correlates logarithmically with message density: S = 0.73 + 0.28·ln(c), R²=0.68. Performance plateaus near <span class="metric">c*=0.39 messages/turn</span>. The optimal coordination band is <span class="metric">200%-300% overhead</span>—enough communication to catch errors, not so much that protocol complexity introduces new failure modes.</p>
+        <p>Above 400% overhead, coordination failures emerge as a new error category unique to MAS, offsetting error reduction benefits.</p>
+    </div>
+
+    <div class="figure">
+        <img src="https://arxiv.org/html/2512.08296v1/x10.png" alt="Number of agents scaling" style="width: 100%; max-width: 800px;">
+        <div class="figure-caption">Figure 4: Number of agents scaling reveals model-dependent coordination limits. Different LLMs show distinct scaling patterns—Gemini-2.0 Flash peaks at 3 agents while Gemini-2.5 Pro continues scaling to 5.</div>
+    </div>
+
+    <h2>Part 6: Practical Guidelines</h2>
+
+    <p>The model achieves <span class="metric">87% accuracy</span> predicting optimal architectures on held-out configurations. Based on these results, the following decision framework emerges:</p>
+
+    <div class="methodology-box">
+        <h3>When to Use Single-Agent Systems</h3>
+        <ul>
+            <li><strong>High baseline performance:</strong> SAS accuracy &gt;45% leaves limited room for MAS gains</li>
+            <li><strong>Sequential dependencies:</strong> Tasks with strict ordering (crafting chains, multi-step proofs)</li>
+            <li><strong>Shared mutable state:</strong> When agents would conflict over resources</li>
+            <li><strong>Low tool complexity:</strong> Few tool calls reduce the need for parallelization</li>
+            <li><strong>Cost sensitivity:</strong> SAS achieves <span class="metric">67.7 success/1K tokens</span> vs 13.6 for Hybrid</li>
+        </ul>
+    </div>
+
+    <div class="methodology-box">
+        <h3>When to Use Centralized MAS</h3>
+        <ul>
+            <li><strong>Parallelizable subtasks:</strong> Independent spreadsheets, documents, or data sources</li>
+            <li><strong>Numerical reasoning:</strong> Structured outputs facilitate verification (+80.9% on Finance)</li>
+            <li><strong>Clear decomposition:</strong> Tasks with natural boundaries for subtask assignment</li>
+            <li><strong>Error-critical domains:</strong> Centralized achieves best error absorption (4.4× vs 17.2×)</li>
+        </ul>
+    </div>
+
+    <div class="methodology-box">
+        <h3>When to Use Decentralized MAS</h3>
+        <ul>
+            <li><strong>Exploratory tasks:</strong> Web browsing, research synthesis (+9.2% on BrowseComp)</li>
+            <li><strong>Moderate tool complexity:</strong> Benefits from parallel exploration</li>
+            <li><strong>Dynamic environments:</strong> Peer communication enables real-time adaptation</li>
+        </ul>
+    </div>
+
+    <div class="key-finding">
+        <h3>Universal Recommendation: Avoid Independent MAS</h3>
+        <p>Across all benchmarks, model families, and task types, Independent MAS <strong>universally underperformed</strong>. The lack of any verification mechanism leads to 17.2× error amplification with no compensating benefits. If you need multiple agents, invest in coordination infrastructure—the overhead pays for itself in error reduction.</p>
+    </div>
+
+    <div class="figure">
+        <img src="https://arxiv.org/html/2512.08296v1/x9.png" alt="Agent heterogeneity effects" style="width: 100%; max-width: 800px;">
+        <div class="figure-caption">Figure 5: Agent heterogeneity effects on multi-agent performance across BrowseComp-Plus. Capability mixing yields different results across LLM families—some benefit from diverse agent capabilities, others perform better with homogeneous teams.</div>
+    </div>
+
+    <div class="conclusion-box">
+        <h2>Conclusion</h2>
+        <p>This research transforms multi-agent system design from heuristic intuition to quantitative science. The core findings challenge prevailing assumptions:</p>
+        <ul>
+            <li><strong>MAS is not universally beneficial:</strong> Mean improvement is <span class="performance-decline">-3.5%</span> with variance of ±45%</li>
+            <li><strong>Task structure determines outcomes:</strong> Finance Agent gains <span class="performance-improvement">+80.9%</span>; PlanCraft loses <span class="performance-decline">-70%</span></li>
+            <li><strong>Predictable decision boundaries exist:</strong> The ~45% baseline threshold and R²=0.513 model enable principled architecture selection</li>
+            <li><strong>Error dynamics vary dramatically:</strong> From 4.4× (centralized) to 17.2× (independent) amplification</li>
+            <li><strong>Independent MAS should be avoided:</strong> Universal underperformance across all conditions</li>
+        </ul>
+        <p>The practical implication: before adding agents, measure your single-agent baseline. If it exceeds 45% accuracy on your task, coordination overhead likely exceeds benefits. If parallelizable subtasks exist, centralized MAS with explicit verification yields the best error-adjusted performance. The era of "more agents is better" is over—principled architecture selection based on task properties is the path forward.</p>
+    </div>
+
+    <div class="source-box">
+        <h3>Primary Sources</h3>
+        <p>
+            <a href="https://arxiv.org/abs/2512.08296" target="_blank">Towards a Science of Scaling Agent Systems</a><br>
+            <em>Kim, Gu, Park, Schmidgall, et al., December 2025</em>
+        </p>
+    </div>
+
+    <div id="footer"></div>
+</body>
+</html>

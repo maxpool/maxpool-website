@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Research Papers - AI Agent Engineering</title>
     <link rel="stylesheet" href="../design-system.css">
+    <script src="../components.js"></script>
     <style>
         .paper-link {
             color: #191817;
@@ -25,33 +26,31 @@
             margin-left: 8px;
             font-weight: 500;
         }
+        .page-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .page-title h1 {
+            color: #1a1a1a;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .page-title .subtitle {
+            color: #666;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="main-header">
-            <div class="header-content">
-                <a href="../" class="nav-home">← Home</a>
-                <div class="header-left">
-                    <h1 class="heading-2">Research Papers</h1>
-                    <div class="subtitle-section">Curated collection of AI agent engineering research and analysis</div>
-                </div>
-                <div class="cta">
-                    <div>
-                        <div class="cta-label">GenAI Community</div>
-                        <a href="https://join.maxpool.dev" target="_blank" class="cta-link">
-                            join.maxpool.dev →
-                        </a>
-                    </div>
-                </div>
-            </div>
+        <div id="nav"></div>
+
+        <div class="page-title">
+            <h1>Research Papers</h1>
+            <div class="subtitle">Curated collection of AI agent engineering research and analysis</div>
         </div>
 
         <div class="section">
-            <div class="section-header">
-                <div class="section-title heading-3">Available Papers</div>
-                <div class="subtitle-section">Research reports and architectural analysis</div>
-            </div>
             <div class="content">
                 <div class="table-wrapper">
                     <table>
@@ -62,6 +61,14 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <tr>
+                                <td>
+                                    <a href="scaling_agent_systems_report.html" target="_blank" class="paper-link">
+                                        <strong>Towards a Science of Scaling Agent Systems: Quantitative Principles for Multi-Agent Coordination</strong>
+                                    </a>
+                                </td>
+                                <td class="description">Landmark empirical study establishing quantitative scaling principles for multi-agent systems through controlled evaluation of 180 configurations across three LLM families (OpenAI, Google, Anthropic) and four benchmarks. Reveals highly heterogeneous MAS performance (+81% improvement to -70% degradation) determined by task structure, not agent count. Introduces predictive mixed-effects model achieving R²=0.513 cross-validation accuracy and 87% optimal architecture prediction. Identifies critical ~45% baseline threshold where coordination value inverts, 17.2× error amplification in independent MAS vs 4.4× centralized, and 58-515% coordination overhead scaling. Provides principled guidance: use single-agent for sequential reasoning and high baseline tasks; centralized MAS for parallelizable numerical reasoning; avoid independent MAS universally.</td>
+                            </tr>
                             <tr>
                                 <td>
                                     <a href="measuring_agents_production.html" target="_blank" class="paper-link">
@@ -180,13 +187,7 @@
             </div>
         </div>
 
-        <div class="footer">
-            <h3>GenAI Community</h3>
-            <p>Join our community for more AI development resources and discussions</p>
-            <a href="https://join.maxpool.dev" target="_blank" class="btn-outline">
-                Visit join.maxpool.dev →
-            </a>
-        </div>
+        <div id="footer"></div>
     </div>
 </body>
 </html>
