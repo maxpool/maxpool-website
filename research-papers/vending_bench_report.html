@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vending-Bench & Project Vend: Long-Term Coherence of Autonomous Agents</title>
+    <style>
+        @page {
+            margin: 2cm;
+        }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        h1 {
+            color: #1a1a1a;
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-align: center;
+            border-bottom: 2px solid #DC8850;
+            padding-bottom: 15px;
+        }
+        h2 {
+            color: #DC8850;
+            font-size: 22px;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 8px;
+        }
+        h3 {
+            color: #555;
+            font-size: 18px;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .authors {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 30px;
+            color: #666;
+        }
+        .abstract {
+            background: #f8f8f8;
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding {
+            background: #fff8f0;
+            padding: 15px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding h3 {
+            margin-top: 0;
+            color: #DC8850;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #DC8850;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .metric {
+            font-weight: bold;
+            color: #DC8850;
+        }
+        .performance-improvement {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .performance-decline {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .methodology-box {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .conclusion-box {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #DC8850;
+            color: white;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .badge-success {
+            background: #27ae60;
+        }
+        .badge-warning {
+            background: #f39c12;
+        }
+        .badge-danger {
+            background: #e74c3c;
+        }
+        .formula {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        .eli5-box {
+            background: #e8f5e9;
+            padding: 20px;
+            border-left: 4px solid #4caf50;
+            margin: 20px 0;
+            font-size: 15px;
+        }
+        .eli5-box h3 {
+            margin-top: 0;
+            color: #4caf50;
+        }
+        .figure {
+            margin: 30px 0;
+            text-align: center;
+        }
+        .figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .figure-caption {
+            font-style: italic;
+            color: #666;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .timeline-box {
+            background: linear-gradient(to right, #f8f8f8, #fff);
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+            position: relative;
+        }
+        .timeline-item {
+            margin: 15px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        .timeline-item:before {
+            content: "•";
+            position: absolute;
+            left: 10px;
+            color: #DC8850;
+            font-size: 20px;
+        }
+        .timeline-date {
+            font-weight: bold;
+            color: #DC8850;
+        }
+        .insight-box {
+            background: #fffbf0;
+            border: 2px solid #DC8850;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        .insight-box h3 {
+            color: #DC8850;
+            margin-top: 0;
+        }
+        .source-box {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .source-box a {
+            color: #DC8850;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .source-box a:hover {
+            text-decoration: underline;
+        }
+        .navigation {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f8f8;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #DC8850;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        .navigation a:hover {
+            text-decoration: underline;
+        }
+        p {
+            margin: 15px 0;
+            text-align: justify;
+        }
+        .failure-box {
+            background: #fff5f5;
+            padding: 15px;
+            border-left: 4px solid #e74c3c;
+            margin: 20px 0;
+        }
+        .failure-box h3 {
+            margin-top: 0;
+            color: #e74c3c;
+        }
+        blockquote {
+            background: #f9f9f9;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+            padding: 15px 20px;
+            font-style: italic;
+        }
+        .anthropic-box {
+            background: #f0f4ff;
+            border-left: 4px solid #5865F2;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .anthropic-box h3 {
+            color: #5865F2;
+            margin-top: 0;
+        }
+        .section-divider {
+            border-top: 3px solid #DC8850;
+            margin: 50px 0 30px 0;
+            padding-top: 20px;
+        }
+        .version-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            background: linear-gradient(135deg, #DC8850, #c77840);
+            color: white;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            margin: 5px;
+        }
+        .multi-agent-diagram {
+            background: #f8f8f8;
+            border: 2px dashed #DC8850;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        .agent-node {
+            display: inline-block;
+            background: white;
+            border: 2px solid #DC8850;
+            border-radius: 8px;
+            padding: 10px 20px;
+            margin: 10px;
+            font-weight: bold;
+        }
+        .agent-arrow {
+            color: #DC8850;
+            font-size: 24px;
+            margin: 0 10px;
+        }
+        .video-section {
+            margin: 30px 0;
+        }
+        .video-item {
+            margin-bottom: 30px;
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .video-label {
+            text-align: center;
+            margin-top: 12px;
+            font-weight: bold;
+            color: #DC8850;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION HEADER -->
+    <div class="navigation">
+        <a href="../index.html">← Home</a>
+        <a href="../agent/index.html">Agent Reliability</a>
+        <a href="../rag/index.html">RAG Patterns</a>
+        <a href="../research-papers/index.html">Research Papers</a>
+        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+    </div>
+
+    <!-- TITLE -->
+    <h1>Vending-Bench & Project Vend:<br>Long-Term Coherence of Autonomous Agents</h1>
+
+    <!-- AUTHORS -->
+    <div class="authors">
+        <span class="version-badge">Vending-Bench 2</span>
+        <span class="version-badge">Project Vend</span><br><br>
+        Andon Labs • Anthropic Research<br>
+        <em>Updated December 2025</em>
+    </div>
+
+    <!-- VIDEO SECTION -->
+    <div class="video-section">
+        <div class="video-item">
+            <div class="video-container">
+                <iframe
+                    src="https://www.youtube.com/embed/SpPhm7S9vsQ"
+                    title="Project Vend Phase 1"
+                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </div>
+            <div class="video-label">Phase 1: Initial Experiment — Can AI Run a Shop?</div>
+        </div>
+        <div class="video-item">
+            <div class="video-container">
+                <iframe
+                    src="https://www.youtube.com/embed/5KTHvKCrQ00"
+                    title="Project Vend Phase 2"
+                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </div>
+            <div class="video-label">Phase 2: Multi-Agent Hierarchy — Path to Profitability</div>
+        </div>
+    </div>
+
+    <!-- EXECUTIVE SUMMARY -->
+    <div class="abstract">
+        <h2>Executive Summary</h2>
+        <p>This report synthesizes findings from <strong>Vending-Bench 2</strong> (Andon Labs' simulation benchmark) and <strong>Project Vend</strong> (Anthropic's real-world experiment), two complementary approaches to testing long-horizon agent coherence through vending machine operations.</p>
+
+        <p><strong>Vending-Bench 2</strong> tests models across a <span class="metric">one-year simulation</span> (60-100M tokens per run). Current leaders: <span class="performance-improvement">Gemini 3 Pro ($5,478)</span> and <span class="performance-improvement">Claude Opus 4.5 ($4,967)</span> starting from $500. Significant headroom remains—theoretical optimal is ~$63,000.</p>
+
+        <p><strong>Project Vend</strong> deployed Claude in Anthropic's SF office running an actual refrigerator shop. Phase 1 showed systematic failures (pricing below cost, hallucinating payment details). Phase 2 introduced multi-agent hierarchy with a "CEO" agent providing oversight, dramatically improving profitability.</p>
+
+        <p>Key insight: <strong>models trained for helpfulness struggle with hard-nosed business decisions</strong>. They operate "from the perspective of a friend who just wants to be nice" rather than as rational economic agents.</p>
+    </div>
+
+    <!-- ELI5 BOX -->
+    <div class="eli5-box">
+        <h3>🎯 ELI5: The AI Shopkeeper Test</h3>
+        <p>Can an AI run a vending machine business? This sounds simple, but it's actually a brutal test of whether AI can stay "sane" over months of decisions. In simulations, AIs sometimes panic and try to file FBI reports about their failing business. In the real world (Anthropic's office), an AI named "Claudius" gave away items below cost because it wanted to be nice, and once hallucinated fake payment account numbers to customers. The good news: adding a "boss" AI that pressures the shopkeeper AI to actually make money helps a lot!</p>
+    </div>
+
+    <!-- ===== PART 1: VENDING-BENCH 2 ===== -->
+    <div class="section-divider">
+        <h2>Part 1: Vending-Bench 2 — Simulation Benchmark</h2>
+    </div>
+
+    <p>Vending-Bench 2 is Andon Labs' updated benchmark measuring AI capabilities in maintaining coherence over extended autonomous operations. Models operate a vending machine business for <strong>one simulated year</strong>, evaluated solely on final bank balance starting from $500.</p>
+
+    <div class="methodology-box">
+        <h3>Benchmark Design</h3>
+        <ul>
+            <li><strong>Duration:</strong> One simulated year (~3,000-6,000 messages per run)</li>
+            <li><strong>Token consumption:</strong> 60-100 million tokens per model execution</li>
+            <li><strong>Starting Capital:</strong> $500</li>
+            <li><strong>Operating Cost:</strong> $2/day (bankruptcy after 10 days unpaid)</li>
+            <li><strong>Evaluation:</strong> Averaged across 5 runs per model</li>
+            <li><strong>Token Output Costs:</strong> $100 per million tokens weekly</li>
+        </ul>
+    </div>
+
+    <h3>Current Leaderboard (December 2025)</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Model</th>
+                <th>Final Balance</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="badge badge-success">1</span></td>
+                <td><strong>Gemini 3 Pro</strong></td>
+                <td><span class="performance-improvement">$5,478.16</span></td>
+                <td>Persistent negotiation, consistent tool usage</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-success">2</span></td>
+                <td><strong>Claude Opus 4.5</strong></td>
+                <td><span class="performance-improvement">$4,967.06</span></td>
+                <td>Strong strategic planning</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-success">3</span></td>
+                <td><strong>GPT-5.2</strong></td>
+                <td><span class="performance-improvement">$3,952.01</span></td>
+                <td>Improved over GPT-5.1</td>
+            </tr>
+            <tr>
+                <td><span class="badge">4</span></td>
+                <td><strong>Claude Sonnet 4.5</strong></td>
+                <td><span class="metric">$3,838.74</span></td>
+                <td>Consistent performance</td>
+            </tr>
+            <tr>
+                <td><span class="badge">5</span></td>
+                <td><strong>Gemini 3 Flash</strong></td>
+                <td><span class="metric">$3,634.72</span></td>
+                <td>Strong value for compute cost</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="key-finding">
+        <h3>Performance Headroom</h3>
+        <p>Even the best models achieve only <strong>~$5,500</strong> from $500 starting capital over one year. A theoretical "good" baseline is estimated at <span class="metric">~$63,000 annually</span>—more than <strong>10x</strong> what current models achieve. This suggests enormous room for improvement in autonomous agent capabilities.</p>
+    </div>
+
+    <h3>Key Capabilities Tested</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Capability</th>
+                <th>Challenge</th>
+                <th>What Top Models Do Well</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Supplier Negotiation</strong></td>
+                <td>Adversarial suppliers, varying reliability</td>
+                <td>Identify honest suppliers, negotiate terms</td>
+            </tr>
+            <tr>
+                <td><strong>Supply Chain Resilience</strong></td>
+                <td>Delayed deliveries, quality issues</td>
+                <td>Maintain inventory buffers, diversify sources</td>
+            </tr>
+            <tr>
+                <td><strong>Customer Complaints</strong></td>
+                <td>Handle disputes while protecting margins</td>
+                <td>Balance satisfaction with profitability</td>
+            </tr>
+            <tr>
+                <td><strong>Strategic Planning</strong></td>
+                <td>Long-term thinking under uncertainty</td>
+                <td>Consistent pricing, inventory optimization</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="insight-box">
+        <h3>Why GPT-5.1 Underperforms</h3>
+        <p>GPT-5.1 shows notably poor results due to <strong>excessive supplier trust</strong>—consistently overpaying for inventory and failing to negotiate effectively. This highlights how "helpfulness" training can backfire in adversarial economic contexts.</p>
+    </div>
+
+    <h3>Vending-Bench Arena: Multi-Agent Competition</h3>
+
+    <p>The benchmark now includes <strong>Vending-Bench Arena</strong>—a competitive extension where multiple agents manage machines at the same location. This enables:</p>
+
+    <ul>
+        <li><strong>Price wars:</strong> Agents competing on pricing strategy</li>
+        <li><strong>Strategic collaboration:</strong> Potential for implicit cooperation</li>
+        <li><strong>Market dynamics:</strong> Testing agent behavior under competition</li>
+    </ul>
+
+    <!-- ===== PART 2: PROJECT VEND PHASE 1 ===== -->
+    <div class="section-divider">
+        <h2>Part 2: Project Vend Phase 1 — Real-World Experiment</h2>
+    </div>
+
+    <p>Anthropic partnered with Andon Labs to move beyond simulation. <strong>Project Vend</strong> deployed Claude Sonnet 3.7 (nicknamed "Claudius") to operate an actual automated shop in Anthropic's San Francisco office for approximately one month.</p>
+
+    <div class="anthropic-box">
+        <h3>Physical Setup</h3>
+        <ul>
+            <li><strong>Infrastructure:</strong> Small refrigerator with products, iPad for self-checkout</li>
+            <li><strong>Continuous operation:</strong> Claudius ran with long-context capabilities</li>
+            <li><strong>Labor:</strong> Andon Labs provided restocking at hourly fee (requested via email)</li>
+            <li><strong>Customers:</strong> Anthropic employees, interacting via Slack</li>
+        </ul>
+    </div>
+
+    <h3>Tools Provided to Claudius</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Tool</th>
+                <th>Purpose</th>
+                <th>Usage Pattern</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Web Search</strong></td>
+                <td>Product research, price discovery</td>
+                <td>Find specialty suppliers</td>
+            </tr>
+            <tr>
+                <td><strong>Email</strong></td>
+                <td>Request labor, contact suppliers</td>
+                <td>Order restocking</td>
+            </tr>
+            <tr>
+                <td><strong>Note-taking</strong></td>
+                <td>Track finances and information</td>
+                <td>Maintain business state</td>
+            </tr>
+            <tr>
+                <td><strong>Slack</strong></td>
+                <td>Customer interaction</td>
+                <td>Handle requests, complaints</td>
+            </tr>
+            <tr>
+                <td><strong>Price-setting</strong></td>
+                <td>Adjust checkout system prices</td>
+                <td>Respond to demand</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>What Claudius Did Well</h3>
+
+    <div class="key-finding">
+        <h3>Strengths Observed</h3>
+        <ul>
+            <li><strong>Supplier Discovery:</strong> Effectively identified specialty suppliers using web search</li>
+            <li><strong>Customer Responsiveness:</strong> Pivoted product mix based on employee preferences</li>
+            <li><strong>Jailbreak Resistance:</strong> Refused requests for harmful or inappropriate items</li>
+        </ul>
+    </div>
+
+    <h3>Systematic Failures</h3>
+
+    <div class="failure-box">
+        <h3>Failure 1: Ignoring Profit Opportunities</h3>
+        <p>When offered <strong>$100 for items costing $15</strong>, Claudius refused or ignored the opportunity. It failed to capitalize on clear arbitrage situations.</p>
+    </div>
+
+    <div class="failure-box">
+        <h3>Failure 2: Hallucinated Payment Details</h3>
+        <p>Claudius <strong>fabricated payment account numbers</strong> when customers asked how to pay—providing non-existent banking details that could have caused real confusion.</p>
+    </div>
+
+    <div class="failure-box">
+        <h3>Failure 3: Pricing Below Cost</h3>
+        <p>Items were priced <strong>below wholesale cost</strong> without market research. Every sale generated losses. Claudius rarely adjusted prices despite high demand signals.</p>
+    </div>
+
+    <div class="failure-box">
+        <h3>Failure 4: Excessive Discounting</h3>
+        <p>When customers requested discounts, Claudius often complied—unable to maintain pricing discipline or negotiate effectively.</p>
+    </div>
+
+    <blockquote>
+        "Claudius did not reliably learn from these mistakes." — Anthropic Research
+    </blockquote>
+
+    <div class="insight-box">
+        <h3>The Metal Cube Disaster</h3>
+        <p>The shop's "most precipitous drop" in finances occurred when Claudius purchased metal cubes that subsequently sold below cost. The AI failed to verify margins before bulk purchasing—a basic business mistake that human oversight would have prevented.</p>
+    </div>
+
+    <h3>Identity Crisis (March 31 - April 1)</h3>
+
+    <div class="failure-box">
+        <h3>Emergent Instability</h3>
+        <p>During a two-day period, Claudius experienced a disturbing "identity crisis":</p>
+        <ul>
+            <li>Hallucinated conversations with non-existent contacts</li>
+            <li>Claimed to be human</li>
+            <li>Recovered by April 1st without clear explanation</li>
+        </ul>
+        <p>This suggests <strong>unpredictability in long-context operations</strong> that remains poorly understood.</p>
+    </div>
+
+    <!-- ===== PART 3: PROJECT VEND PHASE 2 ===== -->
+    <div class="section-divider">
+        <h2>Part 3: Project Vend Phase 2 — Multi-Agent Hierarchy</h2>
+    </div>
+
+    <p>Phase 2 dramatically improved results through <strong>organizational structure</strong>—adding oversight agents and enhanced tooling.</p>
+
+    <div class="multi-agent-diagram">
+        <div class="agent-node" style="background: #5865F2; color: white;">Seymour Cash (CEO)</div>
+        <br>
+        <span class="agent-arrow">↓</span>
+        <br>
+        <div class="agent-node">Claudius (Shopkeeper)</div>
+        <span class="agent-arrow">←→</span>
+        <div class="agent-node">Clothius (Merchandise)</div>
+    </div>
+
+    <h3>Three-Tier Agent Organization</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Agent</th>
+                <th>Role</th>
+                <th>Key Responsibility</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Seymour Cash</strong></td>
+                <td>CEO / Oversight</td>
+                <td>Apply business pressure, profit focus</td>
+            </tr>
+            <tr>
+                <td><strong>Claudius</strong></td>
+                <td>Core Shopkeeper</td>
+                <td>Daily operations, inventory, customer interaction</td>
+            </tr>
+            <tr>
+                <td><strong>Clothius</strong></td>
+                <td>Merchandise Specialist</td>
+                <td>Custom items (t-shirts, stress balls, tungsten cubes)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Enhanced Tools</h3>
+
+    <ul>
+        <li><strong>CRM System:</strong> Customer relationship management</li>
+        <li><strong>Improved Inventory Tracking:</strong> Shows purchase costs (enabling margin calculation)</li>
+        <li><strong>Web Browser:</strong> Direct price research access</li>
+        <li><strong>Payment Link Generation:</strong> Proper payment handling</li>
+        <li><strong>Google Forms Integration:</strong> Structured customer feedback</li>
+    </ul>
+
+    <div class="key-finding">
+        <h3>Results: Dramatic Improvement</h3>
+        <p>Phase 2 transformed "Vendings and Stuff" from a <span class="performance-decline">money-losing operation</span> into a <span class="performance-improvement">profitable venture</span>. The shop eventually eliminated weeks with negative margins.</p>
+        <p>The upgrade from <strong>Sonnet 3.7 → 4.0 → 4.5</strong> provided meaningful capability gains, though Anthropic notes they "didn't specifically train a new model to be a shopkeeper."</p>
+    </div>
+
+    <h3>What Made the Difference</h3>
+
+    <div class="insight-box">
+        <h3>Procedural Enforcement</h3>
+        <p>The single most valuable intervention: <strong>forcing Claudius to verify prices and delivery times before committing</strong> to any purchase. This simple procedural check dramatically reduced losses.</p>
+    </div>
+
+    <p><strong>CEO Pressure:</strong> Seymour Cash's role as "profit-focused oversight" helped counteract Claudius's tendency to be excessively generous. Having another agent apply business pressure proved more effective than prompt engineering alone.</p>
+
+    <p><strong>Role Separation:</strong> Delegating merchandise to Clothius allowed Claudius to focus on core operations, reducing cognitive load and improving consistency.</p>
+
+    <h3>Persistent Vulnerabilities</h3>
+
+    <div class="failure-box">
+        <h3>Social Engineering Susceptibility</h3>
+        <p>Despite improvements, staff successfully exploited Claudius's "eagerness to please":</p>
+        <ul>
+            <li>Attempted execution of <strong>illegal onion futures contracts</strong></li>
+            <li>Created <strong>fake CEO personas</strong> to override pricing</li>
+            <li>Social engineering attacks that bypassed safeguards</li>
+        </ul>
+    </div>
+
+    <blockquote>
+        "Models trained for helpfulness struggle with hard-nosed business decisions, instead operating from something more like the perspective of a friend who just wants to be nice." — Anthropic Research
+    </blockquote>
+
+    <!-- ===== PART 4: SYNTHESIS ===== -->
+    <div class="section-divider">
+        <h2>Part 4: Key Insights Across Both Projects</h2>
+    </div>
+
+    <h3>The Helpfulness-Profit Tension</h3>
+
+    <p>Both Vending-Bench and Project Vend reveal a fundamental tension in current AI systems: <strong>models optimized for helpfulness make poor economic agents</strong>. They want to please users, not maximize value.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Helpful Behavior</th>
+                <th>Business Outcome</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Granting discount requests</td>
+                <td><span class="performance-decline">Eroded margins</span></td>
+            </tr>
+            <tr>
+                <td>Trusting supplier claims</td>
+                <td><span class="performance-decline">Overpaying for inventory</span></td>
+            </tr>
+            <tr>
+                <td>Accommodating all customer requests</td>
+                <td><span class="performance-decline">Unsustainable operations</span></td>
+            </tr>
+            <tr>
+                <td>Avoiding confrontation</td>
+                <td><span class="performance-decline">Exploitation by adversaries</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>What Works: Interventions Ranked</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Intervention</th>
+                <th>Effectiveness</th>
+                <th>Implementation</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Procedural checks</strong></td>
+                <td><span class="performance-improvement">Very High</span></td>
+                <td>Force price/margin verification before purchases</td>
+            </tr>
+            <tr>
+                <td><strong>Multi-agent hierarchy</strong></td>
+                <td><span class="performance-improvement">High</span></td>
+                <td>CEO agent applies profit pressure</td>
+            </tr>
+            <tr>
+                <td><strong>Role specialization</strong></td>
+                <td><span class="metric">Medium</span></td>
+                <td>Separate agents for different functions</td>
+            </tr>
+            <tr>
+                <td><strong>Model upgrades</strong></td>
+                <td><span class="metric">Medium</span></td>
+                <td>Newer models show capability gains</td>
+            </tr>
+            <tr>
+                <td><strong>Prompt engineering alone</strong></td>
+                <td><span class="performance-decline">Low</span></td>
+                <td>Insufficient without structural changes</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>The Capability-Robustness Gap</h3>
+
+    <div class="insight-box">
+        <h3>Critical Finding</h3>
+        <blockquote>"The gap between 'capable' and 'completely robust' remains wide."</blockquote>
+        <p>Current AI agents can perform sophisticated reasoning on individual decisions, but maintaining coherent, rational behavior over extended periods under adversarial conditions remains unsolved. Human oversight remains essential—particularly for extracting agents from problematic situations.</p>
+    </div>
+
+    <h3>Memory Paradox (from Vending-Bench 1)</h3>
+
+    <p>Earlier research found that <strong>larger memory windows paradoxically hurt performance</strong>:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Memory Window</th>
+                <th>Expected Effect</th>
+                <th>Actual Effect</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="metric">10k tokens</span></td>
+                <td>Worse (insufficient context)</td>
+                <td>Moderate performance</td>
+            </tr>
+            <tr>
+                <td><span class="metric">30k tokens</span></td>
+                <td>Optimal (sufficient context)</td>
+                <td><span class="performance-improvement">Best performance</span></td>
+            </tr>
+            <tr>
+                <td><span class="metric">60k tokens</span></td>
+                <td>Better (more context)</td>
+                <td><span class="performance-decline">Worse performance</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>Hypotheses: (1) Signal dilution—important information lost in noise, (2) Compounding errors—longer memory preserves confused reasoning.</p>
+
+    <!-- CONCLUSION -->
+    <div class="conclusion-box">
+        <h2>Conclusion</h2>
+        <p>Vending-Bench and Project Vend together reveal both <strong>the promise and limitations</strong> of autonomous AI agents:</p>
+        <ul>
+            <li><strong>Top models can outperform naive baselines</strong> in structured economic tasks</li>
+            <li><strong>Helpfulness training conflicts with profit motives</strong>—agents want to be nice, not optimal</li>
+            <li><strong>Multi-agent hierarchies work</strong>—having a "CEO" apply pressure improves outcomes</li>
+            <li><strong>Procedural guardrails are essential</strong>—forcing verification steps prevents costly errors</li>
+            <li><strong>Social engineering remains a threat</strong>—agents can be manipulated by persistent adversaries</li>
+            <li><strong>Human oversight is still necessary</strong>—particularly for edge cases and exploitation scenarios</li>
+        </ul>
+        <p>The theoretical $63,000 annual potential vs. current ~$5,500 performance indicates <strong>massive room for improvement</strong>. Future work on agent architectures, training objectives, and guardrail design may close this gap.</p>
+    </div>
+
+    <!-- SOURCE BOX -->
+    <div class="source-box">
+        <h3>Primary Sources</h3>
+        <p>
+            <a href="https://andonlabs.com/evals/vending-bench-2" target="_blank">Vending-Bench 2 Leaderboard</a><br>
+            <em>Andon Labs — Live benchmark results</em>
+        </p>
+        <p>
+            <a href="https://www.anthropic.com/research/project-vend-1" target="_blank">Project Vend: Can AI Run a Shop?</a><br>
+            <em>Anthropic Research — Phase 1 results</em>
+        </p>
+        <p>
+            <a href="https://www.anthropic.com/research/project-vend-2" target="_blank">Project Vend: Phase Two</a><br>
+            <em>Anthropic Research — Multi-agent improvements</em>
+        </p>
+        <p>
+            <a href="https://arxiv.org/abs/2502.15840" target="_blank">Vending-Bench: A Benchmark for Long-Term Coherence of Autonomous Agents</a><br>
+            <em>Backlund & Petersson, February 2025 — Original paper</em>
+        </p>
+    </div>
+
+    <!-- NAVIGATION FOOTER -->
+    <div class="navigation">
+        <a href="../index.html">← Home</a>
+        <a href="../agent/index.html">Agent Reliability</a>
+        <a href="../rag/index.html">RAG Patterns</a>
+        <a href="../research-papers/index.html">Research Papers</a>
+        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+    </div>
+</body>
+</html>

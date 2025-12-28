@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Trader: Benchmarking Autonomous Agents in Real-Time Financial Markets</title>
+    <style>
+        @page {
+            margin: 2cm;
+        }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        h1 {
+            color: #1a1a1a;
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-align: center;
+            border-bottom: 2px solid #DC8850;
+            padding-bottom: 15px;
+        }
+        h2 {
+            color: #DC8850;
+            font-size: 22px;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 8px;
+        }
+        h3 {
+            color: #555;
+            font-size: 18px;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .authors {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 30px;
+            color: #666;
+        }
+        .abstract {
+            background: #f8f8f8;
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding {
+            background: #fff8f0;
+            padding: 15px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding h3 {
+            margin-top: 0;
+            color: #DC8850;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #DC8850;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .metric {
+            font-weight: bold;
+            color: #DC8850;
+        }
+        .performance-improvement {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .performance-decline {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .methodology-box {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .conclusion-box {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #DC8850;
+            color: white;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .badge-success {
+            background: #27ae60;
+        }
+        .badge-warning {
+            background: #f39c12;
+        }
+        .badge-danger {
+            background: #e74c3c;
+        }
+        .eli5-box {
+            background: #e8f5e9;
+            padding: 20px;
+            border-left: 4px solid #4caf50;
+            margin: 20px 0;
+            font-size: 15px;
+        }
+        .eli5-box h3 {
+            margin-top: 0;
+            color: #4caf50;
+        }
+        .figure {
+            margin: 30px 0;
+            text-align: center;
+        }
+        .figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .figure-caption {
+            font-style: italic;
+            color: #666;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .insight-box {
+            background: #fffbf0;
+            border: 2px solid #DC8850;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        .insight-box h3 {
+            color: #DC8850;
+            margin-top: 0;
+        }
+        .source-box {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .source-box a {
+            color: #DC8850;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .source-box a:hover {
+            text-decoration: underline;
+        }
+        .navigation {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f8f8;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #DC8850;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        .navigation a:hover {
+            text-decoration: underline;
+        }
+        p {
+            margin: 15px 0;
+            text-align: justify;
+        }
+        .warning-box {
+            background: #fff3e0;
+            border-left: 4px solid #f39c12;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .warning-box h3 {
+            margin-top: 0;
+            color: #f39c12;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .placeholder-figure {
+            background: #f8f8f8;
+            padding: 40px;
+            border: 2px dashed #DC8850;
+            border-radius: 5px;
+            min-height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="navigation">
+        <a href="../index.html">← Home</a>
+        <a href="../agent/index.html">Agent Reliability</a>
+        <a href="../rag/index.html">RAG Patterns</a>
+        <a href="../research-papers/index.html">Research Papers</a>
+        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+    </div>
+
+    <h1>AI-Trader: Benchmarking Autonomous Agents<br>in Real-Time Financial Markets</h1>
+
+    <div class="authors">
+        Tianyu Fan, Yuhao Yang, Yangqin Jiang, Yifei Zhang, Yuxuan Chen, Chao Huang<br>
+        The University of Hong Kong<br>
+        <em>December 2025</em>
+    </div>
+
+    <div class="abstract">
+        <h2>Executive Summary</h2>
+        <p>AI-Trader introduces the <strong>first fully-automated, live, and data-uncontaminated evaluation benchmark</strong> for LLM agents in financial decision-making. Unlike prior benchmarks that rely on historical data (risking contamination in LLM training sets), AI-Trader tests agents in real-time markets with live data streams.</p>
+
+        <p>The benchmark spans three major financial markets—<span class="metric">U.S. stocks (NASDAQ-100)</span>, <span class="metric">Chinese A-shares (SSE 50)</span>, and <span class="metric">cryptocurrencies (10 major assets)</span>—with both daily and hourly trading frequencies. Six mainstream LLMs are evaluated under identical conditions with <span class="metric">$10,000</span> starting capital.</p>
+
+        <p>Key finding: <span class="performance-decline">General intelligence does not translate to trading capability.</span> Most agents exhibited poor returns and inadequate risk management. The study reveals that <strong>risk control capacity</strong>—not raw intelligence—determines consistent performance across different market regimes. AI strategies achieve excess returns more readily in highly liquid markets than in policy-driven environments.</p>
+    </div>
+
+    <div class="eli5-box">
+        <h3>ELI5: Can ChatGPT Beat the Stock Market?</h3>
+        <p>Imagine giving the smartest AI models $10,000 and asking them to trade stocks, just like a human day trader would. No cheat sheets, no insider information—they have to search for news, analyze data, and make their own decisions in real-time. This study did exactly that across US stocks, Chinese stocks, and crypto. The surprising result? Being "smarter" at general tasks (like writing or coding) doesn't mean an AI is good at trading. The AIs that did best weren't necessarily the most intelligent—they were the ones that knew when NOT to trade and how to avoid big losses.</p>
+    </div>
+
+    <h2>Part 1: Why We Need Live Trading Benchmarks</h2>
+
+    <p>Existing financial AI benchmarks suffer from a critical flaw: <strong>data contamination</strong>. Large language models are trained on massive internet corpora that likely include historical financial data, analyst reports, and even retrospective market analyses. When tested on that same historical data, models may simply be "remembering" rather than "reasoning."</p>
+
+    <div class="key-finding">
+        <h3>The Data Contamination Problem</h3>
+        <ul>
+            <li><strong>Historical backtests are compromised:</strong> LLMs may have seen the outcomes during training</li>
+            <li><strong>Look-ahead bias:</strong> Models trained on data from 2023 inherently "know" what happened in 2022</li>
+            <li><strong>No true generalization test:</strong> We can't verify if models reason about markets or recall patterns</li>
+        </ul>
+        <p>AI-Trader solves this by testing on <em>live, current market data</em> that couldn't possibly be in any training set.</p>
+    </div>
+
+    <h2>Part 2: The AI-Trader Framework</h2>
+
+    <div class="methodology-box">
+        <h3>Fully Autonomous Minimal Information Paradigm</h3>
+        <p>AI-Trader implements a strict evaluation protocol where agents must operate with minimal guidance:</p>
+        <ul>
+            <li><strong>Zero preset strategies:</strong> No algorithmic rules or trading signals provided</li>
+            <li><strong>Complete self-reliance:</strong> Agents must independently search, verify, and synthesize market information</li>
+            <li><strong>Real-time operation:</strong> Decisions based on live data with automated future information filtering</li>
+            <li><strong>Uniform conditions:</strong> All agents receive identical capital, data feeds, and execution infrastructure</li>
+        </ul>
+    </div>
+
+    <h3>Market Coverage</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Market</th>
+                <th>Universe</th>
+                <th>Starting Capital</th>
+                <th>Characteristics</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>U.S. Stocks</strong></td>
+                <td>NASDAQ-100 components</td>
+                <td><span class="metric">$10,000 USD</span></td>
+                <td>High liquidity, 24/5 extended hours</td>
+            </tr>
+            <tr>
+                <td><strong>A-Shares</strong></td>
+                <td>SSE 50 index stocks</td>
+                <td><span class="metric">¥100,000</span></td>
+                <td>Policy-driven, T+1 settlement</td>
+            </tr>
+            <tr>
+                <td><strong>Crypto</strong></td>
+                <td>BTC, ETH, XRP, SOL, ADA, SUI, LINK, AVAX, LTC, DOT</td>
+                <td><span class="metric">50,000 USDT</span></td>
+                <td>24/7, high volatility</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Trading Frequencies</h3>
+
+    <p>The benchmark supports multiple granularities to test different trading styles:</p>
+
+    <ul>
+        <li><strong>Daily trading:</strong> End-of-day decisions based on daily price action and news</li>
+        <li><strong>Hourly trading:</strong> Intraday decisions requiring real-time responsiveness</li>
+    </ul>
+
+    <div class="figure">
+        <div class="placeholder-figure">
+            <div style="text-align: center;">
+                <h4 style="color: #DC8850;">AI-Trader Architecture</h4>
+                <p>Each agent receives: identical starting capital, synchronized trading windows,<br>
+                uniform market data feeds via MCP toolchain, Alpha Vantage API for prices,<br>
+                and Jina AI for market intelligence retrieval.</p>
+                <p><em>All agents operate in sandboxed environments with identical infrastructure.</em></p>
+            </div>
+        </div>
+        <div class="figure-caption">Figure 1: AI-Trader benchmark architecture ensuring fair comparison across LLM agents.</div>
+    </div>
+
+    <h3>Evaluation Metrics</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Metric</th>
+                <th>Description</th>
+                <th>What It Measures</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Annualized Return</strong></td>
+                <td>Total return normalized to yearly basis</td>
+                <td>Raw profitability</td>
+            </tr>
+            <tr>
+                <td><strong>Sharpe Ratio</strong></td>
+                <td>Risk-adjusted return (return / volatility)</td>
+                <td>Return per unit of risk</td>
+            </tr>
+            <tr>
+                <td><strong>Maximum Drawdown</strong></td>
+                <td>Largest peak-to-trough decline</td>
+                <td>Worst-case loss scenario</td>
+            </tr>
+            <tr>
+                <td><strong>Win Rate</strong></td>
+                <td>Percentage of profitable trades</td>
+                <td>Decision accuracy</td>
+            </tr>
+            <tr>
+                <td><strong>Calmar Ratio</strong></td>
+                <td>Return / Maximum Drawdown</td>
+                <td>Return relative to tail risk</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Part 3: Key Findings</h2>
+
+    <div class="warning-box">
+        <h3>Critical Finding: Intelligence ≠ Trading Ability</h3>
+        <p>The benchmark reveals a <strong>striking disconnect</strong> between general AI capabilities and financial performance. Models that excel at coding, reasoning, and language tasks often perform poorly at trading. This challenges the assumption that more capable models automatically make better traders.</p>
+    </div>
+
+    <div class="key-finding">
+        <h3>Finding 1: Risk Control Determines Cross-Market Robustness</h3>
+        <p>Agents that performed consistently across all three markets shared one trait: <strong>strong risk management</strong>. Rather than chasing returns, these agents:</p>
+        <ul>
+            <li>Maintained position sizing discipline</li>
+            <li>Avoided overconcentration in single assets</li>
+            <li>Recognized when NOT to trade (staying in cash)</li>
+            <li>Cut losses quickly rather than hoping for recovery</li>
+        </ul>
+        <p>This suggests that for production trading agents, <em>risk control modules should be prioritized over pure alpha generation.</em></p>
+    </div>
+
+    <div class="key-finding">
+        <h3>Finding 2: Market Structure Matters</h3>
+        <p>AI trading strategies achieved excess returns more readily in <strong>highly liquid markets</strong> (crypto, US large-caps) than in <strong>policy-driven environments</strong> (A-shares).</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Market Type</th>
+                    <th>AI Performance</th>
+                    <th>Explanation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Liquid (Crypto, US)</td>
+                    <td><span class="performance-improvement">Better</span></td>
+                    <td>Price reflects information efficiently; technical patterns more reliable</td>
+                </tr>
+                <tr>
+                    <td>Policy-driven (A-shares)</td>
+                    <td><span class="performance-decline">Worse</span></td>
+                    <td>Government interventions create unpredictable regime changes</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="key-finding">
+        <h3>Finding 3: Most Agents Exhibit Poor Returns</h3>
+        <p>Across the benchmark, the majority of LLM agents showed:</p>
+        <ul>
+            <li><span class="performance-decline">Negative or marginal returns</span> in most market conditions</li>
+            <li><span class="performance-decline">Inadequate risk management</span> leading to large drawdowns</li>
+            <li><span class="performance-decline">Overtrading</span> generating excessive transaction costs</li>
+            <li><span class="performance-decline">Herding behavior</span> making similar decisions under similar prompts</li>
+        </ul>
+        <p>This exposes critical limitations in current autonomous agents for financial applications.</p>
+    </div>
+
+    <h2>Part 4: Implications for AI Trading Systems</h2>
+
+    <div class="insight-box">
+        <h3>Lessons for Building Production Trading Agents</h3>
+        <ol>
+            <li><strong>Prioritize risk over returns:</strong> Build robust stop-loss and position sizing before optimizing for alpha</li>
+            <li><strong>Match market to method:</strong> AI strategies work better in liquid, technically-driven markets</li>
+            <li><strong>Test on live data:</strong> Historical backtests alone are insufficient due to contamination risk</li>
+            <li><strong>Don't assume intelligence transfers:</strong> A model's general capability score doesn't predict trading performance</li>
+            <li><strong>Monitor for regime changes:</strong> Strategies that work in one market may fail catastrophically in another</li>
+        </ol>
+    </div>
+
+    <h3>Connection to ProFiT and Strategy Evolution</h3>
+
+    <p>AI-Trader's findings complement the <a href="profit_trading_report.html">ProFiT framework</a> in an interesting way:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Aspect</th>
+                <th>AI-Trader (This Paper)</th>
+                <th>ProFiT</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Approach</td>
+                <td>Benchmark LLM agents as-is</td>
+                <td>Evolve trading strategies via LLMs</td>
+            </tr>
+            <tr>
+                <td>Finding</td>
+                <td>Raw LLMs perform poorly at trading</td>
+                <td>LLM-evolved code can outperform baselines</td>
+            </tr>
+            <tr>
+                <td>Implication</td>
+                <td>Don't use LLMs directly as traders</td>
+                <td>Use LLMs to improve trading code</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>Together, these papers suggest that LLMs are better as <em>strategy developers</em> than as <em>direct traders</em>—they can write and improve trading code, but shouldn't make real-time trading decisions themselves.</p>
+
+    <h2>Part 5: Technical Infrastructure</h2>
+
+    <div class="methodology-box">
+        <h3>Data Sources & Integration</h3>
+        <ul>
+            <li><strong>Alpha Vantage API:</strong> Real-time and historical price data</li>
+            <li><strong>Jina AI:</strong> Market intelligence and news retrieval</li>
+            <li><strong>Tushare:</strong> A-share specific data (optional)</li>
+            <li><strong>MCP Toolchain:</strong> Unified execution infrastructure preventing infrastructure-based advantages</li>
+        </ul>
+    </div>
+
+    <h3>Preventing Look-Ahead Bias</h3>
+
+    <p>The benchmark implements several safeguards:</p>
+    <ul>
+        <li><strong>Historical replay mode:</strong> Automated filtering of future information</li>
+        <li><strong>Timestamp validation:</strong> Agents can only access data from current time and before</li>
+        <li><strong>Synchronized windows:</strong> All agents trade in identical time periods</li>
+    </ul>
+
+    <div class="conclusion-box">
+        <h2>Conclusion</h2>
+        <p>AI-Trader establishes the first rigorous benchmark for evaluating LLM agents in live financial markets. The key findings challenge optimistic assumptions about AI trading:</p>
+        <ul>
+            <li><span class="performance-decline">General intelligence does not transfer to trading ability</span></li>
+            <li><span class="metric">Risk control capability</span> determines cross-market robustness</li>
+            <li>AI strategies work better in <span class="performance-improvement">liquid markets</span> than policy-driven ones</li>
+            <li>Most current LLM agents exhibit <span class="performance-decline">poor returns and inadequate risk management</span></li>
+        </ul>
+        <p>These findings provide critical direction for future research: rather than scaling model intelligence, focus on risk management, market-specific adaptation, and perhaps using LLMs to evolve trading strategies rather than execute them directly.</p>
+    </div>
+
+    <div class="source-box">
+        <h3>Primary Sources</h3>
+        <p>
+            <a href="https://arxiv.org/abs/2512.10971" target="_blank">AI-Trader: Benchmarking Autonomous Agents in Real-Time Financial Markets</a><br>
+            <em>Tianyu Fan, Yuhao Yang, Yangqin Jiang, Yifei Zhang, Yuxuan Chen, Chao Huang — arXiv:2512.10971, December 2025</em>
+        </p>
+        <p>
+            <a href="https://github.com/HKUDS/AI-Trader" target="_blank">GitHub Repository: HKUDS/AI-Trader</a><br>
+            <em>Open-source code and evaluation data</em>
+        </p>
+        <p>
+            <a href="https://ai4trade.ai" target="_blank">Live Trading Leaderboard</a><br>
+            <em>Real-time performance tracking of AI trading agents</em>
+        </p>
+        <p>
+            <a href="profit_trading_report.html" target="_blank">Related: ProFiT (Program Search for Financial Trading)</a><br>
+            <em>LLM-driven evolution of trading strategies—a complementary approach</em>
+        </p>
+    </div>
+
+    <div class="navigation">
+        <a href="../index.html">← Home</a>
+        <a href="../agent/index.html">Agent Reliability</a>
+        <a href="../rag/index.html">RAG Patterns</a>
+        <a href="../research-papers/index.html">Research Papers</a>
+        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+    </div>
+</body>
+</html>

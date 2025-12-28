@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Shadow Value of Public Information - AI vs Human Fund Managers</title>
+    <style>
+        @page {
+            margin: 2cm;
+        }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        h1 {
+            color: #1a1a1a;
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-align: center;
+            border-bottom: 2px solid #DC8850;
+            padding-bottom: 15px;
+        }
+        h2 {
+            color: #DC8850;
+            font-size: 22px;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 8px;
+        }
+        h3 {
+            color: #555;
+            font-size: 18px;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .authors {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 30px;
+            color: #666;
+        }
+        .abstract {
+            background: #f8f8f8;
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding {
+            background: #fff8f0;
+            padding: 15px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding h3 {
+            margin-top: 0;
+            color: #DC8850;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #DC8850;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .metric {
+            font-weight: bold;
+            color: #DC8850;
+        }
+        .performance-improvement {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .performance-decline {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .methodology-box {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .conclusion-box {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #DC8850;
+            color: white;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .badge-success {
+            background: #27ae60;
+        }
+        .badge-warning {
+            background: #f39c12;
+        }
+        .badge-danger {
+            background: #e74c3c;
+        }
+        .formula {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        .eli5-box {
+            background: #e8f5e9;
+            padding: 20px;
+            border-left: 4px solid #4caf50;
+            margin: 20px 0;
+            font-size: 15px;
+        }
+        .eli5-box h3 {
+            margin-top: 0;
+            color: #4caf50;
+        }
+        .figure {
+            margin: 30px 0;
+            text-align: center;
+        }
+        .figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .figure-caption {
+            font-style: italic;
+            color: #666;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .timeline-box {
+            background: linear-gradient(to right, #f8f8f8, #fff);
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+            position: relative;
+        }
+        .timeline-item {
+            margin: 15px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        .timeline-item:before {
+            content: "•";
+            position: absolute;
+            left: 10px;
+            color: #DC8850;
+            font-size: 20px;
+        }
+        .timeline-date {
+            font-weight: bold;
+            color: #DC8850;
+        }
+        .insight-box {
+            background: #fffbf0;
+            border: 2px solid #DC8850;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        .insight-box h3 {
+            color: #DC8850;
+            margin-top: 0;
+        }
+        .source-box {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .source-box a {
+            color: #DC8850;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .source-box a:hover {
+            text-decoration: underline;
+        }
+        .navigation {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f8f8;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #DC8850;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        .navigation a:hover {
+            text-decoration: underline;
+        }
+        p {
+            margin: 15px 0;
+            text-align: justify;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION HEADER -->
+    <div class="navigation">
+        <a href="../index.html">← Home</a>
+        <a href="../agent/index.html">Agent Reliability</a>
+        <a href="../rag/index.html">RAG Patterns</a>
+        <a href="../research-papers/index.html">Research Papers</a>
+        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+    </div>
+
+    <!-- TITLE -->
+    <h1>The Shadow Value of "Public" Information<br>Evidence from Mutual Fund Managers</h1>
+
+    <!-- AUTHORS -->
+    <div class="authors">
+        Ed deHaan, Chanseok Lee, Miao Liu, Suzie Noh<br>
+        Stanford Graduate School of Business, Boston College<br>
+        <em>July 2025</em>
+    </div>
+
+    <!-- EXECUTIVE SUMMARY -->
+    <div class="abstract">
+        <h2>Executive Summary</h2>
+        <p>This landmark Stanford GSB study demonstrates that an AI analyst using <strong>only publicly available information</strong> outperformed <span class="performance-improvement">93% of mutual fund managers</span> over a 30-year period (1990-2020). The AI-adjusted portfolios generated <span class="performance-improvement">$17.1 million in additional quarterly returns</span> compared to human managers' <span class="metric">$2.8 million</span>—a stunning <span class="performance-improvement">~600% improvement</span>.</p>
+
+        <p>The research reveals a critical insight about information costs: the AI's advantage comes not from <em>access</em> to private information, but from superior <em>processing</em> of public data. Counterintuitively, the model primarily relied on simple variables like firm size and trading volume, but deployed sophisticated machine learning techniques to extract maximum predictive value. This demonstrates that "public" information still carries substantial hidden value—a "shadow price"—when processed efficiently.</p>
+
+        <p>Testing across <span class="metric">3,300 diversified U.S. equity mutual funds</span> with <span class="metric">170 publicly available variables</span>, the study quantifies what researchers term "information processing costs"—the expensive computation required to fully exploit freely available datasets. This has profound implications for AI-augmented investment management.</p>
+    </div>
+
+    <!-- ELI5 BOX -->
+    <div class="eli5-box">
+        <h3>🎯 ELI5: The Library Analogy</h3>
+        <p>Imagine a library where all books are free to read. A human librarian can read maybe 10 books and remember key points. But an AI "librarian" can read <em>every</em> book, remember <em>every</em> detail, and spot patterns humans miss—like noticing that authors who use certain words tend to write bestsellers. The books are free, but the ability to read them all and find hidden connections? That's incredibly valuable. This study proves that in investing, the "free" public data is worth billions when you can actually process it all.</p>
+    </div>
+
+    <!-- PART 1: The Problem -->
+    <h2>Part 1: The Information Paradox</h2>
+
+    <p>Professional fund managers have long justified their fees by claiming access to superior information and analysis. But in an era of mandatory disclosure requirements, most market-relevant data is technically "public." The question becomes: if everyone has access to the same data, why do some managers consistently outperform?</p>
+
+    <div class="key-finding">
+        <h3>The Hidden Cost of "Free" Information</h3>
+        <p>The researchers introduce the concept of <strong>"shadow price"</strong>—the true cost of extracting value from public information. While datasets themselves may be freely available, the computational resources and analytical sophistication required to fully exploit them create substantial barriers.</p>
+        <ul>
+            <li><strong>170 variables</strong> tracked simultaneously (Treasury rates, credit ratings, earnings sentiment, etc.)</li>
+            <li><strong>Processing frictions</strong> make complete analysis prohibitively expensive for humans</li>
+            <li><strong>Information is expensive to <em>know</em></strong>, even when datasets are free to <em>access</em></li>
+        </ul>
+    </div>
+
+    <p>This explains why active management persists despite efficient market theory—the "efficiency" assumes perfect information processing, which humans cannot achieve.</p>
+
+    <!-- PART 2: Methodology -->
+    <h2>Part 2: Experimental Design</h2>
+
+    <div class="methodology-box">
+        <h3>AI Model Architecture</h3>
+        <p>The researchers employed a <strong>random forest model</strong> for predicting quarterly benchmark-adjusted returns:</p>
+        <ul>
+            <li><strong>Training Period:</strong> 1980-1990 market data</li>
+            <li><strong>Testing Period:</strong> 1990-2020 (30 years of out-of-sample evaluation)</li>
+            <li><strong>Universe:</strong> ~3,300 diversified U.S. equity mutual funds</li>
+            <li><strong>Rebalancing:</strong> Quarterly adjustments maintaining fund characteristics</li>
+        </ul>
+    </div>
+
+    <h3>Input Variables</h3>
+
+    <p>The AI analyzed <span class="metric">170 publicly available variables</span>, including:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Example Variables</th>
+                <th>Source</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Market Data</strong></td>
+                <td>Firm size, dollar trading volume, price momentum</td>
+                <td>Stock exchanges</td>
+            </tr>
+            <tr>
+                <td><strong>Fundamentals</strong></td>
+                <td>P/E ratios, book value, debt levels</td>
+                <td>SEC filings (10-K, 10-Q)</td>
+            </tr>
+            <tr>
+                <td><strong>Fixed Income</strong></td>
+                <td>Treasury rates, credit spreads, yield curves</td>
+                <td>Federal Reserve</td>
+            </tr>
+            <tr>
+                <td><strong>Sentiment</strong></td>
+                <td>Earnings call tone, regulatory filing sentiment</td>
+                <td>NLP analysis of transcripts</td>
+            </tr>
+            <tr>
+                <td><strong>Analyst Data</strong></td>
+                <td>Ratings changes, price targets, EPS estimates</td>
+                <td>Sell-side research</td>
+            </tr>
+            <tr>
+                <td><strong>Macro</strong></td>
+                <td>GDP growth, inflation, unemployment</td>
+                <td>Government agencies</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="insight-box">
+        <h3>The Simplicity Paradox</h3>
+        <p>Counterintuitively, the AI primarily relied on the <strong>simplest variables</strong>—firm size and dollar trading volume—rather than sophisticated metrics. The advantage came from deploying "complex AI techniques to squeeze the most predictive value from this simple data." This suggests that expertise lies not in finding obscure signals, but in optimally processing obvious ones.</p>
+    </div>
+
+    <!-- PART 3: Results -->
+    <h2>Part 3: Performance Results</h2>
+
+    <p>The results demonstrate a dramatic performance gap between AI-assisted and human-only management:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Metric</th>
+                <th>Human Managers</th>
+                <th>AI-Adjusted</th>
+                <th>Improvement</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Quarterly Alpha</strong></td>
+                <td>$2.8 million</td>
+                <td>$17.1 million</td>
+                <td><span class="performance-improvement">+$14.3M (+511%)</span></td>
+            </tr>
+            <tr>
+                <td><strong>Manager Ranking</strong></td>
+                <td>Median performance</td>
+                <td>Top 7%</td>
+                <td><span class="performance-improvement">Beat 93% of managers</span></td>
+            </tr>
+            <tr>
+                <td><strong>30-Year Performance</strong></td>
+                <td>Baseline</td>
+                <td>+600% vs human average</td>
+                <td><span class="performance-improvement">6× better returns</span></td>
+            </tr>
+            <tr>
+                <td><strong>Holdings Modified</strong></td>
+                <td>N/A</td>
+                <td>~50% quarterly</td>
+                <td>Active rebalancing</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="key-finding">
+        <h3>Portfolio Modification Strategy</h3>
+        <p>The AI rebalanced holdings <strong>quarterly</strong> without fundamentally altering fund characteristics like risk levels or stock count. It sorted investment options into <strong>ten performance-expectation buckets</strong>, swapping underperformers for similar assets with better prospects while maintaining portfolio structure. This approach modified approximately <strong>50% of total holdings each quarter</strong>, generating sixfold returns over the 30-year simulation.</p>
+    </div>
+
+    <h3>Index Allocation Efficiency</h3>
+
+    <p>Even more striking: AI-only portfolios allocated <span class="metric">42% to passive index funds</span> yet still dramatically outperformed active managers. This suggests that a substantial portion of active management fees are wasted on decisions that underperform simple indices.</p>
+
+    <div class="formula">
+        AI Alpha = (Optimal Public Info Processing) - (Human Processing Capacity)<br>
+        where Human Capacity &lt;&lt; Available Information
+    </div>
+
+    <!-- PART 4: Implications -->
+    <h2>Part 4: Implications for AI-Augmented Investing</h2>
+
+    <div class="key-finding">
+        <h3>The Automation Imperative</h3>
+        <p>The findings suggest investment firms should <strong>automate data collection and analysis work</strong> currently performed by analysts. However, co-author Ed deHaan notes: "There will always be a role for clever humans who can guide the process and think in broad ways about strategies." The optimal model appears to be AI-human collaboration, not replacement.</p>
+    </div>
+
+    <h3>Connection to LLM Trading Research</h3>
+
+    <p>This study provides crucial context for understanding why LLM-based trading agents (evaluated in StockBench and AI-Trader) struggle as direct traders but show promise as analysts:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Approach</th>
+                <th>Task Type</th>
+                <th>Performance</th>
+                <th>Source</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>AI as Analyst</strong></td>
+                <td>Information processing</td>
+                <td><span class="performance-improvement">+600% vs humans</span></td>
+                <td>This paper</td>
+            </tr>
+            <tr>
+                <td><strong>LLM as Trader</strong></td>
+                <td>Real-time decisions</td>
+                <td><span class="performance-decline">Most fail vs buy-and-hold</span></td>
+                <td>StockBench, AI-Trader</td>
+            </tr>
+            <tr>
+                <td><strong>Multi-Agent System</strong></td>
+                <td>Collaborative analysis</td>
+                <td><span class="metric">Outperforms single-agent</span></td>
+                <td>AlphaAgents</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="insight-box">
+        <h3>The Division of AI Labor</h3>
+        <p>The emerging picture suggests a clear division: AI excels at <strong>processing vast public information</strong> and <strong>identifying statistical patterns</strong>, but struggles with <strong>real-time market dynamics</strong> and <strong>regime recognition</strong>. The optimal architecture may be AI-generated signals feeding into human (or more sophisticated agent) decision-making—not end-to-end automation.</p>
+    </div>
+
+    <!-- PART 5: Limitations -->
+    <h2>Part 5: Important Caveats</h2>
+
+    <p>The researchers acknowledge significant limitations:</p>
+
+    <div class="methodology-box">
+        <h3>Limitations & Caveats</h3>
+        <ul>
+            <li><strong>Hypothetical Scenario:</strong> Results represent a theoretical case where one team received AI advantage in historical markets</li>
+            <li><strong>Crowding Effects:</strong> "If every investor were using this tool, then much of the advantage would go away" (Noh)</li>
+            <li><strong>Historical Data:</strong> Backtesting on 1990-2020 data may not predict future performance</li>
+            <li><strong>Market Impact:</strong> Large-scale AI adoption would likely erode the informational advantage</li>
+            <li><strong>Execution Costs:</strong> Real trading involves slippage, fees, and market impact not fully modeled</li>
+        </ul>
+    </div>
+
+    <p>These limitations mirror the "alpha decay" phenomenon in quantitative finance—strategies that work in backtests often fail once widely adopted.</p>
+
+    <!-- CONCLUSION -->
+    <div class="conclusion-box">
+        <h2>Conclusion</h2>
+        <p>This Stanford GSB research fundamentally reframes the value proposition of AI in finance. The key insight is not that AI has access to better information, but that it can <strong>extract more value from existing public information</strong> than humans possibly can.</p>
+        <ul>
+            <li><strong>93% outperformance</strong> over 30 years using only public data</li>
+            <li><strong>$17.1M quarterly alpha</strong> vs human managers' $2.8M</li>
+            <li><strong>Simple variables, sophisticated processing</strong>—the AI's edge lies in computation, not secrets</li>
+            <li><strong>42% index allocation</strong> still beat active managers—questioning the value of stock-picking</li>
+            <li><strong>Human+AI collaboration</strong> remains optimal for strategic guidance</li>
+        </ul>
+        <p>For AI agent engineering, this study validates the approach of using AI for information processing and signal generation, while reserving dynamic decision-making for architectures better suited to real-time adaptation.</p>
+    </div>
+
+    <!-- SOURCE BOX -->
+    <div class="source-box">
+        <h3>Primary Sources</h3>
+        <p>
+            <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5256379" target="_blank">The Shadow Value of "Public" Information: Evidence from Mutual Fund Managers</a><br>
+            <em>deHaan, Lee, Liu, Noh — Stanford GSB Research Paper, July 2025</em>
+        </p>
+        <p>
+            <a href="https://www.gsb.stanford.edu/insights/ai-analyst-made-30-years-stock-picks-blew-human-investors-away" target="_blank">An AI Analyst Made 30 Years of Stock Picks — and Blew Human Investors Away</a><br>
+            <em>Stanford Graduate School of Business Insights</em>
+        </p>
+        <p>
+            <a href="https://gsb-faculty.stanford.edu/ed-dehaan/" target="_blank">Ed deHaan Faculty Page</a><br>
+            <em>Stanford GSB Professor of Accounting</em>
+        </p>
+    </div>
+
+    <!-- NAVIGATION FOOTER -->
+    <div class="navigation">
+        <a href="../index.html">← Home</a>
+        <a href="../agent/index.html">Agent Reliability</a>
+        <a href="../rag/index.html">RAG Patterns</a>
+        <a href="../research-papers/index.html">Research Papers</a>
+        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+    </div>
+</body>
+</html>

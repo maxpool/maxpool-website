@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockBench: Can LLM Agents Trade Stocks Profitably?</title>
+    <style>
+        @page {
+            margin: 2cm;
+        }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        h1 {
+            color: #1a1a1a;
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-align: center;
+            border-bottom: 2px solid #DC8850;
+            padding-bottom: 15px;
+        }
+        h2 {
+            color: #DC8850;
+            font-size: 22px;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 8px;
+        }
+        h3 {
+            color: #555;
+            font-size: 18px;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .authors {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 30px;
+            color: #666;
+        }
+        .abstract {
+            background: #f8f8f8;
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding {
+            background: #fff8f0;
+            padding: 15px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding h3 {
+            margin-top: 0;
+            color: #DC8850;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #DC8850;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .metric {
+            font-weight: bold;
+            color: #DC8850;
+        }
+        .performance-improvement {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .performance-decline {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .methodology-box {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .conclusion-box {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #DC8850;
+            color: white;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .badge-success {
+            background: #27ae60;
+        }
+        .badge-warning {
+            background: #f39c12;
+        }
+        .badge-danger {
+            background: #e74c3c;
+        }
+        .formula {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        .eli5-box {
+            background: #e8f5e9;
+            padding: 20px;
+            border-left: 4px solid #4caf50;
+            margin: 20px 0;
+            font-size: 15px;
+        }
+        .eli5-box h3 {
+            margin-top: 0;
+            color: #4caf50;
+        }
+        .figure {
+            margin: 30px 0;
+            text-align: center;
+        }
+        .figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .figure-caption {
+            font-style: italic;
+            color: #666;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .timeline-box {
+            background: linear-gradient(to right, #f8f8f8, #fff);
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+            position: relative;
+        }
+        .timeline-item {
+            margin: 15px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        .timeline-item:before {
+            content: "•";
+            position: absolute;
+            left: 10px;
+            color: #DC8850;
+            font-size: 20px;
+        }
+        .timeline-date {
+            font-weight: bold;
+            color: #DC8850;
+        }
+        .insight-box {
+            background: #fffbf0;
+            border: 2px solid #DC8850;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        .insight-box h3 {
+            color: #DC8850;
+            margin-top: 0;
+        }
+        .source-box {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .source-box a {
+            color: #DC8850;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .source-box a:hover {
+            text-decoration: underline;
+        }
+        .navigation {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f8f8;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #DC8850;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        .navigation a:hover {
+            text-decoration: underline;
+        }
+        p {
+            margin: 15px 0;
+            text-align: justify;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION HEADER -->
+    <div class="navigation">
+        <a href="../index.html">← Home</a>
+        <a href="../agent/index.html">Agent Reliability</a>
+        <a href="../rag/index.html">RAG Patterns</a>
+        <a href="../research-papers/index.html">Research Papers</a>
+        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+    </div>
+
+    <!-- TITLE -->
+    <h1>StockBench: Can LLM Agents Trade Stocks Profitably?<br>A Contamination-Free Multi-Month Benchmark</h1>
+
+    <!-- AUTHORS -->
+    <div class="authors">
+        Yanxu Chen, Zijun Yao, Yantao Liu, Jin Ye, Jianing Yu, Lei Hou, Juanzi Li<br>
+        Tsinghua University, Beijing University of Posts and Telecommunications<br>
+        <em>October 2025</em>
+    </div>
+
+    <!-- EXECUTIVE SUMMARY -->
+    <div class="abstract">
+        <h2>Executive Summary</h2>
+        <p>StockBench introduces the first <strong>contamination-free benchmark</strong> for evaluating LLM-based trading agents in realistic multi-month market environments. Unlike static financial knowledge tests, this benchmark tests whether AI agents can actually make profitable sequential trading decisions across <span class="metric">82 trading days</span> using real prices, fundamentals, and news for the top <span class="metric">20 DJIA stocks</span>.</p>
+
+        <p>The critical finding: <strong>strong performance on financial knowledge tasks does not translate to trading success</strong>. Most LLM agents struggle against a simple buy-and-hold baseline. The best performer, <strong>Kimi-K2</strong>, achieved <span class="performance-improvement">+1.9% return</span> with superior risk management (<span class="metric">-11.8%</span> max drawdown), while the passive baseline returned only <span class="metric">0.4%</span> with <span class="performance-decline">-15.2%</span> drawdown. However, market regime sensitivity remains problematic—agents failed during downturns (Jan-Apr 2025) while excelling during upturns (May-Aug 2025).</p>
+
+        <p>The benchmark reveals a substantial gap between LLMs' reasoning abilities and effective decision-making in dynamic, noisy financial markets—challenging assumptions that general intelligence translates to domain-specific performance.</p>
+    </div>
+
+    <!-- ELI5 BOX -->
+    <div class="eli5-box">
+        <h3>🎯 ELI5: Testing AI Stock Traders</h3>
+        <p>Imagine giving someone a financial trivia test versus actually letting them manage real money for four months. Passing the test doesn't mean they'll make good trades! StockBench does the "real money test" for AI—giving LLMs daily market information and seeing if they can actually grow a $100,000 portfolio. The result? Most AIs that ace financial quizzes still lose to the simple strategy of "just buy everything and hold it." It's like finding out a chess genius can't actually win at poker.</p>
+    </div>
+
+    <!-- KEY FIGURE -->
+    <div class="figure">
+        <img src="https://arxiv.org/html/2510.02209v1/x1.png" alt="StockBench Overview" style="width: 100%; max-width: 800px;">
+        <div class="figure-caption">Figure 1: StockBench architecture showing the back-trading environment workflow—from daily market signals through the four-stage agent pipeline to trade execution and portfolio evaluation.</div>
+    </div>
+
+    <!-- PART 1: Benchmark Design -->
+    <h2>Part 1: Benchmark Design Philosophy</h2>
+
+    <p>StockBench addresses critical limitations in existing financial AI evaluation. Traditional benchmarks like FinBen test <em>static knowledge</em> through question-answering, but knowing "what is P/E ratio?" differs fundamentally from <em>dynamic decision-making</em> under uncertainty. The benchmark embodies three key design principles:</p>
+
+    <div class="key-finding">
+        <h3>Core Design Principles</h3>
+        <ul>
+            <li><strong>Realistic:</strong> Uses actual market prices, fundamental metrics (P/E ratio, market cap, dividend yield), and top-5 news articles from previous 48 hours</li>
+            <li><strong>Continuous:</strong> <span class="metric">82 trading days</span> of sequential decisions, not isolated predictions—replicating how real traders operate</li>
+            <li><strong>Contamination-Free:</strong> Data period (March-June 2025) post-dates all LLM training cutoffs, with commitment to continuous dataset updates</li>
+        </ul>
+    </div>
+
+    <h3>Investment Universe</h3>
+
+    <p>The benchmark focuses on the <span class="metric">top 20 DJIA stocks by index weight</span>, representing blue-chip companies across diverse sectors. This provides sufficient diversification while maintaining tractable complexity for evaluating agent capabilities.</p>
+
+    <div class="figure">
+        <img src="https://arxiv.org/html/2510.02209v1/x2.png" alt="Stock Industry Distribution" style="width: 100%; max-width: 700px;">
+        <div class="figure-caption">Figure 2: Industry distribution of selected stocks, showing sectoral diversity in the investment universe.</div>
+    </div>
+
+    <!-- METHODOLOGY BOX -->
+    <div class="methodology-box">
+        <h3>Four-Stage Agent Workflow</h3>
+        <p>Each trading day, agents execute a structured decision pipeline:</p>
+        <ol>
+            <li><strong>Portfolio Overview:</strong> Agent scans all available stocks and current positions</li>
+            <li><strong>In-Depth Analysis:</strong> Selected stocks examined with fundamental data, price history, and news</li>
+            <li><strong>Decision Generation:</strong> Explicit increase/decrease/hold decisions with reasoning</li>
+            <li><strong>Execution & Validation:</strong> Convert decisions to share quantities; flag liquidity issues or errors</li>
+        </ol>
+        <p>This pipeline mirrors institutional trading workflows while enabling reproducible agent evaluation.</p>
+    </div>
+
+    <!-- PART 2: Evaluation Framework -->
+    <h2>Part 2: Evaluation Metrics</h2>
+
+    <p>StockBench employs a multi-dimensional evaluation framework capturing both returns and risk management—critical for realistic trading assessment:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Metric</th>
+                <th>Definition</th>
+                <th>What It Measures</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Final Return</strong></td>
+                <td>(V<sub>T</sub> - V<sub>0</sub>) / V<sub>0</sub> × 100%</td>
+                <td>Raw profitability over evaluation period</td>
+            </tr>
+            <tr>
+                <td><strong>Max Drawdown</strong></td>
+                <td>Largest peak-to-trough decline</td>
+                <td>Worst-case loss exposure / risk control</td>
+            </tr>
+            <tr>
+                <td><strong>Sortino Ratio</strong></td>
+                <td>Risk-adjusted return (downside only)</td>
+                <td>Return per unit of harmful volatility</td>
+            </tr>
+            <tr>
+                <td><strong>Composite Rank</strong></td>
+                <td>[z(Return) - z(Drawdown) + z(Sortino)] / 3</td>
+                <td>Balanced performance across all dimensions</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="formula">
+        Composite Score = (z<sub>return</sub> - z<sub>drawdown</sub> + z<sub>sortino</sub>) / 3<br>
+        where z<sub>x</sub> = standardized score for metric x
+    </div>
+
+    <div class="insight-box">
+        <h3>Why Sortino Over Sharpe?</h3>
+        <p>Traditional Sharpe ratio penalizes <em>all</em> volatility equally, but upside volatility (prices rising faster than expected) is actually desirable! The Sortino ratio only penalizes downside deviation, providing a more accurate risk-adjusted return metric for asymmetric investment outcomes.</p>
+    </div>
+
+    <!-- PART 3: Results -->
+    <h2>Part 3: Benchmark Results</h2>
+
+    <p>Testing across state-of-the-art proprietary and open-weight models reveals substantial variation in trading capability:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Model</th>
+                <th>Return (%)</th>
+                <th>Max Drawdown (%)</th>
+                <th>Sortino Ratio</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="badge badge-success">1</span></td>
+                <td><strong>Kimi-K2</strong></td>
+                <td><span class="performance-improvement">+1.9%</span></td>
+                <td>-11.8%</td>
+                <td>0.0420</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-success">2</span></td>
+                <td><strong>Qwen3-235B-Ins</strong></td>
+                <td><span class="performance-improvement">+2.4%</span></td>
+                <td>-11.2%</td>
+                <td>0.0299</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-success">3</span></td>
+                <td><strong>GLM-4.5</strong></td>
+                <td><span class="performance-improvement">+2.3%</span></td>
+                <td>-13.7%</td>
+                <td>0.0295</td>
+            </tr>
+            <tr>
+                <td><span class="badge">9</span></td>
+                <td>GPT-5</td>
+                <td><span class="metric">+0.3%</span></td>
+                <td>-13.1%</td>
+                <td>0.0132</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-warning">12</span></td>
+                <td><strong>Passive Baseline</strong></td>
+                <td><span class="metric">+0.4%</span></td>
+                <td><span class="performance-decline">-15.2%</span></td>
+                <td>0.0155</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="key-finding">
+        <h3>Critical Finding: Intelligence ≠ Trading Ability</h3>
+        <p>GPT-5, despite being a frontier model, ranked <span class="performance-decline">9th out of 12</span>, barely matching the passive baseline. This demonstrates that <strong>general reasoning capability does not automatically translate to profitable trading decisions</strong>. The gap between static knowledge and dynamic execution remains fundamental.</p>
+    </div>
+
+    <!-- PART 4: Market Regime Analysis -->
+    <h2>Part 4: Market Regime Sensitivity</h2>
+
+    <p>Perhaps the most striking finding: agent performance varies dramatically across market conditions.</p>
+
+    <div class="figure">
+        <img src="https://arxiv.org/html/2510.02209v1/x3.png" alt="Market Regime Performance" style="width: 100%; max-width: 800px;">
+        <div class="figure-caption">Figure 3: Cumulative returns across different market regimes—downturn (Jan-Apr 2025) versus upturn (May-Aug 2025), showing dramatic performance inversions.</div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Market Condition</th>
+                <th>Period</th>
+                <th>Agent Performance vs Baseline</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="badge badge-danger">Downturn</span></td>
+                <td>Jan-Apr 2025</td>
+                <td><span class="performance-decline">Most agents failed to outperform</span></td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-success">Upturn</span></td>
+                <td>May-Aug 2025</td>
+                <td><span class="performance-improvement">Most agents succeeded</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="insight-box">
+        <h3>The Bull Market Illusion</h3>
+        <p>During rising markets, <em>any</em> strategy that buys stocks tends to look good. The true test of trading skill is bear market navigation—where agents must recognize when to reduce exposure or exit positions. Current LLM agents show minimal defensive capability, suggesting they may be pattern-matching "buy signals" without understanding market regime transitions.</p>
+    </div>
+
+    <!-- PART 5: Failure Analysis -->
+    <h2>Part 5: Error Patterns & Scalability</h2>
+
+    <h3>Common Agent Failures</h3>
+
+    <p>The benchmark identified two major error categories:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Error Type</th>
+                <th>Description</th>
+                <th>Model Impact</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Arithmetic Errors</strong></td>
+                <td>Incorrect position sizing, return calculations</td>
+                <td>Reasoning models (O3) <span class="performance-improvement">better</span>; Instruction models <span class="performance-decline">struggle</span></td>
+            </tr>
+            <tr>
+                <td><strong>Schema Errors</strong></td>
+                <td>Malformed output, missing fields</td>
+                <td>Reasoning models <span class="performance-decline">worse</span> (more format deviations)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="key-finding">
+        <h3>Portfolio Scalability Degradation</h3>
+        <p>"All evaluated models exhibit performance degradation as portfolio size increases, characterized by <strong>declining mean returns</strong> and <strong>rising return volatility</strong>."</p>
+        <p>This suggests current LLMs struggle with the combinatorial complexity of managing multiple positions simultaneously—a critical limitation for real-world asset management applications.</p>
+    </div>
+
+    <h3>Information Source Importance</h3>
+
+    <p>Ablation studies revealed that removing data sources progressively degraded performance:</p>
+
+    <ul>
+        <li><strong>News removal:</strong> Reduced sentiment-driven decision quality</li>
+        <li><strong>Fundamentals removal:</strong> Impaired value assessment capability</li>
+        <li><strong>Impact varies by model sophistication:</strong> Larger models more robust to information degradation</li>
+    </ul>
+
+    <!-- CONCLUSION -->
+    <div class="conclusion-box">
+        <h2>Conclusion</h2>
+        <p>StockBench reveals a <strong>substantial gap between LLMs' static financial knowledge and dynamic trading execution</strong>. While top-performing agents demonstrate potential for profitability and risk mitigation, the domain requires significant advancement in:</p>
+        <ul>
+            <li><strong>Market Regime Adaptation:</strong> Current agents fail to recognize and respond to bear market conditions</li>
+            <li><strong>Portfolio Scalability:</strong> Performance degrades with position count—limiting practical utility</li>
+            <li><strong>Schema Compliance:</strong> Reasoning models produce more format errors despite better calculations</li>
+            <li><strong>Defensive Strategies:</strong> No agent demonstrated consistent loss-limiting behavior</li>
+        </ul>
+        <p>The benchmark positions LLMs as <em>potential trading assistants</em> rather than autonomous traders—complementing the AI-Trader and AlphaAgents findings that LLMs work better as strategy developers than direct market participants.</p>
+    </div>
+
+    <!-- SOURCE BOX -->
+    <div class="source-box">
+        <h3>Primary Sources</h3>
+        <p>
+            <a href="https://arxiv.org/abs/2510.02209" target="_blank">StockBench: Can LLM Agents Trade Stocks Profitably In Real-world Markets?</a><br>
+            <em>Chen et al., Tsinghua University, October 2025</em>
+        </p>
+        <p>
+            <a href="https://stockbench.github.io/" target="_blank">StockBench Project Page</a><br>
+            <em>Official benchmark website with leaderboard</em>
+        </p>
+        <p>
+            <a href="https://github.com/ChenYXxxx/stockbench" target="_blank">GitHub Repository</a><br>
+            <em>Open-source benchmark implementation</em>
+        </p>
+    </div>
+
+    <!-- NAVIGATION FOOTER -->
+    <div class="navigation">
+        <a href="../index.html">← Home</a>
+        <a href="../agent/index.html">Agent Reliability</a>
+        <a href="../rag/index.html">RAG Patterns</a>
+        <a href="../research-papers/index.html">Research Papers</a>
+        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+    </div>
+</body>
+</html>

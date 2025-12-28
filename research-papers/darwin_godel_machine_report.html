@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darwin Gödel Machine - Open-Ended Evolution of Self-Improving Agents</title>
+    <style>
+        @page {
+            margin: 2cm;
+        }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        h1 {
+            color: #1a1a1a;
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-align: center;
+            border-bottom: 2px solid #DC8850;
+            padding-bottom: 15px;
+        }
+        h2 {
+            color: #DC8850;
+            font-size: 22px;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 8px;
+        }
+        h3 {
+            color: #555;
+            font-size: 18px;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .authors {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 30px;
+            color: #666;
+        }
+        .abstract {
+            background: #f8f8f8;
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding {
+            background: #fff8f0;
+            padding: 15px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding h3 {
+            margin-top: 0;
+            color: #DC8850;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #DC8850;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .metric {
+            font-weight: bold;
+            color: #DC8850;
+        }
+        .performance-improvement {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .performance-decline {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .methodology-box {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .conclusion-box {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #DC8850;
+            color: white;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .badge-success {
+            background: #27ae60;
+        }
+        .badge-warning {
+            background: #f39c12;
+        }
+        .badge-danger {
+            background: #e74c3c;
+        }
+        .eli5-box {
+            background: #e8f5e9;
+            padding: 20px;
+            border-left: 4px solid #4caf50;
+            margin: 20px 0;
+            font-size: 15px;
+        }
+        .eli5-box h3 {
+            margin-top: 0;
+            color: #4caf50;
+        }
+        .figure {
+            margin: 30px 0;
+            text-align: center;
+        }
+        .figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .figure-caption {
+            font-style: italic;
+            color: #666;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .insight-box {
+            background: #fffbf0;
+            border: 2px solid #DC8850;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        .insight-box h3 {
+            color: #DC8850;
+            margin-top: 0;
+        }
+        .source-box {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .source-box a {
+            color: #DC8850;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .source-box a:hover {
+            text-decoration: underline;
+        }
+        .navigation {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f8f8;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #DC8850;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        .navigation a:hover {
+            text-decoration: underline;
+        }
+        p {
+            margin: 15px 0;
+            text-align: justify;
+        }
+        .warning-box {
+            background: #fff3e0;
+            border-left: 4px solid #f39c12;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .warning-box h3 {
+            margin-top: 0;
+            color: #f39c12;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navigation">
+        <a href="../index.html">← Home</a>
+        <a href="../agent/index.html">Agent Reliability</a>
+        <a href="../rag/index.html">RAG Patterns</a>
+        <a href="../research-papers/index.html">Research Papers</a>
+        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+    </div>
+
+    <h1>Darwin Gödel Machine<br>Open-Ended Evolution of Self-Improving Agents</h1>
+
+    <div class="authors">
+        Jenny Zhang, Shengran Hu, Cong Lu, Robert Lange, Jeff Clune<br>
+        University of British Columbia, Vector Institute, Sakana AI, Canada CIFAR AI Chair<br>
+        <em>May 2025</em>
+    </div>
+
+    <div class="abstract">
+        <h2>Executive Summary</h2>
+        <p>The Darwin Gödel Machine (DGM) introduces a practical framework for AI systems that autonomously modify their own code to enhance problem-solving capabilities. Unlike theoretical Gödel Machines that require formal mathematical proofs of improvement, the DGM validates modifications empirically using coding benchmarks—making self-improvement tractable in real-world settings.</p>
+
+        <p>The framework achieves remarkable results: on SWE-bench verified tasks, performance increased from <span class="metric">20.0%</span> to <span class="performance-improvement">50.0%</span> (a <span class="performance-improvement">+150%</span> relative improvement). On the Polyglot multilingual benchmark, performance improved from <span class="metric">14.2%</span> to <span class="performance-improvement">30.7%</span> (<span class="performance-improvement">+116%</span> relative improvement). These gains transfer robustly across different foundation models, benchmarks, and programming languages.</p>
+
+        <p>DGM combines three essential elements: self-referential improvement (agents modify their own Python codebases), open-ended exploration (maintaining an archive of all discovered agents as stepping stones), and iterative cycles alternating between self-modification and evaluation phases. The entire codebase is open-sourced for community verification and extension.</p>
+    </div>
+
+    <div class="eli5-box">
+        <h3>ELI5: AI That Rewrites Its Own Playbook</h3>
+        <p>Imagine a chess player who, instead of just practicing more games, could actually rewrite the rules in their own brain about how to evaluate positions and choose moves. The Darwin Gödel Machine is like that—it's an AI that can look at its own code (its "playbook"), figure out what's not working well, and write better code for itself. The clever part is that it keeps a library of all the different versions of itself that worked reasonably well, so if one self-improvement turns out to be a dead end, it can branch off from a different version instead of being stuck.</p>
+    </div>
+
+    <div class="figure">
+        <img src="https://arxiv.org/html/2505.22954v2/x1.png" alt="Darwin Gödel Machine Architecture" style="width: 100%; max-width: 800px;">
+        <div class="figure-caption">Figure 1: Darwin Gödel Machine overview. The DGM iteratively builds a growing archive of agents by interleaving self-modification with downstream task evaluation. Each cycle selects an agent from the archive, generates modifications via an LLM, evaluates the modified agent on benchmarks, and archives successful variants.</div>
+    </div>
+
+    <h2>Part 1: From Theoretical to Practical Self-Improvement</h2>
+
+    <p>The concept of self-improving AI systems dates back to Jürgen Schmidhuber's Gödel Machines (2003)—theoretical systems that modify their own source code only after identifying a formal proof that the modification will improve performance. This requirement for mathematical proofs, while elegant, has severely limited practical applications since formal proofs of improvement are generally intractable in complex environments.</p>
+
+    <div class="key-finding">
+        <h3>The DGM Breakthrough: Empirical Validation</h3>
+        <p>The Darwin Gödel Machine replaces formal proofs with empirical validation through benchmark performance. This seemingly simple change unlocks practical self-improvement:</p>
+        <ul>
+            <li><strong>Tractable:</strong> Testing on benchmarks is computationally feasible, unlike proving theoretical guarantees</li>
+            <li><strong>Grounded:</strong> Performance on coding tasks directly reflects enhanced self-modification capabilities</li>
+            <li><strong>Scalable:</strong> Can leverage increasingly powerful foundation models as they become available</li>
+        </ul>
+    </div>
+
+    <p>The choice of coding benchmarks is deliberate: since agents modify their own Python code, improvements on coding tasks directly translate to better self-modification ability. This creates a virtuous cycle where better coding leads to better self-improvement leads to even better coding.</p>
+
+    <h2>Part 2: The DGM Framework</h2>
+
+    <p>The Darwin Gödel Machine operates through three interconnected components that together enable open-ended self-improvement:</p>
+
+    <div class="methodology-box">
+        <h3>Three Pillars of Self-Improvement</h3>
+        <ol>
+            <li><strong>Self-Referential Improvement:</strong> Agents directly modify their own Python codebases, with performance gains on coding tasks reflecting enhanced self-modification capabilities</li>
+            <li><strong>Open-Ended Exploration:</strong> The system maintains an archive of ALL discovered agents, enabling branching from diverse stepping stones rather than hill-climbing from a single best solution</li>
+            <li><strong>Iterative Cycles:</strong> The framework alternates between self-modification phases (where selected agents generate modified versions) and evaluation phases (testing on benchmarks)</li>
+        </ol>
+    </div>
+
+    <div class="figure">
+        <img src="https://arxiv.org/html/2505.22954v2/x2.png" alt="SWE-bench Performance" style="width: 100%; max-width: 800px;">
+        <div class="figure-caption">Figure 2: Performance progression on SWE-bench Verified. The DGM (blue) continues improving while ablations without self-improvement (orange) or without open-ended exploration (green) plateau or regress. Self-improvement and open-ended exploration enable continued progress.</div>
+    </div>
+
+    <h3>The Evolutionary Loop</h3>
+
+    <p>Each DGM cycle follows a structured process:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Phase</th>
+                <th>Action</th>
+                <th>Purpose</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Selection</strong></td>
+                <td>Choose agent from archive</td>
+                <td>Pick promising starting point for modification</td>
+            </tr>
+            <tr>
+                <td><strong>Analysis</strong></td>
+                <td>LLM examines agent code</td>
+                <td>Identify potential improvements</td>
+            </tr>
+            <tr>
+                <td><strong>Modification</strong></td>
+                <td>LLM generates code changes</td>
+                <td>Create new agent variant</td>
+            </tr>
+            <tr>
+                <td><strong>Evaluation</strong></td>
+                <td>Test on benchmarks</td>
+                <td>Measure empirical performance</td>
+            </tr>
+            <tr>
+                <td><strong>Archival</strong></td>
+                <td>Store if viable</td>
+                <td>Expand stepping stone library</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="insight-box">
+        <h3>Why Open-Ended Exploration Matters</h3>
+        <p>Traditional optimization keeps only the best solution and improves from there. DGM maintains an archive of ALL viable agents. This is crucial because:</p>
+        <ul>
+            <li><strong>Dead ends aren't fatal:</strong> If a modification path leads nowhere, the system can branch from a different archived agent</li>
+            <li><strong>Diverse innovations:</strong> Many breakthrough improvements traverse through lower-performing intermediate nodes</li>
+            <li><strong>Avoids local optima:</strong> The archive provides escape routes from performance plateaus</li>
+        </ul>
+        <p>Ablation studies confirm this: without open-ended exploration, poor modifications trap the system in degraded states with no recovery path.</p>
+    </div>
+
+    <h3>Initial Agent Architecture</h3>
+
+    <p>The seed agent starts with standard tool-based capabilities:</p>
+    <ul>
+        <li><strong>Bash execution:</strong> Run terminal commands in sandboxed environment</li>
+        <li><strong>File editing:</strong> Read and modify code files</li>
+        <li><strong>Foundation model:</strong> Frozen pretrained LLM (Claude 3.5 Sonnet) for reasoning</li>
+        <li><strong>Problem specification:</strong> Repository location and testing framework</li>
+    </ul>
+
+    <p>The DGM automatically discovers improvements to both the tools AND the workflow of how foundation models are utilized—emergent enhancements included granular file viewing, precise string-replacement editing, and multi-attempt solving strategies.</p>
+
+    <h2>Part 3: Benchmark Results & Transfer Learning</h2>
+
+    <div class="key-finding">
+        <h3>Primary Benchmark Results</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Benchmark</th>
+                    <th>Initial</th>
+                    <th>Final</th>
+                    <th>Improvement</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>SWE-bench Verified</strong></td>
+                    <td><span class="metric">20.0%</span></td>
+                    <td><span class="performance-improvement">50.0%</span></td>
+                    <td><span class="performance-improvement">+150% relative</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Polyglot (Multi-language)</strong></td>
+                    <td><span class="metric">14.2%</span></td>
+                    <td><span class="performance-improvement">30.7%</span></td>
+                    <td><span class="performance-improvement">+116% relative</span></td>
+                </tr>
+            </tbody>
+        </table>
+        <p><em>SWE-bench tests real-world GitHub issue resolution. Polyglot evaluates coding across multiple programming languages.</em></p>
+    </div>
+
+    <h3>Ablation Studies: Both Components Essential</h3>
+
+    <p>Two ablation baselines revealed that both self-improvement AND open-ended exploration are necessary:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Configuration</th>
+                <th>Result</th>
+                <th>Explanation</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Full DGM</td>
+                <td><span class="performance-improvement">Continuous improvement</span></td>
+                <td>Both components work synergistically</td>
+            </tr>
+            <tr>
+                <td>Without Self-Improvement</td>
+                <td><span class="performance-decline">Early plateau</span></td>
+                <td>Replicates prior ADAS-style approaches</td>
+            </tr>
+            <tr>
+                <td>Without Open-Ended Archive</td>
+                <td><span class="performance-decline">Trapped in degraded states</span></td>
+                <td>No recovery from poor modifications</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="figure">
+        <img src="https://arxiv.org/html/2505.22954v2/x4.png" alt="Archive Visualization" style="width: 100%; max-width: 800px;">
+        <div class="figure-caption">Figure 3: Archive of generated agents visualized as a tree. Node size represents benchmark performance. Many paths to innovation traverse through lower-performing intermediate nodes, demonstrating the value of open-ended exploration over greedy hill-climbing.</div>
+    </div>
+
+    <h3>Transfer Learning: Remarkable Generalization</h3>
+
+    <p>Discovered agents demonstrate robust transfer across multiple dimensions:</p>
+
+    <div class="key-finding">
+        <h3>Cross-Domain Transfer Results</h3>
+        <ul>
+            <li><strong>Across Foundation Models:</strong> Agents evolved with Claude 3.5 Sonnet transfer to o3-mini and Claude 3.7 Sonnet</li>
+            <li><strong>Between Benchmarks:</strong> SWE-bench agents improve on Polyglot; Polyglot agents improve on SWE-bench</li>
+            <li><strong>Across Programming Languages:</strong> Improvements on Python transfer to Java, JavaScript, and other languages within Polyglot</li>
+        </ul>
+    </div>
+
+    <div class="figure">
+        <img src="https://arxiv.org/html/2505.22954v2/x6.png" alt="Transfer Learning Results" style="width: 100%; max-width: 800px;">
+        <div class="figure-caption">Figure 4: Transfer performance across different foundation models, benchmarks, and programming languages. The discovered agents generalize well beyond their training conditions.</div>
+    </div>
+
+    <h2>Part 4: Safety Considerations & Limitations</h2>
+
+    <div class="warning-box">
+        <h3>Safety Measures Implemented</h3>
+        <p>The researchers implemented multiple safeguards to mitigate risks from self-modifying AI:</p>
+        <ul>
+            <li><strong>Sandboxed Execution:</strong> All agent operations isolated from host systems</li>
+            <li><strong>Resource Limits:</strong> Strict timeouts preventing unbounded computation</li>
+            <li><strong>Scoped Modifications:</strong> Changes confined to coding domain only</li>
+            <li><strong>Full Traceability:</strong> Complete archive documenting modification lineage</li>
+        </ul>
+    </div>
+
+    <p>The authors explicitly acknowledge potential risks: "Modifications optimized solely for benchmark performance might inadvertently introduce vulnerabilities or behaviors misaligned with human intentions." This honest assessment of limitations is crucial for responsible AI development.</p>
+
+    <h3>Current Limitations</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Limitation</th>
+                <th>Impact</th>
+                <th>Future Direction</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Compute Intensity</td>
+                <td>Single run requires ~2 weeks + significant API costs</td>
+                <td>More efficient search algorithms</td>
+            </tr>
+            <tr>
+                <td>Frozen Foundation Model</td>
+                <td>Cannot improve the underlying LLM itself</td>
+                <td>Training script modification</td>
+            </tr>
+            <tr>
+                <td>Fixed Objectives</td>
+                <td>Benchmark-specific optimization</td>
+                <td>Co-evolved evaluation criteria</td>
+            </tr>
+            <tr>
+                <td>Domain Scope</td>
+                <td>Limited to coding tasks</td>
+                <td>Expand to vision, creative writing, etc.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Discovered Enhancements</h3>
+
+    <p>The DGM automatically discovered several workflow improvements that human engineers might design:</p>
+
+    <ul>
+        <li><strong>Granular file viewing:</strong> Rather than reading entire files, evolved agents learned to view specific line ranges</li>
+        <li><strong>Precise editing:</strong> String replacement operations instead of rewriting entire files</li>
+        <li><strong>Multi-attempt strategies:</strong> Running multiple solution attempts and selecting the best</li>
+        <li><strong>Enhanced error handling:</strong> Better recovery from failed operations</li>
+    </ul>
+
+    <div class="insight-box">
+        <h3>Implications for AI Development</h3>
+        <p>The DGM represents a significant step toward automating AI development itself. Key insights:</p>
+        <ol>
+            <li><strong>Self-acceleration:</strong> Systems can iteratively enhance their own capabilities without manual tuning</li>
+            <li><strong>Empirical grounding:</strong> Real-world performance replaces intractable formal proofs</li>
+            <li><strong>Diversity preservation:</strong> Maintaining stepping stones prevents catastrophic forgetting of capabilities</li>
+            <li><strong>Transfer learning:</strong> Improvements generalize beyond the specific training conditions</li>
+        </ol>
+        <p>This suggests pathways toward self-accelerating AI development that remains aligned with human values through careful boundary setting and oversight.</p>
+    </div>
+
+    <div class="conclusion-box">
+        <h2>Conclusion</h2>
+        <p>The Darwin Gödel Machine bridges the gap between theoretical self-improvement concepts and practical implementation. By replacing formal proofs with empirical validation and maintaining diverse agent archives, DGM achieves:</p>
+        <ul>
+            <li><span class="performance-improvement">+150%</span> improvement on SWE-bench (20% → 50%)</li>
+            <li><span class="performance-improvement">+116%</span> improvement on Polyglot (14.2% → 30.7%)</li>
+            <li>Robust transfer across foundation models, benchmarks, and programming languages</li>
+            <li>Automatic discovery of workflow optimizations typically requiring human engineering</li>
+        </ul>
+        <p>The open-sourced codebase enables community verification and extension, establishing DGM as a foundation for future research in self-improving AI systems. While significant challenges remain—particularly around compute costs, safety guarantees, and broader domain applicability—DGM demonstrates that practical self-improvement is achievable with current technology.</p>
+    </div>
+
+    <div class="source-box">
+        <h3>Primary Sources</h3>
+        <p>
+            <a href="https://arxiv.org/abs/2505.22954" target="_blank">Darwin Gödel Machine: Open-Ended Evolution of Self-Improving Agents</a><br>
+            <em>Jenny Zhang, Shengran Hu, Cong Lu, Robert Lange, Jeff Clune — arXiv:2505.22954, May 2025</em>
+        </p>
+        <p>
+            <a href="https://github.com/jennyzzt/dgm" target="_blank">GitHub Repository: jennyzzt/dgm</a><br>
+            <em>Open-source implementation for community verification and extension</em>
+        </p>
+        <p>
+            <a href="profit_trading_report.html" target="_blank">Related: ProFiT (Program Search for Financial Trading)</a><br>
+            <em>Applies DGM-inspired concepts to algorithmic trading strategy evolution</em>
+        </p>
+    </div>
+
+    <div class="navigation">
+        <a href="../index.html">← Home</a>
+        <a href="../agent/index.html">Agent Reliability</a>
+        <a href="../rag/index.html">RAG Patterns</a>
+        <a href="../research-papers/index.html">Research Papers</a>
+        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+    </div>
+</body>
+</html>

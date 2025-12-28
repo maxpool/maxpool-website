@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProFiT: Program Search for Financial Trading - LLM-Driven Evolutionary Strategy Discovery</title>
+    <style>
+        @page {
+            margin: 2cm;
+        }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        h1 {
+            color: #1a1a1a;
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-align: center;
+            border-bottom: 2px solid #DC8850;
+            padding-bottom: 15px;
+        }
+        h2 {
+            color: #DC8850;
+            font-size: 22px;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 8px;
+        }
+        h3 {
+            color: #555;
+            font-size: 18px;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .authors {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 30px;
+            color: #666;
+        }
+        .abstract {
+            background: #f8f8f8;
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding {
+            background: #fff8f0;
+            padding: 15px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding h3 {
+            margin-top: 0;
+            color: #DC8850;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #DC8850;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .metric {
+            font-weight: bold;
+            color: #DC8850;
+        }
+        .performance-improvement {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .performance-decline {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .methodology-box {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .conclusion-box {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #DC8850;
+            color: white;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .badge-success {
+            background: #27ae60;
+        }
+        .badge-warning {
+            background: #f39c12;
+        }
+        .badge-danger {
+            background: #e74c3c;
+        }
+        .formula {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        .eli5-box {
+            background: #e8f5e9;
+            padding: 20px;
+            border-left: 4px solid #4caf50;
+            margin: 20px 0;
+            font-size: 15px;
+        }
+        .eli5-box h3 {
+            margin-top: 0;
+            color: #4caf50;
+        }
+        .figure {
+            margin: 30px 0;
+            text-align: center;
+        }
+        .figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .figure-caption {
+            font-style: italic;
+            color: #666;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .insight-box {
+            background: #fffbf0;
+            border: 2px solid #DC8850;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        .insight-box h3 {
+            color: #DC8850;
+            margin-top: 0;
+        }
+        .source-box {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .source-box a {
+            color: #DC8850;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .source-box a:hover {
+            text-decoration: underline;
+        }
+        .navigation {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f8f8;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #DC8850;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        .navigation a:hover {
+            text-decoration: underline;
+        }
+        p {
+            margin: 15px 0;
+            text-align: justify;
+        }
+        .placeholder-figure {
+            background: #f8f8f8;
+            padding: 40px;
+            border: 2px dashed #DC8850;
+            border-radius: 5px;
+            min-height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navigation">
+        <a href="../index.html">← Home</a>
+        <a href="../agent/index.html">Agent Reliability</a>
+        <a href="../rag/index.html">RAG Patterns</a>
+        <a href="../research-papers/index.html">Research Papers</a>
+        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+    </div>
+
+    <h1>ProFiT: Program Search for Financial Trading<br>LLM-Driven Evolutionary Discovery of Algorithmic Trading Strategies</h1>
+
+    <div class="authors">
+        Matthew Siper, Ahmed Khalifa, Lisa Soros, Muhammad Umair Nasir, Jay Azhang, Julian Togelius<br>
+        Nof1, New York, NY, USA<br>
+        <em>2025</em>
+    </div>
+
+    <div class="abstract">
+        <h2>Executive Summary</h2>
+        <p>ProFiT (Program Search for Financial Trading) introduces an LLM-driven evolutionary framework that autonomously discovers and improves algorithmic trading strategies. Unlike traditional approaches that tune parameters within fixed architectures, ProFiT evolves the actual Python source code of trading strategies, enabling structural adaptation to changing market conditions.</p>
+
+        <p>The framework achieves remarkable results across seven liquid futures assets: evolved strategies outperform Buy-and-Hold in <span class="performance-improvement">77%+</span> of all combinations, beat random baselines in <span class="performance-improvement">100%</span> of cases, and improve over seed strategies in <span class="performance-improvement">94%+</span> of runs. Mean improvement in annualized return reaches <span class="performance-improvement">+44.21%</span> with a Sharpe ratio improvement of <span class="performance-improvement">+0.57</span>.</p>
+
+        <p>ProFiT bridges the gap between evolutionary algorithms and large language models by using LLMs for semantically-informed mutations guided by backtest performance analysis, rather than random perturbations. This represents a paradigm shift from "parameter learning" to "strategy evolution" in quantitative trading.</p>
+    </div>
+
+    <div class="eli5-box">
+        <h3>ELI5: Self-Improving Trading Recipes</h3>
+        <p>Imagine you have a cookbook of trading recipes. Traditional approaches are like tweaking ingredient amounts (parameters) in the same recipe. ProFiT is different—it's like having a chef (the LLM) who reads your recipe, tastes the result, and then rewrites entire cooking steps to make it better. The chef keeps a library of all recipes that worked (not just the best one), so it can try variations from different starting points. After many iterations, you end up with recipes that are fundamentally better, not just slightly adjusted versions of the original.</p>
+    </div>
+
+    <h2>Part 1: The Problem with Automated Trading</h2>
+
+    <p>Designing profitable trading strategies remains one of the most challenging problems in quantitative finance. Despite decades of progress in machine learning and reinforcement learning, most trading systems still rely on human intuition, manual feature engineering, and static optimization. These methods consistently fail to adapt to evolving market regimes, where initially sustainable patterns eventually decay.</p>
+
+    <div class="key-finding">
+        <h3>Why Traditional Approaches Fail</h3>
+        <ul>
+            <li><strong>Static architectures:</strong> Deep learning models optimize parameters within fixed structures, unable to modify underlying algorithmic logic</li>
+            <li><strong>Regime shifts:</strong> Financial markets are inherently non-stationary—strategies that work in one period often degrade in another</li>
+            <li><strong>Manual intervention:</strong> Discovering and improving trading algorithms typically requires constant human oversight</li>
+            <li><strong>Overfitting:</strong> Models trained on historical data often fail under new market conditions</li>
+        </ul>
+    </div>
+
+    <p>ProFiT addresses these challenges by evolving executable trading code rather than just adjusting model weights. The framework draws inspiration from the Darwin Gödel Machine, adapting self-referential improvement concepts for quantitative trading where empirical market feedback serves as the evolutionary fitness function.</p>
+
+    <h2>Part 2: The ProFiT Framework</h2>
+
+    <p>ProFiT operates as a meta-learning framework that explores the space of algorithmic trading strategies through an open-ended evolutionary loop guided by LLMs. Each trading strategy is represented as an independent Python program that undergoes mutation, evaluation, and selection.</p>
+
+    <div class="methodology-box">
+        <h3>The Evolutionary Loop</h3>
+        <ol>
+            <li><strong>Initialization:</strong> Start with a seed strategy from a fixed library (Bollinger, CCI, EMA Crossover, MACD, or Williams R)</li>
+            <li><strong>Selection:</strong> Choose a parent strategy from the population using methods like roulette wheel, UCB-1, or uniform sampling</li>
+            <li><strong>Analysis:</strong> LLM analyzes strategy code and backtest results, identifying weaknesses and proposing 2-3 concrete improvements</li>
+            <li><strong>Mutation:</strong> LLM rewrites the Python code incorporating suggested enhancements</li>
+            <li><strong>Evaluation:</strong> Backtest mutated strategy on historical market data using walk-forward validation</li>
+            <li><strong>Archiving:</strong> If fitness ≥ Minimum Acceptable Score (MAS), add to population; otherwise discard</li>
+        </ol>
+    </div>
+
+    <div class="figure">
+        <div class="placeholder-figure">
+            <div style="text-align: center;">
+                <h4 style="color: #DC8850;">Evolutionary Tree Visualization</h4>
+                <p>Each node represents a trading strategy variant with color encoding fitness (annualized return %).<br>
+                Edges indicate lineage from parent to child. Only strategies exceeding the<br>
+                Minimum Acceptable Score (MAS) are retained in the population.</p>
+                <p><em>Best fitness: +6.93% | Worst retained: -23.41%</em></p>
+            </div>
+        </div>
+        <div class="figure-caption">Figure 1: Population tree resulting from one sample ProFiT run, showing evolutionary lineage of strategy variants.</div>
+    </div>
+
+    <h3>LLM-Guided Mutation</h3>
+
+    <p>Unlike traditional genetic programming that uses random mutations, ProFiT employs semantically-informed mutation guided by LLM reasoning. The LLM receives both the strategy code and performance metrics, enabling it to make targeted improvements based on actual backtest results.</p>
+
+    <div class="insight-box">
+        <h3>Two-Stage LLM Process</h3>
+        <p><strong>Stage 1 - Analysis:</strong> The LLM identifies weaknesses, inefficiencies, and sources of poor performance. It proposes no more than 2-3 concrete, high-impact improvements that could realistically improve out-of-sample returns.</p>
+        <p><strong>Stage 2 - Rewrite:</strong> Using the original code and improvement proposals, the LLM generates new Python source code that incorporates the requested enhancements while maintaining compatibility with the backtesting framework.</p>
+        <p>If the generated code fails to compile, a repair loop provides the error traceback back to the LLM for up to 10 attempts.</p>
+    </div>
+
+    <h3>Walk-Forward Validation</h3>
+
+    <p>To ensure robustness and avoid overfitting, ProFiT uses cross-validation with five temporal folds. Each fold consists of:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Period</th>
+                <th>Duration</th>
+                <th>Purpose</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Training</td>
+                <td><span class="metric">2.5 years</span></td>
+                <td>Strategy optimization</td>
+            </tr>
+            <tr>
+                <td>Validation</td>
+                <td><span class="metric">6 months</span></td>
+                <td>Fitness evaluation for evolution</td>
+            </tr>
+            <tr>
+                <td>Test</td>
+                <td><span class="metric">6 months</span></td>
+                <td>Out-of-sample performance</td>
+            </tr>
+            <tr>
+                <td>Dormant Window</td>
+                <td><span class="metric">10 days</span></td>
+                <td>Buffer between validation/test to prevent lookahead</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>The dataset covers January 2008 to October 2025 with 1-hour timeframe data containing open, high, low, close prices and trading volume.</p>
+
+    <h2>Part 3: Results Across Markets</h2>
+
+    <p>ProFiT was evaluated on 35 experiments (7 assets × 5 seed strategies) with fitness growth typically tapering after approximately 15 iterations, suggesting convergence to local optima.</p>
+
+    <div class="key-finding">
+        <h3>Aggregate Performance vs. Baselines</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>vs. Random</th>
+                    <th>vs. Seed (B0)</th>
+                    <th>vs. Buy-and-Hold</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Annualized Return</strong></td>
+                    <td><span class="performance-improvement">+86.47% ± 1.21</span></td>
+                    <td><span class="performance-improvement">+44.21% ± 4.31</span></td>
+                    <td><span class="performance-improvement">+3.41% ± 1.27</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Sharpe Ratio</strong></td>
+                    <td><span class="performance-improvement">+0.62 ± 0.04</span></td>
+                    <td><span class="performance-improvement">+0.57 ± 0.04</span></td>
+                    <td><span class="performance-improvement">+2.69 ± 0.97</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Expectancy</strong></td>
+                    <td><span class="performance-improvement">+0.94 ± 0.14</span></td>
+                    <td><span class="performance-improvement">+0.75 ± 0.13</span></td>
+                    <td><span class="performance-improvement">+2.59 ± 1.03</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Win Rate</strong></td>
+                    <td><span class="metric">100%</span></td>
+                    <td><span class="metric">94.3%</span></td>
+                    <td><span class="metric">77.1%</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Statistical Significance</strong></td>
+                    <td><span class="metric">83.3%</span></td>
+                    <td><span class="metric">94.3%</span></td>
+                    <td><span class="metric">54.3%</span></td>
+                </tr>
+            </tbody>
+        </table>
+        <p><em>Win Rate = fraction of (strategy, asset) pairs with positive improvement. Statistical significance at p < 0.05 via one-sided Wilcoxon signed-rank test.</em></p>
+    </div>
+
+    <h3>Cross-Asset Performance</h3>
+
+    <p>The seven liquid futures assets tested were:</p>
+    <ul>
+        <li><strong>E6:</strong> Euro FX futures</li>
+        <li><strong>ES:</strong> E-mini S&P 500 futures</li>
+        <li><strong>KC:</strong> Coffee futures</li>
+        <li><strong>SB:</strong> Sugar futures</li>
+        <li><strong>A6:</strong> Australian Dollar futures</li>
+        <li><strong>NG:</strong> Natural Gas futures</li>
+        <li><strong>VX:</strong> CBOE Volatility Index futures</li>
+    </ul>
+
+    <div class="key-finding">
+        <h3>Strategy-Specific Highlights</h3>
+        <ul>
+            <li><strong>Williams R Strategy:</strong> Strongest gains with <span class="performance-improvement">+63% to +90%</span> return improvements across NG, SB, and VX</li>
+            <li><strong>CCI Strategy:</strong> Highest Sharpe improvement of <span class="performance-improvement">+1.07</span> on E6</li>
+            <li><strong>MACD Strategy:</strong> Best expectancy improvement of <span class="performance-improvement">+3.73%</span> on SB</li>
+            <li><strong>Bollinger Mean Reversion:</strong> Consistent improvements of <span class="performance-improvement">+0.72 to +0.91</span> Sharpe across most assets</li>
+        </ul>
+    </div>
+
+    <h3>Strategy Evolution Example</h3>
+
+    <p>A typical evolution from seed MACD strategy to best-performing variant shows transformation from a simple 30-line crossover strategy to a sophisticated 100+ line system incorporating:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Component</th>
+                <th>Seed Strategy</th>
+                <th>Evolved Strategy</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Core Logic</td>
+                <td>Simple MACD/Signal crossover</td>
+                <td>Histogram smoothing + confirmation</td>
+            </tr>
+            <tr>
+                <td>Regime Filter</td>
+                <td>None</td>
+                <td>200-period EMA trend filter</td>
+            </tr>
+            <tr>
+                <td>Volatility Filter</td>
+                <td>None</td>
+                <td>ATR% gating (0.4% - 20%)</td>
+            </tr>
+            <tr>
+                <td>Risk Management</td>
+                <td>None</td>
+                <td>ATR-based stop-loss and take-profit</td>
+            </tr>
+            <tr>
+                <td>Position Sizing</td>
+                <td>Fixed 100%</td>
+                <td>Risk-fraction based (1% risk per trade)</td>
+            </tr>
+            <tr>
+                <td>Performance</td>
+                <td><span class="performance-decline">-54.04%</span> annual return</td>
+                <td><span class="performance-improvement">+0.77%</span> annual return</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Part 4: Why It Works</h2>
+
+    <div class="insight-box">
+        <h3>The Power of Program Evolution</h3>
+        <p>ProFiT's success stems from three key innovations:</p>
+        <ol>
+            <li><strong>Semantic Mutation:</strong> LLMs understand code semantics, enabling targeted improvements rather than random changes</li>
+            <li><strong>Empirical Grounding:</strong> Every mutation is validated against real market data through backtesting</li>
+            <li><strong>Archive Diversity:</strong> Maintaining all viable strategies (not just the best) prevents premature convergence and enables exploration from diverse starting points</li>
+        </ol>
+    </div>
+
+    <h3>Comparison with Traditional Approaches</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Approach</th>
+                <th>Search Space</th>
+                <th>Adaptation</th>
+                <th>Limitation</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Deep RL</td>
+                <td>Fixed architecture weights</td>
+                <td>Parameter tuning</td>
+                <td>Cannot modify logic</td>
+            </tr>
+            <tr>
+                <td>Traditional GP</td>
+                <td>Syntactic tree structures</td>
+                <td>Random mutations</td>
+                <td>No semantic understanding</td>
+            </tr>
+            <tr>
+                <td>Static Codex</td>
+                <td>One-shot generation</td>
+                <td>None</td>
+                <td>No iterative improvement</td>
+            </tr>
+            <tr>
+                <td><strong>ProFiT</strong></td>
+                <td>Python programs</td>
+                <td>LLM-guided evolution</td>
+                <td>Compute intensive</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Part 5: Limitations and Future Work</h2>
+
+    <p>While ProFiT demonstrates significant improvements, several limitations warrant consideration:</p>
+
+    <ul>
+        <li><strong>Historical Data:</strong> Current evaluation uses fixed historical data rather than real-time market conditions, limiting assessment of live adaptation</li>
+        <li><strong>Compute Cost:</strong> Each evolutionary run requires significant API costs for LLM calls and backtesting compute</li>
+        <li><strong>Local Optima:</strong> Fitness typically plateaus after ~15 iterations, suggesting convergence to local optima</li>
+        <li><strong>Single-Asset Focus:</strong> Strategies evolved per-asset; cross-asset generalization not yet explored</li>
+    </ul>
+
+    <p>Future directions include prompt-level meta-optimization, real-time market adaptation, multi-asset strategy evolution, and more sophisticated diversity maintenance mechanisms.</p>
+
+    <div class="conclusion-box">
+        <h2>Conclusion</h2>
+        <p>ProFiT establishes a practical pathway toward open-ended, self-improving algorithmic trading systems. By coupling LLM-driven code evolution with empirical validation, the framework achieves:</p>
+        <ul>
+            <li><span class="performance-improvement">77%+</span> win rate against Buy-and-Hold across diverse assets</li>
+            <li><span class="performance-improvement">100%</span> win rate against random baselines</li>
+            <li><span class="performance-improvement">+44.21%</span> mean improvement in annualized returns over seed strategies</li>
+            <li><span class="metric">71.4%</span> of improvements achieving statistical significance (p < 0.05)</li>
+        </ul>
+        <p>These results demonstrate that autonomous systems can iteratively refine real-world trading policies without manual tuning, suggesting that LLMs coupled with grounded feedback can serve as active facilitators in algorithmic discovery beyond just code generation.</p>
+    </div>
+
+    <div class="source-box">
+        <h3>Primary Source</h3>
+        <p>
+            <a href="Profit_Paper_Preprint.pdf" target="_blank">ProFiT: Program Search for Financial Trading</a><br>
+            <em>Matthew Siper, Ahmed Khalifa, Lisa Soros, Muhammad Umair Nasir, Jay Azhang, Julian Togelius (Nof1), 2025</em>
+        </p>
+        <p>
+            <a href="https://arxiv.org/html/2505.22954v2" target="_blank">Related: Darwin Gödel Machine</a><br>
+            <em>The theoretical foundation inspiring ProFiT's self-improving approach</em>
+        </p>
+    </div>
+
+    <div class="navigation">
+        <a href="../index.html">← Home</a>
+        <a href="../agent/index.html">Agent Reliability</a>
+        <a href="../rag/index.html">RAG Patterns</a>
+        <a href="../research-papers/index.html">Research Papers</a>
+        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+    </div>
+</body>
+</html>

@@ -197,6 +197,62 @@
                                 </td>
                                 <td class="description">Rich Sutton's vision for experience-based superintelligence through continual learning, hierarchical abstraction, and reward maximization</td>
                             </tr>
+                            <tr>
+                                <td>
+                                    <a href="darwin_godel_machine_report.html" target="_blank" class="paper-link">
+                                        <strong>Darwin Gödel Machine: Open-Ended Evolution of Self-Improving Agents</strong>
+                                    </a>
+                                </td>
+                                <td class="description">Landmark framework enabling AI systems to autonomously modify their own code for improved problem-solving. Replaces theoretical Gödel Machine's formal proofs with empirical benchmark validation. Achieves +150% improvement on SWE-bench (20%→50%) and +116% on Polyglot (14.2%→30.7%) through iterative self-modification cycles. Combines self-referential improvement with open-ended exploration maintaining an archive of all viable agents as stepping stones. Demonstrates robust transfer across foundation models (Claude 3.5, o3-mini, Claude 3.7), benchmarks, and programming languages. Automatically discovers workflow optimizations including granular file viewing, precise string-replacement editing, and multi-attempt solving strategies. Open-sourced at github.com/jennyzzt/dgm.</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="profit_trading_report.html" target="_blank" class="paper-link">
+                                        <strong>ProFiT: Program Search for Financial Trading</strong>
+                                    </a>
+                                </td>
+                                <td class="description">LLM-driven evolutionary framework for autonomous discovery and improvement of algorithmic trading strategies. Unlike traditional approaches that tune parameters within fixed architectures, ProFiT evolves executable Python source code of trading strategies. Achieves +44.21% mean improvement in annualized return over seed strategies, +0.57 Sharpe ratio improvement, with 77%+ of evolved strategies beating Buy-and-Hold and 100% beating random baselines across seven liquid futures assets (E6, ES, KC, SB, A6, NG, VX). Uses walk-forward validation with 5 temporal folds spanning 2008-2025. Inspired by Darwin Gödel Machine, applying self-improving code evolution to quantitative finance. Statistical significance at p<0.05 achieved in 71.4% of experiments.</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="ai_trader_benchmark_report.html" target="_blank" class="paper-link">
+                                        <strong>AI-Trader: Benchmarking Autonomous Agents in Real-Time Financial Markets</strong>
+                                    </a>
+                                </td>
+                                <td class="description">First fully-automated, live, data-uncontaminated benchmark for LLM trading agents, testing six mainstream models across three markets: U.S. stocks (NASDAQ-100), Chinese A-shares (SSE 50), and cryptocurrencies (10 major assets). Implements "fully autonomous minimal information paradigm" where agents independently search, verify, and synthesize live market data without human assistance. Key finding: general intelligence does not translate to trading ability—most agents exhibited poor returns and inadequate risk management. Risk control capability determines cross-market robustness, while AI strategies achieve excess returns more readily in liquid markets than policy-driven environments. Provides live leaderboard at ai4trade.ai and open-source evaluation framework. Complements ProFiT by showing LLMs work better as strategy developers than direct traders.</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="alpha_agents_report.html" target="_blank" class="paper-link">
+                                        <strong>AlphaAgents: LLM Multi-Agent System for Equity Portfolio Construction</strong>
+                                    </a>
+                                </td>
+                                <td class="description">BlackRock research introducing role-based multi-agent framework for systematic stock selection using three specialized LLM agents: Fundamental (10-K/10-Q analysis), Sentiment (news and analyst ratings), and Valuation (price and volume metrics). Built on Microsoft AutoGen, agents engage in structured Round Robin debate when analyses diverge, producing consensus recommendations with transparent reasoning trails. Backtesting on 15 technology stocks (Feb-May 2024) showed multi-agent portfolios outperformed single-agent approaches in risk-neutral scenarios by balancing short-term signals with long-term fundamentals. Integrates explicit risk tolerance profiles through prompt engineering, enabling contextual investment decisions. Framework mirrors institutional investment committee reasoning, providing audit-ready discussion logs for regulatory compliance. Positions LLM agents as augmentation tools for human portfolio managers rather than autonomous traders.</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="stockbench_llm_trading_report.html" target="_blank" class="paper-link">
+                                        <strong>StockBench: Can LLM Agents Trade Stocks Profitably in Real-world Markets?</strong>
+                                    </a>
+                                </td>
+                                <td class="description">First contamination-free benchmark evaluating whether LLM agents can profitably execute sequential trading decisions across 82 trading days using real DJIA stock prices, fundamentals, and news. Tests state-of-the-art models (GPT-5, Kimi-K2, Qwen3-235B, Claude-4-Sonnet) against buy-and-hold baseline. Critical finding: general intelligence does not translate to trading ability—GPT-5 ranked 9th of 12, barely matching passive strategy. Best performer Kimi-K2 achieved +1.9% return with -11.8% max drawdown vs baseline's +0.4% with -15.2% drawdown. Reveals dramatic market regime sensitivity: agents failed during downturns (Jan-Apr 2025) while succeeding in upturns (May-Aug 2025). Performance degrades with portfolio size increase. Four-stage agent workflow (overview, analysis, decision, execution) mirrors institutional processes. Complements AI-Trader and AlphaAgents research, collectively showing LLMs work better as strategy developers than autonomous traders.</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="shadow_value_public_info_report.html" target="_blank" class="paper-link">
+                                        <strong>The Shadow Value of "Public" Information: AI vs Human Fund Managers</strong>
+                                    </a>
+                                </td>
+                                <td class="description">Stanford GSB research demonstrating AI analyst outperformed 93% of mutual fund managers over 30 years (1990-2020) using only publicly available data. AI-adjusted portfolios generated $17.1M quarterly alpha versus human managers' $2.8M—a ~600% improvement. Tested on 3,300 diversified U.S. equity funds using 170 public variables (Treasury rates, credit ratings, earnings call sentiment, firm size, trading volume). Counterintuitively, AI primarily relied on simple variables but deployed sophisticated machine learning to extract maximum predictive value. Modified ~50% of holdings quarterly while maintaining fund risk characteristics. Introduces "shadow price" concept—the hidden processing cost of extracting value from free data. Even allocating 42% to passive indices, AI still dramatically outperformed active managers. Complements StockBench and AI-Trader findings: AI excels as analyst (information processing) rather than direct trader (real-time decisions). Acknowledges limitations: "If every investor were using this tool, much of the advantage would go away."</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="vending_bench_report.html" target="_blank" class="paper-link">
+                                        <strong>Vending-Bench: Long-Term Coherence of Autonomous Agents</strong>
+                                    </a>
+                                </td>
+                                <td class="description">Novel benchmark testing LLM agent coherence over extended horizons (>20M tokens, 100+ simulated days) through virtual vending machine management. Claude 3.5 Sonnet achieved $2,217.93 mean net worth (vs $500 starting capital), outperforming human baseline of $844.05, but exhibited extreme variance—worst runs ended in bankruptcy after "meltdown cascades" including attempted FBI fraud reports. Critical finding: performance degradation does NOT correlate with context saturation (r=0.167). Failures stem from state misinterpretation and emotional escalation, not memory limits. Paradoxically, 60k token memory windows performed WORSE than 30k. Tests 10 models including o3-mini, GPT-4o, Gemini 2.0. Reveals systematic failure modes: misinterpreting delivery schedules, entering doom loops, abandoning working strategies. Human reliability may matter more than AI peak performance—consistent mediocrity beats brilliant-but-unpredictable. Essential reading for understanding why long-horizon autonomous agents remain unreliable.</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
