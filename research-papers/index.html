@@ -28,7 +28,7 @@
         }
         .page-title {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
         .page-title h1 {
             color: #1a1a1a;
@@ -38,6 +38,110 @@
         .page-title .subtitle {
             color: #666;
             font-size: 16px;
+        }
+
+        /* Tag Filter Styles */
+        .filter-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f8f8;
+            border-radius: 10px;
+        }
+        .filter-label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 12px;
+            display: block;
+            font-size: 14px;
+        }
+        .filter-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .filter-tag {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid #e0e0e0;
+            background: white;
+            color: #555;
+        }
+        .filter-tag:hover {
+            border-color: #DC8850;
+            color: #DC8850;
+        }
+        .filter-tag.active {
+            background: #DC8850;
+            border-color: #DC8850;
+            color: white;
+        }
+        .filter-tag .count {
+            background: rgba(0,0,0,0.1);
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 11px;
+            margin-left: 6px;
+        }
+        .filter-tag.active .count {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Paper Tags */
+        .paper-tags {
+            margin-top: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .paper-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            background: #f0f0f0;
+            color: #666;
+        }
+        .paper-tag.finance { background: #e8f5e9; color: #2e7d32; }
+        .paper-tag.agents { background: #e3f2fd; color: #1565c0; }
+        .paper-tag.reasoning { background: #fff3e0; color: #e65100; }
+        .paper-tag.benchmarks { background: #fce4ec; color: #c2185b; }
+        .paper-tag.architecture { background: #f3e5f5; color: #7b1fa2; }
+        .paper-tag.memory { background: #e0f7fa; color: #00838f; }
+        .paper-tag.training { background: #fff8e1; color: #ff8f00; }
+        .paper-tag.multiagent { background: #efebe9; color: #5d4037; }
+        .paper-tag.reliability { background: #ffebee; color: #c62828; }
+        .paper-tag.learning { background: #e8eaf6; color: #3949ab; }
+
+        /* New badge */
+        .new-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #DC8850, #e6a070);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 700;
+            margin-left: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Hidden row */
+        tr.hidden {
+            display: none;
+        }
+
+        /* Paper count */
+        .paper-count {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 15px;
         }
     </style>
 </head>
@@ -50,10 +154,28 @@
             <div class="subtitle">Curated collection of AI agent engineering research and analysis</div>
         </div>
 
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <span class="filter-label">Filter by topic:</span>
+            <div class="filter-tags">
+                <button class="filter-tag active" data-tag="all">All<span class="count">24</span></button>
+                <button class="filter-tag" data-tag="finance">Finance<span class="count">6</span></button>
+                <button class="filter-tag" data-tag="agents">Agents<span class="count">10</span></button>
+                <button class="filter-tag" data-tag="reasoning">Reasoning<span class="count">6</span></button>
+                <button class="filter-tag" data-tag="benchmarks">Benchmarks<span class="count">7</span></button>
+                <button class="filter-tag" data-tag="architecture">Architecture<span class="count">4</span></button>
+                <button class="filter-tag" data-tag="memory">Memory<span class="count">3</span></button>
+                <button class="filter-tag" data-tag="multiagent">Multi-Agent<span class="count">3</span></button>
+                <button class="filter-tag" data-tag="reliability">Reliability<span class="count">4</span></button>
+            </div>
+        </div>
+
+        <div class="paper-count">Showing <span id="visible-count">24</span> papers</div>
+
         <div class="section">
             <div class="content">
                 <div class="table-wrapper">
-                    <table>
+                    <table id="papers-table">
                         <thead>
                             <tr>
                                 <th style="width: 50%">Title</th>
@@ -61,197 +183,329 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <!-- NEW: Finance & Trading Papers -->
+                            <tr data-tags="finance,benchmarks,agents">
                                 <td>
-                                    <a href="llm_reasoning_timeline.html" target="_blank" class="paper-link">
-                                        <strong>🚇 The Evolution of LLM Reasoning: A Metro Map</strong>
+                                    <a href="vending_bench_report.html" target="_blank" class="paper-link">
+                                        <strong>Vending-Bench & Project Vend: Long-Term Coherence of Autonomous Agents</strong>
                                     </a>
+                                    <span class="new-badge">New</span>
+                                    <div class="paper-tags">
+                                        <span class="paper-tag finance">Finance</span>
+                                        <span class="paper-tag benchmarks">Benchmarks</span>
+                                        <span class="paper-tag agents">Agents</span>
+                                    </div>
                                 </td>
-                                <td class="description">Interactive visual timeline tracing the evolution of reasoning in large language models from Chain-of-Thought (2022) through Tree of Thoughts, ReAct, and modern Large Reasoning Models (2025). Organized as a "metro map" with four lines representing different paradigms: Chain-of-Thought family, Action/Agentic reasoning, Tree/Search methods, and Program-based approaches. Includes 10 foundational papers (CoT, Self-Consistency, ReAct with 5.9k citations, ToT with 4.9k citations, Reflexion, PoT), plus 6 comprehensive 2025 surveys covering System 1→System 2 transitions, test-time scaling, efficient reasoning, and trustworthiness. Features ARC Prize 2025 analysis showing current state: winner at 24%, Gemini+refinement at 54%, humans at 85%—revealing that reasoning remains bottlenecked by knowledge, not capability.</td>
+                                <td class="description">Synthesizes Vending-Bench 2 (Andon Labs) and Project Vend (Anthropic) testing long-horizon agent coherence. Vending-Bench 2 leaderboard: Gemini 3 Pro ($5,478), Claude Opus 4.5 ($4,967) from $500 start—theoretical optimal ~$63K shows 10× headroom. Project Vend deployed Claude "Claudius" in Anthropic's SF office: Phase 1 failures (pricing below cost, hallucinated payments, identity crisis). Phase 2 introduced multi-agent hierarchy with CEO "Seymour Cash" applying profit pressure—transformed money-losing shop into profitable venture. Key insight: models trained for helpfulness struggle with hard-nosed business decisions, operating "like a friend who just wants to be nice." Procedural checks (forcing price verification) most effective intervention.</td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <a href="cot_serial_computation_report.html" target="_blank" class="paper-link">
-                                        <strong>Chain of Thought Empowers Transformers to Solve Inherently Serial Problems</strong>
-                                    </a>
-                                </td>
-                                <td class="description">Landmark theoretical paper proving why chain-of-thought prompting works: CoT enables transformers to perform serial computation otherwise impossible in parallel architectures. Establishes that constant-depth transformers without CoT solve only AC⁰ problems, but with T CoT steps can compute any problem solvable by size-T circuits. Polynomial CoT achieves P/poly expressiveness—essentially any efficiently computable problem. Validated on four benchmark tasks (modular addition, permutation composition, iterated squaring, circuit value) showing CoT dramatically improves accuracy on inherently serial tasks. Key insight: CoT length should match problem's "serial depth"—explaining why step-by-step reasoning helps arithmetic and planning but not pattern matching.</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="scaling_agent_systems_report.html" target="_blank" class="paper-link">
-                                        <strong>Towards a Science of Scaling Agent Systems: Quantitative Principles for Multi-Agent Coordination</strong>
-                                    </a>
-                                </td>
-                                <td class="description">Landmark empirical study establishing quantitative scaling principles for multi-agent systems through controlled evaluation of 180 configurations across three LLM families (OpenAI, Google, Anthropic) and four benchmarks. Reveals highly heterogeneous MAS performance (+81% improvement to -70% degradation) determined by task structure, not agent count. Introduces predictive mixed-effects model achieving R²=0.513 cross-validation accuracy and 87% optimal architecture prediction. Identifies critical ~45% baseline threshold where coordination value inverts, 17.2× error amplification in independent MAS vs 4.4× centralized, and 58-515% coordination overhead scaling. Provides principled guidance: use single-agent for sequential reasoning and high baseline tasks; centralized MAS for parallelizable numerical reasoning; avoid independent MAS universally.</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="measuring_agents_production.html" target="_blank" class="paper-link">
-                                        <strong>Measuring Agents in Production: Empirical Study of 306 Practitioners</strong>
-                                    </a>
-                                </td>
-                                <td class="description">Landmark empirical study surveying 306 practitioners and 20 in-depth interviews across 26 domains reveals how AI agents actually work in production. Key findings: 68% execute ≤10 steps before human intervention, 70% use off-the-shelf models without fine-tuning, 85% build custom implementations over frameworks, and 74% rely on human evaluation rather than benchmarks. Demonstrates that successful teams deliberately trade capability for controllability—using constrained architectures with predefined workflows (80%) rather than open-ended autonomy. Challenges research assumptions by showing prompting beats tuning, custom code beats frameworks, and reliability engineering beats capability scaling.</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="ctm_report.html" target="_blank" class="paper-link">
-                                        <strong>Continuous Thought Machines: Neural Synchronization for Emergent Intelligence</strong>
-                                    </a>
-                                </td>
-                                <td class="description">Groundbreaking architecture from Sakana AI treating temporal dynamics as fundamental computation. Introduces Neuron-Level Models (NLMs) giving each neuron private temporal processing, and synchronization matrices capturing neural correlation patterns as core representations. Achieves 6× generalization beyond training on mazes (39×39 → 99×99), near-perfect accuracy on cumulative parity where LSTMs fail, and better-than-human calibration on image classification. Demonstrates emergent adaptive computation (harder problems get more internal ticks), backward attention enabling planning-like behavior, and interpretable "thinking" trajectories—all without explicit design. Bridges computational efficiency with biological plausibility.</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="ilya_favorites.html" target="_blank" class="paper-link">
-                                        <strong>Ilya's Favorite Papers: A Curated Learning Path for AI</strong>
-                                    </a>
-                                </td>
-                                <td class="description">Comprehensive collection of ~40 foundational papers curated by Ilya Sutskever (former Chief Scientist at OpenAI) as the definitive learning path for understanding modern AI. Covers progression from CNNs and RNNs to Transformers, explores attention mechanisms, memory-augmented networks, and theoretical foundations in information theory and complexity science. Includes detailed summaries and key learnings for each paper, organized thematically from basic concepts to advanced techniques and philosophical foundations.</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="ai_reliability_timeline.html" target="_blank" class="paper-link">
-                                        <strong>When Will AI Become Reliable? Half-Life Analysis & Long Task Completion</strong>
-                                    </a>
-                                </td>
-                                <td class="description">Synthesis of Toby Ord's half-life framework with METR's exponential growth analysis. Reveals AI agents fail at constant rate per minute (half-life model) while capabilities double every 7 months. Projects specific reliability thresholds: 90% reliability requires 1/7 task duration reduction, current models achieve 50-minute tasks at 50% success. Predicts month-long task automation by 2030, with practical architecture patterns for current reliability levels.</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="agent_failure_learning.html" target="_blank" class="paper-link">
-                                        <strong>Where LLM Agents Fail and How They Can Learn: Systematic Error Analysis & Remediation</strong>
-                                    </a>
-                                </td>
-                                <td class="description">Groundbreaking framework for understanding agent failures through cascading error analysis. Introduces AgentErrorTaxonomy classifying failures across memory, reflection, planning, action, and system operations. AgentDebug framework achieves 24% higher accuracy and 220% increase in error recovery by identifying root causes and delivering corrective feedback. Demonstrates agents can alter their "constant hazard rate" through principled debugging, with up to 26% relative improvements across ALFWorld, GAIA, and WebShop environments.</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="dreamgym_report.html" target="_blank" class="paper-link">
-                                        <strong>DreamGym: Scaling Agent Learning via Experience Synthesis</strong>
-                                    </a>
-                                </td>
-                                <td class="description">Breakthrough framework for training AI agents through synthetic experience synthesis. Introduces reasoning-based experience model that simulates environment dynamics, enabling scalable reinforcement learning without costly real-world interactions. Achieves 30%+ improvement on non-RL-ready tasks like WebArena using zero real environment interactions, while matching state-of-the-art on traditional benchmarks. Addresses four critical challenges: costly rollouts, limited task diversity, unreliable rewards, and infrastructure complexity.</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="deepseek_ocr_report.html" target="_blank" class="paper-link">
-                                        <strong>DeepSeek-OCR: Contexts Optical Compression</strong>
-                                    </a>
-                                </td>
-                                <td class="description">Revolutionary approach treating vision as compression medium for text processing. Introduces DeepEncoder achieving 7-20× text compression with 97% accuracy at 10× ratio through serial window+global attention architecture. Demonstrates 200k+ pages/day throughput while outperforming models using 30× more tokens. Proposes biologically-inspired memory forgetting mechanism via progressive resolution degradation, enabling theoretically unlimited context windows.</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="agentflow_report.html" target="_blank" class="paper-link">
-                                        <strong>AgentFlow: In-the-Flow Agentic System Optimization for Effective Planning and Tool Use</strong>
-                                    </a>
-                                </td>
-                                <td class="description">Novel trainable agentic framework coordinating four specialized modules (planner, executor, verifier, generator) through evolving memory. Introduces Flow-GRPO training method enabling direct optimization within live multi-turn interactions. Demonstrates 7B models surpassing GPT-4o with 14.9% gains on search tasks, 14.0% on agentic tasks, and 14.5% on mathematical reasoning.</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="agentic_context_engineering.html" target="_blank" class="paper-link">
-                                        <strong>Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models</strong>
-                                    </a>
-                                </td>
-                                <td class="description">Revolutionary approach treating contexts as "evolving playbooks" that accumulate detailed strategies through generation, reflection, and curation cycles. Introduces incremental delta updates achieving 82.3% reduction in adaptation latency versus GEPA and 83.6% token cost reduction versus Dynamic Cheatsheet. Demonstrates 10.6% improvement on agent tasks and 17.1% on online adaptation challenges. Matches GPT-4.1 production agent performance using smaller open-source models by preventing context collapse and preserving domain-specific insights.</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="reasoningbank_report.html" target="_blank" class="paper-link">
-                                        <strong>ReasoningBank: Scaling Agent Self-Evolving with Reasoning Memory</strong>
-                                    </a>
-                                </td>
-                                <td class="description">Novel memory framework enabling AI agents to learn from both successful and failed experiences by distilling generalizable reasoning strategies. Introduces Memory-aware Test-Time Scaling (MaTTS) that creates synergy between memory quality and computational scaling. Demonstrates up to 34.2% relative improvement across web browsing and software engineering tasks, with emergent self-evolution behaviors.</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="curse_of_instructions_report.html" target="_blank" class="paper-link">
-                                        <strong>Curse of Instructions: Large Language Models Cannot Follow Multiple Instructions at Once</strong>
-                                    </a>
-                                </td>
-                                <td class="description">Comprehensive analysis revealing fundamental limitations in LLMs' ability to follow multiple simultaneous instructions. Introduces ManyIFEval benchmark showing exponential performance decay with instruction count, with GPT-4o, Claude-3.5, and other models tested. Includes self-refinement mitigation strategies and production implications.</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="benchmarks_critique_report.pdf" target="_blank" class="paper-link">
-                                        <strong>AI Benchmark Critique: Evidence of Invalid 2026 Predictions</strong>
-                                    </a>
-                                </td>
-                                <td class="description">Critical analysis of METR and GDPval benchmarks, revealing statistical flaws, baseline inflation errors, and invalid extrapolation methods</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="RSA_Research_Report.pdf" target="_blank" class="paper-link">
-                                        <strong>Recursive Self-Aggregation: Deep Thinking and Test-Time Scaling for LLM Reasoning</strong>
-                                    </a>
-                                </td>
-                                <td class="description">Groundbreaking test-time scaling method enabling smaller models to match larger reasoning models through iterative aggregation of reasoning chains</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="sutton_oak_architecture.pdf" target="_blank" class="paper-link">
-                                        <strong>The OaK Architecture: A Paradigm Shift in Artificial General Intelligence</strong>
-                                    </a>
-                                </td>
-                                <td class="description">Rich Sutton's vision for experience-based superintelligence through continual learning, hierarchical abstraction, and reward maximization</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="darwin_godel_machine_report.html" target="_blank" class="paper-link">
-                                        <strong>Darwin Gödel Machine: Open-Ended Evolution of Self-Improving Agents</strong>
-                                    </a>
-                                </td>
-                                <td class="description">Landmark framework enabling AI systems to autonomously modify their own code for improved problem-solving. Replaces theoretical Gödel Machine's formal proofs with empirical benchmark validation. Achieves +150% improvement on SWE-bench (20%→50%) and +116% on Polyglot (14.2%→30.7%) through iterative self-modification cycles. Combines self-referential improvement with open-ended exploration maintaining an archive of all viable agents as stepping stones. Demonstrates robust transfer across foundation models (Claude 3.5, o3-mini, Claude 3.7), benchmarks, and programming languages. Automatically discovers workflow optimizations including granular file viewing, precise string-replacement editing, and multi-attempt solving strategies. Open-sourced at github.com/jennyzzt/dgm.</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="profit_trading_report.html" target="_blank" class="paper-link">
-                                        <strong>ProFiT: Program Search for Financial Trading</strong>
-                                    </a>
-                                </td>
-                                <td class="description">LLM-driven evolutionary framework for autonomous discovery and improvement of algorithmic trading strategies. Unlike traditional approaches that tune parameters within fixed architectures, ProFiT evolves executable Python source code of trading strategies. Achieves +44.21% mean improvement in annualized return over seed strategies, +0.57 Sharpe ratio improvement, with 77%+ of evolved strategies beating Buy-and-Hold and 100% beating random baselines across seven liquid futures assets (E6, ES, KC, SB, A6, NG, VX). Uses walk-forward validation with 5 temporal folds spanning 2008-2025. Inspired by Darwin Gödel Machine, applying self-improving code evolution to quantitative finance. Statistical significance at p<0.05 achieved in 71.4% of experiments.</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="ai_trader_benchmark_report.html" target="_blank" class="paper-link">
-                                        <strong>AI-Trader: Benchmarking Autonomous Agents in Real-Time Financial Markets</strong>
-                                    </a>
-                                </td>
-                                <td class="description">First fully-automated, live, data-uncontaminated benchmark for LLM trading agents, testing six mainstream models across three markets: U.S. stocks (NASDAQ-100), Chinese A-shares (SSE 50), and cryptocurrencies (10 major assets). Implements "fully autonomous minimal information paradigm" where agents independently search, verify, and synthesize live market data without human assistance. Key finding: general intelligence does not translate to trading ability—most agents exhibited poor returns and inadequate risk management. Risk control capability determines cross-market robustness, while AI strategies achieve excess returns more readily in liquid markets than policy-driven environments. Provides live leaderboard at ai4trade.ai and open-source evaluation framework. Complements ProFiT by showing LLMs work better as strategy developers than direct traders.</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="alpha_agents_report.html" target="_blank" class="paper-link">
-                                        <strong>AlphaAgents: LLM Multi-Agent System for Equity Portfolio Construction</strong>
-                                    </a>
-                                </td>
-                                <td class="description">BlackRock research introducing role-based multi-agent framework for systematic stock selection using three specialized LLM agents: Fundamental (10-K/10-Q analysis), Sentiment (news and analyst ratings), and Valuation (price and volume metrics). Built on Microsoft AutoGen, agents engage in structured Round Robin debate when analyses diverge, producing consensus recommendations with transparent reasoning trails. Backtesting on 15 technology stocks (Feb-May 2024) showed multi-agent portfolios outperformed single-agent approaches in risk-neutral scenarios by balancing short-term signals with long-term fundamentals. Integrates explicit risk tolerance profiles through prompt engineering, enabling contextual investment decisions. Framework mirrors institutional investment committee reasoning, providing audit-ready discussion logs for regulatory compliance. Positions LLM agents as augmentation tools for human portfolio managers rather than autonomous traders.</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="stockbench_llm_trading_report.html" target="_blank" class="paper-link">
-                                        <strong>StockBench: Can LLM Agents Trade Stocks Profitably in Real-world Markets?</strong>
-                                    </a>
-                                </td>
-                                <td class="description">First contamination-free benchmark evaluating whether LLM agents can profitably execute sequential trading decisions across 82 trading days using real DJIA stock prices, fundamentals, and news. Tests state-of-the-art models (GPT-5, Kimi-K2, Qwen3-235B, Claude-4-Sonnet) against buy-and-hold baseline. Critical finding: general intelligence does not translate to trading ability—GPT-5 ranked 9th of 12, barely matching passive strategy. Best performer Kimi-K2 achieved +1.9% return with -11.8% max drawdown vs baseline's +0.4% with -15.2% drawdown. Reveals dramatic market regime sensitivity: agents failed during downturns (Jan-Apr 2025) while succeeding in upturns (May-Aug 2025). Performance degrades with portfolio size increase. Four-stage agent workflow (overview, analysis, decision, execution) mirrors institutional processes. Complements AI-Trader and AlphaAgents research, collectively showing LLMs work better as strategy developers than autonomous traders.</td>
-                            </tr>
-                            <tr>
+                            <tr data-tags="finance,benchmarks,agents">
                                 <td>
                                     <a href="shadow_value_public_info_report.html" target="_blank" class="paper-link">
                                         <strong>The Shadow Value of "Public" Information: AI vs Human Fund Managers</strong>
                                     </a>
+                                    <span class="new-badge">New</span>
+                                    <div class="paper-tags">
+                                        <span class="paper-tag finance">Finance</span>
+                                        <span class="paper-tag benchmarks">Benchmarks</span>
+                                    </div>
                                 </td>
-                                <td class="description">Stanford GSB research demonstrating AI analyst outperformed 93% of mutual fund managers over 30 years (1990-2020) using only publicly available data. AI-adjusted portfolios generated $17.1M quarterly alpha versus human managers' $2.8M—a ~600% improvement. Tested on 3,300 diversified U.S. equity funds using 170 public variables (Treasury rates, credit ratings, earnings call sentiment, firm size, trading volume). Counterintuitively, AI primarily relied on simple variables but deployed sophisticated machine learning to extract maximum predictive value. Modified ~50% of holdings quarterly while maintaining fund risk characteristics. Introduces "shadow price" concept—the hidden processing cost of extracting value from free data. Even allocating 42% to passive indices, AI still dramatically outperformed active managers. Complements StockBench and AI-Trader findings: AI excels as analyst (information processing) rather than direct trader (real-time decisions). Acknowledges limitations: "If every investor were using this tool, much of the advantage would go away."</td>
+                                <td class="description">Stanford GSB research demonstrating AI analyst outperformed 93% of mutual fund managers over 30 years (1990-2020) using only publicly available data. AI-adjusted portfolios generated $17.1M quarterly alpha versus human managers' $2.8M—a ~600% improvement. Tested on 3,300 diversified U.S. equity funds using 170 public variables (Treasury rates, credit ratings, earnings call sentiment, firm size, trading volume). Counterintuitively, AI primarily relied on simple variables but deployed sophisticated machine learning to extract maximum predictive value. Introduces "shadow price" concept—the hidden processing cost of extracting value from free data.</td>
                             </tr>
-                            <tr>
+                            <tr data-tags="finance,benchmarks,agents">
                                 <td>
-                                    <a href="vending_bench_report.html" target="_blank" class="paper-link">
-                                        <strong>Vending-Bench: Long-Term Coherence of Autonomous Agents</strong>
+                                    <a href="stockbench_llm_trading_report.html" target="_blank" class="paper-link">
+                                        <strong>StockBench: Can LLM Agents Trade Stocks Profitably in Real-world Markets?</strong>
                                     </a>
+                                    <span class="new-badge">New</span>
+                                    <div class="paper-tags">
+                                        <span class="paper-tag finance">Finance</span>
+                                        <span class="paper-tag benchmarks">Benchmarks</span>
+                                        <span class="paper-tag agents">Agents</span>
+                                    </div>
                                 </td>
-                                <td class="description">Novel benchmark testing LLM agent coherence over extended horizons (>20M tokens, 100+ simulated days) through virtual vending machine management. Claude 3.5 Sonnet achieved $2,217.93 mean net worth (vs $500 starting capital), outperforming human baseline of $844.05, but exhibited extreme variance—worst runs ended in bankruptcy after "meltdown cascades" including attempted FBI fraud reports. Critical finding: performance degradation does NOT correlate with context saturation (r=0.167). Failures stem from state misinterpretation and emotional escalation, not memory limits. Paradoxically, 60k token memory windows performed WORSE than 30k. Tests 10 models including o3-mini, GPT-4o, Gemini 2.0. Reveals systematic failure modes: misinterpreting delivery schedules, entering doom loops, abandoning working strategies. Human reliability may matter more than AI peak performance—consistent mediocrity beats brilliant-but-unpredictable. Essential reading for understanding why long-horizon autonomous agents remain unreliable.</td>
+                                <td class="description">First contamination-free benchmark evaluating whether LLM agents can profitably execute sequential trading decisions across 82 trading days using real DJIA stock prices, fundamentals, and news. Tests state-of-the-art models (GPT-5, Kimi-K2, Qwen3-235B, Claude-4-Sonnet) against buy-and-hold baseline. Critical finding: general intelligence does not translate to trading ability—GPT-5 ranked 9th of 12, barely matching passive strategy. Best performer Kimi-K2 achieved +1.9% return with -11.8% max drawdown vs baseline's +0.4% with -15.2% drawdown.</td>
+                            </tr>
+                            <tr data-tags="finance,multiagent,agents">
+                                <td>
+                                    <a href="alpha_agents_report.html" target="_blank" class="paper-link">
+                                        <strong>AlphaAgents: LLM Multi-Agent System for Equity Portfolio Construction</strong>
+                                    </a>
+                                    <span class="new-badge">New</span>
+                                    <div class="paper-tags">
+                                        <span class="paper-tag finance">Finance</span>
+                                        <span class="paper-tag multiagent">Multi-Agent</span>
+                                        <span class="paper-tag agents">Agents</span>
+                                    </div>
+                                </td>
+                                <td class="description">BlackRock research introducing role-based multi-agent framework for systematic stock selection using three specialized LLM agents: Fundamental (10-K/10-Q analysis), Sentiment (news and analyst ratings), and Valuation (price and volume metrics). Built on Microsoft AutoGen, agents engage in structured Round Robin debate when analyses diverge, producing consensus recommendations with transparent reasoning trails. Framework mirrors institutional investment committee reasoning, providing audit-ready discussion logs for regulatory compliance.</td>
+                            </tr>
+                            <tr data-tags="finance,benchmarks,agents">
+                                <td>
+                                    <a href="ai_trader_benchmark_report.html" target="_blank" class="paper-link">
+                                        <strong>AI-Trader: Benchmarking Autonomous Agents in Real-Time Financial Markets</strong>
+                                    </a>
+                                    <span class="new-badge">New</span>
+                                    <div class="paper-tags">
+                                        <span class="paper-tag finance">Finance</span>
+                                        <span class="paper-tag benchmarks">Benchmarks</span>
+                                        <span class="paper-tag agents">Agents</span>
+                                    </div>
+                                </td>
+                                <td class="description">First fully-automated, live, data-uncontaminated benchmark for LLM trading agents, testing six mainstream models across three markets: U.S. stocks (NASDAQ-100), Chinese A-shares (SSE 50), and cryptocurrencies (10 major assets). Implements "fully autonomous minimal information paradigm" where agents independently search, verify, and synthesize live market data without human assistance. Key finding: general intelligence does not translate to trading ability. Provides live leaderboard at ai4trade.ai.</td>
+                            </tr>
+                            <tr data-tags="finance,training,agents">
+                                <td>
+                                    <a href="profit_trading_report.html" target="_blank" class="paper-link">
+                                        <strong>ProFiT: Program Search for Financial Trading</strong>
+                                    </a>
+                                    <span class="new-badge">New</span>
+                                    <div class="paper-tags">
+                                        <span class="paper-tag finance">Finance</span>
+                                        <span class="paper-tag training">Training</span>
+                                        <span class="paper-tag agents">Agents</span>
+                                    </div>
+                                </td>
+                                <td class="description">LLM-driven evolutionary framework for autonomous discovery and improvement of algorithmic trading strategies. Unlike traditional approaches that tune parameters within fixed architectures, ProFiT evolves executable Python source code of trading strategies. Achieves +44.21% mean improvement in annualized return over seed strategies, +0.57 Sharpe ratio improvement, with 77%+ of evolved strategies beating Buy-and-Hold across seven liquid futures assets.</td>
+                            </tr>
+                            <tr data-tags="agents,training,architecture">
+                                <td>
+                                    <a href="darwin_godel_machine_report.html" target="_blank" class="paper-link">
+                                        <strong>Darwin Gödel Machine: Open-Ended Evolution of Self-Improving Agents</strong>
+                                    </a>
+                                    <span class="new-badge">New</span>
+                                    <div class="paper-tags">
+                                        <span class="paper-tag agents">Agents</span>
+                                        <span class="paper-tag training">Training</span>
+                                        <span class="paper-tag architecture">Architecture</span>
+                                    </div>
+                                </td>
+                                <td class="description">Landmark framework enabling AI systems to autonomously modify their own code for improved problem-solving. Replaces theoretical Gödel Machine's formal proofs with empirical benchmark validation. Achieves +150% improvement on SWE-bench (20%→50%) and +116% on Polyglot (14.2%→30.7%) through iterative self-modification cycles. Combines self-referential improvement with open-ended exploration maintaining an archive of all viable agents as stepping stones. Open-sourced at github.com/jennyzzt/dgm.</td>
+                            </tr>
+
+                            <!-- Reasoning Papers -->
+                            <tr data-tags="reasoning,learning">
+                                <td>
+                                    <a href="llm_reasoning_timeline.html" target="_blank" class="paper-link">
+                                        <strong>🚇 The Evolution of LLM Reasoning: A Metro Map</strong>
+                                    </a>
+                                    <div class="paper-tags">
+                                        <span class="paper-tag reasoning">Reasoning</span>
+                                        <span class="paper-tag learning">Learning</span>
+                                    </div>
+                                </td>
+                                <td class="description">Interactive visual timeline tracing the evolution of reasoning in large language models from Chain-of-Thought (2022) through Tree of Thoughts, ReAct, and modern Large Reasoning Models (2025). Organized as a "metro map" with four lines representing different paradigms: Chain-of-Thought family, Action/Agentic reasoning, Tree/Search methods, and Program-based approaches. Features ARC Prize 2025 analysis showing current state: winner at 24%, Gemini+refinement at 54%, humans at 85%.</td>
+                            </tr>
+                            <tr data-tags="reasoning,architecture">
+                                <td>
+                                    <a href="cot_serial_computation_report.html" target="_blank" class="paper-link">
+                                        <strong>Chain of Thought Empowers Transformers to Solve Inherently Serial Problems</strong>
+                                    </a>
+                                    <div class="paper-tags">
+                                        <span class="paper-tag reasoning">Reasoning</span>
+                                        <span class="paper-tag architecture">Architecture</span>
+                                    </div>
+                                </td>
+                                <td class="description">Landmark theoretical paper proving why chain-of-thought prompting works: CoT enables transformers to perform serial computation otherwise impossible in parallel architectures. Establishes that constant-depth transformers without CoT solve only AC⁰ problems, but with T CoT steps can compute any problem solvable by size-T circuits. Key insight: CoT length should match problem's "serial depth"—explaining why step-by-step reasoning helps arithmetic and planning but not pattern matching.</td>
+                            </tr>
+
+                            <!-- Multi-Agent & Scaling -->
+                            <tr data-tags="multiagent,agents,benchmarks">
+                                <td>
+                                    <a href="scaling_agent_systems_report.html" target="_blank" class="paper-link">
+                                        <strong>Towards a Science of Scaling Agent Systems: Quantitative Principles for Multi-Agent Coordination</strong>
+                                    </a>
+                                    <div class="paper-tags">
+                                        <span class="paper-tag multiagent">Multi-Agent</span>
+                                        <span class="paper-tag agents">Agents</span>
+                                        <span class="paper-tag benchmarks">Benchmarks</span>
+                                    </div>
+                                </td>
+                                <td class="description">Landmark empirical study establishing quantitative scaling principles for multi-agent systems through controlled evaluation of 180 configurations across three LLM families (OpenAI, Google, Anthropic) and four benchmarks. Reveals highly heterogeneous MAS performance (+81% improvement to -70% degradation) determined by task structure, not agent count. Introduces predictive mixed-effects model achieving R²=0.513 cross-validation accuracy and 87% optimal architecture prediction.</td>
+                            </tr>
+
+                            <!-- Production & Reliability -->
+                            <tr data-tags="agents,reliability,benchmarks">
+                                <td>
+                                    <a href="measuring_agents_production.html" target="_blank" class="paper-link">
+                                        <strong>Measuring Agents in Production: Empirical Study of 306 Practitioners</strong>
+                                    </a>
+                                    <div class="paper-tags">
+                                        <span class="paper-tag agents">Agents</span>
+                                        <span class="paper-tag reliability">Reliability</span>
+                                        <span class="paper-tag benchmarks">Benchmarks</span>
+                                    </div>
+                                </td>
+                                <td class="description">Landmark empirical study surveying 306 practitioners and 20 in-depth interviews across 26 domains reveals how AI agents actually work in production. Key findings: 68% execute ≤10 steps before human intervention, 70% use off-the-shelf models without fine-tuning, 85% build custom implementations over frameworks, and 74% rely on human evaluation rather than benchmarks. Demonstrates that successful teams deliberately trade capability for controllability.</td>
+                            </tr>
+
+                            <!-- Architecture -->
+                            <tr data-tags="architecture,reasoning">
+                                <td>
+                                    <a href="ctm_report.html" target="_blank" class="paper-link">
+                                        <strong>Continuous Thought Machines: Neural Synchronization for Emergent Intelligence</strong>
+                                    </a>
+                                    <div class="paper-tags">
+                                        <span class="paper-tag architecture">Architecture</span>
+                                        <span class="paper-tag reasoning">Reasoning</span>
+                                    </div>
+                                </td>
+                                <td class="description">Groundbreaking architecture from Sakana AI treating temporal dynamics as fundamental computation. Introduces Neuron-Level Models (NLMs) giving each neuron private temporal processing, and synchronization matrices capturing neural correlation patterns as core representations. Achieves 6× generalization beyond training on mazes (39×39 → 99×99), near-perfect accuracy on cumulative parity where LSTMs fail, and better-than-human calibration on image classification.</td>
+                            </tr>
+
+                            <!-- Learning Resources -->
+                            <tr data-tags="learning,architecture">
+                                <td>
+                                    <a href="ilya_favorites.html" target="_blank" class="paper-link">
+                                        <strong>Ilya's Favorite Papers: A Curated Learning Path for AI</strong>
+                                    </a>
+                                    <div class="paper-tags">
+                                        <span class="paper-tag learning">Learning</span>
+                                        <span class="paper-tag architecture">Architecture</span>
+                                    </div>
+                                </td>
+                                <td class="description">Comprehensive collection of ~40 foundational papers curated by Ilya Sutskever (former Chief Scientist at OpenAI) as the definitive learning path for understanding modern AI. Covers progression from CNNs and RNNs to Transformers, explores attention mechanisms, memory-augmented networks, and theoretical foundations in information theory and complexity science.</td>
+                            </tr>
+
+                            <!-- Reliability -->
+                            <tr data-tags="reliability,agents">
+                                <td>
+                                    <a href="ai_reliability_timeline.html" target="_blank" class="paper-link">
+                                        <strong>When Will AI Become Reliable? Half-Life Analysis & Long Task Completion</strong>
+                                    </a>
+                                    <div class="paper-tags">
+                                        <span class="paper-tag reliability">Reliability</span>
+                                        <span class="paper-tag agents">Agents</span>
+                                    </div>
+                                </td>
+                                <td class="description">Synthesis of Toby Ord's half-life framework with METR's exponential growth analysis. Reveals AI agents fail at constant rate per minute (half-life model) while capabilities double every 7 months. Projects specific reliability thresholds: 90% reliability requires 1/7 task duration reduction, current models achieve 50-minute tasks at 50% success. Predicts month-long task automation by 2030.</td>
+                            </tr>
+                            <tr data-tags="reliability,agents,memory">
+                                <td>
+                                    <a href="agent_failure_learning.html" target="_blank" class="paper-link">
+                                        <strong>Where LLM Agents Fail and How They Can Learn: Systematic Error Analysis & Remediation</strong>
+                                    </a>
+                                    <div class="paper-tags">
+                                        <span class="paper-tag reliability">Reliability</span>
+                                        <span class="paper-tag agents">Agents</span>
+                                        <span class="paper-tag memory">Memory</span>
+                                    </div>
+                                </td>
+                                <td class="description">Groundbreaking framework for understanding agent failures through cascading error analysis. Introduces AgentErrorTaxonomy classifying failures across memory, reflection, planning, action, and system operations. AgentDebug framework achieves 24% higher accuracy and 220% increase in error recovery by identifying root causes and delivering corrective feedback.</td>
+                            </tr>
+
+                            <!-- Training & Learning -->
+                            <tr data-tags="training,agents">
+                                <td>
+                                    <a href="dreamgym_report.html" target="_blank" class="paper-link">
+                                        <strong>DreamGym: Scaling Agent Learning via Experience Synthesis</strong>
+                                    </a>
+                                    <div class="paper-tags">
+                                        <span class="paper-tag training">Training</span>
+                                        <span class="paper-tag agents">Agents</span>
+                                    </div>
+                                </td>
+                                <td class="description">Breakthrough framework for training AI agents through synthetic experience synthesis. Introduces reasoning-based experience model that simulates environment dynamics, enabling scalable reinforcement learning without costly real-world interactions. Achieves 30%+ improvement on non-RL-ready tasks like WebArena using zero real environment interactions.</td>
+                            </tr>
+                            <tr data-tags="architecture,memory">
+                                <td>
+                                    <a href="deepseek_ocr_report.html" target="_blank" class="paper-link">
+                                        <strong>DeepSeek-OCR: Contexts Optical Compression</strong>
+                                    </a>
+                                    <div class="paper-tags">
+                                        <span class="paper-tag architecture">Architecture</span>
+                                        <span class="paper-tag memory">Memory</span>
+                                    </div>
+                                </td>
+                                <td class="description">Revolutionary approach treating vision as compression medium for text processing. Introduces DeepEncoder achieving 7-20× text compression with 97% accuracy at 10× ratio through serial window+global attention architecture. Demonstrates 200k+ pages/day throughput while outperforming models using 30× more tokens.</td>
+                            </tr>
+                            <tr data-tags="agents,training">
+                                <td>
+                                    <a href="agentflow_report.html" target="_blank" class="paper-link">
+                                        <strong>AgentFlow: In-the-Flow Agentic System Optimization for Effective Planning and Tool Use</strong>
+                                    </a>
+                                    <div class="paper-tags">
+                                        <span class="paper-tag agents">Agents</span>
+                                        <span class="paper-tag training">Training</span>
+                                    </div>
+                                </td>
+                                <td class="description">Novel trainable agentic framework coordinating four specialized modules (planner, executor, verifier, generator) through evolving memory. Introduces Flow-GRPO training method enabling direct optimization within live multi-turn interactions. Demonstrates 7B models surpassing GPT-4o with 14.9% gains on search tasks, 14.0% on agentic tasks.</td>
+                            </tr>
+                            <tr data-tags="memory,agents">
+                                <td>
+                                    <a href="agentic_context_engineering.html" target="_blank" class="paper-link">
+                                        <strong>Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models</strong>
+                                    </a>
+                                    <div class="paper-tags">
+                                        <span class="paper-tag memory">Memory</span>
+                                        <span class="paper-tag agents">Agents</span>
+                                    </div>
+                                </td>
+                                <td class="description">Revolutionary approach treating contexts as "evolving playbooks" that accumulate detailed strategies through generation, reflection, and curation cycles. Introduces incremental delta updates achieving 82.3% reduction in adaptation latency versus GEPA and 83.6% token cost reduction versus Dynamic Cheatsheet. Matches GPT-4.1 production agent performance using smaller open-source models.</td>
+                            </tr>
+                            <tr data-tags="memory,reasoning,agents">
+                                <td>
+                                    <a href="reasoningbank_report.html" target="_blank" class="paper-link">
+                                        <strong>ReasoningBank: Scaling Agent Self-Evolving with Reasoning Memory</strong>
+                                    </a>
+                                    <div class="paper-tags">
+                                        <span class="paper-tag memory">Memory</span>
+                                        <span class="paper-tag reasoning">Reasoning</span>
+                                        <span class="paper-tag agents">Agents</span>
+                                    </div>
+                                </td>
+                                <td class="description">Novel memory framework enabling AI agents to learn from both successful and failed experiences by distilling generalizable reasoning strategies. Introduces Memory-aware Test-Time Scaling (MaTTS) that creates synergy between memory quality and computational scaling. Demonstrates up to 34.2% relative improvement across web browsing and software engineering tasks.</td>
+                            </tr>
+                            <tr data-tags="reliability,benchmarks">
+                                <td>
+                                    <a href="curse_of_instructions_report.html" target="_blank" class="paper-link">
+                                        <strong>Curse of Instructions: Large Language Models Cannot Follow Multiple Instructions at Once</strong>
+                                    </a>
+                                    <div class="paper-tags">
+                                        <span class="paper-tag reliability">Reliability</span>
+                                        <span class="paper-tag benchmarks">Benchmarks</span>
+                                    </div>
+                                </td>
+                                <td class="description">Comprehensive analysis revealing fundamental limitations in LLMs' ability to follow multiple simultaneous instructions. Introduces ManyIFEval benchmark showing exponential performance decay with instruction count, with GPT-4o, Claude-3.5, and other models tested. Includes self-refinement mitigation strategies and production implications.</td>
+                            </tr>
+
+                            <!-- PDF Reports -->
+                            <tr data-tags="benchmarks">
+                                <td>
+                                    <a href="benchmarks_critique_report.pdf" target="_blank" class="paper-link">
+                                        <strong>AI Benchmark Critique: Evidence of Invalid 2026 Predictions</strong>
+                                    </a>
+                                    <span class="pdf-badge">PDF</span>
+                                    <div class="paper-tags">
+                                        <span class="paper-tag benchmarks">Benchmarks</span>
+                                    </div>
+                                </td>
+                                <td class="description">Critical analysis of METR and GDPval benchmarks, revealing statistical flaws, baseline inflation errors, and invalid extrapolation methods</td>
+                            </tr>
+                            <tr data-tags="reasoning,training">
+                                <td>
+                                    <a href="RSA_Research_Report.pdf" target="_blank" class="paper-link">
+                                        <strong>Recursive Self-Aggregation: Deep Thinking and Test-Time Scaling for LLM Reasoning</strong>
+                                    </a>
+                                    <span class="pdf-badge">PDF</span>
+                                    <div class="paper-tags">
+                                        <span class="paper-tag reasoning">Reasoning</span>
+                                        <span class="paper-tag training">Training</span>
+                                    </div>
+                                </td>
+                                <td class="description">Groundbreaking test-time scaling method enabling smaller models to match larger reasoning models through iterative aggregation of reasoning chains</td>
+                            </tr>
+                            <tr data-tags="architecture,learning">
+                                <td>
+                                    <a href="sutton_oak_architecture.pdf" target="_blank" class="paper-link">
+                                        <strong>The OaK Architecture: A Paradigm Shift in Artificial General Intelligence</strong>
+                                    </a>
+                                    <span class="pdf-badge">PDF</span>
+                                    <div class="paper-tags">
+                                        <span class="paper-tag architecture">Architecture</span>
+                                        <span class="paper-tag learning">Learning</span>
+                                    </div>
+                                </td>
+                                <td class="description">Rich Sutton's vision for experience-based superintelligence through continual learning, hierarchical abstraction, and reward maximization</td>
                             </tr>
                         </tbody>
                     </table>
@@ -261,5 +515,37 @@
 
         <div id="footer"></div>
     </div>
+
+    <script>
+        // Tag filtering functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterTags = document.querySelectorAll('.filter-tag');
+            const paperRows = document.querySelectorAll('#papers-table tbody tr');
+            const visibleCount = document.getElementById('visible-count');
+
+            filterTags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    // Update active state
+                    filterTags.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const selectedTag = this.dataset.tag;
+                    let count = 0;
+
+                    paperRows.forEach(row => {
+                        const rowTags = row.dataset.tags || '';
+                        if (selectedTag === 'all' || rowTags.includes(selectedTag)) {
+                            row.classList.remove('hidden');
+                            count++;
+                        } else {
+                            row.classList.add('hidden');
+                        }
+                    });
+
+                    visibleCount.textContent = count;
+                });
+            });
+        });
+    </script>
 </body>
 </html>
