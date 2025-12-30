@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maxpool 2025 Year in Review</title>
+    <meta name="description" content="A look back at the Maxpool community in 2025 - statistics, trends, and highlights">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --bg: #000000;
+            --bg-card: #0a0a0a;
+            --bg-card-hover: #111111;
+            --border: #1a1a1a;
+            --border-light: #333333;
+            --text: #ffffff;
+            --text-secondary: #d4d4d8;
+            --text-muted: #71717a;
+            --accent: #3b82f6;
+            --accent-green: #22c55e;
+            --accent-orange: #f97316;
+            --accent-cyan: #06b6d4;
+            --accent-yellow: #eab308;
+            --font-sans: 'Inter', -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        /* Layout */
+        .layout {
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .main-content {
+            padding: 40px 24px 80px 24px;
+            min-width: 0;
+        }
+
+        /* Floating ToC - Fixed on right edge */
+        .toc {
+            position: fixed;
+            top: 50%;
+            right: 24px;
+            transform: translateY(-50%);
+            z-index: 50;
+        }
+
+        .toc-title {
+            display: none;
+        }
+
+        .toc-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .toc-item {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            font-size: 11px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .toc-item::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border-light);
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .toc-item:hover {
+            color: var(--text-secondary);
+        }
+
+        .toc-item:hover::after {
+            background: var(--text-muted);
+        }
+
+        .toc-item.active {
+            color: var(--text);
+        }
+
+        .toc-item.active::after {
+            background: var(--accent);
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+        }
+
+        /* Header */
+        .header {
+            margin-bottom: 48px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 13px;
+            margin-bottom: 24px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--text);
+        }
+
+        .back-link svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+        }
+
+        .header-text h1 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 2px;
+        }
+
+        .header-text .year {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: var(--accent);
+        }
+
+        .header-desc {
+            color: var(--text-secondary);
+            font-size: 15px;
+            max-width: 500px;
+        }
+
+        /* Hero Stats */
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 48px;
+        }
+
+        .hero-stat {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .hero-stat-value {
+            font-family: var(--font-mono);
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .hero-stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Sections */
+        section {
+            margin-bottom: 48px;
+        }
+
+        .section-header {
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-header h2 {
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-header h2 span {
+            font-size: 14px;
+        }
+
+        /* Leaderboard */
+        .leaderboard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .group-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .group-header {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .group-icon {
+            font-size: 16px;
+        }
+
+        .group-info {
+            flex: 1;
+        }
+
+        .group-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .group-meta {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .contributor-list {
+            padding: 8px 0;
+        }
+
+        .contributor {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+        }
+
+        .contributor-rank {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--text-muted);
+            width: 18px;
+        }
+
+        .contributor-rank.gold { color: var(--accent-yellow); }
+        .contributor-rank.silver { color: #94a3b8; }
+        .contributor-rank.bronze { color: #d97706; }
+
+        .contributor-name {
+            flex: 1;
+            font-size: 13px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .contributor-count {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Top 10 Overall */
+        .top-overall {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .top-overall-title {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+        }
+
+        .top-overall-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .top-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .top-user.rank-1 { border-color: var(--accent-yellow); background: rgba(234, 179, 8, 0.05); }
+        .top-user.rank-2 { border-color: #94a3b8; background: rgba(148, 163, 184, 0.05); }
+        .top-user.rank-3 { border-color: #d97706; background: rgba(217, 119, 6, 0.05); }
+
+        .top-user-rank {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 700;
+            width: 28px;
+            color: var(--text-muted);
+        }
+
+        .rank-1 .top-user-rank { color: var(--accent-yellow); }
+        .rank-2 .top-user-rank { color: #94a3b8; }
+        .rank-3 .top-user-rank { color: #d97706; }
+
+        .top-user-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .top-user-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .top-user-topics {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .top-user-count {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        /* Special Thanks */
+        .special-thanks {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px 32px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .thanks-emoji {
+            font-size: 40px;
+            flex-shrink: 0;
+        }
+
+        .thanks-content {
+            flex: 1;
+        }
+
+        .thanks-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text);
+        }
+
+        .special-thanks p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Charts */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .chart-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .chart-card.full-width {
+            grid-column: span 2;
+        }
+
+        .chart-card h3 {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 200px;
+        }
+
+        .chart-container.tall {
+            height: 280px;
+        }
+
+        /* Models Grid */
+        .models-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+        }
+
+        .model-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+
+        .model-card:hover {
+            border-color: var(--border-light);
+        }
+
+        .model-rank {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .model-name {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .model-count {
+            font-family: var(--font-mono);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        /* Themes */
+        .themes-list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .theme-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+        }
+
+        .theme-rank {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--text-muted);
+            width: 20px;
+        }
+
+        .theme-name {
+            font-size: 13px;
+            font-weight: 500;
+            min-width: 180px;
+        }
+
+        .theme-bar {
+            flex: 1;
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .theme-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+        }
+
+        .theme-count {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--text-secondary);
+            min-width: 50px;
+            text-align: right;
+        }
+
+        /* Issues Grid */
+        .issues-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .issue-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .issue-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .issue-name {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .issue-count {
+            font-family: var(--font-mono);
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--accent-orange);
+        }
+
+        /* Emoji */
+        .emoji-grid {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .emoji-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 18px;
+            text-align: center;
+        }
+
+        .emoji-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .emoji-count {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Heatmap */
+        .heatmap-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .heatmap-wrapper {
+            display: flex;
+            gap: 8px;
+        }
+
+        .heatmap-y-labels {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            font-size: 11px;
+            color: var(--text-secondary);
+            min-width: 32px;
+        }
+
+        .heatmap-grid {
+            display: grid;
+            grid-template-columns: repeat(24, 1fr);
+            grid-template-rows: repeat(7, 1fr);
+            gap: 2px;
+            flex: 1;
+            height: 140px;
+        }
+
+        .heatmap-cell {
+            border-radius: 2px;
+            min-width: 8px;
+        }
+
+        .heatmap-x-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-secondary);
+            padding-left: 40px;
+        }
+
+        .heatmap-legend {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: flex-end;
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+        }
+
+        .heatmap-legend-colors {
+            display: flex;
+            gap: 2px;
+        }
+
+        .heatmap-legend-colors::before {
+            content: '';
+            display: flex;
+            gap: 2px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            margin-top: 48px;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-bottom: 16px;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: var(--accent);
+            color: white;
+            font-weight: 600;
+            font-size: 13px;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .cta-button:hover {
+            background: #2563eb;
+        }
+
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .toc-item {
+                font-size: 0;
+                gap: 0;
+            }
+        }
+
+        @media (max-width: 1100px) {
+            .toc {
+                display: none;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .hero-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .leaderboard-grid {
+                grid-template-columns: 1fr;
+            }
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            .chart-card.full-width {
+                grid-column: span 1;
+            }
+            .top-overall-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .models-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .issues-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .top-overall-grid {
+                grid-template-columns: 1fr;
+            }
+            .models-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .theme-name {
+                min-width: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <div class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <a href="../" class="back-link">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    Back to Maxpool
+                </a>
+                <div class="header-top">
+                    <img src="../images/maxpool_logo_color.jpeg" alt="Maxpool" class="logo">
+                    <div class="header-text">
+                        <h1>Year in Review</h1>
+                        <div class="year">2025</div>
+                    </div>
+                </div>
+                <p class="header-desc">A look back at the Maxpool community - the conversations, trends, and people that made it happen.</p>
+            </header>
+
+            <!-- Hero Stats -->
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="hero-stat-value" data-target="9414">0</div>
+                    <div class="hero-stat-label">Messages</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value" data-target="400">0</div>
+                    <div class="hero-stat-label">Contributors</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value" data-target="192324">0</div>
+                    <div class="hero-stat-label">Words</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value" data-target="809">0</div>
+                    <div class="hero-stat-label">Links Shared</div>
+                </div>
+            </div>
+
+            <!-- Contributors Section -->
+            <section id="contributors">
+                <div class="section-header">
+                    <h2><span>01</span> Top Contributors</h2>
+                </div>
+
+                <div class="leaderboard-grid">
+                    <div class="group-card">
+                        <div class="group-header">
+                            <span class="group-icon">&#128295;</span>
+                            <div class="group-info">
+                                <div class="group-name">Engineering</div>
+                                <div class="group-meta">3,349 msgs &bull; 261 members</div>
+                            </div>
+                        </div>
+                        <div class="contributor-list">
+                            <div class="contributor"><span class="contributor-rank gold">1</span><span class="contributor-name">Pratik</span><span class="contributor-count">427</span></div>
+                            <div class="contributor"><span class="contributor-rank silver">2</span><span class="contributor-name">~ R</span><span class="contributor-count">282</span></div>
+                            <div class="contributor"><span class="contributor-rank bronze">3</span><span class="contributor-name">Nico</span><span class="contributor-count">277</span></div>
+                            <div class="contributor"><span class="contributor-rank">4</span><span class="contributor-name">Ankur Bohra</span><span class="contributor-count">160</span></div>
+                            <div class="contributor"><span class="contributor-rank">5</span><span class="contributor-name">Roland Tannous</span><span class="contributor-count">133</span></div>
+                        </div>
+                    </div>
+
+                    <div class="group-card">
+                        <div class="group-header">
+                            <span class="group-icon">&#128172;</span>
+                            <div class="group-info">
+                                <div class="group-name">Gossip</div>
+                                <div class="group-meta">4,511 msgs &bull; 176 members</div>
+                            </div>
+                        </div>
+                        <div class="contributor-list">
+                            <div class="contributor"><span class="contributor-rank gold">1</span><span class="contributor-name">Ankur Bohra</span><span class="contributor-count">899</span></div>
+                            <div class="contributor"><span class="contributor-rank silver">2</span><span class="contributor-name">Pratik</span><span class="contributor-count">801</span></div>
+                            <div class="contributor"><span class="contributor-rank bronze">3</span><span class="contributor-name">Nico</span><span class="contributor-count">616</span></div>
+                            <div class="contributor"><span class="contributor-rank">4</span><span class="contributor-name">Devansh</span><span class="contributor-count">209</span></div>
+                            <div class="contributor"><span class="contributor-rank">5</span><span class="contributor-name">Roland Tannous</span><span class="contributor-count">203</span></div>
+                        </div>
+                    </div>
+
+                    <div class="group-card">
+                        <div class="group-header">
+                            <span class="group-icon">&#128300;</span>
+                            <div class="group-info">
+                                <div class="group-name">Research</div>
+                                <div class="group-meta">1,554 msgs &bull; 224 members</div>
+                            </div>
+                        </div>
+                        <div class="contributor-list">
+                            <div class="contributor"><span class="contributor-rank gold">1</span><span class="contributor-name">Pratik</span><span class="contributor-count">287</span></div>
+                            <div class="contributor"><span class="contributor-rank silver">2</span><span class="contributor-name">Nico</span><span class="contributor-count">179</span></div>
+                            <div class="contributor"><span class="contributor-rank bronze">3</span><span class="contributor-name">Ankur Bohra</span><span class="contributor-count">174</span></div>
+                            <div class="contributor"><span class="contributor-rank">4</span><span class="contributor-name">Suvrankar Datta</span><span class="contributor-count">98</span></div>
+                            <div class="contributor"><span class="contributor-rank">5</span><span class="contributor-name">Yam Parlant</span><span class="contributor-count">90</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="top-overall">
+                    <div class="top-overall-title">Top 10 Overall</div>
+                    <div class="top-overall-list">
+                        <div class="top-user rank-1">
+                            <div class="top-user-rank">#1</div>
+                            <div class="top-user-info"><div class="top-user-name">Pratik</div><div class="top-user-topics">Agents, Evaluation, Coding</div></div>
+                            <div class="top-user-count">1,515</div>
+                        </div>
+                        <div class="top-user rank-2">
+                            <div class="top-user-rank">#2</div>
+                            <div class="top-user-info"><div class="top-user-name">Ankur Bohra</div><div class="top-user-topics">OpenAI, Claude, Gemini</div></div>
+                            <div class="top-user-count">1,233</div>
+                        </div>
+                        <div class="top-user rank-3">
+                            <div class="top-user-rank">#3</div>
+                            <div class="top-user-info"><div class="top-user-name">Nico</div><div class="top-user-topics">Gemini, Agents, Research</div></div>
+                            <div class="top-user-count">1,072</div>
+                        </div>
+                        <div class="top-user">
+                            <div class="top-user-rank">#4</div>
+                            <div class="top-user-info"><div class="top-user-name">~ R</div><div class="top-user-topics">RAG, Agents, Open Source</div></div>
+                            <div class="top-user-count">471</div>
+                        </div>
+                        <div class="top-user">
+                            <div class="top-user-rank">#5</div>
+                            <div class="top-user-info"><div class="top-user-name">Roland Tannous</div><div class="top-user-topics">Research, Gemini, Open Source</div></div>
+                            <div class="top-user-count">368</div>
+                        </div>
+                        <div class="top-user">
+                            <div class="top-user-rank">#6</div>
+                            <div class="top-user-info"><div class="top-user-name">Suvrankar Datta</div><div class="top-user-topics">Research, Evaluation, Vision</div></div>
+                            <div class="top-user-count">325</div>
+                        </div>
+                        <div class="top-user">
+                            <div class="top-user-rank">#7</div>
+                            <div class="top-user-info"><div class="top-user-name">Devansh</div><div class="top-user-topics">Deployment, Startups, OpenAI</div></div>
+                            <div class="top-user-count">257</div>
+                        </div>
+                        <div class="top-user">
+                            <div class="top-user-rank">#8</div>
+                            <div class="top-user-info"><div class="top-user-name">Atharv Jairath</div><div class="top-user-topics">Agents, OpenAI, Coding</div></div>
+                            <div class="top-user-count">222</div>
+                        </div>
+                        <div class="top-user">
+                            <div class="top-user-rank">#9</div>
+                            <div class="top-user-info"><div class="top-user-name">Ravi Theja</div><div class="top-user-topics">Open Source, Evaluation, OpenAI</div></div>
+                            <div class="top-user-count">195</div>
+                        </div>
+                        <div class="top-user">
+                            <div class="top-user-rank">#10</div>
+                            <div class="top-user-info"><div class="top-user-name">Raj Rohit</div><div class="top-user-topics">OpenAI, Voice, Coding</div></div>
+                            <div class="top-user-count">179</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="special-thanks">
+                    <div class="thanks-emoji">&#127881;</div>
+                    <div class="thanks-content">
+                        <div class="thanks-title">Special Thanks to All 900+ Members</div>
+                        <p>To everyone who shared knowledge, asked tough questions, debated model benchmarks, posted late-night arxiv finds, and made Maxpool the best GenAI community. Here's to another year of shipping AI together!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity Section -->
+            <section id="activity">
+                <div class="section-header">
+                    <h2><span>02</span> Activity Patterns</h2>
+                </div>
+
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3>By Day of Week</h3>
+                        <div class="chart-container">
+                            <canvas id="weekdayChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>By Hour</h3>
+                        <div class="chart-container">
+                            <canvas id="hourlyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Models Section -->
+            <section id="models">
+                <div class="section-header">
+                    <h2><span>03</span> Most Discussed Models</h2>
+                </div>
+
+                <div class="models-grid">
+                    <div class="model-card"><div class="model-rank">#1</div><div class="model-name">OpenAI</div><div class="model-count">231</div></div>
+                    <div class="model-card"><div class="model-rank">#1</div><div class="model-name">Gemini</div><div class="model-count">231</div></div>
+                    <div class="model-card"><div class="model-rank">#3</div><div class="model-name">Claude</div><div class="model-count">177</div></div>
+                    <div class="model-card"><div class="model-rank">#4</div><div class="model-name">DeepSeek</div><div class="model-count">132</div></div>
+                    <div class="model-card"><div class="model-rank">#5</div><div class="model-name">Llama</div><div class="model-count">116</div></div>
+                    <div class="model-card"><div class="model-rank">#6</div><div class="model-name">ChatGPT</div><div class="model-count">97</div></div>
+                    <div class="model-card"><div class="model-rank">#7</div><div class="model-name">Claude Sonnet</div><div class="model-count">78</div></div>
+                    <div class="model-card"><div class="model-rank">#8</div><div class="model-name">o1</div><div class="model-count">66</div></div>
+                    <div class="model-card"><div class="model-rank">#9</div><div class="model-name">o3</div><div class="model-count">56</div></div>
+                    <div class="model-card"><div class="model-rank">#10</div><div class="model-name">GPT-4</div><div class="model-count">52</div></div>
+                    <div class="model-card"><div class="model-rank">#11</div><div class="model-name">Qwen</div><div class="model-count">49</div></div>
+                    <div class="model-card"><div class="model-rank">#12</div><div class="model-name">Mistral</div><div class="model-count">42</div></div>
+                </div>
+            </section>
+
+            <!-- Themes Section -->
+            <section id="themes">
+                <div class="section-header">
+                    <h2><span>04</span> Discussion Themes</h2>
+                </div>
+
+                <div class="themes-list">
+                    <div class="theme-row"><span class="theme-rank">1</span><span class="theme-name">Coding & Development</span><div class="theme-bar"><div class="theme-bar-fill" style="width: 100%; background: var(--accent);"></div></div><span class="theme-count">1,212</span></div>
+                    <div class="theme-row"><span class="theme-rank">2</span><span class="theme-name">Agents & Agentic</span><div class="theme-bar"><div class="theme-bar-fill" style="width: 58%; background: var(--accent-cyan);"></div></div><span class="theme-count">708</span></div>
+                    <div class="theme-row"><span class="theme-rank">3</span><span class="theme-name">Research & Papers</span><div class="theme-bar"><div class="theme-bar-fill" style="width: 45%; background: var(--accent-green);"></div></div><span class="theme-count">550</span></div>
+                    <div class="theme-row"><span class="theme-rank">4</span><span class="theme-name">Deployment & Infra</span><div class="theme-bar"><div class="theme-bar-fill" style="width: 43%; background: var(--accent-orange);"></div></div><span class="theme-count">517</span></div>
+                    <div class="theme-row"><span class="theme-rank">5</span><span class="theme-name">Startups & Business</span><div class="theme-bar"><div class="theme-bar-fill" style="width: 41%; background: #ef4444;"></div></div><span class="theme-count">502</span></div>
+                    <div class="theme-row"><span class="theme-rank">6</span><span class="theme-name">Evaluation & Testing</span><div class="theme-bar"><div class="theme-bar-fill" style="width: 40%; background: var(--accent);"></div></div><span class="theme-count">490</span></div>
+                    <div class="theme-row"><span class="theme-rank">7</span><span class="theme-name">Cost & Optimization</span><div class="theme-bar"><div class="theme-bar-fill" style="width: 33%; background: var(--accent-yellow);"></div></div><span class="theme-count">402</span></div>
+                    <div class="theme-row"><span class="theme-rank">8</span><span class="theme-name">RAG & Retrieval</span><div class="theme-bar"><div class="theme-bar-fill" style="width: 31%; background: var(--accent-cyan);"></div></div><span class="theme-count">374</span></div>
+                    <div class="theme-row"><span class="theme-rank">9</span><span class="theme-name">Prompting</span><div class="theme-bar"><div class="theme-bar-fill" style="width: 24%; background: var(--accent-green);"></div></div><span class="theme-count">287</span></div>
+                    <div class="theme-row"><span class="theme-rank">10</span><span class="theme-name">Jobs & Career</span><div class="theme-bar"><div class="theme-bar-fill" style="width: 20%; background: var(--accent-orange);"></div></div><span class="theme-count">237</span></div>
+                </div>
+            </section>
+
+            <!-- Issues Section -->
+            <section id="issues">
+                <div class="section-header">
+                    <h2><span>05</span> Common Challenges</h2>
+                </div>
+
+                <div class="issues-grid">
+                    <div class="issue-card"><div class="issue-icon">&#128184;</div><div class="issue-name">Cost Issues</div><div class="issue-count">270</div></div>
+                    <div class="issue-card"><div class="issue-icon">&#9201;</div><div class="issue-name">Latency</div><div class="issue-count">158</div></div>
+                    <div class="issue-card"><div class="issue-icon">&#128545;</div><div class="issue-name">Quality Issues</div><div class="issue-count">43</div></div>
+                    <div class="issue-card"><div class="issue-icon">&#127922;</div><div class="issue-name">Reliability</div><div class="issue-count">41</div></div>
+                    <div class="issue-card"><div class="issue-icon">&#128268;</div><div class="issue-name">API Issues</div><div class="issue-count">40</div></div>
+                    <div class="issue-card"><div class="issue-icon">&#127744;</div><div class="issue-name">Hallucinations</div><div class="issue-count">36</div></div>
+                    <div class="issue-card"><div class="issue-icon">&#128207;</div><div class="issue-name">Context Length</div><div class="issue-count">32</div></div>
+                    <div class="issue-card"><div class="issue-icon">&#128678;</div><div class="issue-name">Rate Limits</div><div class="issue-count">21</div></div>
+                </div>
+            </section>
+
+            <!-- Activity Heatmap Section -->
+            <section id="heatmap">
+                <div class="section-header">
+                    <h2><span>06</span> Activity Heatmap</h2>
+                </div>
+                <div class="chart-card">
+                    <h3>When does the community chat? (Day x Hour)</h3>
+                    <div class="heatmap-container">
+                        <div class="heatmap-wrapper">
+                            <div class="heatmap-y-labels">
+                                <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                            </div>
+                            <div class="heatmap-grid" id="heatmapGrid"></div>
+                        </div>
+                        <div class="heatmap-x-labels">
+                            <span>0</span><span>4</span><span>8</span><span>12</span><span>16</span><span>20</span><span>24</span>
+                        </div>
+                        <div class="heatmap-legend">
+                            <span>Less</span>
+                            <div class="heatmap-legend-colors"></div>
+                            <span>More</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Emoji Section -->
+            <section id="vibes">
+                <div class="section-header">
+                    <h2><span>07</span> Community Vibes</h2>
+                </div>
+
+                <div class="emoji-grid">
+                    <div class="emoji-card"><div class="emoji-icon">&#128514;</div><div class="emoji-count">106</div></div>
+                    <div class="emoji-card"><div class="emoji-icon">&#128517;</div><div class="emoji-count">82</div></div>
+                    <div class="emoji-card"><div class="emoji-icon">&#129300;</div><div class="emoji-count">43</div></div>
+                    <div class="emoji-card"><div class="emoji-icon">&#128518;</div><div class="emoji-count">37</div></div>
+                    <div class="emoji-card"><div class="emoji-icon">&#128579;</div><div class="emoji-count">29</div></div>
+                    <div class="emoji-card"><div class="emoji-icon">&#128556;</div><div class="emoji-count">25</div></div>
+                    <div class="emoji-card"><div class="emoji-icon">&#128539;</div><div class="emoji-count">23</div></div>
+                    <div class="emoji-card"><div class="emoji-icon">&#129763;</div><div class="emoji-count">23</div></div>
+                    <div class="emoji-card"><div class="emoji-icon">&#129315;</div><div class="emoji-count">22</div></div>
+                    <div class="emoji-card"><div class="emoji-icon">&#128077;</div><div class="emoji-count">11</div></div>
+                </div>
+            </section>
+
+            <footer>
+                <p class="footer-text">Built with care by the Maxpool community</p>
+                <a href="https://join.maxpool.dev" target="_blank" class="cta-button">
+                    Join the Community
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </footer>
+        </div>
+
+        <!-- Floating ToC -->
+        <nav class="toc">
+            <div class="toc-title">On this page</div>
+            <ul class="toc-list">
+                <li><a href="#contributors" class="toc-item active">Contributors</a></li>
+                <li><a href="#activity" class="toc-item">Activity</a></li>
+                <li><a href="#models" class="toc-item">Models</a></li>
+                <li><a href="#themes" class="toc-item">Themes</a></li>
+                <li><a href="#issues" class="toc-item">Challenges</a></li>
+                <li><a href="#heatmap" class="toc-item">Heatmap</a></li>
+                <li><a href="#vibes" class="toc-item">Vibes</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <script>
+        // Counter animation
+        function animateCounter(el, target) {
+            const duration = 1500;
+            const start = performance.now();
+            function update(now) {
+                const elapsed = now - start;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const value = Math.floor(eased * target);
+                el.textContent = value.toLocaleString();
+                if (progress < 1) requestAnimationFrame(update);
+            }
+            requestAnimationFrame(update);
+        }
+
+        setTimeout(() => {
+            document.querySelectorAll('.hero-stat-value').forEach(el => {
+                animateCounter(el, parseInt(el.dataset.target));
+            });
+        }, 300);
+
+        // ToC active state
+        const sections = document.querySelectorAll('section');
+        const tocItems = document.querySelectorAll('.toc-item');
+
+        function updateToc() {
+            let current = '';
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 100) current = section.id;
+            });
+            tocItems.forEach(item => {
+                item.classList.toggle('active', item.getAttribute('href') === '#' + current);
+            });
+        }
+
+        window.addEventListener('scroll', updateToc);
+        updateToc();
+
+        // Chart.js
+        Chart.defaults.color = '#a1a1aa';
+        Chart.defaults.borderColor = '#1a1a1a';
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.font.size = 11;
+
+        // Weekday
+        new Chart(document.getElementById('weekdayChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    data: [1130, 1899, 1661, 1780, 1298, 883, 763],
+                    backgroundColor: '#3b82f6',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#1a1a1a' } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // Hourly
+        new Chart(document.getElementById('hourlyChart'), {
+            type: 'bar',
+            data: {
+                labels: ['0', '2', '4', '6', '8', '10', '12', '14', '16', '18', '20', '22'],
+                datasets: [{
+                    data: [355, 217, 37, 65, 213, 510, 885, 511, 406, 471, 465, 533],
+                    backgroundColor: '#06b6d4',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#1a1a1a' } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // Activity Heatmap
+        const heatmapData = [
+            [29,19,12,3,0,3,6,7,34,49,27,87,109,80,75,43,50,84,95,101,66,48,55,48],
+            [48,51,52,21,8,1,9,29,74,122,71,122,162,56,42,84,129,82,116,105,84,116,176,139],
+            [54,38,6,13,3,2,40,13,13,67,94,103,99,170,130,63,58,52,45,176,123,115,87,97],
+            [63,31,51,32,6,1,0,4,39,86,164,144,244,167,85,67,42,43,92,58,78,55,101,127],
+            [66,144,42,38,3,1,5,26,29,61,55,102,94,114,59,57,59,39,56,45,50,50,66,37],
+            [29,38,39,12,12,8,2,5,7,29,43,44,82,103,83,87,48,30,29,43,15,25,27,43],
+            [66,28,15,12,5,1,3,5,17,30,56,59,95,48,37,26,20,37,38,43,49,32,21,20]
+        ];
+
+        const heatmapGrid = document.getElementById('heatmapGrid');
+        const maxVal = Math.max(...heatmapData.flat());
+
+        heatmapData.forEach((row, dayIdx) => {
+            row.forEach((val, hourIdx) => {
+                const cell = document.createElement('div');
+                cell.className = 'heatmap-cell';
+                const intensity = val / maxVal;
+                if (intensity === 0) {
+                    cell.style.background = '#1a1a1a';
+                } else if (intensity < 0.25) {
+                    cell.style.background = '#0e4429';
+                } else if (intensity < 0.5) {
+                    cell.style.background = '#006d32';
+                } else if (intensity < 0.75) {
+                    cell.style.background = '#26a641';
+                } else {
+                    cell.style.background = '#39d353';
+                }
+                cell.title = `${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][dayIdx]} ${hourIdx}:00 - ${val} messages`;
+                heatmapGrid.appendChild(cell);
+            });
+        });
+
+        // Heatmap legend
+        const legendColors = document.querySelector('.heatmap-legend-colors');
+        ['#1a1a1a', '#0e4429', '#006d32', '#26a641', '#39d353'].forEach(color => {
+            const box = document.createElement('div');
+            box.style.cssText = `width: 12px; height: 12px; background: ${color}; border-radius: 2px;`;
+            legendColors.appendChild(box);
+        });
+
+    </script>
+</body>
+</html>
