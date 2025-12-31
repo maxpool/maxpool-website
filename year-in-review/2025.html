@@ -124,6 +124,32 @@
             margin-bottom: 48px;
         }
 
+        .header-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .cta-button-small {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--accent);
+            color: white;
+            font-weight: 600;
+            font-size: 12px;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .cta-button-small:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
         .back-link {
             display: inline-flex;
             align-items: center;
@@ -131,7 +157,6 @@
             color: var(--text-muted);
             text-decoration: none;
             font-size: 13px;
-            margin-bottom: 24px;
             transition: color 0.2s;
         }
 
@@ -659,6 +684,191 @@
             gap: 2px;
         }
 
+        /* Blog Section */
+        .blog-container {
+            max-width: 800px;
+        }
+
+        .blog-intro {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            line-height: 1.7;
+        }
+
+        .blog-article {
+            margin-bottom: 48px;
+            padding-bottom: 48px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .blog-article:last-child {
+            border-bottom: none;
+        }
+
+        .blog-article h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text);
+            line-height: 1.4;
+        }
+
+        .blog-article p {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .blog-article em {
+            color: var(--text);
+            font-style: italic;
+        }
+
+        .blog-article strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .quote-block {
+            background: var(--bg-card);
+            border-left: 3px solid var(--accent);
+            padding: 20px 24px;
+            margin: 24px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .quote-block p {
+            font-size: 16px;
+            font-style: italic;
+            color: var(--text);
+            margin-bottom: 8px;
+            line-height: 1.7;
+        }
+
+        .quote-author {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-style: normal;
+        }
+
+        /* Wisdom Grid */
+        .wisdom-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .wisdom-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .wisdom-card p {
+            font-size: 14px;
+            font-style: italic;
+            color: var(--text);
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .wisdom-card span {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Funny Quotes */
+        .funny-quotes {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .funny-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .funny-item::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            font-size: 60px;
+            color: var(--border-light);
+            font-family: Georgia, serif;
+        }
+
+        .funny-text {
+            font-size: 15px;
+            color: var(--text);
+            margin-bottom: 8px;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .funny-context {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Lessons List */
+        .lessons-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .lesson-item {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .lesson-number {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent);
+            min-width: 28px;
+        }
+
+        .lesson-content strong {
+            display: block;
+            font-size: 15px;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .lesson-content p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Responsive for blog */
+        @media (max-width: 700px) {
+            .wisdom-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* Footer */
         footer {
             padding: 40px 0;
@@ -750,12 +960,20 @@
         <div class="main-content">
             <!-- Header -->
             <header class="header">
-                <a href="../" class="back-link">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M19 12H5M12 19l-7-7 7-7"/>
-                    </svg>
-                    Back to Maxpool
-                </a>
+                <div class="header-nav">
+                    <a href="../" class="back-link">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                        Back to Maxpool
+                    </a>
+                    <a href="https://join.maxpool.dev" target="_blank" class="cta-button-small">
+                        Join the Community
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
                 <div class="header-top">
                     <img src="../images/maxpool_logo_color.jpeg" alt="Maxpool" class="logo">
                     <div class="header-text">
@@ -806,7 +1024,12 @@
                             <div class="contributor"><span class="contributor-rank silver">2</span><span class="contributor-name">~ R</span><span class="contributor-count">282</span></div>
                             <div class="contributor"><span class="contributor-rank bronze">3</span><span class="contributor-name">Nico</span><span class="contributor-count">277</span></div>
                             <div class="contributor"><span class="contributor-rank">4</span><span class="contributor-name">Ankur Bohra</span><span class="contributor-count">160</span></div>
-                            <div class="contributor"><span class="contributor-rank">5</span><span class="contributor-name">Roland Tannous</span><span class="contributor-count">133</span></div>
+                            <div class="contributor"><span class="contributor-rank">5</span><span class="contributor-name">~ Roger</span><span class="contributor-count">111</span></div>
+                            <div class="contributor"><span class="contributor-rank">6</span><span class="contributor-name">Atharv Jairath</span><span class="contributor-count">110</span></div>
+                            <div class="contributor"><span class="contributor-rank">7</span><span class="contributor-name">Syed</span><span class="contributor-count">91</span></div>
+                            <div class="contributor"><span class="contributor-rank">8</span><span class="contributor-name">Yam Parlant</span><span class="contributor-count">87</span></div>
+                            <div class="contributor"><span class="contributor-rank">9</span><span class="contributor-name">Ankit Enterpret</span><span class="contributor-count">77</span></div>
+                            <div class="contributor"><span class="contributor-rank">10</span><span class="contributor-name">Shailen</span><span class="contributor-count">68</span></div>
                         </div>
                     </div>
 
@@ -823,7 +1046,12 @@
                             <div class="contributor"><span class="contributor-rank silver">2</span><span class="contributor-name">Pratik</span><span class="contributor-count">801</span></div>
                             <div class="contributor"><span class="contributor-rank bronze">3</span><span class="contributor-name">Nico</span><span class="contributor-count">616</span></div>
                             <div class="contributor"><span class="contributor-rank">4</span><span class="contributor-name">Devansh</span><span class="contributor-count">209</span></div>
-                            <div class="contributor"><span class="contributor-rank">5</span><span class="contributor-name">Roland Tannous</span><span class="contributor-count">203</span></div>
+                            <div class="contributor"><span class="contributor-rank">5</span><span class="contributor-name">Suvrankar Datta</span><span class="contributor-count">191</span></div>
+                            <div class="contributor"><span class="contributor-rank">6</span><span class="contributor-name">Ravi Theja</span><span class="contributor-count">141</span></div>
+                            <div class="contributor"><span class="contributor-rank">7</span><span class="contributor-name">~ R</span><span class="contributor-count">109</span></div>
+                            <div class="contributor"><span class="contributor-rank">8</span><span class="contributor-name">Raj Rohit</span><span class="contributor-count">96</span></div>
+                            <div class="contributor"><span class="contributor-rank">9</span><span class="contributor-name">Ankit Enterpret</span><span class="contributor-count">91</span></div>
+                            <div class="contributor"><span class="contributor-rank">10</span><span class="contributor-name">Shailen</span><span class="contributor-count">87</span></div>
                         </div>
                     </div>
 
@@ -841,6 +1069,11 @@
                             <div class="contributor"><span class="contributor-rank bronze">3</span><span class="contributor-name">Ankur Bohra</span><span class="contributor-count">174</span></div>
                             <div class="contributor"><span class="contributor-rank">4</span><span class="contributor-name">Suvrankar Datta</span><span class="contributor-count">98</span></div>
                             <div class="contributor"><span class="contributor-rank">5</span><span class="contributor-name">Yam Parlant</span><span class="contributor-count">90</span></div>
+                            <div class="contributor"><span class="contributor-rank">6</span><span class="contributor-name">~ R</span><span class="contributor-count">80</span></div>
+                            <div class="contributor"><span class="contributor-rank">7</span><span class="contributor-name">Shailen</span><span class="contributor-count">41</span></div>
+                            <div class="contributor"><span class="contributor-rank">8</span><span class="contributor-name">Atharv Jairath</span><span class="contributor-count">26</span></div>
+                            <div class="contributor"><span class="contributor-rank">9</span><span class="contributor-name">Saksham Jindal</span><span class="contributor-count">19</span></div>
+                            <div class="contributor"><span class="contributor-rank">10</span><span class="contributor-name">Ravi Theja</span><span class="contributor-count">18</span></div>
                         </div>
                     </div>
                 </div>
@@ -870,33 +1103,33 @@
                         </div>
                         <div class="top-user">
                             <div class="top-user-rank">#5</div>
-                            <div class="top-user-info"><div class="top-user-name">Roland Tannous</div><div class="top-user-topics">Research, Gemini, Open Source</div></div>
-                            <div class="top-user-count">368</div>
-                        </div>
-                        <div class="top-user">
-                            <div class="top-user-rank">#6</div>
                             <div class="top-user-info"><div class="top-user-name">Suvrankar Datta</div><div class="top-user-topics">Research, Evaluation, Vision</div></div>
                             <div class="top-user-count">325</div>
                         </div>
                         <div class="top-user">
-                            <div class="top-user-rank">#7</div>
+                            <div class="top-user-rank">#6</div>
                             <div class="top-user-info"><div class="top-user-name">Devansh</div><div class="top-user-topics">Deployment, Startups, OpenAI</div></div>
                             <div class="top-user-count">257</div>
                         </div>
                         <div class="top-user">
-                            <div class="top-user-rank">#8</div>
+                            <div class="top-user-rank">#7</div>
                             <div class="top-user-info"><div class="top-user-name">Atharv Jairath</div><div class="top-user-topics">Agents, OpenAI, Coding</div></div>
                             <div class="top-user-count">222</div>
                         </div>
                         <div class="top-user">
-                            <div class="top-user-rank">#9</div>
+                            <div class="top-user-rank">#8</div>
                             <div class="top-user-info"><div class="top-user-name">Ravi Theja</div><div class="top-user-topics">Open Source, Evaluation, OpenAI</div></div>
                             <div class="top-user-count">195</div>
                         </div>
                         <div class="top-user">
-                            <div class="top-user-rank">#10</div>
+                            <div class="top-user-rank">#9</div>
                             <div class="top-user-info"><div class="top-user-name">Raj Rohit</div><div class="top-user-topics">OpenAI, Voice, Coding</div></div>
                             <div class="top-user-count">179</div>
+                        </div>
+                        <div class="top-user">
+                            <div class="top-user-rank">#10</div>
+                            <div class="top-user-info"><div class="top-user-name">Ankit Enterpret</div><div class="top-user-topics">Agents, Coding, Startups</div></div>
+                            <div class="top-user-count">178</div>
                         </div>
                     </div>
                 </div>
@@ -1038,6 +1271,233 @@
                 </div>
             </section>
 
+            <!-- Stories Section -->
+            <section id="stories">
+                <div class="section-header">
+                    <h2><span>08</span> Stories from the Trenches</h2>
+                </div>
+
+                <div class="blog-container">
+                    <p class="blog-intro">2025 was a wild ride in AI. Here's what kept us up at night, made us laugh, and occasionally question our career choices.</p>
+
+                    <!-- The Karpathy Interview -->
+                    <article class="blog-article">
+                        <h3>The Karpathy-Dwarkesh Debate: AGI is a Decade Away</h3>
+                        <p>October 18 saw one of the most intellectually rigorous discussions in the Research group when Karpathy dropped his AGI timeline views.</p>
+
+                        <div class="quote-block">
+                            <p>"If agents with many tools and turns were at 60% at the start of year, now we are at 75 → still useless. And every next 5% is becoming uphill to the point it's breaking the practicality."</p>
+                            <span class="quote-author">— Pratik, Oct 18, 2025</span>
+                        </div>
+
+                        <p>Nico's takeaway resonated deeply:</p>
+
+                        <div class="quote-block">
+                            <p>"By far the best explanation thus far of why we're going to need real breakthroughs in order to advance the field materially. Engineers don't understand human society and how it works. Yet, they're the only ones permitted in the discussion."</p>
+                            <span class="quote-author">— Nico, Oct 18, 2025</span>
+                        </div>
+
+                        <p>Yam captured the expert paradox perfectly: <em>"People who say LLMs will soon replace profession X usually aren't truly of that profession themselves."</em> The discussion ended with: <em>"Pratik - the optimist. Nico - the pragmatist. We need a podcast I'm telling you."</em></p>
+                    </article>
+
+                    <!-- GPT-5.2 and Gemini 3 -->
+                    <article class="blog-article">
+                        <h3>The GPT-5.2 vs Gemini 3 Wars</h3>
+                        <p>December 2025 saw the frontier models duke it out. When GPT-5.2 dropped:</p>
+
+                        <div class="quote-block">
+                            <p>"The benchmarks of gpt-5.2 are just incredible!!! First model to cross 80 percent in SWE-bench."</p>
+                            <span class="quote-author">— Ankur Bohra, Dec 12, 2025</span>
+                        </div>
+
+                        <p>But Devansh kept it real: <em>"in practice it was so verbose it still ended costing more"</em></p>
+
+                        <p>Then Gemini 3 Flash landed on Dec 17: <em>"Gemini 3 flash seems like a different beast!"</em> — Nico. The subscription poll results? Claude (because of Claude Code) won with 8 votes.</p>
+                    </article>
+
+                    <!-- MCP and Code Mode -->
+                    <article class="blog-article">
+                        <h3>The MCP Revolution: Code Mode Enters the Chat</h3>
+                        <p>November saw deep discussions on Anthropic's MCP. Sumedh dropped knowledge from the AI Engineer summit:</p>
+
+                        <div class="quote-block">
+                            <p>"Every tool definition eats up tokens. If we scale to 50+ tools, we flood the context window. The 8-10 tool number is where this trade-off starts making sense."</p>
+                            <span class="quote-author">— Sumedh Khodke, Nov 23, 2025</span>
+                        </div>
+
+                        <p>But then the plot twist: <em>"One OpenAI engineer at the expo commented privately, codemode was a deadend since LLMs are only going to get better"</em></p>
+                    </article>
+
+                    <!-- Production Agents Study -->
+                    <article class="blog-article">
+                        <h3>The "Measuring Agents in Production" Reality Check</h3>
+                        <p>December brought a landmark study that validated what the community had been saying:</p>
+
+                        <div class="quote-block">
+                            <p>"68% of agents run ≤10 steps before human intervention. 70% use off-the-shelf models. 85% are custom-built, avoiding framework abstractions. 80% use static workflows."</p>
+                            <span class="quote-author">— Pratik summarizing the research, Dec 8, 2025</span>
+                        </div>
+
+                        <p>The core insight? <em>"Successful production teams deliberately trade capability for controllability."</em></p>
+                    </article>
+
+                    <!-- China vs USA Innovation -->
+                    <article class="blog-article">
+                        <h3>The Great Debate: China's Innovation Model</h3>
+                        <p>December brought intense geopolitical AI discussions:</p>
+
+                        <div class="quote-block">
+                            <p>"60-70% of AI patents are now coming from Chinese research institutions. Over 50% of the world's AI researchers come from Chinese institutions."</p>
+                            <span class="quote-author">— Nico, Dec 7, 2025</span>
+                        </div>
+
+                        <p>Nico's counter was sharp: <em>"China doesn't need the same CapEx as the USA. Pushing OSS innovation threatens the backbone economics of the US AI Infra buildout."</em></p>
+                    </article>
+
+                    <!-- The DeepSeek Saga -->
+                    <article class="blog-article">
+                        <h3>The DeepSeek Saga: When China Dropped a Bomb</h3>
+                        <p>In late January, DeepSeek R1 arrived. The API reliability became the drama:</p>
+
+                        <div class="quote-block">
+                            <p>"the deepseek API is absolute sh*te. Sometimes it answered, sometimes it didn't."</p>
+                            <span class="quote-author">— Nico, Feb 13, 2025</span>
+                        </div>
+
+                        <p>But the verdict was clear: <em>"On Live code bench deepseek is better than sonnet"</em> — Ankur Bohra, Jan 26</p>
+                    </article>
+
+                    <!-- Wisdom Nuggets -->
+                    <article class="blog-article">
+                        <h3>Wisdom Nuggets: The Quotable Maxpool</h3>
+                        <p>Some messages deserved to be framed:</p>
+
+                        <div class="wisdom-grid">
+                            <div class="wisdom-card">
+                                <p>"Research that aims to replace human decision makers, while being performed by those who don't understand how experts make decisions — that research is doomed."</p>
+                                <span>— Yam Parlant, Oct 18, 2025</span>
+                            </div>
+
+                            <div class="wisdom-card">
+                                <p>"We are now using one model to create another model. The world is a computation and all it wants is to find the answer which is probably 42."</p>
+                                <span>— Pratik, Dec 10, 2025</span>
+                            </div>
+
+                            <div class="wisdom-card">
+                                <p>"Anthropic's execution and thought leadership has been out of this world. They have been sent from the future by Skynet to alter their source code."</p>
+                                <span>— Pratik, Dec 17, 2025</span>
+                            </div>
+
+                            <div class="wisdom-card">
+                                <p>"Maxpool is the place to be for Gen AI. I rarely message but I read everything and it expands my knowledge and viewpoint a lot."</p>
+                                <span>— Roger, Oct 19, 2025</span>
+                            </div>
+
+                            <div class="wisdom-card">
+                                <p>"You try to delegate domain understanding to the LLM, but you can't. You can only delegate execution."</p>
+                                <span>— Yam Parlant, Dec 4, 2025</span>
+                            </div>
+
+                            <div class="wisdom-card">
+                                <p>"Humans have high mental entropy vs the reduced entropy of LLMs. Karpathy couldn't articulate where this could be solved."</p>
+                                <span>— Nico, Oct 18, 2025</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- The Funny Moments -->
+                    <article class="blog-article">
+                        <h3>The Comedy Hour: Best One-Liners of 2025</h3>
+                        <p>AI is serious business, but we found time to laugh:</p>
+
+                        <div class="funny-quotes">
+                            <div class="funny-item">
+                                <p class="funny-text">"production reliability and Agent in the same sentence xD"</p>
+                                <span class="funny-context">— Atharv Jairath, Dec 3, 2025</span>
+                            </div>
+
+                            <div class="funny-item">
+                                <p class="funny-text">"The day the world stops turning we're all going to die." / "We are all going to die even if the world does not stop turning"</p>
+                                <span class="funny-context">— Nico & Suvrankar's existential exchange, Dec 12, 2025</span>
+                            </div>
+
+                            <div class="funny-item">
+                                <p class="funny-text">"So basically all SaaS revenue is now agentic AI revenue" / "Seems like they misspelt loss as revenue"</p>
+                                <span class="funny-context">— Devansh & ~ R, Dec 11, 2025</span>
+                            </div>
+
+                            <div class="funny-item">
+                                <p class="funny-text">"@Pratik can summon your AI waifu opus and tell us?"</p>
+                                <span class="funny-context">— Ankur Bohra, Dec 12, 2025</span>
+                            </div>
+
+                            <div class="funny-item">
+                                <p class="funny-text">"I use all of them 🫣 Except Gemini Ultra" / "The man who funded AI!!"</p>
+                                <span class="funny-context">— Nico & Ankur on subscriptions, Dec 9, 2025</span>
+                            </div>
+
+                            <div class="funny-item">
+                                <p class="funny-text">"Bubble bubble bubble!!!!!!"</p>
+                                <span class="funny-context">— Ankur Bohra on CoreWeave's 50% stock drop, Dec 17, 2025</span>
+                            </div>
+
+                            <div class="funny-item">
+                                <p class="funny-text">"Yes in Indian context, vapi is a place in Gujarat where you can hire people to do sales calls at cheap prices 😂"</p>
+                                <span class="funny-context">— Abhinav, Feb 26, 2025</span>
+                            </div>
+
+                            <div class="funny-item">
+                                <p class="funny-text">"The parameters almost fit in a Google sheet 😂"</p>
+                                <span class="funny-context">— Nico on a surprisingly small model, Oct 9, 2025</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Looking Forward -->
+                    <article class="blog-article">
+                        <h3>What 2025 Taught Us</h3>
+                        <div class="lessons-list">
+                            <div class="lesson-item">
+                                <span class="lesson-number">01</span>
+                                <div class="lesson-content">
+                                    <strong>Agents need constraints, not capabilities</strong>
+                                    <p>68% of production agents run ≤10 steps. Reliability beats autonomy.</p>
+                                </div>
+                            </div>
+                            <div class="lesson-item">
+                                <span class="lesson-number">02</span>
+                                <div class="lesson-content">
+                                    <strong>China is a serious contender</strong>
+                                    <p>DeepSeek, Qwen, and 60%+ of AI patents changed the game.</p>
+                                </div>
+                            </div>
+                            <div class="lesson-item">
+                                <span class="lesson-number">03</span>
+                                <div class="lesson-content">
+                                    <strong>Claude Code won the coding wars</strong>
+                                    <p>Opus 4.5 + Claude Code became the developer's choice.</p>
+                                </div>
+                            </div>
+                            <div class="lesson-item">
+                                <span class="lesson-number">04</span>
+                                <div class="lesson-content">
+                                    <strong>AGI is a decade away (per Karpathy)</strong>
+                                    <p>Current agents lack continual learning, memory, and true generalization.</p>
+                                </div>
+                            </div>
+                            <div class="lesson-item">
+                                <span class="lesson-number">05</span>
+                                <div class="lesson-content">
+                                    <strong>Community knowledge compounds faster than models</strong>
+                                    <p>900+ practitioners sharing real production learnings outpaces any benchmark.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+            </section>
+
             <footer>
                 <p class="footer-text">Built with care by the Maxpool community</p>
                 <a href="https://join.maxpool.dev" target="_blank" class="cta-button">
@@ -1060,6 +1520,7 @@
                 <li><a href="#issues" class="toc-item">Challenges</a></li>
                 <li><a href="#heatmap" class="toc-item">Heatmap</a></li>
                 <li><a href="#vibes" class="toc-item">Vibes</a></li>
+                <li><a href="#stories" class="toc-item">Stories</a></li>
             </ul>
         </nav>
     </div>
