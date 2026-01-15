@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Definition of AGI - Quantifiable Framework for Measuring Artificial General Intelligence</title>
+    <style>
+        @page {
+            margin: 2cm;
+        }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        h1 {
+            color: #1a1a1a;
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-align: center;
+            border-bottom: 2px solid #DC8850;
+            padding-bottom: 15px;
+        }
+        h2 {
+            color: #DC8850;
+            font-size: 22px;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 8px;
+        }
+        h3 {
+            color: #555;
+            font-size: 18px;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .authors {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 30px;
+            color: #666;
+        }
+        .abstract {
+            background: #f8f8f8;
+            padding: 20px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding {
+            background: #fff8f0;
+            padding: 15px;
+            border-left: 4px solid #DC8850;
+            margin: 20px 0;
+        }
+        .key-finding h3 {
+            margin-top: 0;
+            color: #DC8850;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #DC8850;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .metric {
+            font-weight: bold;
+            color: #DC8850;
+        }
+        .performance-improvement {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .performance-decline {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .methodology-box {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .conclusion-box {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #DC8850;
+            color: white;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .badge-success {
+            background: #27ae60;
+        }
+        .badge-warning {
+            background: #f39c12;
+        }
+        .badge-danger {
+            background: #e74c3c;
+        }
+        .eli5-box {
+            background: #e8f5e9;
+            padding: 20px;
+            border-left: 4px solid #4caf50;
+            margin: 20px 0;
+            font-size: 15px;
+        }
+        .eli5-box h3 {
+            margin-top: 0;
+            color: #4caf50;
+        }
+        .figure {
+            margin: 30px 0;
+            text-align: center;
+        }
+        .figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .figure-caption {
+            font-style: italic;
+            color: #666;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .insight-box {
+            background: #fffbf0;
+            border: 2px solid #DC8850;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        .insight-box h3 {
+            color: #DC8850;
+            margin-top: 0;
+        }
+        .source-box {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .source-box a {
+            color: #DC8850;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .source-box a:hover {
+            text-decoration: underline;
+        }
+        .navigation {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f8f8;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #DC8850;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        .navigation a:hover {
+            text-decoration: underline;
+        }
+        p {
+            margin: 15px 0;
+            text-align: justify;
+        }
+        .bottleneck-box {
+            background: #ffebee;
+            border-left: 4px solid #e74c3c;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .bottleneck-box h3 {
+            margin-top: 0;
+            color: #c62828;
+        }
+        .domain-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .domain-card {
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #DC8850;
+        }
+        .domain-card h4 {
+            margin: 0 0 10px 0;
+            color: #DC8850;
+        }
+        .domain-card .score {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        .domain-card .score.zero {
+            color: #e74c3c;
+        }
+        .domain-card .score.low {
+            color: #f39c12;
+        }
+        .domain-card .score.high {
+            color: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION HEADER -->
+    <div class="navigation">
+        <a href="../index.html">← Home</a>
+        <a href="../agent/index.html">Agent Reliability</a>
+        <a href="../rag/index.html">RAG Patterns</a>
+        <a href="../research-papers/index.html">Research Papers</a>
+        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+    </div>
+
+    <!-- TITLE -->
+    <h1>A Definition of AGI<br>Quantifiable Framework for Measuring Artificial General Intelligence</h1>
+
+    <!-- AUTHORS -->
+    <div class="authors">
+        Dan Hendrycks, Dawn Song, Christian Szegedy, Yoshua Bengio, Gary Marcus, Max Tegmark, Eric Schmidt, and 30+ researchers across 30 institutions<br>
+        <em>October 2025</em>
+    </div>
+
+    <!-- EXECUTIVE SUMMARY -->
+    <div class="abstract">
+        <h2>Executive Summary</h2>
+        <p>This landmark paper proposes the first rigorous, quantifiable framework for evaluating Artificial General Intelligence by grounding it in the most empirically validated model of human cognition: the Cattell-Horn-Carroll (CHC) theory. The authors define AGI as "matching the cognitive versatility and proficiency of a well-educated adult" and decompose this into <span class="metric">ten core cognitive domains</span>, each weighted equally at 10%.</p>
+
+        <p>The framework's most striking finding: current frontier models exhibit profoundly "jagged" cognitive profiles. <span class="metric">GPT-4 scores 27%</span> on the AGI scale while <span class="metric">GPT-5 reaches 57%</span>—but both score <span class="performance-decline">0%</span> on Long-Term Memory Storage, revealing a fundamental architectural bottleneck that prevents continuous learning. This single deficit forces current systems to "re-learn context in every interaction" and rely on compensatory mechanisms like massive context windows.</p>
+
+        <p>The paper distinguishes AGI from related concepts including Superintelligence, Pandemic AI, and Recursive AI, providing clarity that has been lacking in the field. The authors conclude that achieving a 100% AGI score remains "unlikely in the next year" due to barriers in abstract reasoning (ARC-AGI Challenge), world models, spatial navigation, hallucination reduction, and continual learning systems.</p>
+    </div>
+
+    <!-- ELI5 BOX -->
+    <div class="eli5-box">
+        <h3>🎯 ELI5: What is AGI Really?</h3>
+        <p>Imagine you're testing whether a robot can replace a well-educated office worker. You wouldn't just test if it can write emails—you'd check if it can read reports, do math, remember what you told it yesterday, recognize your face, understand your tone of voice, and think through new problems it's never seen before. This paper creates a "report card" with 10 subjects based on how human brains actually work. Current AI gets A's in some subjects (like general knowledge) but completely fails others (like remembering new things permanently). It's like a student who memorizes textbooks but forgets everything the moment the test ends—smart in some ways, but not ready to graduate.</p>
+    </div>
+
+    <!-- KEY FIGURE 1 -->
+    <div class="figure">
+        <img src="https://arxiv.org/html/2510.18212v3/x1.png" alt="GPT-4 and GPT-5 AGI capability comparison radar chart" style="width: 100%; max-width: 800px;">
+        <div class="figure-caption">Figure 1: Comparison of GPT-4 (27%) and GPT-5 (57%) across ten cognitive abilities. Note the jagged profile with complete deficits in Long-Term Memory Storage.</div>
+    </div>
+
+    <!-- PART 1: THE FRAMEWORK -->
+    <h2>Part 1: The CHC-Based Definition Framework</h2>
+
+    <p>The authors ground their AGI definition in the <strong>Cattell-Horn-Carroll (CHC) theory</strong>, which represents the most empirically validated model of human intelligence, developed over a century of psychometric research. This choice is significant—rather than creating an arbitrary AI-centric definition, the paper anchors AGI to what we know about human cognition.</p>
+
+    <div class="key-finding">
+        <h3>The Ten Cognitive Domains</h3>
+        <p>Each domain receives equal weighting of <span class="metric">10%</span>, prioritizing breadth over depth in any single capability:</p>
+        <ul>
+            <li><strong>General Knowledge (K):</strong> Breadth of factual understanding across domains</li>
+            <li><strong>Reading and Writing (RW):</strong> Language consumption and production at sentence, paragraph, and document levels</li>
+            <li><strong>Mathematical Ability (M):</strong> From arithmetic through calculus</li>
+            <li><strong>On-the-Spot Reasoning (R):</strong> Novel problem-solving without relying on learned schemas</li>
+            <li><strong>Working Memory (WM):</strong> Information maintenance in active attention</li>
+            <li><strong>Long-Term Memory Storage (MS):</strong> Permanently learning new information</li>
+            <li><strong>Long-Term Memory Retrieval (MR):</strong> Accessing and retrieving stored knowledge accurately</li>
+            <li><strong>Visual Processing (V):</strong> Image and video analysis and generation</li>
+            <li><strong>Auditory Processing (A):</strong> Sound discrimination, speech recognition, musical processing</li>
+            <li><strong>Speed (S):</strong> Cognitive task performance speed and efficiency</li>
+        </ul>
+    </div>
+
+    <!-- KEY FIGURE 2 -->
+    <div class="figure">
+        <img src="https://arxiv.org/html/2510.18212v3/x2.png" alt="Ten core cognitive components diagram" style="width: 100%; max-width: 800px;">
+        <div class="figure-caption">Figure 2: The ten core cognitive components derived from CHC theory, forming the basis of the AGI assessment framework.</div>
+    </div>
+
+    <h3>Why Equal Weighting?</h3>
+    <p>The authors explicitly acknowledge that "equal weighting of broad abilities prioritizes breadth but represents one of many possible configurations." This design choice reflects a key insight: true general intelligence requires competence across all domains, not exceptional performance in just a few. An AI that scores 100% in mathematics but 0% in memory is not generally intelligent—it's a specialized tool.</p>
+
+    <!-- PART 2: CURRENT MODEL SCORES -->
+    <h2>Part 2: Evaluating Current Frontier Models</h2>
+
+    <p>The paper provides illustrative AGI scores for GPT-4 and GPT-5, revealing the dramatic gaps between current capabilities and true AGI:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Cognitive Ability</th>
+                <th>GPT-4</th>
+                <th>GPT-5</th>
+                <th>Gap to AGI</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>General Knowledge (K)</td>
+                <td><span class="performance-improvement">8%</span></td>
+                <td><span class="performance-improvement">9%</span></td>
+                <td>1-2%</td>
+            </tr>
+            <tr>
+                <td>Reading/Writing (RW)</td>
+                <td>6%</td>
+                <td><span class="performance-improvement">10%</span></td>
+                <td>0%</td>
+            </tr>
+            <tr>
+                <td>Mathematical (M)</td>
+                <td>4%</td>
+                <td><span class="performance-improvement">10%</span></td>
+                <td>0%</td>
+            </tr>
+            <tr>
+                <td>On-the-Spot Reasoning (R)</td>
+                <td><span class="performance-decline">0%</span></td>
+                <td>7%</td>
+                <td>3%</td>
+            </tr>
+            <tr>
+                <td>Working Memory (WM)</td>
+                <td>2%</td>
+                <td>4%</td>
+                <td>6%</td>
+            </tr>
+            <tr>
+                <td>Long-Term Memory Storage (MS)</td>
+                <td><span class="performance-decline">0%</span></td>
+                <td><span class="performance-decline">0%</span></td>
+                <td><span class="performance-decline">10%</span></td>
+            </tr>
+            <tr>
+                <td>Long-Term Memory Retrieval (MR)</td>
+                <td>4%</td>
+                <td>4%</td>
+                <td>6%</td>
+            </tr>
+            <tr>
+                <td>Visual Processing (V)</td>
+                <td><span class="performance-decline">0%</span></td>
+                <td>4%</td>
+                <td>6%</td>
+            </tr>
+            <tr>
+                <td>Auditory Processing (A)</td>
+                <td><span class="performance-decline">0%</span></td>
+                <td>6%</td>
+                <td>4%</td>
+            </tr>
+            <tr>
+                <td>Speed (S)</td>
+                <td>3%</td>
+                <td>3%</td>
+                <td>7%</td>
+            </tr>
+            <tr style="background: #fff8f0; font-weight: bold;">
+                <td><strong>Total AGI Score</strong></td>
+                <td><span class="metric">27%</span></td>
+                <td><span class="metric">57%</span></td>
+                <td><span class="metric">43%</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="bottleneck-box">
+        <h3>🚨 Critical Bottleneck: Long-Term Memory Storage at 0%</h3>
+        <p>The paper identifies Long-Term Memory Storage as "perhaps the most significant bottleneck" for current AI systems. Both GPT-4 and GPT-5 score <strong>0%</strong> in this domain, meaning they cannot permanently learn new information after deployment. This forces models to:</p>
+        <ul>
+            <li><strong>Re-learn context in every interaction</strong> — users must re-explain preferences, past conversations, and domain-specific knowledge</li>
+            <li><strong>Rely on massive context windows</strong> as a compensatory mechanism, stuffing working memory with what should be long-term knowledge</li>
+            <li><strong>Use retrieval-augmented generation (RAG)</strong> to mask the absence of true learning</li>
+        </ul>
+        <p>This architectural limitation means current AI cannot accumulate knowledge over time like humans do—a fundamental barrier to true general intelligence.</p>
+    </div>
+
+    <!-- PART 3: DOMAIN DETAILS -->
+    <h2>Part 3: Deep Dive into Each Cognitive Domain</h2>
+
+    <h3>General Knowledge (K)</h3>
+    <div class="figure">
+        <img src="https://arxiv.org/html/2510.18212v3/x3.png" alt="General Knowledge domain breakdown" style="width: 100%; max-width: 800px;">
+        <div class="figure-caption">Figure 3: General Knowledge assessment structure spanning commonsense, science, social science, history, and culture.</div>
+    </div>
+    <p>Tests span commonsense reasoning, science (physics, chemistry, biology), social science (psychology, economics, geography, government), history, and culture. Benchmarks include AP exams (requiring a score of 5) and PIQA (requiring >85% accuracy). Current models perform relatively well here, with GPT-5 achieving near-ceiling performance.</p>
+
+    <h3>Reading and Writing (RW)</h3>
+    <div class="figure">
+        <img src="https://arxiv.org/html/2510.18212v3/x4.png" alt="Reading and Writing ability breakdown" style="width: 100%; max-width: 800px;">
+        <div class="figure-caption">Figure 4: Reading and Writing assessment across sentence, paragraph, and document levels.</div>
+    </div>
+    <p>Assessment occurs at three levels: sentence, paragraph, and document. Comprehension benchmarks include Winograd schemas, COQA, ReCoRD, and LAMBADA. Writing ability is tested via GRE Analytical Writing standards. GPT-5 achieves full marks in this domain.</p>
+
+    <h3>Mathematical Ability (M)</h3>
+    <div class="figure">
+        <img src="https://arxiv.org/html/2510.18212v3/x5.png" alt="Mathematical Ability breakdown" style="width: 100%; max-width: 800px;">
+        <div class="figure-caption">Figure 5: Mathematical assessment progression from arithmetic through advanced calculus.</div>
+    </div>
+    <p>Progresses from arithmetic (GSM8K >95% required) through algebra, geometry, probability, and calculus. Includes both rudimentary and proficient performance tiers using MATH dataset and AMC/AoPS problems. GPT-5's jump from 4% to 10% represents significant improvement in mathematical reasoning.</p>
+
+    <h3>On-the-Spot Reasoning (R)</h3>
+    <div class="figure">
+        <img src="https://arxiv.org/html/2510.18212v3/x6.png" alt="On-the-Spot Reasoning breakdown" style="width: 100%; max-width: 800px;">
+        <div class="figure-caption">Figure 6: Reasoning assessment covering deduction, induction, theory of mind, planning, and adaptation.</div>
+    </div>
+    <p>This domain covers deduction (LogiQA 2.0), induction (Raven's Progressive Matrices), theory of mind (FANToM, ToMBench), planning (Natural Plan, PlanBench), and adaptation (Wisconsin Card Sorting Test). GPT-4's 0% score here indicates fundamental reasoning limitations that GPT-5 only partially addresses.</p>
+
+    <h3>Working Memory (WM)</h3>
+    <div class="figure">
+        <img src="https://arxiv.org/html/2510.18212v3/x7.png" alt="Working Memory breakdown" style="width: 100%; max-width: 800px;">
+        <div class="figure-caption">Figure 7: Working Memory assessment across textual, auditory, visual, and cross-modal dimensions.</div>
+    </div>
+    <p>Tests across modalities: textual (recall and transformation), auditory (voice and sound recognition), visual (images, spatial navigation, long video Q&A via VSI-Bench), and cross-modal binding. Even GPT-5 only achieves 4%, suggesting context windows don't translate to robust working memory.</p>
+
+    <h3>Long-Term Memory Storage (MS)</h3>
+    <div class="figure">
+        <img src="https://arxiv.org/html/2510.18212v3/x8.png" alt="Long-Term Memory Storage breakdown" style="width: 100%; max-width: 800px;">
+        <div class="figure-caption">Figure 8: Long-Term Memory Storage assessment—the critical 0% bottleneck for all current models.</div>
+    </div>
+    <p>Assesses associative memory (cross-modal, personalization, procedural), meaningful memory (story and movie recall), and verbatim memory (sequences, sets, designs). The complete failure of current models here represents an architectural limitation: transformers cannot update their weights post-training.</p>
+
+    <h3>Long-Term Memory Retrieval (MR)</h3>
+    <div class="figure">
+        <img src="https://arxiv.org/html/2510.18212v3/x9.png" alt="Long-Term Memory Retrieval breakdown" style="width: 100%; max-width: 800px;">
+        <div class="figure-caption">Figure 9: Long-Term Memory Retrieval assessment including fluency measures and hallucination rates.</div>
+    </div>
+    <p>Measures fluency (ideational, expressional, alternative solutions, word, naming, figural) and precision (hallucination rates via Vectara HHEM, SimpleQA requiring <5% error rate). The 4% score reflects persistent hallucination problems even in frontier models.</p>
+
+    <h3>Visual Processing (V)</h3>
+    <div class="figure">
+        <img src="https://arxiv.org/html/2510.18212v3/x10.png" alt="Visual Processing breakdown" style="width: 100%; max-width: 800px;">
+        <div class="figure-caption">Figure 10: Visual Processing assessment covering perception, generation, reasoning, and spatial scanning.</div>
+    </div>
+    <p>Perception (ImageNet >85%, ImageNet-R >90%), generation (images and videos), reasoning (SPACE, SpatialViz-Bench >80%, IntPhysics 2, CharXiv), and spatial scanning. GPT-5's improvement to 4% reflects better multimodal capabilities but significant gaps remain.</p>
+
+    <h3>Auditory Processing (A)</h3>
+    <div class="figure">
+        <img src="https://arxiv.org/html/2510.18212v3/x11.png" alt="Auditory Processing breakdown" style="width: 100%; max-width: 800px;">
+        <div class="figure-caption">Figure 11: Auditory Processing assessment including speech recognition, phonetic coding, and musical ability.</div>
+    </div>
+    <p>Phonetic coding, speech recognition (LibriSpeech WER thresholds), voice quality recognition, rhythmic ability, and musical judgment. GPT-5's 6% score reflects native audio capabilities in multimodal models.</p>
+
+    <h3>Speed (S)</h3>
+    <div class="figure">
+        <img src="https://arxiv.org/html/2510.18212v3/x12.png" alt="Speed measures breakdown" style="width: 100%; max-width: 800px;">
+        <div class="figure-caption">Figure 12: Speed assessment covering ten distinct cognitive efficiency measures.</div>
+    </div>
+    <p>Ten distinct abilities: perceptual search/compare, reading/writing speed, number facility, simple/choice reaction time, inspection time, comparison speed, and pointer fluency. Both models score 3%, suggesting speed is not a primary focus of current architectures.</p>
+
+    <!-- PART 4: CAPABILITY CONTORTIONS -->
+    <h2>Part 4: Capability Contortions — How Models Mask Weaknesses</h2>
+
+    <div class="insight-box">
+        <h3>Compensatory Mechanisms in Current AI</h3>
+        <p>The paper introduces the concept of "capability contortions"—techniques that mask fundamental deficits rather than solving them:</p>
+        <ul>
+            <li><strong>Massive Context Windows:</strong> Stuffing 128K+ tokens into context substitutes for true long-term memory, but forces repeated re-reading and incurs latency/cost</li>
+            <li><strong>Retrieval-Augmented Generation (RAG):</strong> External memory stores mask hallucination problems and memory limitations but add infrastructure complexity</li>
+            <li><strong>Chain-of-Thought Prompting:</strong> Serializes reasoning to compensate for weak working memory but increases token usage</li>
+            <li><strong>Tool Use:</strong> Offloads computation (calculators, code execution) to mask reasoning deficits</li>
+        </ul>
+        <p>These workarounds achieve impressive results but represent engineering solutions to architectural limitations, not progress toward true AGI.</p>
+    </div>
+
+    <!-- PART 5: DISTINGUISHING AGI -->
+    <h2>Part 5: What AGI Is Not — Related Concepts Distinguished</h2>
+
+    <p>The paper provides crucial definitional clarity by distinguishing AGI from related but distinct concepts:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Concept</th>
+                <th>Definition</th>
+                <th>Relationship to AGI</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Superintelligence</strong></td>
+                <td>Exceeding human performance across all cognitive domains</td>
+                <td>Beyond AGI — requires >100% on framework</td>
+            </tr>
+            <tr>
+                <td><strong>Pandemic AI</strong></td>
+                <td>Capable of engineering infectious pathogens</td>
+                <td>Narrow capability, not general</td>
+            </tr>
+            <tr>
+                <td><strong>Cyberwarfare AI</strong></td>
+                <td>Executing sophisticated cyber campaigns autonomously</td>
+                <td>Narrow capability, not general</td>
+            </tr>
+            <tr>
+                <td><strong>Self-Sustaining AI</strong></td>
+                <td>Operating autonomously indefinitely</td>
+                <td>Operational characteristic, not cognitive</td>
+            </tr>
+            <tr>
+                <td><strong>Recursive AI</strong></td>
+                <td>Conducting entire AI R&D independently</td>
+                <td>Requires AGI plus specialized capabilities</td>
+            </tr>
+            <tr>
+                <td><strong>Replacement AI</strong></td>
+                <td>Performing almost all human tasks more effectively</td>
+                <td>Economic impact metric, not cognitive</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- PART 6: BARRIERS -->
+    <h2>Part 6: Barriers to Achieving 100% AGI</h2>
+
+    <div class="methodology-box">
+        <h3>Unsolved Challenges</h3>
+        <p>The framework identifies specific barriers that must be overcome for complete AGI:</p>
+        <ul>
+            <li><strong>Abstract Reasoning:</strong> The ARC-AGI Challenge remains unsolved, requiring novel visual abstraction abilities</li>
+            <li><strong>World Models:</strong> Intuitive physics understanding and causal reasoning about the physical world</li>
+            <li><strong>Spatial Navigation Memory:</strong> Maintaining and updating mental maps over time</li>
+            <li><strong>Hallucination Reduction:</strong> Current best models still exceed acceptable error rates on SimpleQA</li>
+            <li><strong>Continual Learning:</strong> No current architecture can permanently learn from new experiences post-deployment</li>
+        </ul>
+    </div>
+
+    <div class="figure">
+        <img src="https://arxiv.org/html/2510.18212v3/x13.png" alt="Intelligence as a processor model" style="width: 100%; max-width: 800px;">
+        <div class="figure-caption">Figure 13: Conceptual model of intelligence as information processing, highlighting the knowledge-in, knowledge-out paradigm.</div>
+    </div>
+
+    <!-- PART 7: IMPLICATIONS -->
+    <h2>Part 7: Implications for AI Development</h2>
+
+    <div class="key-finding">
+        <h3>Development Priorities from This Framework</h3>
+        <ul>
+            <li><strong>Architectural Innovation Needed:</strong> The 0% long-term memory score suggests transformers may not be sufficient for AGI without fundamental changes</li>
+            <li><strong>Balanced Development:</strong> Equal weighting means progress on reasoning matters as much as language—narrow optimization won't reach AGI</li>
+            <li><strong>Benchmark Design:</strong> Current benchmarks overweight language and knowledge; we need more working memory, reasoning, and learning evaluations</li>
+            <li><strong>Honest Assessment:</strong> The framework exposes that even GPT-5 is less than 60% of the way to human-level general intelligence</li>
+        </ul>
+    </div>
+
+    <h3>Timeline Implications</h3>
+    <p>The authors conclude that achieving a 100% AGI score remains "unlikely in the next year." The <span class="metric">30 percentage point</span> gap between GPT-4 and GPT-5 suggests rapid progress is possible, but the remaining <span class="metric">43 percentage points</span> include the hardest challenges: long-term memory (requiring architectural breakthroughs), abstract reasoning (no clear path), and hallucination elimination (fundamental to reliability).</p>
+
+    <!-- CONCLUSION -->
+    <div class="conclusion-box">
+        <h2>Conclusion</h2>
+        <p>This paper represents a crucial step toward rigorous AGI discourse. By grounding the definition in established cognitive science and providing quantifiable metrics, the authors enable meaningful progress measurement and honest capability assessment.</p>
+        <ul>
+            <li><strong>Framework:</strong> Ten equally-weighted cognitive domains derived from CHC theory, totaling 100%</li>
+            <li><strong>Current State:</strong> GPT-4 at 27%, GPT-5 at 57%—significant progress but far from complete</li>
+            <li><strong>Critical Gap:</strong> Long-Term Memory Storage at 0% represents an architectural limitation, not just a training deficit</li>
+            <li><strong>Key Insight:</strong> Current AI has "jagged" profiles—exceptional at some tasks, completely failing others</li>
+            <li><strong>Path Forward:</strong> Requires solving continual learning, abstract reasoning, and hallucination problems</li>
+        </ul>
+        <p>The framework reveals that claims of imminent AGI should be viewed skeptically—even the most advanced models fail fundamental cognitive tests that well-educated adults pass routinely.</p>
+    </div>
+
+    <!-- SOURCE BOX -->
+    <div class="source-box">
+        <h3>Primary Sources</h3>
+        <p>
+            <a href="https://arxiv.org/abs/2510.18212" target="_blank">A Definition of AGI</a><br>
+            <em>Hendrycks, Song, Szegedy, Bengio, Marcus, Tegmark, Schmidt et al., October 2025</em>
+        </p>
+        <p>
+            <a href="https://arxiv.org/html/2510.18212v3" target="_blank">Full HTML Version with Figures</a><br>
+            <em>ArXiv HTML rendering with complete methodology details</em>
+        </p>
+    </div>
+
+    <!-- NAVIGATION FOOTER -->
+    <div class="navigation">
+        <a href="../index.html">← Home</a>
+        <a href="../agent/index.html">Agent Reliability</a>
+        <a href="../rag/index.html">RAG Patterns</a>
+        <a href="../research-papers/index.html">Research Papers</a>
+        <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+    </div>
+</body>
+</html>

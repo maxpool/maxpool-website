@@ -158,19 +158,19 @@
         <div class="filter-section">
             <span class="filter-label">Filter by topic:</span>
             <div class="filter-tags">
-                <button class="filter-tag active" data-tag="all">All<span class="count">24</span></button>
+                <button class="filter-tag active" data-tag="all">All<span class="count">25</span></button>
                 <button class="filter-tag" data-tag="finance">Finance<span class="count">6</span></button>
                 <button class="filter-tag" data-tag="agents">Agents<span class="count">10</span></button>
                 <button class="filter-tag" data-tag="reasoning">Reasoning<span class="count">6</span></button>
-                <button class="filter-tag" data-tag="benchmarks">Benchmarks<span class="count">7</span></button>
-                <button class="filter-tag" data-tag="architecture">Architecture<span class="count">4</span></button>
-                <button class="filter-tag" data-tag="memory">Memory<span class="count">3</span></button>
+                <button class="filter-tag" data-tag="benchmarks">Benchmarks<span class="count">8</span></button>
+                <button class="filter-tag" data-tag="architecture">Architecture<span class="count">5</span></button>
+                <button class="filter-tag" data-tag="memory">Memory<span class="count">4</span></button>
                 <button class="filter-tag" data-tag="multiagent">Multi-Agent<span class="count">3</span></button>
                 <button class="filter-tag" data-tag="reliability">Reliability<span class="count">4</span></button>
             </div>
         </div>
 
-        <div class="paper-count">Showing <span id="visible-count">24</span> papers</div>
+        <div class="paper-count">Showing <span id="visible-count">25</span> papers</div>
 
         <div class="section">
             <div class="content">
@@ -183,7 +183,22 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- NEW: Finance & Trading Papers -->
+                            <!-- NEW: AGI Definition -->
+                            <tr data-tags="benchmarks,architecture,memory">
+                                <td>
+                                    <a href="agi_definition_report.html" target="_blank" class="paper-link">
+                                        <strong>A Definition of AGI: Quantifiable Framework for Measuring Artificial General Intelligence</strong>
+                                    </a>
+                                    <span class="new-badge">New</span>
+                                    <div class="paper-tags">
+                                        <span class="paper-tag benchmarks">Benchmarks</span>
+                                        <span class="paper-tag architecture">Architecture</span>
+                                        <span class="paper-tag memory">Memory</span>
+                                    </div>
+                                </td>
+                                <td class="description">Landmark paper from 30+ researchers (Hendrycks, Song, Szegedy, Bengio, Marcus, Tegmark, Schmidt) proposing the first rigorous, quantifiable AGI framework grounded in Cattell-Horn-Carroll cognitive theory. Decomposes AGI into ten equally-weighted domains (10% each): General Knowledge, Reading/Writing, Math, Reasoning, Working Memory, Long-Term Memory Storage/Retrieval, Visual, Auditory, and Speed. Reveals current models' "jagged" profiles: GPT-4 scores 27%, GPT-5 reaches 57%—but both score 0% on Long-Term Memory Storage, identifying it as the critical architectural bottleneck preventing true general intelligence. Distinguishes AGI from Superintelligence, Pandemic AI, and Recursive AI concepts.</td>
+                            </tr>
+                            <!-- Finance & Trading Papers -->
                             <tr data-tags="finance,benchmarks,agents">
                                 <td>
                                     <a href="vending_bench_report.html" target="_blank" class="paper-link">
