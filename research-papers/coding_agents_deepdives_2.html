@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Part 5: Agent Deep-Dives O&ndash;W | Coding Agent Engineering Analysis</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Georgia', 'Times New Roman', serif; font-size: 16px; line-height: 1.7; color: #1a1a1a; background: #fff; max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        h1 { font-size: 28px; text-align: center; margin-bottom: 10px; padding-bottom: 15px; border-bottom: 2px solid #DC8850; }
+        h2 { font-size: 22px; color: #DC8850; margin-top: 40px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #DC8850; }
+        h3 { font-size: 18px; color: #555; margin-top: 25px; margin-bottom: 10px; font-weight: 600; }
+        h4 { font-size: 16px; font-weight: bold; margin-top: 15px; margin-bottom: 8px; }
+        p { margin-bottom: 1em; text-align: justify; }
+        a { color: #DC8850; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        ul, ol { margin-left: 1.5em; margin-bottom: 1em; }
+        li { margin-bottom: 0.4em; }
+        .navigation { display: flex; justify-content: center; gap: 20px; padding: 15px 0; margin-bottom: 30px; border-bottom: 1px solid #eee; flex-wrap: wrap; }
+        .navigation a { color: #DC8850; text-decoration: none; font-size: 14px; font-weight: 500; }
+        .navigation a:hover { text-decoration: underline; }
+        .authors { text-align: center; font-style: italic; color: #666; margin-bottom: 30px; font-size: 15px; }
+        .abstract { background: #f8f8f8; padding: 20px 25px; border-left: 4px solid #DC8850; margin: 25px 0; border-radius: 0 5px 5px 0; }
+        .abstract h2 { margin-top: 0; border: none; padding: 0; margin-bottom: 10px; }
+        .key-finding { background: #fff8f0; padding: 20px 25px; border-left: 4px solid #DC8850; margin: 20px 0; border-radius: 0 5px 5px 0; }
+        .eli5-box { background: #e8f5e9; padding: 20px 25px; border-left: 4px solid #4caf50; margin: 25px 0; border-radius: 0 5px 5px 0; }
+        .insight-box { background: #fffbf0; padding: 20px 25px; border: 2px solid #DC8850; margin: 20px 0; border-radius: 8px; }
+        .warning-box { background: #fff3e0; padding: 20px 25px; border-left: 4px solid #f39c12; margin: 20px 0; border-radius: 0 5px 5px 0; }
+        .conclusion-box { background: #f0f0f0; padding: 20px 25px; border-radius: 5px; margin: 20px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; vertical-align: top; }
+        th { background: #DC8850; color: #fff; font-weight: bold; }
+        tr:nth-child(even) { background: #f9f9f9; }
+        pre { font-family: 'Courier New', monospace; font-size: 13px; background: #f8f8f8; border: 1px solid #ddd; padding: 15px; margin: 15px 0; overflow-x: auto; line-height: 1.4; border-radius: 5px; }
+        code { font-family: 'Courier New', monospace; font-size: 13px; background: #f0f0f0; padding: 2px 6px; border-radius: 3px; }
+        .diagram { font-family: 'Courier New', monospace; font-size: 12px; background: #fafafa; border: 2px solid #eee; padding: 20px; margin: 20px 0; overflow-x: auto; white-space: pre; line-height: 1.3; border-radius: 8px; }
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 3px; font-size: 12px; font-weight: bold; }
+        .badge-primary { background: #DC8850; color: #fff; }
+        .badge-success { background: #27ae60; color: #fff; }
+        .badge-warning { background: #f39c12; color: #fff; }
+        .badge-danger { background: #e74c3c; color: #fff; }
+        .metric { font-weight: bold; color: #DC8850; }
+        .performance-improvement { font-weight: bold; color: #27ae60; }
+        .performance-decline { font-weight: bold; color: #e74c3c; }
+        .part-nav { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; margin: 30px 0; }
+        .part-card { display: block; background: #fff; border: 2px solid #eee; border-radius: 8px; padding: 20px; text-decoration: none; color: #1a1a1a; transition: all 0.2s; }
+        .part-card:hover { border-color: #DC8850; box-shadow: 0 4px 12px rgba(220,136,80,0.15); transform: translateY(-2px); text-decoration: none; }
+        .part-card h3 { color: #DC8850; margin: 0 0 8px 0; font-size: 16px; }
+        .part-card p { margin: 0; font-size: 14px; color: #666; text-align: left; }
+        .part-card .part-num { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .source-box { background: #f8f8f8; padding: 20px; border-radius: 5px; margin: 30px 0; font-size: 14px; }
+        .series-nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; margin: 30px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; font-size: 14px; }
+        .series-nav a { color: #DC8850; }
+        @media (max-width: 768px) {
+            body { padding: 20px 15px; font-size: 15px; }
+            h1 { font-size: 22px; }
+            h2 { font-size: 18px; }
+            table { font-size: 12px; }
+            th, td { padding: 6px; }
+            .part-nav { grid-template-columns: 1fr; }
+            pre, .diagram { font-size: 11px; padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="navigation">
+    <a href="../index.html">&larr; Home</a>
+    <a href="../agent/index.html">Agent Reliability</a>
+    <a href="../rag/index.html">RAG Patterns</a>
+    <a href="index.html">Research Papers</a>
+    <a href="https://join.maxpool.dev" target="_blank">Join Community &rarr;</a>
+</div>
+
+<h1>Part 5: Agent Deep-Dives O&ndash;W</h1>
+<div class="authors">Coding Agent Engineering Analysis &middot; Part 5 of 6<br><em>Enhanced Edition &middot; January 2026 &middot; 6 Agents Analyzed</em></div>
+
+<div class="abstract">
+    <h2>Overview</h2>
+    <p>This installment covers six coding agents spanning the O&ndash;W range: OpenCode, OpenManus, Qwen Code, Replit Agent, Vibe CLI, and Warp. These agents represent a diverse cross-section of the ecosystem &mdash; from open-source LSP-integrated terminals to proprietary cloud-native development environments. Warp achieves the <span class="performance-improvement">highest SWE-bench score at 75.8%</span> through Full Terminal Control, while Replit demonstrates <span class="performance-improvement">15% cost savings</span> and <span class="performance-improvement">30% faster execution</span> via Python DSL tool invocation. Vibe CLI offers the most cost-effective option at <span class="metric">$0.40/$2.00 per 1M tokens</span> &mdash; roughly 7.5x cheaper than competing models.</p>
+</div>
+
+<!-- ======================================================================== -->
+<!-- OPENCODE -->
+<!-- ======================================================================== -->
+
+<h2>1. OpenCode</h2>
+
+<p><span class="badge badge-success">Go</span> <span class="badge badge-primary">Apache-2.0</span> <span class="badge badge-warning">5k+ Stars</span></p>
+
+<h3>Architecture: Client/Server with Deep LSP Integration</h3>
+
+<p>OpenCode takes a distinctive client/server approach built in Go. The TUI client is built with Bubble Tea (a Go TUI framework) and communicates with the OpenCode Server over gRPC. This separation enables the server to manage long-running sessions independently of the terminal interface, supporting features like shareable links and multi-session workflows. An internal Event Bus coordinates communication between the LSP Client, MCP Client, and core server logic.</p>
+
+<div class="diagram">
+OPENCODE CLIENT/SERVER ARCHITECTURE:
+
+  ┌────────────────────────────────────────────────────────────────┐
+  │  TUI Client (Go + Bubble Tea)                                 │
+  │  ├─ Interactive terminal interface                             │
+  │  ├─ Multi-session management                                  │
+  │  └─ Shareable session links                                   │
+  └──────────────────────┬─────────────────────────────────────────┘
+                         │ gRPC
+  ┌──────────────────────▼─────────────────────────────────────────┐
+  │  OpenCode Server                                               │
+  │  ┌──────────────────────────────────────────────────────────┐  │
+  │  │                    Event Bus                              │  │
+  │  │  ┌───────────┐  ┌───────────┐  ┌──────────────────────┐ │  │
+  │  │  │ LSP Client│  │MCP Client │  │  LLM Provider Router │ │  │
+  │  │  └─────┬─────┘  └─────┬─────┘  │  (75+ via Models.dev)│ │  │
+  │  │        │              │         └──────────────────────┘ │  │
+  │  └────────┼──────────────┼─────────────────────────────────┘  │
+  └───────────┼──────────────┼────────────────────────────────────┘
+              │              │
+     ┌────────▼────────┐  ┌─▼──────────────────┐
+     │  LSP Servers     │  │  MCP Tool Servers   │
+     │  (Auto-detected) │  │  (External tools)   │
+     └─────────────────┘  └────────────────────┘</div>
+
+<h3>LSP Integration: Semantic Code Intelligence</h3>
+
+<p>OpenCode&rsquo;s standout feature is its comprehensive Language Server Protocol integration. Rather than relying solely on text-based grep and file reads, the agent leverages structured semantic understanding of the codebase through <span class="metric">9 LSP methods</span>:</p>
+
+<ul>
+    <li><code>goToDefinition</code> &mdash; Jump to where a symbol is defined</li>
+    <li><code>findReferences</code> &mdash; Locate all usages of a symbol across the project</li>
+    <li><code>hover</code> &mdash; Retrieve type information and documentation</li>
+    <li><code>documentSymbol</code> &mdash; List all symbols in a file</li>
+    <li><code>workspaceSymbol</code> &mdash; Search symbols across the entire workspace</li>
+    <li><code>goToImplementation</code> &mdash; Find concrete implementations of interfaces</li>
+    <li><code>prepareCallHierarchy</code> &mdash; Map function call relationships</li>
+    <li><code>incomingCalls</code> &mdash; Which functions call a given function</li>
+    <li><code>outgoingCalls</code> &mdash; Which functions a given function calls</li>
+</ul>
+
+<h4>Auto-Detected LSP Servers</h4>
+<table>
+    <thead>
+        <tr><th>Language</th><th>LSP Server</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Go</td><td>gopls</td></tr>
+        <tr><td>TypeScript / JavaScript</td><td>typescript-language-server</td></tr>
+        <tr><td>Python</td><td>pyright</td></tr>
+        <tr><td>Ruby</td><td>solargraph / ruby-lsp</td></tr>
+        <tr><td>Rust</td><td>rust-analyzer</td></tr>
+        <tr><td>PHP</td><td>intelephense / phpactor</td></tr>
+    </tbody>
+</table>
+
+<div class="key-finding">
+    <h4>Diagnostic Feedback Loop</h4>
+    <p>OpenCode implements a closed-loop correction cycle: the LLM proposes a file edit, which is applied and immediately validated by the LSP Server. Any diagnostics (type errors, missing imports, unresolved references) are fed back to the LLM, enabling self-correction without requiring a separate test run. This is analogous to having a compiler in the loop &mdash; catching errors at the semantic level before they ever reach runtime.</p>
+</div>
+
+<h3>Additional Features</h3>
+<ul>
+    <li><strong>Provider Agnostic:</strong> Supports <span class="metric">75+ LLM providers</span> via the Models.dev registry</li>
+    <li><strong>AGENTS.md:</strong> Project-specific configuration file for custom instructions, similar to Claude&rsquo;s CLAUDE.md</li>
+    <li><strong>Multi-Session:</strong> Run and switch between multiple concurrent sessions</li>
+    <li><strong>Shareable Links:</strong> Export session state as shareable URLs</li>
+    <li><strong>Claude Pro Support:</strong> Direct integration with Anthropic&rsquo;s Claude Pro subscription</li>
+</ul>
+
+<!-- ======================================================================== -->
+<!-- OPENMANUS -->
+<!-- ======================================================================== -->
+
+<h2>2. OpenManus</h2>
+
+<p><span class="badge badge-success">Python</span> <span class="badge badge-primary">MIT</span> <span class="badge badge-warning">53.9k Stars</span></p>
+
+<h3>Architecture: 4-Level ReAct Agent Hierarchy</h3>
+
+<p>OpenManus implements a layered agent architecture where each level adds progressively more capability. The base layer provides memory, state management, and LLM connectivity. The ReAct layer adds the Observe &rarr; Think &rarr; Act loop. The ToolCall layer enables structured tool invocation. Finally, the Manus layer combines everything into a fully autonomous coding agent. This design achieves <span class="metric">74.3% on the GAIA benchmark</span> for general AI assistant tasks.</p>
+
+<div class="diagram">
+OPENMANUS AGENT HIERARCHY:
+┌─────────────────────────────────────────────────────────┐
+│  Manus (Top-Level Agent)                                │
+│  └─ ToolCallAgent                                       │
+│     └─ ReActAgent (Observe → Think → Act loop)          │
+│        └─ BaseAgent (memory, state, LLM connection)     │
+├─────────────────────────────────────────────────────────┤
+│  PlanningFlow                                           │
+│  ├─ Create plan with PlanningTool                       │
+│  ├─ Execute steps via agent hierarchy                   │
+│  └─ Monitor and adjust plan as needed                   │
+├─────────────────────────────────────────────────────────┤
+│  Tools (15+):                                           │
+│  Bash | PythonExecute | FileOps | StrReplace | Browser  │
+│  WebSearch | Crawl4AI | MCP Bridge | AskHuman | Plan    │
+└─────────────────────────────────────────────────────────┘</div>
+
+<h3>PlanningFlow Orchestration</h3>
+
+<p>Complex multi-step tasks are managed through PlanningFlow, which creates an explicit plan using the PlanningTool before execution begins. Each step in the plan is executed through the full agent hierarchy, and the plan itself is monitored and adjusted dynamically as steps succeed or fail. This explicit planning layer is critical for tasks that require coordination across multiple files or systems.</p>
+
+<h3>Tool Inventory</h3>
+
+<p>OpenManus ships with <span class="metric">15+ built-in tools</span> spanning shell execution, file manipulation, web interaction, and agent coordination:</p>
+
+<table>
+    <thead>
+        <tr><th>Tool</th><th>Category</th><th>Purpose</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Bash</td><td>Execution</td><td>Shell command execution</td></tr>
+        <tr><td>PythonExecute</td><td>Execution</td><td>Direct Python code execution</td></tr>
+        <tr><td>FileOperators</td><td>File I/O</td><td>Read, write, list file operations</td></tr>
+        <tr><td>StrReplaceEditor</td><td>File I/O</td><td>Surgical string replacement edits</td></tr>
+        <tr><td>Browser</td><td>Web</td><td>Browser automation and interaction</td></tr>
+        <tr><td>WebSearch</td><td>Web</td><td>Internet search queries</td></tr>
+        <tr><td>Crawl4AI</td><td>Web</td><td>Web page crawling and extraction</td></tr>
+        <tr><td>MCP Bridge</td><td>Integration</td><td>External tool integration via MCP</td></tr>
+        <tr><td>AskHuman</td><td>Interaction</td><td>Interactive clarification requests</td></tr>
+        <tr><td>PlanningTool</td><td>Orchestration</td><td>Explicit plan creation and management</td></tr>
+    </tbody>
+</table>
+
+<div class="insight-box">
+    <h4>Design Insight: Why 4 Layers?</h4>
+    <p>The layered hierarchy enables clean separation of concerns. BaseAgent handles persistence, ReActAgent handles reasoning loops, ToolCallAgent handles tool dispatch, and Manus orchestrates the full workflow. Each layer can be tested and extended independently. The MCP Bridge also allows OpenManus to incorporate any MCP-compatible external tool without modifying the core agent code.</p>
+</div>
+
+<!-- ======================================================================== -->
+<!-- QWEN CODE -->
+<!-- ======================================================================== -->
+
+<h2>3. Qwen Code</h2>
+
+<p><span class="badge badge-success">TypeScript</span> <span class="badge badge-primary">Apache-2.0</span> <span class="badge badge-warning">17.9k Stars</span></p>
+
+<h3>Architecture: Forked CLI with Qwen Optimizations</h3>
+
+<p>Qwen Code is a TypeScript CLI forked from Gemini CLI and customized for the Qwen model family. It achieves <span class="metric">67&ndash;69.6% on SWE-bench Verified</span> depending on the underlying model variant. The most notable feature is its <span class="performance-improvement">free tier offering 2,000 requests per day</span> via OAuth authentication &mdash; no API key required &mdash; making it the most accessible agent for developers without cloud billing.</p>
+
+<div class="diagram">
+QWEN CODE ARCHITECTURE:
+┌──────────────────────────────────────────────────────────┐
+│  Qwen Code CLI (TypeScript, forked from Gemini CLI)      │
+├──────────────────────────────────────────────────────────┤
+│  Authentication                                          │
+│  ├─ OAuth (Free Tier: 2000 req/day, no API key)          │
+│  └─ API Key (Pay-per-use, higher limits)                 │
+├──────────────────────────────────────────────────────────┤
+│  13 Built-in Tools:                                      │
+│  ┌──────────────┐  ┌──────────────┐  ┌────────────────┐ │
+│  │ File I/O     │  │ Search       │  │ Execution      │ │
+│  │ Read         │  │ Grep         │  │ Shell          │ │
+│  │ ReadManyFiles│  │ Glob         │  │ web_fetch      │ │
+│  │ Write        │  │ web_search   │  │ task           │ │
+│  │ Edit         │  │              │  │ exit_plan_mode │ │
+│  └──────────────┘  └──────────────┘  └────────────────┘ │
+│  ┌──────────────┐  ┌──────────────┐                      │
+│  │ Memory       │  │ Planning     │                      │
+│  │ save_memory  │  │ todo_write   │                      │
+│  └──────────────┘  └──────────────┘                      │
+├──────────────────────────────────────────────────────────┤
+│  Sandbox: Docker isolation via --sandbox flag             │
+└──────────────────────────────────────────────────────────┘</div>
+
+<h3>Tool Inventory (13 Tools)</h3>
+
+<table>
+    <thead>
+        <tr><th>Tool</th><th>Category</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Read</td><td>File I/O</td><td>Read a single file</td></tr>
+        <tr><td>ReadManyFiles</td><td>File I/O</td><td>Multi-file read in a single tool call (ACI optimization)</td></tr>
+        <tr><td>Write</td><td>File I/O</td><td>Write content to a file</td></tr>
+        <tr><td>Edit</td><td>File I/O</td><td>Surgical edits via string replacement</td></tr>
+        <tr><td>Grep</td><td>Search</td><td>Content search across files</td></tr>
+        <tr><td>Glob</td><td>Search</td><td>File path pattern matching</td></tr>
+        <tr><td>Shell</td><td>Execution</td><td>Shell command execution</td></tr>
+        <tr><td>web_fetch</td><td>Web</td><td>Fetch and process web content</td></tr>
+        <tr><td>web_search</td><td>Web</td><td>Internet search queries</td></tr>
+        <tr><td>save_memory</td><td>Memory</td><td>Explicit cross-session memory persistence</td></tr>
+        <tr><td>exit_plan_mode</td><td>Planning</td><td>Transition from planning to execution</td></tr>
+        <tr><td>todo_write</td><td>Planning</td><td>Task tracking and management</td></tr>
+        <tr><td>task</td><td>Execution</td><td>Delegate sub-tasks to a child agent</td></tr>
+    </tbody>
+</table>
+
+<div class="key-finding">
+    <h4>ACI Optimization: ReadManyFiles</h4>
+    <p>The <code>ReadManyFiles</code> tool is a notable Agent-Computer Interface optimization. Instead of issuing N separate Read calls (each consuming a turn and adding latency), the agent can read multiple files in a single tool invocation. This reduces round-trips and context overhead, which is particularly impactful in large repositories where understanding a feature might require reading 5&ndash;10 files simultaneously.</p>
+</div>
+
+<h3>Cross-Session Memory</h3>
+
+<p>The <code>save_memory</code> tool enables explicit persistence of information across sessions. Unlike implicit memory systems that rely on conversation history, this gives the agent (and user) direct control over what knowledge is retained. This is especially useful for project-specific conventions, architectural decisions, or debugging context that should survive session boundaries.</p>
+
+<!-- ======================================================================== -->
+<!-- REPLIT AGENT -->
+<!-- ======================================================================== -->
+
+<h2>4. Replit Agent</h2>
+
+<p><span class="badge badge-danger">Python</span> <span class="badge badge-warning">Proprietary</span></p>
+
+<h3>Architecture: Multi-Agent System with Python DSL</h3>
+
+<p>Replit Agent uses a multi-agent architecture with three specialized agents: a <strong>Manager Agent</strong> that decomposes tasks and coordinates execution, an <strong>Editor Agent</strong> that handles code modifications, and a <strong>Verifier Agent</strong> that validates outputs. The most significant architectural innovation is replacing traditional JSON function calling with a <strong>Python DSL for tool invocation</strong>, yielding <span class="performance-improvement">~90% tool invocation success rate</span>, <span class="performance-improvement">15% cost savings</span> from fewer turns, and <span class="performance-improvement">30% faster execution</span>.</p>
+
+<div class="diagram">
+REPLIT MULTI-AGENT SYSTEM:
+┌───────────────────────────────────────────────────────────┐
+│  Manager Agent                                            │
+│  ├─ Task decomposition                                    │
+│  ├─ Agent coordination                                    │
+│  └─ Progress monitoring                                   │
+├───────────────┬───────────────────────────────────────────┤
+│  Editor Agent │  Verifier Agent                           │
+│  ├─ Code edits│  ├─ Output validation                     │
+│  ├─ File ops  │  ├─ Self-testing                          │
+│  └─ Refactors │  └─ Checkpoint verification               │
+├───────────────┴───────────────────────────────────────────┤
+│  Python DSL Tool Invocation Layer                         │
+│  (Replaces JSON function calling)                         │
+├───────────────────────────────────────────────────────────┤
+│  Cloud Sandbox with Checkpoint System                     │
+│  ├─ 200-minute autonomous sessions                        │
+│  ├─ Trajectory compression                                │
+│  └─ State snapshots at key decision points                │
+└───────────────────────────────────────────────────────────┘</div>
+
+<h3>Python DSL vs. Traditional Function Calling</h3>
+
+<p>The Python DSL approach is Replit&rsquo;s most impactful engineering decision. Traditional JSON function calling limits the agent to one tool call per generation step, with no conditional logic. The Python DSL allows multiple tools, branching, and loops in a single generation:</p>
+
+<pre>
+# TRADITIONAL (JSON Function Calling):
+# { "name": "edit_file", "arguments": {...} }
+# =&gt; One tool per generation, no conditional logic
+
+# REPLIT (Python DSL):
+file_content = read_file("src/app.py")
+if "def hello():" in file_content:
+    edit_file("src/app.py", ...)
+    run_command("python -m pytest tests/")
+# =&gt; Multiple tools, conditional logic, single generation
+</pre>
+
+<div class="insight-box">
+    <h4>Why Python DSL Wins</h4>
+    <p>The Python DSL reduces the number of LLM generation turns needed per task. Each turn has fixed overhead (network latency, prompt processing), so fewer turns means faster execution and lower cost. The <span class="metric">~90% success rate</span> also exceeds typical JSON function calling accuracy, because the model is generating in a syntax it has been extensively trained on &mdash; Python &mdash; rather than a rigid JSON schema.</p>
+</div>
+
+<h3>Trajectory Compression</h3>
+
+<p>Replit supports <span class="metric">200-minute autonomous sessions</span>, which can generate enormous context windows. Trajectory compression addresses this by condensing long session histories into key decision points. Instead of retaining every file read and tool call, the system identifies critical state transitions &mdash; plan changes, test failures, architectural decisions &mdash; and preserves only those.</p>
+
+<div class="diagram">
+TRAJECTORY COMPRESSION:
+
+Full Session (200 min):
+  [read] [read] [edit] [test] [fail] [read] [edit] [test] [pass]
+  [read] [read] [read] [edit] [test] [fail] [debug] [edit] [pass]
+  ...hundreds more actions...
+
+Compressed Trajectory:
+  [plan: add auth module]
+  [decision: chose JWT over session tokens]
+  [test_fail: missing middleware]
+  [fix: added auth middleware]
+  [checkpoint: auth module complete]
+  [plan: add rate limiting]
+  ...</div>
+
+<h3>Production Scale</h3>
+
+<p>Replit Agent&rsquo;s cloud sandbox includes a checkpoint system that captures full environment state at key moments, enabling rollback and branching. In a partnership with Rokt, the system demonstrated its production readiness by building <span class="metric">135 applications in 24 hours</span>. The Verifier Agent adds a self-testing layer where the agent writes and runs its own test suites to validate correctness before marking a task complete.</p>
+
+<!-- ======================================================================== -->
+<!-- VIBE CLI -->
+<!-- ======================================================================== -->
+
+<h2>5. Vibe CLI (Mistral)</h2>
+
+<p><span class="badge badge-success">TypeScript</span> <span class="badge badge-primary">Apache-2.0</span></p>
+
+<h3>Architecture: Config-Driven Agent Framework</h3>
+
+<p>Vibe CLI is Mistral&rsquo;s open-source coding agent, built around a <code>~/.vibe/</code> configuration directory that organizes agents, prompts, and history as structured files. Custom agents are defined via TOML configuration, making it straightforward to create specialized agents for different tasks without modifying source code. The Devstral model family powers the backend, achieving <span class="metric">72.2% on SWE-bench Verified</span> with the flagship 123B model.</p>
+
+<div class="diagram">
+VIBE CLI CONFIG STRUCTURE:
+
+~/.vibe/
+├── config.toml          # Global configuration
+├── agents/              # Custom agent definitions (TOML)
+│   ├── default.toml     # Default coding agent
+│   ├── reviewer.toml    # Code review specialist
+│   └── debugger.toml    # Debugging specialist
+├── prompts/             # Reusable prompt templates
+│   ├── system.txt       # System prompt
+│   └── review.txt       # Review prompt template
+└── history/             # Session history storage
+    ├── session_001.json
+    └── session_002.json
+
+8 Built-in Tools:
+┌────────────────┬─────────────────┬────────────────────┐
+│ read_file      │ write_file      │ search_replace     │
+│ bash           │ grep            │ todo               │
+│ ask_user_question               │ task               │
+└────────────────┴─────────────────┴────────────────────┘</div>
+
+<h3>Devstral Model Family</h3>
+
+<table>
+    <thead>
+        <tr><th>Model</th><th>Parameters</th><th>Context</th><th>SWE-bench</th><th>License</th><th>Hardware</th></tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Devstral 2</td>
+            <td>123B</td>
+            <td>256K</td>
+            <td><span class="performance-improvement">72.2%</span></td>
+            <td>Modified MIT</td>
+            <td>4x H100</td>
+        </tr>
+        <tr>
+            <td>Devstral Small 2</td>
+            <td>24B</td>
+            <td>256K</td>
+            <td><span class="metric">68.0%</span></td>
+            <td>Apache 2.0</td>
+            <td>Single GPU</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>Cost Comparison</h3>
+
+<p>The Devstral family offers the most cost-effective per-token pricing among agents with competitive SWE-bench scores:</p>
+
+<table>
+    <thead>
+        <tr><th>Model</th><th>Input (per 1M tokens)</th><th>Output (per 1M tokens)</th><th>SWE-bench</th></tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Devstral 2 (123B)</td>
+            <td><span class="performance-improvement">$0.40</span></td>
+            <td><span class="performance-improvement">$2.00</span></td>
+            <td>72.2%</td>
+        </tr>
+        <tr>
+            <td>Claude Sonnet</td>
+            <td>$3.00</td>
+            <td>$15.00</td>
+            <td>~72%</td>
+        </tr>
+        <tr>
+            <td><em>Cost ratio</em></td>
+            <td><em>7.5x cheaper</em></td>
+            <td><em>7.5x cheaper</em></td>
+            <td><em>Comparable</em></td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="key-finding">
+    <h4>Agent Communication Protocol (ACP)</h4>
+    <p>Vibe CLI supports the Agent Communication Protocol for IDE integration. The initial integration target is Zed, the GPU-accelerated editor. ACP allows the CLI agent to communicate bidirectionally with the IDE &mdash; receiving context about the current file, cursor position, and diagnostics while sending back edits, terminal commands, and status updates. This bridges the gap between standalone CLI agents and IDE-native copilots.</p>
+</div>
+
+<!-- ======================================================================== -->
+<!-- WARP -->
+<!-- ======================================================================== -->
+
+<h2>6. Warp</h2>
+
+<p><span class="badge badge-success">Rust</span> <span class="badge badge-warning">Proprietary</span></p>
+
+<h3>Architecture: Agent Development Environment (ADE)</h3>
+
+<p>Warp redefines what a coding agent can be by building an entire Agent Development Environment with a GPU-rendered Rust UI. It achieves the <span class="performance-improvement">highest SWE-bench Verified score at 75.8%</span> (with GPT-5) among all agents analyzed in this series, and scores <span class="metric">52% on Terminal-Bench</span>. The team&rsquo;s core thesis: <em>&ldquo;A single agent with focused tools outperforms multi-agent approaches.&rdquo;</em></p>
+
+<h3>Full Terminal Control (FTC)</h3>
+
+<p>Warp&rsquo;s most significant innovation is Full Terminal Control &mdash; a PTY-based system that gives the agent the ability to drive interactive terminal sessions. Unlike traditional agents that can only execute commands and read stdout, FTC enables the agent to handle prompts, confirmations, pagination, SSH sessions, and even interactive editors like vim.</p>
+
+<div class="diagram">
+FULL TERMINAL CONTROL COMPARISON:
+
+Traditional Agent:
+  agent → exec("npm install") → wait → read stdout
+  FAILS on: interactive prompts, sudo, ssh, vim, less
+
+Warp FTC:
+  agent → PTY.spawn("ssh server") →
+    ← "Password: "
+  agent → PTY.write(password + "\n") →
+    ← "server$ "
+  agent → PTY.write("tail -f /var/log/app.log\n") →
+    ← (streaming log output)
+  agent → PTY.write("\x03") → (Ctrl-C to stop)
+
+Capabilities:
+  ├─ Interactive prompts &amp; confirmations
+  ├─ SSH sessions (multi-hop)
+  ├─ Pagination (less, more)
+  ├─ Text editors (vim, nano)
+  ├─ Real-time log streaming
+  ├─ Ctrl-C / arrow keys / escape sequences
+  └─ sudo password entry</div>
+
+<div class="insight-box">
+    <h4>Why FTC Matters</h4>
+    <p>Most coding agents fail when a command requires interactive input &mdash; a <code>sudo</code> password prompt, an <code>npm init</code> questionnaire, or an SSH key confirmation. These are common in real-world development workflows. By operating at the PTY level, Warp can read terminal output character-by-character in real-time and send arbitrary keystrokes including control sequences. This closes the gap between what a human developer can do in a terminal and what an agent can do.</p>
+</div>
+
+<h3>Cloud Sandbox Architecture</h3>
+
+<div class="diagram">
+WARP CLOUD SANDBOX:
+┌──────────────────────────────────────────────────────────┐
+│  Warp ADE (GPU-Rendered Rust UI)                         │
+│  ├─ Multi-model composition                              │
+│  ├─ Codebase embeddings for semantic search              │
+│  └─ Full Terminal Control engine                         │
+├──────────────────────────────────────────────────────────┤
+│  Cloud Sandbox (via Namespace)                           │
+│  ├─ Ephemeral environments                               │
+│  ├─ SOC 2 compliant                                      │
+│  ├─ Isolated execution contexts                          │
+│  └─ Pre-configured development toolchains                │
+├──────────────────────────────────────────────────────────┤
+│  Model Layer                                             │
+│  ├─ GPT-5 (primary, SWE-bench 75.8%)                    │
+│  ├─ Multi-model composition                              │
+│  └─ Task-specific model routing                          │
+└──────────────────────────────────────────────────────────┘</div>
+
+<h3>Key Engineering Decisions</h3>
+
+<ul>
+    <li><strong>Single-Agent Philosophy:</strong> Warp deliberately chose a single-agent architecture with focused, high-quality tools over a multi-agent system. Their benchmarks show this outperforms approaches that distribute work across multiple specialized agents.</li>
+    <li><strong>GPU-Rendered UI:</strong> The Rust + GPU rendering pipeline delivers sub-frame latency for terminal output, critical when the agent is streaming real-time log output or navigating interactive sessions.</li>
+    <li><strong>Codebase Embeddings:</strong> Semantic search over the codebase via embeddings enables the agent to find relevant code by meaning rather than just text matching, improving context retrieval for complex tasks.</li>
+    <li><strong>SOC 2 Compliance:</strong> The cloud sandbox (Namespace) is SOC 2 compliant, making Warp viable for enterprise environments where security and auditability are requirements.</li>
+</ul>
+
+<div class="warning-box">
+    <h4>Trade-off: Proprietary Lock-in</h4>
+    <p>Warp&rsquo;s impressive benchmark results come with a proprietary architecture. The GPU-rendered UI, FTC engine, and cloud sandbox are all closed-source. While the benchmark scores are the highest in this analysis, organizations must weigh this against the vendor dependency and lack of self-hosting options.</p>
+</div>
+
+<!-- ======================================================================== -->
+<!-- QUICK REFERENCE TABLE -->
+<!-- ======================================================================== -->
+
+<h2>Quick Reference: All 6 Agents</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Agent</th>
+            <th>Language</th>
+            <th>License</th>
+            <th>Stars</th>
+            <th>SWE-bench</th>
+            <th>Key Innovation</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>OpenCode</strong></td>
+            <td>Go</td>
+            <td>Apache-2.0</td>
+            <td>5k+</td>
+            <td>N/A</td>
+            <td>LSP semantic search</td>
+        </tr>
+        <tr>
+            <td><strong>OpenManus</strong></td>
+            <td>Python</td>
+            <td>MIT</td>
+            <td>53.9k</td>
+            <td>N/A (GAIA 74.3%)</td>
+            <td>4-level ReAct hierarchy</td>
+        </tr>
+        <tr>
+            <td><strong>Qwen Code</strong></td>
+            <td>TypeScript</td>
+            <td>Apache-2.0</td>
+            <td>17.9k</td>
+            <td>67&ndash;69.6%</td>
+            <td>Free tier + multi-file read</td>
+        </tr>
+        <tr>
+            <td><strong>Replit Agent</strong></td>
+            <td>Python</td>
+            <td>Proprietary</td>
+            <td>N/A</td>
+            <td>N/A</td>
+            <td>Python DSL tool invocation</td>
+        </tr>
+        <tr>
+            <td><strong>Vibe CLI</strong></td>
+            <td>TypeScript</td>
+            <td>Apache-2.0</td>
+            <td>N/A</td>
+            <td>72.2%</td>
+            <td>Cheapest per-token cost</td>
+        </tr>
+        <tr>
+            <td><strong>Warp</strong></td>
+            <td>Rust</td>
+            <td>Proprietary</td>
+            <td>N/A</td>
+            <td><span class="performance-improvement">75.8%</span></td>
+            <td>Full Terminal Control (PTY)</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- ======================================================================== -->
+<!-- CONCLUSION -->
+<!-- ======================================================================== -->
+
+<h2>Themes Across O&ndash;W Agents</h2>
+
+<div class="conclusion-box">
+    <h4>Key Patterns</h4>
+    <ul>
+        <li><strong>Semantic over Syntactic:</strong> Both OpenCode (LSP) and Warp (embeddings) invest heavily in understanding code meaning, not just text. This enables more precise edits and better context retrieval.</li>
+        <li><strong>Cost vs. Capability Trade-off:</strong> Vibe CLI delivers competitive SWE-bench scores at 7.5x lower cost than proprietary alternatives. Qwen Code goes further with a completely free tier. The cost floor for competitive coding agents is dropping rapidly.</li>
+        <li><strong>Interactive Terminal is the Frontier:</strong> Warp&rsquo;s FTC demonstrates that the next capability boundary is not code generation quality but environment interaction. Agents that can handle SSH, vim, and interactive prompts unlock workflows that text-only agents cannot.</li>
+        <li><strong>Python DSL &gt; JSON Function Calling:</strong> Replit&rsquo;s results suggest that using Python as the tool invocation language is strictly superior to JSON schemas for tool use &mdash; better success rates, lower cost, and faster execution.</li>
+        <li><strong>Single Agent vs. Multi-Agent:</strong> Warp (single-agent, 75.8%) outperforms most multi-agent systems, while Replit (multi-agent) excels at long autonomous sessions. The optimal architecture depends on the task duration and complexity profile.</li>
+    </ul>
+</div>
+
+<!-- ======================================================================== -->
+<!-- SOURCES -->
+<!-- ======================================================================== -->
+
+<div class="source-box">
+    <h4>Sources &amp; References</h4>
+    <p><strong>Open Source:</strong> <a href="https://github.com/opencode-ai/opencode" target="_blank">OpenCode</a>, <a href="https://github.com/FoundationAgents/OpenManus" target="_blank">OpenManus</a>, <a href="https://github.com/QwenLM/qwen-code" target="_blank">Qwen Code</a>, <a href="https://github.com/mistralai/vibe" target="_blank">Vibe CLI</a></p>
+    <p><strong>Proprietary:</strong> <a href="https://replit.com" target="_blank">Replit Agent</a>, <a href="https://warp.dev" target="_blank">Warp</a></p>
+    <p><em>Part 5 of 6 &middot; Coding Agent Engineering Analysis &middot; January 2026</em></p>
+</div>
+
+<!-- ======================================================================== -->
+<!-- SERIES NAVIGATION -->
+<!-- ======================================================================== -->
+
+<div class="series-nav">
+    <a href="coding_agents_deepdives.html">&larr; Part 4: Deep-Dives A&ndash;L</a>
+    <span>Part 5 of 6</span>
+    <a href="coding_agents_production.html">Next: Production &amp; Enterprise &rarr;</a>
+</div>
+
+<div class="navigation">
+    <a href="../index.html">&larr; Home</a>
+    <a href="../agent/index.html">Agent Reliability</a>
+    <a href="../rag/index.html">RAG Patterns</a>
+    <a href="index.html">Research Papers</a>
+    <a href="https://join.maxpool.dev" target="_blank">Join Community &rarr;</a>
+</div>
+
+</body>
+</html>

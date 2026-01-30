@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Part 1: Tools &amp; Agent Computer Interface - Coding Agent Engineering Analysis</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Georgia', 'Times New Roman', serif; font-size: 16px; line-height: 1.7; color: #1a1a1a; background: #fff; max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        h1 { font-size: 28px; text-align: center; margin-bottom: 10px; padding-bottom: 15px; border-bottom: 2px solid #DC8850; }
+        h2 { font-size: 22px; color: #DC8850; margin-top: 40px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #DC8850; }
+        h3 { font-size: 18px; color: #555; margin-top: 25px; margin-bottom: 10px; font-weight: 600; }
+        h4 { font-size: 16px; font-weight: bold; margin-top: 15px; margin-bottom: 8px; }
+        p { margin-bottom: 1em; text-align: justify; }
+        a { color: #DC8850; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        ul, ol { margin-left: 1.5em; margin-bottom: 1em; }
+        li { margin-bottom: 0.4em; }
+        .navigation { display: flex; justify-content: center; gap: 20px; padding: 15px 0; margin-bottom: 30px; border-bottom: 1px solid #eee; flex-wrap: wrap; }
+        .navigation a { color: #DC8850; text-decoration: none; font-size: 14px; font-weight: 500; }
+        .navigation a:hover { text-decoration: underline; }
+        .authors { text-align: center; font-style: italic; color: #666; margin-bottom: 30px; font-size: 15px; }
+        .abstract { background: #f8f8f8; padding: 20px 25px; border-left: 4px solid #DC8850; margin: 25px 0; border-radius: 0 5px 5px 0; }
+        .abstract h2 { margin-top: 0; border: none; padding: 0; margin-bottom: 10px; }
+        .key-finding { background: #fff8f0; padding: 20px 25px; border-left: 4px solid #DC8850; margin: 20px 0; border-radius: 0 5px 5px 0; }
+        .eli5-box { background: #e8f5e9; padding: 20px 25px; border-left: 4px solid #4caf50; margin: 25px 0; border-radius: 0 5px 5px 0; }
+        .insight-box { background: #fffbf0; padding: 20px 25px; border: 2px solid #DC8850; margin: 20px 0; border-radius: 8px; }
+        .warning-box { background: #fff3e0; padding: 20px 25px; border-left: 4px solid #f39c12; margin: 20px 0; border-radius: 0 5px 5px 0; }
+        .conclusion-box { background: #f0f0f0; padding: 20px 25px; border-radius: 5px; margin: 20px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; vertical-align: top; }
+        th { background: #DC8850; color: #fff; font-weight: bold; }
+        tr:nth-child(even) { background: #f9f9f9; }
+        pre { font-family: 'Courier New', monospace; font-size: 13px; background: #f8f8f8; border: 1px solid #ddd; padding: 15px; margin: 15px 0; overflow-x: auto; line-height: 1.4; border-radius: 5px; }
+        code { font-family: 'Courier New', monospace; font-size: 13px; background: #f0f0f0; padding: 2px 6px; border-radius: 3px; }
+        .diagram { font-family: 'Courier New', monospace; font-size: 12px; background: #fafafa; border: 2px solid #eee; padding: 20px; margin: 20px 0; overflow-x: auto; white-space: pre; line-height: 1.3; border-radius: 8px; }
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 3px; font-size: 12px; font-weight: bold; }
+        .badge-primary { background: #DC8850; color: #fff; }
+        .badge-success { background: #27ae60; color: #fff; }
+        .badge-warning { background: #f39c12; color: #fff; }
+        .badge-danger { background: #e74c3c; color: #fff; }
+        .metric { font-weight: bold; color: #DC8850; }
+        .performance-improvement { font-weight: bold; color: #27ae60; }
+        .performance-decline { font-weight: bold; color: #e74c3c; }
+        .part-nav { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; margin: 30px 0; }
+        .part-card { display: block; background: #fff; border: 2px solid #eee; border-radius: 8px; padding: 20px; text-decoration: none; color: #1a1a1a; transition: all 0.2s; }
+        .part-card:hover { border-color: #DC8850; box-shadow: 0 4px 12px rgba(220,136,80,0.15); transform: translateY(-2px); text-decoration: none; }
+        .part-card h3 { color: #DC8850; margin: 0 0 8px 0; font-size: 16px; }
+        .part-card p { margin: 0; font-size: 14px; color: #666; text-align: left; }
+        .part-card .part-num { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .source-box { background: #f8f8f8; padding: 20px; border-radius: 5px; margin: 30px 0; font-size: 14px; }
+        .series-nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; margin: 30px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; font-size: 14px; }
+        .series-nav a { color: #DC8850; }
+        @media (max-width: 768px) {
+            body { padding: 20px 15px; font-size: 15px; }
+            h1 { font-size: 22px; }
+            h2 { font-size: 18px; }
+            table { font-size: 12px; }
+            th, td { padding: 6px; }
+            .part-nav { grid-template-columns: 1fr; }
+            pre, .diagram { font-size: 11px; padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="navigation">
+    <a href="../index.html">&larr; Home</a>
+    <a href="../agent/index.html">Agent Reliability</a>
+    <a href="../rag/index.html">RAG Patterns</a>
+    <a href="index.html">Research Papers</a>
+    <a href="https://join.maxpool.dev" target="_blank">Join Community &rarr;</a>
+</div>
+
+<h1>Part 1: Tools &amp; Agent Computer Interface</h1>
+<div class="authors">
+    Coding Agent Engineering Analysis<br>
+    <em>Deep-Dive Series &middot; January 2026 &middot; 13 Agents Analyzed</em>
+</div>
+
+<!-- ABSTRACT -->
+<div class="abstract">
+    <h2>Section Overview</h2>
+    <p>This section provides a comprehensive analysis of the tool systems that power modern AI coding agents. We examine tool inventories across all <span class="metric">13 agents</span>, covering file operations, search and navigation, command execution, web access, memory systems, and planning capabilities. The analysis reveals that tool design is not merely an implementation detail but a primary determinant of agent performance: SWE-agent's research demonstrated that well-designed Agent Computer Interfaces (ACI) improved SWE-bench pass rates by <span class="performance-improvement">+12.29%</span> over standard bash-only approaches.</p>
+    <p>Key themes include the convergence toward search-replace edit patterns (adopted by Claude Code, Qwen Code, and Droid), the emergence of MCP as a universal tool extension protocol, and Replit's innovative Python DSL approach to tool invocation that achieves <span class="performance-improvement">~90%</span> success rates while reducing costs by <span class="performance-improvement">15%</span>. We also cover ACI design principles, edit tool pattern trade-offs, and a comprehensive tool comparison matrix spanning all 13 agents.</p>
+</div>
+
+<!-- ELI5 -->
+<div class="eli5-box">
+    <h3>ELI5: What Are Agent Tools?</h3>
+    <p>Think of a coding agent as a skilled developer who can only interact with the world through a specific set of buttons on a control panel. Each "tool" is one of those buttons: one reads files, one writes code, one runs terminal commands, one searches for patterns. The quality and design of those buttons determine how effective the developer is. A poorly labeled button causes mistakes. A button that does too many things at once is confusing. The best agents have carefully designed control panels where every button does exactly one thing, gives clear feedback, and prevents accidents. That's what Agent Computer Interface (ACI) design is all about: building the perfect control panel for AI.</p>
+</div>
+
+<!-- SECTION 1: UNIVERSAL TOOL CATEGORIES -->
+<h2>1. Universal Tool Categories</h2>
+
+<p>All 13 analyzed agents implement variations of core tool categories. While naming conventions and implementation details vary, the fundamental capabilities have converged around six primary categories. The table below maps each category to its common implementations and the critical design decisions that differentiate agents.</p>
+
+<table>
+    <tr>
+        <th>Category</th>
+        <th>Common Tools</th>
+        <th>Implementation Notes</th>
+    </tr>
+    <tr>
+        <td><strong>File Operations</strong></td>
+        <td>Read, Write, Edit, Patch, Create, NotebookEdit</td>
+        <td>Edit tools vary significantly: search-replace (Claude Code, Qwen Code), line-range (SWE-agent), whole-file replacement (simple agents), diff-based (Aider), and FIND_AND_REPLACE + V4A diff (Droid). Search-replace is now the dominant pattern due to token efficiency and precision.</td>
+    </tr>
+    <tr>
+        <td><strong>Search &amp; Navigation</strong></td>
+        <td>Grep, Glob, Find, LSP, ReadManyFiles</td>
+        <td>ripgrep integration is near-universal. LSP (OpenCode) provides semantic search with go-to-definition and find-references. Droid's HyperCode/ByteRank provides codebase retrieval optimized for LLM context. Warp uses codebase embeddings for semantic search.</td>
+    </tr>
+    <tr>
+        <td><strong>Execution</strong></td>
+        <td>Bash, Shell, Command, PythonExecute</td>
+        <td>Sandboxing varies widely: OS-native (Codex CLI via Seatbelt/Landlock), Docker containers (Qwen Code), cloud sandboxes (Warp via Namespace), permission-based approval (Claude Code, Cline). Background process support differs by agent.</td>
+    </tr>
+    <tr>
+        <td><strong>Version Control</strong></td>
+        <td>Git status, diff, commit, checkout</td>
+        <td>Auto-commit policies differ: Aider commits after every change with descriptive messages, Cline uses shadow git for checkpoints. Claude Code follows a strict git safety protocol (never force push, never skip hooks).</td>
+    </tr>
+    <tr>
+        <td><strong>Web &amp; Browser</strong></td>
+        <td>WebFetch, WebSearch, BrowserUseTool, Puppeteer, Crawl4AI</td>
+        <td>Browser automation via MCP (Playwright) or native integration (Cline's Puppeteer). OpenManus includes Crawl4AI for structured web scraping. Codex CLI disables network by default to prevent prompt injection via malicious URLs.</td>
+    </tr>
+    <tr>
+        <td><strong>Context &amp; Memory</strong></td>
+        <td>TodoWrite, Memory, Skill, save_memory</td>
+        <td>Task tracking (TodoWrite) is common across Claude Code, Qwen Code, and others. Letta Code has persistent memory blocks (persona, human, project, skills). Qwen Code includes save_memory for cross-session knowledge. Most agents rely on session-only context.</td>
+    </tr>
+    <tr>
+        <td><strong>Planning &amp; Orchestration</strong></td>
+        <td>PlanningTool, EnterPlanMode, ExitPlanMode, Task, AskHuman</td>
+        <td>Claude Code and OpenManus include explicit planning tools. Claude Code's Task tool spawns isolated subagents with limited context. OpenManus uses PlanningFlow for multi-step orchestration. Replit's trajectory compression preserves planning decisions.</td>
+    </tr>
+    <tr>
+        <td><strong>Extension &amp; Integration</strong></td>
+        <td>MCP bridge, SlashCommand, Skill</td>
+        <td>MCP is the universal standard with 3,000+ servers (Linux Foundation governance). Every major agent supports it. Goose is MCP-first architecture. OpenManus bridges MCP tools into its agent hierarchy.</td>
+    </tr>
+</table>
+
+<div class="key-finding">
+    <h4>Key Finding: Tool Count Does Not Correlate with Performance</h4>
+    <p>Droid, which tops Terminal-Bench at <span class="performance-improvement">58.8%</span>, uses a deliberately minimalist tool design. Factory.ai found that complex tool schemas "exponentially increase error rates" for LLMs. Conversely, Claude Code's 18 tools and OpenManus's 15+ tools achieve their performance through careful ACI design rather than sheer tool count. The critical factor is how well tool interfaces are optimized for LLM comprehension, not how many tools are available.</p>
+</div>
+
+<!-- SECTION 2: AGENT-SPECIFIC TOOL IMPLEMENTATIONS -->
+<h2>2. Agent-Specific Tool Implementations</h2>
+
+<p>Each agent makes distinctive architectural choices in its tool system. Below we examine the tool implementations of eight agents in detail, revealing how design philosophy shapes capability.</p>
+
+<h3>2.1 Claude Code: 18 Built-in Tools</h3>
+
+<p>Claude Code provides the most extensively documented tool system, with 18 built-in tools organized into seven categories. The system prompt (comprising 110+ parts) includes detailed usage instructions for each tool, ensuring the LLM understands constraints like "old_string must be unique in file" for the Edit tool.</p>
+
+<pre>
+CLAUDE CODE TOOL INVENTORY (from system prompt analysis):
+├── File Tools
+│   ├── Read          - Read file contents with line range support
+│   ├── Write         - Create new files (atomic operation)
+│   ├── Edit          - String replacement (must be unique in file)
+│   ├── NotebookEdit  - Jupyter notebook cell editing
+│   └── Glob          - File pattern matching (sorted by modification time)
+├── Search Tools
+│   ├── Grep          - Content search via ripgrep (regex support)
+│   └── LSP           - Language Server Protocol queries
+├── Execution Tools
+│   ├── Bash          - Shell command execution (2-min default timeout)
+│   └── Computer      - Chrome browser automation
+├── Planning Tools
+│   ├── EnterPlanMode - Switch to planning mode (no edits)
+│   ├── ExitPlanMode  - Present plan for user approval
+│   └── TodoWrite     - Task list management (persistent across compaction)
+├── Agent Tools
+│   ├── Task          - Spawn subagent with isolated context window
+│   └── SlashCommand  - Execute registered skill commands
+├── Web Tools
+│   ├── WebFetch      - Retrieve URL contents (markdown conversion)
+│   └── WebSearch     - Search engine queries
+└── Utility Tools
+    ├── Skill         - Load skill .md files from .claude/skills/
+    └── Memory        - Edit persistent CLAUDE.md memory blocks
+</pre>
+
+<div class="key-finding">
+    <h4>Notable Design Decisions</h4>
+    <ul>
+        <li><strong>Edit Tool Constraint:</strong> The <code>old_string</code> must be unique within the file. If it appears multiple times, the tool fails and the agent must provide more surrounding context. This prevents ambiguous edits at the cost of occasional retries.</li>
+        <li><strong>Parallel Tool Calls:</strong> Sonnet 4 and later models execute multiple independent tools simultaneously, significantly reducing turn count for tasks like "read these 5 files."</li>
+        <li><strong>Subagent Isolation:</strong> Task subagents get their own context window but limited tool access, preventing runaway operations while enabling parallel work.</li>
+        <li><strong>Context Awareness:</strong> The system prompt warns against <code>git add -A</code> (may include sensitive files) and <code>grep</code> in bash (prefer the built-in Grep tool for proper permissions).</li>
+    </ul>
+</div>
+
+<h3>2.2 Codex CLI: Rust-Native Tool Architecture</h3>
+
+<p>Codex CLI (OpenAI) is built entirely in Rust, with a crate-based architecture that separates core logic, sandbox implementation, and execution policy. The tool system is tightly coupled with OS-level sandboxing, making security a first-class concern at the tool layer.</p>
+
+<pre>
+CODEX CLI CRATE STRUCTURE:
+codex-rs/
+├── core/                    # Business logic (reusable library)
+│   ├── ThreadManager        - Conversation state management
+│   ├── ModelClient          - API communication (OpenAI)
+│   └── ToolOrchestrator     - Sandboxed tool execution
+├── execpolicy/              # Execution policy engine
+│   ├── on-request           - Ask before every action
+│   ├── workspace-write      - Auto-approve within workspace
+│   └── danger-full-access   - No restrictions (CI/VM only)
+├── linux-sandbox/           # Landlock + seccomp (separate binary)
+│   ├── Landlock rules       - Filesystem access control
+│   └── seccomp filters      - Syscall-level network blocking
+├── windows-sandbox-rs/      # Windows restricted tokens
+├── mcp-server/              # MCP protocol support
+├── file-search/             # Repository search capabilities
+├── keyring-store/           # Secure credential storage
+└── otel/                    # OpenTelemetry observability
+
+TOOL EXECUTION FLOW:
+User Request → Policy Check → Sandbox Setup → Execute → Record → Return
+                  │                │
+                  │                └── Seatbelt (macOS) / Landlock (Linux)
+                  └── on-request / workspace-write / danger-full-access
+
+SESSION RECORDING (RolloutRecorder):
+- Every tool call recorded as JSONL
+- Enables audit replay and debugging
+- OpenTelemetry integration for enterprise logging
+</pre>
+
+<h3>2.3 SWE-agent: Agent Computer Interface (ACI) Pioneer</h3>
+
+<p>SWE-agent introduced the foundational concept of Agent Computer Interface (ACI) -- designing tools specifically for LLM ergonomics rather than human ergonomics. Their custom commands replace standard Unix utilities with LLM-friendly alternatives.</p>
+
+<pre>
+SWE-AGENT ACI TOOL DESIGN:
+┌─────────────────────────────────────────────────────────────────┐
+│  DESIGN PRINCIPLES:                                             │
+│  1. Simple, parseable output formats                            │
+│  2. Guardrails to prevent/correct errors                        │
+│  3. Compact, efficient actions                                  │
+│  4. Context management for conciseness                          │
+└─────────────────────────────────────────────────────────────────┘
+
+CUSTOM COMMANDS (replacing standard Unix tools):
+├── find_file      - Locate files by name (vs. find -name)
+├── search_file    - Search within a single file
+├── search_dir     - Recursive directory search (vs. grep -r)
+├── open           - View file in scrollable window
+├── goto           - Jump to specific line number
+├── scroll_up/down - Navigate file view (windowed display)
+├── create         - Create new file with validation
+├── edit           - Line-range replacement with linter check
+└── submit         - Generate patch output for evaluation
+
+SPECIAL FEATURES:
+- Linter integration:      Blocks syntactically invalid edits BEFORE applying
+- Observation collapsing:  Past tool outputs → single-line summaries
+- Error recovery:          Automatic retry on malformed LLM output
+- Window-based viewing:    Shows 100-line window (not entire file)
+
+IMPACT ON PERFORMANCE:
+- ACI-optimized tools: 12.29% improvement over bash-only baselines
+- Linter guardrail alone prevents ~30% of syntax errors from persisting
+</pre>
+
+<h3>2.4 OpenManus: 15+ Tools with 4-Level Hierarchy</h3>
+
+<p>OpenManus (MetaGPT, 53.9k GitHub stars) implements the richest tool ecosystem through a 4-level agent hierarchy. Each level inherits and extends capabilities from its parent, enabling both simple tool calls and complex multi-step orchestration.</p>
+
+<pre>
+OPENMANUS 4-LEVEL AGENT HIERARCHY:
+═══════════════════════════════════════════════════════════════
+
+Level 1: BaseAgent
+    │   Foundation: Memory management, state tracking, LLM interface
+    │
+    └── Level 2: ReActAgent
+        │   Adds: Reasoning-Action loop (think → act → observe → repeat)
+        │
+        └── Level 3: ToolCallAgent
+            │   Adds: Tool registration, execution, result parsing
+            │
+            └── Level 4: Manus (Domain Agent)
+                    Adds: Domain-specific tools, PlanningFlow, browser control
+
+TOOL INVENTORY (15+ tools):
+├── Code Execution
+│   ├── PythonExecute    - Run Python code in sandboxed environment
+│   └── Bash             - Shell command execution
+├── Web &amp; Browser
+│   ├── BrowserUseTool   - Full browser automation (Playwright-based)
+│   ├── WebSearch        - Search engine queries
+│   └── Crawl4AI         - Structured web scraping and extraction
+├── File Operations
+│   ├── FileOperators    - Read, write, list, copy, move, delete
+│   └── StrReplaceEditor - Search-and-replace editing (Claude Code pattern)
+├── Planning
+│   └── PlanningTool     - Multi-step plan creation and tracking
+├── System
+│   ├── ComputerUseTool  - Desktop GUI automation
+│   ├── AskHuman         - Request human input/clarification
+│   └── Terminate        - End agent execution
+└── Integration
+    └── MCP Bridge       - Connect to any MCP server as tool source
+
+PLANNINGFLOW ORCHESTRATION:
+┌──────────────────────────────────────────┐
+│  1. Decompose task into sub-goals        │
+│  2. Assign tools to each sub-goal        │
+│  3. Execute with ReAct loop per step     │
+│  4. Verify results against plan          │
+│  5. Adjust plan if needed (re-plan)      │
+└──────────────────────────────────────────┘
+</pre>
+
+<h3>2.5 Qwen Code: 13 Tools (Gemini CLI Fork)</h3>
+
+<p>Qwen Code (Alibaba, 17.9k stars) is forked from Gemini CLI and built in TypeScript. It provides free access to Qwen3-Coder-480B via OAuth (2,000 requests/day) and implements a tool set deliberately modeled after Claude Code's design, including identical tool names.</p>
+
+<pre>
+QWEN CODE TOOL INVENTORY (13 tools):
+├── File Operations
+│   ├── ReadFile         - Read file with line range support
+│   ├── ReadManyFiles    - Batch file reading (reduces turn count)
+│   ├── WriteFile        - Create or overwrite files
+│   └── Edit             - Search-replace editing (Claude Code pattern)
+├── Search
+│   ├── Glob             - File pattern matching
+│   └── Grep             - Content search via ripgrep
+├── Execution
+│   └── run_shell_command - Shell execution with Docker sandbox option
+├── Web
+│   ├── web_fetch        - URL content retrieval
+│   └── web_search       - Search engine integration
+├── Memory &amp; Planning
+│   ├── save_memory       - Persist knowledge across sessions
+│   ├── todo_write        - Task list management
+│   └── exit_plan_mode    - Transition from planning to execution
+└── Agent
+    └── task              - Subagent delegation
+
+ARCHITECTURE NOTES:
+- Language:    TypeScript (forked from Gemini CLI codebase)
+- Sandbox:    Docker container option for command execution
+- Free Tier:  2,000 requests/day via OAuth authentication
+- Model:      Qwen3-Coder-480B (67-69.6% SWE-bench Verified)
+- Context:    Supports both Qwen and third-party models via BYOK
+
+DESIGN PHILOSOPHY:
+- Mirror Claude Code's tool naming for developer familiarity
+- ReadManyFiles tool reduces round-trips for multi-file tasks
+- save_memory enables cross-session knowledge persistence
+- Docker sandbox provides isolation without OS-level complexity
+</pre>
+
+<h3>2.6 Droid: Minimalist Design Philosophy</h3>
+
+<p>Droid (Factory.ai) takes the opposite approach to tool proliferation. Factory's research found that complex tool schemas "exponentially increase error rates" for LLMs. Droid achieves Terminal-Bench #1 (<span class="performance-improvement">58.8%</span>) with a deliberately minimal tool surface.</p>
+
+<pre>
+DROID TOOL DESIGN PHILOSOPHY:
+═══════════════════════════════════════════════════════════════
+
+PRINCIPLE: "Fewer tools, better schemas, higher success rates"
+
+┌─────────────────────────────────────────────────────────────┐
+│  Complex schemas with many parameters → MORE LLM errors    │
+│  Simple schemas with clear semantics  → FEWER LLM errors   │
+│                                                             │
+│  Factory.ai finding: Error rates increase EXPONENTIALLY     │
+│  with tool schema complexity                                │
+└─────────────────────────────────────────────────────────────┘
+
+CORE EDITING TOOLS:
+├── FIND_AND_REPLACE    - Search-replace with clear semantics
+└── V4A Diff            - Structured diff format for larger changes
+
+CODEBASE RETRIEVAL (proprietary):
+├── HyperCode           - Semantic code search engine
+│   └── Optimized for finding relevant code across large repos
+└── ByteRank            - Code ranking algorithm
+    └── Prioritizes most relevant files for LLM context
+
+MULTI-MODEL COMPOSITION:
+┌───────────────┐     ┌───────────────┐
+│  Planning     │────▶│  Execution    │
+│  (Reasoning)  │     │  (Coding)     │
+│  o3 / Opus    │     │  Sonnet / GPT │
+└───────────────┘     └───────────────┘
+
+BENCHMARK RESULTS:
+- Terminal-Bench:     58.8% (#1 overall)
+- SWE-bench Lite:     31.67%
+- Top 3 performance across 3 different underlying models
+- Stopped running SWE-bench Verified (Python-only limitation)
+</pre>
+
+<div class="warning-box">
+    <h4>Design Lesson from Droid</h4>
+    <p>Droid's success with minimal tooling challenges the assumption that more tools equals better performance. The lesson: <strong>invest in tool schema clarity over tool quantity.</strong> Every additional parameter in a tool schema is a potential point of failure. When designing agent tools, start with the minimum viable set and add tools only when measurable performance gains justify the added complexity.</p>
+</div>
+
+<h3>2.7 Warp: Full Terminal Control</h3>
+
+<p>Warp (75.8% SWE-bench Verified with GPT-5) is an Agent Development Environment (ADE) that reimagines the terminal as a first-class AI development surface. Its distinguishing feature is Full Terminal Control -- the ability to drive interactive terminal sessions through a PTY (pseudo-terminal).</p>
+
+<pre>
+WARP TOOL CATEGORIES:
+═══════════════════════════════════════════════════════════════
+
+File Editing:
+├── File read/write operations
+└── Code modification tools
+
+Code Understanding:
+├── grep              - Content search
+├── find              - File discovery
+├── cat               - File viewing
+└── Codebase embeddings (semantic search across entire repo)
+
+Command Execution:
+└── Full Terminal Control (FTC)
+    ├── Interactive PTY driver
+    │   └── Can handle: prompts, confirmations, pagination
+    ├── Reads terminal output in real-time
+    ├── Sends keystrokes (including Ctrl-C, arrow keys)
+    └── Manages interactive tools (vim, less, ssh, etc.)
+
+Planning &amp; Tracking:
+└── TODO generation and task management
+
+Integration:
+├── MCP client support
+└── Codebase embeddings for semantic retrieval
+
+FULL TERMINAL CONTROL (FTC) - UNIQUE DIFFERENTIATOR:
+┌─────────────────────────────────────────────────────────────┐
+│  Traditional Agent:                                         │
+│    agent → exec("npm install") → wait → read stdout         │
+│    FAILS on: interactive prompts, sudo, ssh, vim            │
+│                                                             │
+│  Warp FTC:                                                  │
+│    agent → PTY.spawn("ssh server") →                        │
+│      ← "Password: "                                         │
+│    agent → PTY.write(password + "\n") →                     │
+│      ← "server$ "                                           │
+│    agent → PTY.write("tail -f /var/log/app.log\n") →        │
+│      ← (streaming log output)                               │
+│    agent → PTY.write("\x03") → (Ctrl-C to stop)            │
+│                                                             │
+│  This enables Warp to handle ANY terminal workflow,         │
+│  including interactive installers, debuggers, and REPLs     │
+└─────────────────────────────────────────────────────────────┘
+
+CLOUD SANDBOX:
+- Powered by Namespace
+- Isolated execution environment
+- Prevents local machine damage
+- GPU-rendered Rust UI for performance
+
+ARCHITECTURAL FINDING:
+"Single-agent with focused tools outperforms multi-agent approaches"
+- Warp tested multi-agent setups and found degraded performance
+- Better to give one agent the right tools than split across agents
+</pre>
+
+<h3>2.8 Replit Agent: Python DSL Tool Invocation</h3>
+
+<p>Replit Agent introduces the most innovative tool invocation mechanism: instead of JSON function calling, the agent generates Python code that calls tool functions. This approach achieves <span class="performance-improvement">~90%</span> tool invocation success rate and enables multi-tool calling within a single generation.</p>
+
+<pre>
+REPLIT TOOL INVOCATION: PYTHON DSL
+═══════════════════════════════════════════════════════════════
+
+TRADITIONAL (JSON Function Calling):
+{
+  "name": "edit_file",
+  "arguments": {
+    "path": "src/app.py",
+    "old_text": "def hello():",
+    "new_text": "def hello(name):"
+  }
+}
+→ One tool per generation
+→ Rigid schema validation
+→ No inter-tool dependencies
+
+REPLIT (Python DSL Code Generation):
+```python
+# Agent generates executable Python
+file_content = read_file("src/app.py")
+if "def hello():" in file_content:
+    edit_file("src/app.py",
+              old_text="def hello():",
+              new_text="def hello(name):")
+    run_command("python -m pytest tests/")
+```
+→ Multiple tools in single generation
+→ Conditional logic between tools
+→ Natural programming patterns
+
+PERFORMANCE IMPACT:
+┌─────────────────────────────────────────┐
+│  Success Rate:    ~90% tool invocation  │
+│  Cost Savings:    15% (fewer turns)     │
+│  Speed:           30% faster execution  │
+│  Autonomy:        200-minute sessions   │
+│  Scale Proof:     135 apps in 24 hours  │
+│                   (Rokt partnership)     │
+└─────────────────────────────────────────┘
+
+MULTI-TOOL CALLING BENEFITS:
+- Read → Check → Edit → Test in ONE generation
+- Eliminates round-trip latency between tool calls
+- Agent can express conditional logic naturally
+- Reduces total tokens consumed (fewer system prompts)
+
+TRAJECTORY COMPRESSION:
+- Long sessions compressed to key decision points
+- Preserves: file changes, test results, errors
+- Discards: redundant reads, intermediate states
+- Enables 200-minute autonomous sessions
+</pre>
+
+<div class="insight-box">
+    <h4>Innovation Spotlight: Code-as-Tool-Call</h4>
+    <p>Replit's Python DSL approach suggests a fundamental rethinking of tool invocation. Rather than constraining LLMs to rigid JSON schemas, letting them express tool usage in a programming language they already understand (Python) leverages their strongest capability. The <span class="performance-improvement">15% cost savings</span> and <span class="performance-improvement">30% speed improvement</span> come from reducing round-trips: instead of call-wait-call-wait, the agent plans multiple tool calls in a single code block. This pattern may become industry-standard as agents handle increasingly complex workflows.</p>
+</div>
+
+<!-- SECTION 3: ACI DESIGN PRINCIPLES -->
+<h2>3. Agent Computer Interface (ACI) Design Principles</h2>
+
+<p>The concept of Agent Computer Interface was introduced by the SWE-agent paper, arguing that tools should be designed for LLM ergonomics rather than human ergonomics. Just as Human-Computer Interaction (HCI) shaped GUI design, ACI shapes how AI agents interact with development environments. The core insight: LLMs process text differently than humans, so optimal tool interfaces diverge from traditional CLI design.</p>
+
+<h3>3.1 The Four ACI Principles</h3>
+
+<div class="key-finding">
+    <h4>Principle 1: Simple, Parseable Outputs</h4>
+    <p>Format tool output so LLMs can easily extract key information. Avoid ambiguous formatting, excessive decoration, or interleaved content. Numbered results, count-first summaries, and clear delimiters outperform raw command output.</p>
+</div>
+
+<div class="key-finding">
+    <h4>Principle 2: Guardrails to Prevent Errors</h4>
+    <p>Build validation directly into tools. SWE-agent's linter integration blocks syntactically invalid edits before they are applied, preventing ~30% of syntax errors from persisting. Claude Code's uniqueness constraint on the Edit tool forces the agent to provide sufficient context, preventing ambiguous replacements.</p>
+</div>
+
+<div class="key-finding">
+    <h4>Principle 3: Compact, Efficient Actions</h4>
+    <p>Consolidate multi-step operations into single tools. Qwen Code's ReadManyFiles tool reads multiple files in one call instead of requiring N sequential Read calls. Claude Code's parallel tool execution achieves the same effect at the model level.</p>
+</div>
+
+<div class="key-finding">
+    <h4>Principle 4: Context Management for Conciseness</h4>
+    <p>Collapse old observations to single-line summaries. Keep recent context detailed, older context summarized. SWE-agent's observation collapsing converts previous tool outputs to summaries, preserving context window budget for the current task.</p>
+</div>
+
+<h3>3.2 ACI vs Traditional CLI: A Concrete Comparison</h3>
+
+<pre>
+TRADITIONAL BASH (human-optimized):
+─────────────────────────────────────────────────────────────────
+$ grep -r "TODO" --include="*.js" src/
+src/utils.js:5:// TODO: Refactor this function
+src/api.js:23:// TODO: Add error handling
+src/api.js:45:// TODO: Implement caching
+src/auth.js:12:// TODO: Add rate limiting
+src/db.js:67:// TODO: Connection pooling
+... (output continues for 50+ lines with no structure)
+
+PROBLEMS FOR LLMs:
+- No count or summary upfront
+- No way to know if output is truncated
+- Inconsistent formatting across tools
+- No suggested next action
+- Raw paths require agent to parse mentally
+
+SWE-AGENT ACI (LLM-optimized):
+─────────────────────────────────────────────────────────────────
+&gt; search_dir "TODO" src/ --extensions js
+Found 5 results in 4 files:
+[1] src/utils.js:5    - "TODO: Refactor this function"
+[2] src/api.js:23     - "TODO: Add error handling"
+[3] src/api.js:45     - "TODO: Implement caching"
+[4] src/auth.js:12    - "TODO: Add rate limiting"
+[5] src/db.js:67      - "TODO: Connection pooling"
+
+To view context around a result, use: open &lt;file&gt; &lt;line&gt;
+
+KEY ACI IMPROVEMENTS:
+─────────────────────────────────────────────────────────────────
+Feature            │ Traditional CLI    │ ACI-Optimized
+───────────────────┼────────────────────┼──────────────────
+Result count       │ Not shown          │ "Found 5 results"
+Numbering          │ None               │ [1], [2], [3]...
+Next step guidance │ None               │ "use: open &lt;file&gt;"
+Truncation         │ Silent             │ Explicit notice
+Output format      │ Varies by tool     │ Consistent schema
+Error messages     │ Cryptic stderr     │ Actionable guidance
+</pre>
+
+<div class="warning-box">
+    <h4>Why Traditional CLI Fails for Agents</h4>
+    <p>When Claude Code's system prompt says "NEVER use grep in Bash -- use the built-in Grep tool instead," this is an ACI principle in action. The built-in Grep tool provides structured output, proper permissions handling, and consistent formatting. Raw <code>grep</code> output can include binary file warnings, permission errors, and inconsistent line formatting that confuse LLMs. The performance gap between ACI-optimized and raw CLI tools is <span class="performance-improvement">+12.29%</span> on SWE-bench (SWE-agent paper).</p>
+</div>
+
+<!-- SECTION 4: EDIT TOOL DESIGN PATTERNS -->
+<h2>4. Edit Tool Design Patterns</h2>
+
+<p>The file editing tool is the single most critical tool in any coding agent. It is invoked more than any other tool, and edit failures cascade into debugging cycles that consume context window budget. Four distinct patterns have emerged, each with different trade-offs.</p>
+
+<h3>Pattern 1: Search-Replace (Claude Code, Qwen Code, Droid)</h3>
+<pre>
+SEARCH-REPLACE PATTERN:
+Tool: Edit
+Input:
+  file_path: "src/api.js"
+  old_string: "function getData() {"
+  new_string: "async function getData() {"
+
+CONSTRAINT: old_string must be UNIQUE within the file.
+If old_string appears 0 times → error: "String not found"
+If old_string appears 2+ times → error: "String not unique, provide more context"
+
+STRENGTHS:
+  + Minimal token usage (only changed region in output)
+  + Precise: no ambiguity about what changes
+  + Human-readable: easy to review in logs
+  + Naturally encourages small, focused edits
+
+WEAKNESSES:
+  - Fails if target string is duplicated
+  - Agent must know exact current file content
+  - Cannot handle simultaneous edits to repeated patterns
+  - Requires Read before Edit pattern (extra round-trip)
+
+ADOPTION: Claude Code, Qwen Code, Droid (FIND_AND_REPLACE),
+          OpenManus (StrReplaceEditor), Vibe CLI (search_replace)
+</pre>
+
+<h3>Pattern 2: Line-Range Replacement (SWE-agent)</h3>
+<pre>
+LINE-RANGE PATTERN:
+Tool: edit
+Input:
+  file: "src/api.js"
+  start_line: 23
+  end_line: 25
+  replacement: "async function getData() {\n  const response = await fetch(url);"
+
+STRENGTHS:
+  + Works even with duplicate strings
+  + Clear scope of change
+  + Compatible with linter validation
+
+WEAKNESSES:
+  - Line numbers shift after edits (stale references)
+  - Agent must track line numbers accurately
+  - Multiple edits in same file require recalculation
+  - Less readable than search-replace in logs
+
+ADOPTION: SWE-agent (primary pattern)
+</pre>
+
+<h3>Pattern 3: Whole-File Replacement</h3>
+<pre>
+WHOLE-FILE PATTERN:
+Tool: write_file
+Input:
+  path: "src/api.js"
+  content: "... entire file content ..."
+
+STRENGTHS:
+  + Always works (no uniqueness/line number issues)
+  + Simple implementation
+  + Guaranteed consistent file state
+
+WEAKNESSES:
+  - Extremely expensive (full file in LLM output tokens)
+  - High risk of merge conflicts
+  - Can accidentally drop content
+  - Difficult to review what changed
+  - Token cost scales with file size
+
+ADOPTION: Simple agents, fallback strategy for others
+NOTE: Claude Code's Write tool is for NEW files only;
+      Edit is required for modifying existing files
+</pre>
+
+<h3>Pattern 4: Diff-Based (Aider)</h3>
+<pre>
+DIFF-BASED PATTERN:
+Tool: diff_edit
+Input:
+  file: "src/api.js"
+  diff: |
+    @@ -23,3 +23,4 @@
+    -function getData() {
+    +async function getData() {
+    +  const response = await fetch(url);
+       return data;
+
+STRENGTHS:
+  + Standard format (unified diff), widely understood
+  + Reviewable by humans and CI tools
+  + Can express multiple changes in one operation
+  + Works well with git workflows
+
+WEAKNESSES:
+  - LLMs frequently generate invalid diffs
+  - Off-by-one errors in line numbers
+  - Context lines must match exactly
+  - Requires more tokens than search-replace
+
+ADOPTION: Aider (primary), Cline (secondary)
+</pre>
+
+<div class="insight-box">
+    <h4>Edit Pattern Comparison Summary</h4>
+    <table>
+        <tr>
+            <th>Pattern</th>
+            <th>Token Cost</th>
+            <th>Reliability</th>
+            <th>Primary Agent</th>
+            <th>Best For</th>
+        </tr>
+        <tr>
+            <td>Search-Replace</td>
+            <td><span class="performance-improvement">Low</span></td>
+            <td>High (with uniqueness)</td>
+            <td>Claude Code</td>
+            <td>Small, focused edits</td>
+        </tr>
+        <tr>
+            <td>Line-Range</td>
+            <td><span class="performance-improvement">Low</span></td>
+            <td>Medium (line drift)</td>
+            <td>SWE-agent</td>
+            <td>Repeated patterns</td>
+        </tr>
+        <tr>
+            <td>Whole-File</td>
+            <td><span class="performance-decline">High</span></td>
+            <td>High (always works)</td>
+            <td>Simple agents</td>
+            <td>New files, small files</td>
+        </tr>
+        <tr>
+            <td>Diff-Based</td>
+            <td>Medium</td>
+            <td>Medium (invalid diffs)</td>
+            <td>Aider</td>
+            <td>Multi-region changes</td>
+        </tr>
+    </table>
+    <p><strong>Industry trend:</strong> Search-replace has become the dominant pattern in 2025-2026, adopted by 6 of 13 agents. Its combination of low token cost, high precision, and human readability makes it the preferred choice for production coding agents.</p>
+</div>
+
+<!-- SECTION 5: COMPREHENSIVE TOOL COMPARISON MATRIX -->
+<h2>5. Comprehensive Tool Comparison Matrix</h2>
+
+<p>The following matrix maps all 13 agents against eight tool capability categories. A checkmark indicates native support; "MCP" indicates the capability is available via MCP extensions; a dash indicates the capability is absent or not documented.</p>
+
+<table>
+    <tr>
+        <th>Agent</th>
+        <th>File Ops</th>
+        <th>Search</th>
+        <th>Exec</th>
+        <th>Git</th>
+        <th>Web</th>
+        <th>Memory</th>
+        <th>Planning</th>
+        <th>MCP</th>
+    </tr>
+    <tr>
+        <td><strong>Aider</strong></td>
+        <td>Diff/Whole</td>
+        <td>Repo map (tree-sitter)</td>
+        <td>Shell</td>
+        <td>Auto-commit</td>
+        <td>URL/Image</td>
+        <td>Session</td>
+        <td>Architect mode</td>
+        <td>&mdash;</td>
+    </tr>
+    <tr>
+        <td><strong>Claude Code</strong></td>
+        <td>Read/Write/Edit/Notebook</td>
+        <td>Grep/Glob/LSP</td>
+        <td>Bash (2-min timeout)</td>
+        <td>Safety protocol</td>
+        <td>WebFetch/WebSearch</td>
+        <td>CLAUDE.md + Memory</td>
+        <td>PlanMode/TodoWrite/Task</td>
+        <td>Full client</td>
+    </tr>
+    <tr>
+        <td><strong>Cline</strong></td>
+        <td>Read/Write/Diff</td>
+        <td>File search</td>
+        <td>Terminal (approval)</td>
+        <td>Shadow git checkpoint</td>
+        <td>Puppeteer (native)</td>
+        <td>Session</td>
+        <td>Plan/Act/Ask modes</td>
+        <td>Full client</td>
+    </tr>
+    <tr>
+        <td><strong>Codex CLI</strong></td>
+        <td>Read/Write/Patch</td>
+        <td>File search</td>
+        <td>Sandboxed (Seatbelt/Landlock)</td>
+        <td>Via shell</td>
+        <td>Disabled by default</td>
+        <td>JSONL recorder</td>
+        <td>Review mode</td>
+        <td>Server + Client</td>
+    </tr>
+    <tr>
+        <td><strong>Droid</strong></td>
+        <td>FIND_AND_REPLACE/V4A diff</td>
+        <td>HyperCode/ByteRank</td>
+        <td>Shell</td>
+        <td>Via shell</td>
+        <td>Via shell</td>
+        <td>Session</td>
+        <td>Multi-model planning</td>
+        <td>&mdash;</td>
+    </tr>
+    <tr>
+        <td><strong>Goose</strong></td>
+        <td>Via MCP</td>
+        <td>Via MCP</td>
+        <td>Local trust</td>
+        <td>Via MCP</td>
+        <td>Via MCP (Playwright)</td>
+        <td>Session</td>
+        <td>Via MCP</td>
+        <td>MCP-first (3000+)</td>
+    </tr>
+    <tr>
+        <td><strong>Letta Code</strong></td>
+        <td>File tools</td>
+        <td>Search tools</td>
+        <td>Shell</td>
+        <td>Via shell</td>
+        <td>Via shell</td>
+        <td>Persistent blocks + Archival DB</td>
+        <td>Skill learning</td>
+        <td>Client</td>
+    </tr>
+    <tr>
+        <td><strong>OpenCode</strong></td>
+        <td>Read/Write/Edit</td>
+        <td>Grep/Glob/LSP (semantic)</td>
+        <td>Shell</td>
+        <td>Via shell</td>
+        <td>Via MCP</td>
+        <td>Session + AGENTS.md</td>
+        <td>Agent configs</td>
+        <td>Full client</td>
+    </tr>
+    <tr>
+        <td><strong>OpenManus</strong></td>
+        <td>FileOperators/StrReplace</td>
+        <td>File search</td>
+        <td>Bash/PythonExecute</td>
+        <td>Via shell</td>
+        <td>Browser/WebSearch/Crawl4AI</td>
+        <td>Agent memory</td>
+        <td>PlanningTool/AskHuman</td>
+        <td>MCP bridge</td>
+    </tr>
+    <tr>
+        <td><strong>Qwen Code</strong></td>
+        <td>Read/ReadMany/Write/Edit</td>
+        <td>Grep/Glob</td>
+        <td>Shell (Docker option)</td>
+        <td>Via shell</td>
+        <td>web_fetch/web_search</td>
+        <td>save_memory</td>
+        <td>exit_plan_mode/todo_write/task</td>
+        <td>Client</td>
+    </tr>
+    <tr>
+        <td><strong>Replit Agent</strong></td>
+        <td>Python DSL file ops</td>
+        <td>Python DSL search</td>
+        <td>Python DSL exec</td>
+        <td>Auto-deploy</td>
+        <td>Python DSL web</td>
+        <td>Trajectory compression</td>
+        <td>Multi-tool code blocks</td>
+        <td>&mdash;</td>
+    </tr>
+    <tr>
+        <td><strong>Vibe CLI</strong></td>
+        <td>read/write/search_replace</td>
+        <td>grep</td>
+        <td>Bash (stateful)</td>
+        <td>Via shell</td>
+        <td>&mdash;</td>
+        <td>Session + history</td>
+        <td>todo/task subagent</td>
+        <td>&mdash;</td>
+    </tr>
+    <tr>
+        <td><strong>Warp</strong></td>
+        <td>File editing</td>
+        <td>grep/find/embeddings</td>
+        <td>Full Terminal Control (PTY)</td>
+        <td>Via terminal</td>
+        <td>Via terminal/MCP</td>
+        <td>Session</td>
+        <td>TODO generation</td>
+        <td>Client</td>
+    </tr>
+</table>
+
+<div class="key-finding">
+    <h4>Matrix Analysis: Key Takeaways</h4>
+    <ol>
+        <li><strong>File Operations are universal</strong> but edit strategies diverge: search-replace dominates (6 agents), with diff-based (2), whole-file (2), and DSL-based (1) as alternatives.</li>
+        <li><strong>Search capabilities range widely:</strong> from basic grep (Vibe CLI) to LSP-powered semantic search (OpenCode) to proprietary codebase retrieval (Droid's HyperCode/ByteRank) to embedding-based search (Warp).</li>
+        <li><strong>Execution sandboxing is the biggest differentiator:</strong> Codex CLI (OS-native), Warp (cloud), Qwen Code (Docker), vs. approval-based (most others). Warp's PTY-based Full Terminal Control is unique.</li>
+        <li><strong>Memory is the least mature category:</strong> Only Letta Code has truly persistent memory. Most agents lose all context between sessions. Qwen Code's save_memory and Claude Code's CLAUDE.md are partial solutions.</li>
+        <li><strong>MCP adoption is near-universal:</strong> 9 of 13 agents support MCP, with Goose built entirely on MCP. The remaining agents (Aider, Droid, Replit, Vibe CLI) may add support as the ecosystem matures.</li>
+        <li><strong>Planning tools are increasingly explicit:</strong> Rather than relying on the LLM to plan implicitly, agents like Claude Code (EnterPlanMode), OpenManus (PlanningTool), and Qwen Code (exit_plan_mode) provide dedicated planning tools.</li>
+    </ol>
+</div>
+
+<!-- CONCLUSION -->
+<h2>Conclusion: Tool Design as Competitive Advantage</h2>
+
+<div class="conclusion-box">
+    <p>The tool layer is where coding agents win or lose. SWE-agent proved that ACI-optimized tools yield <span class="performance-improvement">+12.29%</span> over raw CLI. Droid proved that minimalist tool design with clear schemas can top benchmarks. Replit proved that Python DSL invocation can beat JSON function calling on success rate, cost, and speed. Claude Code proved that comprehensive tooling with careful constraints (uniqueness requirement, parallel execution, subagent isolation) scales to production.</p>
+
+    <p><strong>Recommendations for tool system design:</strong></p>
+    <ol>
+        <li><strong>Start with search-replace editing.</strong> It is the most token-efficient and reliable pattern, adopted by the majority of top-performing agents.</li>
+        <li><strong>Design for LLM ergonomics, not human ergonomics.</strong> Structured output with counts, numbered results, and next-step guidance outperforms raw CLI output.</li>
+        <li><strong>Build guardrails into tools.</strong> Linter checks before edit application, uniqueness constraints, and clear error messages prevent error cascades.</li>
+        <li><strong>Support MCP for extensibility.</strong> The ecosystem has 3,000+ servers under Linux Foundation governance. MCP is the extension model.</li>
+        <li><strong>Minimize tool schema complexity.</strong> Every parameter is a potential point of failure. Droid's success with minimal tooling is not accidental.</li>
+        <li><strong>Consider code-as-tool-call.</strong> Replit's Python DSL pattern reduces round-trips and cost. As models improve at code generation, this pattern may become dominant.</li>
+    </ol>
+</div>
+
+<!-- SOURCES -->
+<div class="source-box">
+    <h4>Sources &amp; References</h4>
+    <p><strong>Primary Sources:</strong> SWE-agent paper (ACI concept), Claude Code system prompt analysis, <a href="https://github.com/openai/codex" target="_blank">Codex CLI source</a>, <a href="https://github.com/FoundationAgents/OpenManus" target="_blank">OpenManus source</a>, <a href="https://github.com/QwenLM/qwen-code" target="_blank">Qwen Code source</a>, Factory.ai technical blog (Droid), Warp engineering blog, Replit Agent technical documentation</p>
+    <p><strong>Benchmarks:</strong> <a href="https://www.swebench.com/" target="_blank">SWE-bench Verified</a>, <a href="https://www.tbench.ai/" target="_blank">Terminal-Bench</a>, <a href="https://gaia-benchmark.com/" target="_blank">GAIA</a></p>
+    <p><em>Part 1 of 6 &middot; Coding Agent Engineering Analysis &middot; January 2026</em></p>
+</div>
+
+<!-- SERIES NAVIGATION -->
+<div class="series-nav">
+    <a href="coding_agents_report.html">&larr; Hub</a>
+    <span>Part 1 of 6</span>
+    <a href="coding_agents_extensions.html">Next: Hooks, MCP &amp; Security &rarr;</a>
+</div>
+
+<!-- FOOTER NAVIGATION -->
+<div class="navigation">
+    <a href="../index.html">&larr; Home</a>
+    <a href="../agent/index.html">Agent Reliability</a>
+    <a href="../rag/index.html">RAG Patterns</a>
+    <a href="index.html">Research Papers</a>
+    <a href="https://join.maxpool.dev" target="_blank">Join Community &rarr;</a>
+</div>
+
+</body>
+</html>

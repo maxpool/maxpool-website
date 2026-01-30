@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding Agent Engineering Analysis - Enhanced Edition</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Georgia', 'Times New Roman', serif; font-size: 16px; line-height: 1.7; color: #1a1a1a; background: #fff; max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        h1 { font-size: 28px; text-align: center; margin-bottom: 10px; padding-bottom: 15px; border-bottom: 2px solid #DC8850; }
+        h2 { font-size: 22px; color: #DC8850; margin-top: 40px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #DC8850; }
+        h3 { font-size: 18px; color: #555; margin-top: 25px; margin-bottom: 10px; font-weight: 600; }
+        h4 { font-size: 16px; font-weight: bold; margin-top: 15px; margin-bottom: 8px; }
+        p { margin-bottom: 1em; text-align: justify; }
+        a { color: #DC8850; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        ul, ol { margin-left: 1.5em; margin-bottom: 1em; }
+        li { margin-bottom: 0.4em; }
+        .navigation { display: flex; justify-content: center; gap: 20px; padding: 15px 0; margin-bottom: 30px; border-bottom: 1px solid #eee; flex-wrap: wrap; }
+        .navigation a { color: #DC8850; text-decoration: none; font-size: 14px; font-weight: 500; }
+        .navigation a:hover { text-decoration: underline; }
+        .authors { text-align: center; font-style: italic; color: #666; margin-bottom: 30px; font-size: 15px; }
+        .abstract { background: #f8f8f8; padding: 20px 25px; border-left: 4px solid #DC8850; margin: 25px 0; border-radius: 0 5px 5px 0; }
+        .abstract h2 { margin-top: 0; border: none; padding: 0; margin-bottom: 10px; }
+        .key-finding { background: #fff8f0; padding: 20px 25px; border-left: 4px solid #DC8850; margin: 20px 0; border-radius: 0 5px 5px 0; }
+        .eli5-box { background: #e8f5e9; padding: 20px 25px; border-left: 4px solid #4caf50; margin: 25px 0; border-radius: 0 5px 5px 0; }
+        .insight-box { background: #fffbf0; padding: 20px 25px; border: 2px solid #DC8850; margin: 20px 0; border-radius: 8px; }
+        .warning-box { background: #fff3e0; padding: 20px 25px; border-left: 4px solid #f39c12; margin: 20px 0; border-radius: 0 5px 5px 0; }
+        .conclusion-box { background: #f0f0f0; padding: 20px 25px; border-radius: 5px; margin: 20px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; vertical-align: top; }
+        th { background: #DC8850; color: #fff; font-weight: bold; }
+        tr:nth-child(even) { background: #f9f9f9; }
+        pre { font-family: 'Courier New', monospace; font-size: 13px; background: #f8f8f8; border: 1px solid #ddd; padding: 15px; margin: 15px 0; overflow-x: auto; line-height: 1.4; border-radius: 5px; }
+        code { font-family: 'Courier New', monospace; font-size: 13px; background: #f0f0f0; padding: 2px 6px; border-radius: 3px; }
+        .diagram { font-family: 'Courier New', monospace; font-size: 12px; background: #fafafa; border: 2px solid #eee; padding: 20px; margin: 20px 0; overflow-x: auto; white-space: pre; line-height: 1.3; border-radius: 8px; }
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 3px; font-size: 12px; font-weight: bold; }
+        .badge-primary { background: #DC8850; color: #fff; }
+        .badge-success { background: #27ae60; color: #fff; }
+        .badge-warning { background: #f39c12; color: #fff; }
+        .badge-danger { background: #e74c3c; color: #fff; }
+        .metric { font-weight: bold; color: #DC8850; }
+        .performance-improvement { font-weight: bold; color: #27ae60; }
+        .performance-decline { font-weight: bold; color: #e74c3c; }
+        .part-nav { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; margin: 30px 0; }
+        .part-card { display: block; background: #fff; border: 2px solid #eee; border-radius: 8px; padding: 20px; text-decoration: none; color: #1a1a1a; transition: all 0.2s; }
+        .part-card:hover { border-color: #DC8850; box-shadow: 0 4px 12px rgba(220,136,80,0.15); transform: translateY(-2px); text-decoration: none; }
+        .part-card h3 { color: #DC8850; margin: 0 0 8px 0; font-size: 16px; }
+        .part-card p { margin: 0; font-size: 14px; color: #666; text-align: left; }
+        .part-card .part-num { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .source-box { background: #f8f8f8; padding: 20px; border-radius: 5px; margin: 30px 0; font-size: 14px; }
+        @media (max-width: 768px) {
+            body { padding: 20px 15px; font-size: 15px; }
+            h1 { font-size: 22px; }
+            h2 { font-size: 18px; }
+            table { font-size: 12px; }
+            th, td { padding: 6px; }
+            .part-nav { grid-template-columns: 1fr; }
+            pre, .diagram { font-size: 11px; padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="navigation">
+    <a href="../index.html">← Home</a>
+    <a href="../agent/index.html">Agent Reliability</a>
+    <a href="../rag/index.html">RAG Patterns</a>
+    <a href="index.html">Research Papers</a>
+    <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+</div>
+
+<h1>Coding Agent Engineering Analysis</h1>
+<div class="authors">
+    Deep-Dive Technical Report: Architecture, Tools &amp; Special Considerations<br>
+    <em>Enhanced Edition · January 2026 · Version 3.0 · 13 Agents Analyzed</em>
+</div>
+
+<!-- DEEP-DIVE NAVIGATION -->
+<h2>Deep-Dive Sections</h2>
+<p>This report is split into six focused parts for manageable reading. Each section covers a specific aspect of coding agent engineering:</p>
+
+<div class="part-nav">
+    <a href="coding_agents_tools.html" class="part-card">
+        <div class="part-num">Part 1</div>
+        <h3>Tools &amp; Agent Computer Interface</h3>
+        <p>Tool inventories for all 13 agents, ACI design principles, edit patterns (search-replace vs diff vs whole-file), and tool success rate analysis.</p>
+    </a>
+    <a href="coding_agents_extensions.html" class="part-card">
+        <div class="part-num">Part 2</div>
+        <h3>Hooks, MCP &amp; Security</h3>
+        <p>Claude Code's 8-event hook lifecycle, MCP ecosystem, OS-level sandboxing (Seatbelt/Landlock), approval workflows, and checkpoint systems.</p>
+    </a>
+    <a href="coding_agents_memory.html" class="part-card">
+        <div class="part-num">Part 3</div>
+        <h3>Memory &amp; Context Management</h3>
+        <p>Session-based vs persistent memory, Letta's memory blocks, Replit's trajectory compression, Aider's repo map, and compaction strategies.</p>
+    </a>
+    <a href="coding_agents_deepdives.html" class="part-card">
+        <div class="part-num">Part 4</div>
+        <h3>Agent Deep-Dives: A–L</h3>
+        <p>Architecture diagrams and analysis for Aider, Claude Code, Cline, Codex CLI, Droid, Goose, and Letta Code.</p>
+    </a>
+    <a href="coding_agents_deepdives_2.html" class="part-card">
+        <div class="part-num">Part 5</div>
+        <h3>Agent Deep-Dives: O–W</h3>
+        <p>Architecture diagrams and analysis for OpenCode, OpenManus, Qwen Code, Replit Agent, Vibe CLI, and Warp.</p>
+    </a>
+    <a href="coding_agents_production.html" class="part-card">
+        <div class="part-num">Part 6</div>
+        <h3>Production &amp; Enterprise</h3>
+        <p>Context window management, error recovery patterns, prompt injection risks, enterprise deployment, and decision framework for choosing an agent.</p>
+    </a>
+</div>
+
+<!-- KEY FINDINGS -->
+<div class="key-finding">
+    <h4>Key Technical Findings</h4>
+    <ol>
+        <li><strong>Hook Systems Are Critical:</strong> Claude Code's 8-event hook lifecycle (UserPromptSubmit, PreToolUse, PostToolUse, Stop, SubagentStop, SessionStart, PreCompact, Notification) provides the most comprehensive extensibility model.</li>
+        <li><strong>Sandboxing Divergence:</strong> Codex CLI uses OS-native sandboxing (Seatbelt/Landlock/seccomp). Warp uses cloud sandboxes via Namespace. Most others rely on permission-based approval workflows.</li>
+        <li><strong>Memory Architecture Split:</strong> Letta Code's persistent memory blocks vs. Replit's trajectory compression vs. session-based approaches (most others). Each trades differently between continuity and context efficiency.</li>
+        <li><strong>Multi-Model Composition Wins:</strong> Warp, Droid, and Replit compose multiple LLMs (reasoning + coding models). Warp found single-agent with focused tools outperforms multi-agent approaches.</li>
+        <li><strong>LSP Integration Emerging:</strong> OpenCode's Language Server Protocol integration provides deterministic code intelligence, reducing edit hallucination.</li>
+        <li><strong>MCP as Universal Standard:</strong> MCP is now governed by the Linux Foundation's AAIF with 3,000+ servers. Every major agent supports it.</li>
+        <li><strong>Open-Source Parity:</strong> Qwen Code (<span class="performance-improvement">67–69.6%</span> SWE-bench) and OpenManus (53.9k GitHub stars) show open-source agents reaching near-parity with proprietary solutions.</li>
+        <li><strong>Tool Invocation Innovation:</strong> Replit Agent uses Python DSL code generation instead of JSON function calling, achieving ~90% tool invocation success rate.</li>
+    </ol>
+</div>
+
+<!-- RECOMMENDED ARCHITECTURE -->
+<h2>Recommended Architecture</h2>
+
+<p>Based on analysis of all 13 agents, here is the recommended architecture for a competitive coding agent. This synthesizes the best patterns: Claude Code's hook system, Codex CLI's sandboxing, Letta's memory blocks, OpenCode's LSP integration, Warp's multi-model composition, and OpenManus's ReAct hierarchy.</p>
+
+<div class="diagram">RECOMMENDED CODING AGENT ARCHITECTURE
+═══════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────┐
+│                    MULTI-INTERFACE LAYER                         │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐       │
+│  │   CLI    │  │ VS Code  │  │ JetBrains│  │  GitHub  │       │
+│  │  (TUI)   │  │Extension │  │  Plugin  │  │  Action  │       │
+│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘       │
+└───────┼─────────────┼────────────┼─────────────┼───────────────┘
+        └─────────────┴──────┬─────┴─────────────┘
+                             │ gRPC / Protocol
+┌────────────────────────────┼───────────────────────────────────┐
+│                    CORE AGENT ENGINE                            │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │              MULTI-MODEL COMPOSITION                      │  │
+│  │  Planning: Reasoning Model (o3/Opus)                      │  │
+│  │  Execution: Code Model (Sonnet/GPT-5/Devstral)           │  │
+│  │  Fallback: Alternate provider (rate limit recovery)       │  │
+│  └──────────────────────────────────────────────────────────┘  │
+│                                                                 │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │              HOOK SYSTEM (8 events)                        │  │
+│  │  SessionStart → UserPromptSubmit → PreToolUse →           │  │
+│  │  [Execute] → PostToolUse → Stop/SubagentStop              │  │
+│  │  PreCompact, Notification                                  │  │
+│  └──────────────────────────────────────────────────────────┘  │
+│                                                                 │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │              TOOL ORCHESTRATOR                             │  │
+│  │  ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐ │  │
+│  │  │  File  │ │Search  │ │ Exec   │ │  Web   │ │ Memory │ │  │
+│  │  │  Ops   │ │(+LSP)  │ │(sand-  │ │ (MCP)  │ │ Blocks │ │  │
+│  │  │        │ │        │ │ boxed) │ │        │ │        │ │  │
+│  │  └────────┘ └────────┘ └────────┘ └────────┘ └────────┘ │  │
+│  └──────────────────────────────────────────────────────────┘  │
+│                                                                 │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │              SUBAGENT DISPATCHER                           │  │
+│  │  Task (parallel) │ Explore (read-only) │ Plan (design)    │  │
+│  └──────────────────────────────────────────────────────────┘  │
+└────────────────────────────────────────────────────────────────┘
+                             │
+┌────────────────────────────┼───────────────────────────────────┐
+│                    PERSISTENCE LAYER                            │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐            │
+│  │Session State│  │Memory Blocks│  │Skill Library│            │
+│  │(SQLite/JSONL│  │(Server-side)│  │(.md files)  │            │
+│  └─────────────┘  └─────────────┘  └─────────────┘            │
+└────────────────────────────────────────────────────────────────┘
+                             │
+┌────────────────────────────┼───────────────────────────────────┐
+│                    SECURITY LAYER                               │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐            │
+│  │ OS Sandbox  │  │  Approval   │  │ Checkpoint  │            │
+│  │ (Seatbelt/  │  │  Workflow   │  │  System     │            │
+│  │  Landlock)  │  │(configurable│  │(shadow git) │            │
+│  └─────────────┘  └─────────────┘  └─────────────┘            │
+└────────────────────────────────────────────────────────────────┘</div>
+
+<h3>Implementation Priority</h3>
+<ol>
+    <li><strong>Phase 1 — Foundation:</strong> Core tool system (file ops, search, exec), basic approval workflow, single-model execution</li>
+    <li><strong>Phase 2 — Extensibility:</strong> Hook system (8 events), MCP client, plugin architecture, multi-model composition</li>
+    <li><strong>Phase 3 — Intelligence:</strong> LSP integration, persistent memory blocks, skill learning, subagent dispatch</li>
+    <li><strong>Phase 4 — Enterprise:</strong> OS sandboxing, MDM config, OpenTelemetry audit logging, SSO, cloud sandbox infrastructure</li>
+</ol>
+
+<h3>Technology Stack Recommendations</h3>
+<table>
+    <tr><th>Component</th><th>Recommended</th><th>Rationale</th></tr>
+    <tr><td>Language</td><td>Rust + TypeScript</td><td>Rust for core/sandbox (Codex CLI pattern), TS for extensions/UI (Claude Code pattern)</td></tr>
+    <tr><td>TUI Framework</td><td>Ratatui (Rust) or Bubble Tea (Go)</td><td>Native performance, rich terminal UI; Warp uses GPU-rendered Rust</td></tr>
+    <tr><td>IDE Extension</td><td>VS Code Extension API</td><td>Widest reach; Cline and Qwen Code prove the model</td></tr>
+    <tr><td>IPC Protocol</td><td>gRPC with Protocol Buffers</td><td>Type-safe, efficient; OpenCode and Warp validate this approach</td></tr>
+    <tr><td>State Storage</td><td>SQLite + JSONL</td><td>Local-first, portable, auditable; Codex CLI uses RolloutRecorder</td></tr>
+    <tr><td>Tool Extensions</td><td>MCP (Model Context Protocol)</td><td>Industry standard, 3000+ servers, Linux Foundation governance</td></tr>
+    <tr><td>Agent Framework</td><td>ReAct loop with stuck detection</td><td>OpenManus validates 4-level hierarchy: Base → ReAct → ToolCall → Domain</td></tr>
+    <tr><td>Sandboxing</td><td>Seatbelt (macOS) + Landlock (Linux)</td><td>Codex CLI proves OS-native sandboxing is production-ready</td></tr>
+</table>
+
+<!-- AGENT LANDSCAPE TABLE -->
+<h2>Agent Landscape: 13 Tools Analyzed</h2>
+
+<table>
+    <tr>
+        <th>Agent</th>
+        <th>Vendor</th>
+        <th>Type</th>
+        <th>License</th>
+        <th>Stars</th>
+        <th>Key Differentiator</th>
+    </tr>
+    <tr>
+        <td><strong>Aider</strong></td>
+        <td>Open Source</td>
+        <td>CLI</td>
+        <td>Apache-2.0</td>
+        <td>~25k</td>
+        <td>Architect/Editor dual-model, repo map via tree-sitter</td>
+    </tr>
+    <tr>
+        <td><strong>Claude Code</strong></td>
+        <td>Anthropic</td>
+        <td>CLI</td>
+        <td>Proprietary</td>
+        <td>—</td>
+        <td>8-event hook system, 18 built-in tools, subagent dispatch</td>
+    </tr>
+    <tr>
+        <td><strong>Cline</strong></td>
+        <td>Community</td>
+        <td>VS Code Ext</td>
+        <td>Apache-2.0</td>
+        <td>~30k</td>
+        <td>Shadow git checkpoints, 33+ LLM providers, browser automation</td>
+    </tr>
+    <tr>
+        <td><strong>Codex CLI</strong></td>
+        <td>OpenAI</td>
+        <td>CLI (Rust)</td>
+        <td>Apache-2.0</td>
+        <td>~18k</td>
+        <td>OS-native sandboxing (Seatbelt/Landlock/seccomp)</td>
+    </tr>
+    <tr>
+        <td><strong>Droid</strong></td>
+        <td>Factory.ai</td>
+        <td>CLI</td>
+        <td>Proprietary</td>
+        <td>~504</td>
+        <td>HyperCode/ByteRank retrieval, Terminal-Bench #1</td>
+    </tr>
+    <tr>
+        <td><strong>Goose</strong></td>
+        <td>Block (Square)</td>
+        <td>CLI + Desktop</td>
+        <td>Apache-2.0</td>
+        <td>~10k</td>
+        <td>MCP-first architecture, 3000+ extension ecosystem</td>
+    </tr>
+    <tr>
+        <td><strong>Letta Code</strong></td>
+        <td>Letta</td>
+        <td>CLI</td>
+        <td>Apache-2.0</td>
+        <td>—</td>
+        <td>Persistent memory blocks, archival vector DB, skill learning</td>
+    </tr>
+    <tr>
+        <td><strong>OpenCode</strong></td>
+        <td>Community</td>
+        <td>CLI (Go)</td>
+        <td>MIT</td>
+        <td>~5k</td>
+        <td>LSP integration, 75+ LLM providers, client-server design</td>
+    </tr>
+    <tr>
+        <td><strong>OpenManus</strong></td>
+        <td>MetaGPT</td>
+        <td>Framework</td>
+        <td>MIT</td>
+        <td>~53.9k</td>
+        <td>4-level ReAct hierarchy, PlanningFlow orchestration</td>
+    </tr>
+    <tr>
+        <td><strong>Qwen Code</strong></td>
+        <td>Alibaba</td>
+        <td>CLI (TS)</td>
+        <td>Apache-2.0</td>
+        <td>~17.9k</td>
+        <td>Free 2000 req/day, forked from Gemini CLI, Docker sandbox</td>
+    </tr>
+    <tr>
+        <td><strong>Replit Agent</strong></td>
+        <td>Replit</td>
+        <td>Web IDE</td>
+        <td>Proprietary</td>
+        <td>—</td>
+        <td>Python DSL tool invocation, 200-min autonomy, self-testing</td>
+    </tr>
+    <tr>
+        <td><strong>Vibe CLI</strong></td>
+        <td>Mistral</td>
+        <td>CLI</td>
+        <td>Apache-2.0</td>
+        <td>—</td>
+        <td>Cheapest inference ($0.40/1M input), single-GPU deployable</td>
+    </tr>
+    <tr>
+        <td><strong>Warp</strong></td>
+        <td>Warp</td>
+        <td>ADE</td>
+        <td>Proprietary</td>
+        <td>—</td>
+        <td>Full Terminal Control (interactive PTY), GPU-rendered Rust UI</td>
+    </tr>
+</table>
+
+<!-- BENCHMARK COMPARISON -->
+<h2>Benchmark Comparison</h2>
+
+<table>
+    <tr>
+        <th>Agent</th>
+        <th>SWE-bench Verified</th>
+        <th>Terminal-Bench</th>
+        <th>Other Benchmarks</th>
+    </tr>
+    <tr>
+        <td><strong>Warp</strong></td>
+        <td><span class="performance-improvement">75.8%</span> (GPT-5)</td>
+        <td><span class="performance-improvement">52%</span> (#1)</td>
+        <td>3.2B total lines edited</td>
+    </tr>
+    <tr>
+        <td><strong>Codex CLI</strong></td>
+        <td><span class="performance-improvement">74.9%</span> (GPT-5)</td>
+        <td>42.8%</td>
+        <td>Code review mode</td>
+    </tr>
+    <tr>
+        <td><strong>Vibe CLI</strong></td>
+        <td><span class="performance-improvement">72.2%</span> (Devstral 2)</td>
+        <td>—</td>
+        <td>68.0% (Small 2, 24B)</td>
+    </tr>
+    <tr>
+        <td><strong>Claude Code</strong></td>
+        <td>~72% (Sonnet 4)</td>
+        <td>43.2%</td>
+        <td>200k context window</td>
+    </tr>
+    <tr>
+        <td><strong>Qwen Code</strong></td>
+        <td><span class="performance-improvement">67–69.6%</span></td>
+        <td>37.5% (480B)</td>
+        <td>SOTA open-source agentic coding</td>
+    </tr>
+    <tr>
+        <td><strong>Droid</strong></td>
+        <td>31.67% (Lite)</td>
+        <td><span class="performance-improvement">58.8%</span> (#1)</td>
+        <td>Top 3 across 3 models</td>
+    </tr>
+    <tr>
+        <td><strong>Replit Agent</strong></td>
+        <td>2nd place (Lite)</td>
+        <td>—</td>
+        <td>135 apps in 24h (Rokt)</td>
+    </tr>
+    <tr>
+        <td><strong>OpenManus</strong></td>
+        <td>—</td>
+        <td>—</td>
+        <td>GAIA: 74.3%</td>
+    </tr>
+    <tr>
+        <td><strong>Aider</strong></td>
+        <td>—</td>
+        <td>—</td>
+        <td>Architect+Editor: 85% (polyglot)</td>
+    </tr>
+    <tr>
+        <td><strong>Cline</strong></td>
+        <td>—</td>
+        <td>—</td>
+        <td>33+ provider support</td>
+    </tr>
+    <tr>
+        <td><strong>OpenCode</strong></td>
+        <td>—</td>
+        <td>—</td>
+        <td>LSP-assisted editing</td>
+    </tr>
+    <tr>
+        <td><strong>Goose</strong></td>
+        <td>—</td>
+        <td>—</td>
+        <td>3000+ MCP extensions</td>
+    </tr>
+    <tr>
+        <td><strong>Letta Code</strong></td>
+        <td>—</td>
+        <td>—</td>
+        <td>#1 model-agnostic on TerminalBench</td>
+    </tr>
+</table>
+
+<div class="warning-box">
+    <h4>⚠️ Benchmark Caveats</h4>
+    <p>SWE-bench scores depend heavily on the underlying model, not just the agent harness. Factory (Droid) stopped running SWE-bench citing its Python-only, debugging-only limitations. Terminal-Bench provides a more holistic evaluation spanning coding, build/test, data/ML, systems, networking, security, and CLI workflows across 80 Dockerized tasks.</p>
+</div>
+
+<!-- COST & LICENSING -->
+<h2>Cost &amp; Licensing</h2>
+
+<table>
+    <tr>
+        <th>Agent</th>
+        <th>Pricing Model</th>
+        <th>Free Tier</th>
+        <th>Open Source</th>
+    </tr>
+    <tr><td><strong>Aider</strong></td><td>Free (BYOK)</td><td>✓ Unlimited</td><td>✓ Apache-2.0</td></tr>
+    <tr><td><strong>Claude Code</strong></td><td>$20–200/mo (API usage)</td><td>✗</td><td>✗ Proprietary</td></tr>
+    <tr><td><strong>Cline</strong></td><td>Free (BYOK)</td><td>✓ Unlimited</td><td>✓ Apache-2.0</td></tr>
+    <tr><td><strong>Codex CLI</strong></td><td>ChatGPT plan included</td><td>With plan</td><td>✓ Apache-2.0</td></tr>
+    <tr><td><strong>Droid</strong></td><td>Free–$40/mo + overage</td><td>✓ (BYOK)</td><td>✗ Proprietary</td></tr>
+    <tr><td><strong>Goose</strong></td><td>Free (BYOK)</td><td>✓ Unlimited</td><td>✓ Apache-2.0</td></tr>
+    <tr><td><strong>Letta Code</strong></td><td>Free (BYOK + Letta server)</td><td>✓ Unlimited</td><td>✓ Apache-2.0</td></tr>
+    <tr><td><strong>OpenCode</strong></td><td>Free (BYOK)</td><td>✓ Unlimited</td><td>✓ MIT</td></tr>
+    <tr><td><strong>OpenManus</strong></td><td>Free (BYOK)</td><td>✓ Unlimited</td><td>✓ MIT</td></tr>
+    <tr><td><strong>Qwen Code</strong></td><td>Free (OAuth: 2000 req/day)</td><td>✓ 2000/day</td><td>✓ Apache-2.0</td></tr>
+    <tr><td><strong>Replit Agent</strong></td><td>$0–35/mo + credits</td><td>Limited daily</td><td>✗ Proprietary</td></tr>
+    <tr><td><strong>Vibe CLI</strong></td><td>Free API (promotional)</td><td>✓</td><td>✓ Apache-2.0</td></tr>
+    <tr><td><strong>Warp</strong></td><td>Free–Pro (100–10k req/mo)</td><td>✓ 100 req/mo</td><td>✗ Proprietary</td></tr>
+</table>
+
+<div class="insight-box">
+    <h4>💡 Model Cost Comparison (per 1M tokens)</h4>
+    <table>
+        <tr><th>Model</th><th>Input</th><th>Output</th><th>Used By</th></tr>
+        <tr><td>Devstral Small 2 (24B)</td><td>$0.10</td><td>$0.30</td><td>Vibe CLI</td></tr>
+        <tr><td>Devstral 2 (123B)</td><td>$0.40</td><td>$2.00</td><td>Vibe CLI</td></tr>
+        <tr><td>Qwen3-Coder-480B</td><td>Free (OAuth)</td><td>Free (OAuth)</td><td>Qwen Code</td></tr>
+        <tr><td>Claude Sonnet 4</td><td>$3.00</td><td>$15.00</td><td>Claude Code, Warp, Droid</td></tr>
+        <tr><td>Claude Opus 4</td><td>$15.00</td><td>$75.00</td><td>Claude Code, Droid</td></tr>
+        <tr><td>GPT-5</td><td>~$2.50</td><td>~$10.00</td><td>Codex CLI, Warp, Droid</td></tr>
+    </table>
+</div>
+
+<!-- SOURCES -->
+<div class="source-box">
+    <h4>Sources &amp; References</h4>
+    <p><strong>GitHub Repositories:</strong> Claude Code (Anthropic), <a href="https://github.com/openai/codex" target="_blank">Codex CLI</a>, <a href="https://github.com/QwenLM/qwen-code" target="_blank">Qwen Code</a>, <a href="https://github.com/FoundationAgents/OpenManus" target="_blank">OpenManus</a>, <a href="https://github.com/paul-gauthier/aider" target="_blank">Aider</a>, <a href="https://github.com/cline/cline" target="_blank">Cline</a>, <a href="https://github.com/block/goose" target="_blank">Goose</a>, <a href="https://github.com/opencode-ai/opencode" target="_blank">OpenCode</a>, <a href="https://github.com/Factory-AI/factory" target="_blank">Droid/Factory</a></p>
+    <p><strong>Benchmarks:</strong> <a href="https://www.swebench.com/" target="_blank">SWE-bench</a>, <a href="https://www.tbench.ai/" target="_blank">Terminal-Bench</a>, <a href="https://gaia-benchmark.com/" target="_blank">GAIA</a></p>
+    <p><strong>Platforms:</strong> <a href="https://warp.dev" target="_blank">Warp</a>, <a href="https://replit.com" target="_blank">Replit</a>, <a href="https://factory.ai" target="_blank">Factory.ai</a>, <a href="https://mistral.ai" target="_blank">Mistral</a>, <a href="https://letta.com" target="_blank">Letta</a></p>
+    <p><em>Document Version: 3.0 Enhanced Edition · January 2026 · Classification: Internal Engineering Document</em></p>
+</div>
+
+<!-- FOOTER NAVIGATION -->
+<div class="navigation">
+    <a href="../index.html">← Home</a>
+    <a href="../agent/index.html">Agent Reliability</a>
+    <a href="../rag/index.html">RAG Patterns</a>
+    <a href="index.html">Research Papers</a>
+    <a href="https://join.maxpool.dev" target="_blank">Join Community →</a>
+</div>
+
+</body>
+</html>

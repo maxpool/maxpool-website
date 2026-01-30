@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Part 3: Memory &amp; Context Management - Coding Agent Engineering Analysis</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Georgia', 'Times New Roman', serif; font-size: 16px; line-height: 1.7; color: #1a1a1a; background: #fff; max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        h1 { font-size: 28px; text-align: center; margin-bottom: 10px; padding-bottom: 15px; border-bottom: 2px solid #DC8850; }
+        h2 { font-size: 22px; color: #DC8850; margin-top: 40px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #DC8850; }
+        h3 { font-size: 18px; color: #555; margin-top: 25px; margin-bottom: 10px; font-weight: 600; }
+        h4 { font-size: 16px; font-weight: bold; margin-top: 15px; margin-bottom: 8px; }
+        p { margin-bottom: 1em; text-align: justify; }
+        a { color: #DC8850; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        ul, ol { margin-left: 1.5em; margin-bottom: 1em; }
+        li { margin-bottom: 0.4em; }
+        .navigation { display: flex; justify-content: center; gap: 20px; padding: 15px 0; margin-bottom: 30px; border-bottom: 1px solid #eee; flex-wrap: wrap; }
+        .navigation a { color: #DC8850; text-decoration: none; font-size: 14px; font-weight: 500; }
+        .navigation a:hover { text-decoration: underline; }
+        .authors { text-align: center; font-style: italic; color: #666; margin-bottom: 30px; font-size: 15px; }
+        .abstract { background: #f8f8f8; padding: 20px 25px; border-left: 4px solid #DC8850; margin: 25px 0; border-radius: 0 5px 5px 0; }
+        .abstract h2 { margin-top: 0; border: none; padding: 0; margin-bottom: 10px; }
+        .key-finding { background: #fff8f0; padding: 20px 25px; border-left: 4px solid #DC8850; margin: 20px 0; border-radius: 0 5px 5px 0; }
+        .eli5-box { background: #e8f5e9; padding: 20px 25px; border-left: 4px solid #4caf50; margin: 25px 0; border-radius: 0 5px 5px 0; }
+        .insight-box { background: #fffbf0; padding: 20px 25px; border: 2px solid #DC8850; margin: 20px 0; border-radius: 8px; }
+        .warning-box { background: #fff3e0; padding: 20px 25px; border-left: 4px solid #f39c12; margin: 20px 0; border-radius: 0 5px 5px 0; }
+        .conclusion-box { background: #f0f0f0; padding: 20px 25px; border-radius: 5px; margin: 20px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; vertical-align: top; }
+        th { background: #DC8850; color: #fff; font-weight: bold; }
+        tr:nth-child(even) { background: #f9f9f9; }
+        pre { font-family: 'Courier New', monospace; font-size: 13px; background: #f8f8f8; border: 1px solid #ddd; padding: 15px; margin: 15px 0; overflow-x: auto; line-height: 1.4; border-radius: 5px; }
+        code { font-family: 'Courier New', monospace; font-size: 13px; background: #f0f0f0; padding: 2px 6px; border-radius: 3px; }
+        .diagram { font-family: 'Courier New', monospace; font-size: 12px; background: #fafafa; border: 2px solid #eee; padding: 20px; margin: 20px 0; overflow-x: auto; white-space: pre; line-height: 1.3; border-radius: 8px; }
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 3px; font-size: 12px; font-weight: bold; }
+        .badge-primary { background: #DC8850; color: #fff; }
+        .badge-success { background: #27ae60; color: #fff; }
+        .badge-warning { background: #f39c12; color: #fff; }
+        .badge-danger { background: #e74c3c; color: #fff; }
+        .metric { font-weight: bold; color: #DC8850; }
+        .performance-improvement { font-weight: bold; color: #27ae60; }
+        .performance-decline { font-weight: bold; color: #e74c3c; }
+        .part-nav { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; margin: 30px 0; }
+        .part-card { display: block; background: #fff; border: 2px solid #eee; border-radius: 8px; padding: 20px; text-decoration: none; color: #1a1a1a; transition: all 0.2s; }
+        .part-card:hover { border-color: #DC8850; box-shadow: 0 4px 12px rgba(220,136,80,0.15); transform: translateY(-2px); text-decoration: none; }
+        .part-card h3 { color: #DC8850; margin: 0 0 8px 0; font-size: 16px; }
+        .part-card p { margin: 0; font-size: 14px; color: #666; text-align: left; }
+        .part-card .part-num { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .source-box { background: #f8f8f8; padding: 20px; border-radius: 5px; margin: 30px 0; font-size: 14px; }
+        .series-nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; margin: 30px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; font-size: 14px; }
+        .series-nav a { color: #DC8850; }
+        @media (max-width: 768px) {
+            body { padding: 20px 15px; font-size: 15px; }
+            h1 { font-size: 22px; }
+            h2 { font-size: 18px; }
+            table { font-size: 12px; }
+            th, td { padding: 6px; }
+            .part-nav { grid-template-columns: 1fr; }
+            pre, .diagram { font-size: 11px; padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="navigation">
+    <a href="../index.html">&larr; Home</a>
+    <a href="../agent/index.html">Agent Reliability</a>
+    <a href="../rag/index.html">RAG Patterns</a>
+    <a href="index.html">Research Papers</a>
+    <a href="https://join.maxpool.dev" target="_blank">Join Community &rarr;</a>
+</div>
+
+<h1>Part 3: Memory &amp; Context Management</h1>
+<div class="authors">Coding Agent Engineering Analysis &middot; Part 3 of 6<br><em>Enhanced Edition &middot; January 2026</em></div>
+
+<div class="series-nav">
+    <a href="coding_agents_extensions.html">&larr; Part 2: Extensions</a>
+    <span>Part 3 of 6</span>
+    <a href="coding_agents_deepdives.html">Next: Agent Deep-Dives A&ndash;L &rarr;</a>
+</div>
+
+<!-- ABSTRACT -->
+<div class="abstract">
+    <h2>Overview</h2>
+    <p>Memory is the most consequential architectural decision in coding agent design. It determines whether an agent forgets everything between sessions or progressively learns your codebase, preferences, and patterns. This section analyzes the full spectrum of memory architectures across <span class="metric">13 coding agents</span>, from ephemeral session-based approaches (Claude Code, Codex CLI, Aider) to fully persistent memory block systems (Letta Code), with hybrid strategies in between (Replit trajectory compression, Warp model-aligned summarization, Qwen Code cross-session save).</p>
+    <p>Context window management is equally critical: a <span class="metric">200k token</span> window sounds generous until MCP server definitions consume 130k tokens, leaving only ~70k for actual work. Every agent faces the same fundamental constraint&mdash;finite context, infinite codebase&mdash;and their solutions reveal deep architectural trade-offs between continuity, efficiency, and fidelity.</p>
+</div>
+
+<!-- ELI5 -->
+<div class="eli5-box">
+    <h3>ELI5: Agent Memory</h3>
+    <p>Think of an agent&rsquo;s memory like a desk. <strong>Session-based agents</strong> clear the desk completely every time you leave the room&mdash;next time you come back, you have to re-explain everything. <strong>Persistent-memory agents</strong> have a filing cabinet next to the desk: they write down important things (your preferences, project structure, skills learned) on index cards and file them away. When the desk gets too cluttered (context window fills up), some agents have a janitor who <strong>compacts</strong> the desk by summarizing old papers into sticky notes. The smartest agents use a <strong>repo map</strong>&mdash;a table of contents for your codebase&mdash;so they only pull the specific files they need onto the desk.</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 1: SESSION-BASED VS PERSISTENT MEMORY -->
+<!-- ============================================================ -->
+<h2>1. Session-Based vs Persistent Memory</h2>
+
+<p>A fundamental architectural divide separates coding agents into two camps: those that treat each session as a blank slate, and those that maintain memory across sessions. This distinction has profound implications for user experience, architecture complexity, and the types of tasks an agent can handle over time. The majority of agents today remain session-based, relying on file-system workarounds for any cross-session continuity. Only Letta Code implements a true server-persistent memory model where the agent actively manages its own long-term state.</p>
+
+<div class="diagram">SESSION-BASED ARCHITECTURE (Claude Code, Codex CLI, Aider, Cline, OpenCode, Vibe CLI)
+════════════════════════════════════════════════════════════════════════════════
+
+Session 1                 Session 2                 Session 3
+┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐
+│  Context Window  │     │  Context Window  │     │  Context Window  │
+│                  │     │                  │     │                  │
+│  ┌────────────┐  │     │  ┌────────────┐  │     │  ┌────────────┐  │
+│  │ System     │  │     │  │ System     │  │     │  │ System     │  │
+│  │ Prompt     │  │     │  │ Prompt     │  │     │  │ Prompt     │  │
+│  ├────────────┤  │     │  ├────────────┤  │     │  ├────────────┤  │
+│  │ CLAUDE.md  │  │     │  │ CLAUDE.md  │  │     │  │ CLAUDE.md  │  │
+│  │ (static)   │  │     │  │ (static)   │  │     │  │ (static)   │  │
+│  ├────────────┤  │     │  ├────────────┤  │     │  ├────────────┤  │
+│  │ Messages   │  │     │  │ Messages   │  │     │  │ Messages   │  │
+│  │ + Files    │  │     │  │ + Files    │  │     │  │ + Files    │  │
+│  │ + Tools    │  │     │  │ + Tools    │  │     │  │ + Tools    │  │
+│  └────────────┘  │     │  └────────────┘  │     │  └────────────┘  │
+└────────┬─────────┘     └────────┬─────────┘     └────────┬─────────┘
+         │                        │                        │
+         ▼                        ▼                        ▼
+     [DISCARDED]              [DISCARDED]              [DISCARDED]
+
+Context is LOST between sessions.
+Only static files (CLAUDE.md, AGENTS.md, settings) persist on disk.
+Conversation history, learned preferences, task context = gone.
+
+
+PERSISTENT-MEMORY ARCHITECTURE (Letta Code)
+════════════════════════════════════════════════════════════════════════════════
+
+                  ┌─────────────────────────────────────────────┐
+                  │          LETTA API SERVER                    │
+                  │    (cloud.letta.com or self-hosted)          │
+                  │                                             │
+                  │  ┌───────────────────────────────────────┐  │
+                  │  │  Memory Blocks (persisted, mutable)   │  │
+                  │  │  ┌──────────┐  ┌──────────┐          │  │
+                  │  │  │ persona  │  │  human   │          │  │
+                  │  │  │ (agent   │  │  (user   │          │  │
+                  │  │  │  identity│  │  prefs)  │          │  │
+                  │  │  └──────────┘  └──────────┘          │  │
+                  │  │  ┌──────────┐  ┌──────────┐          │  │
+                  │  │  │ project  │  │  skills  │          │  │
+                  │  │  │ (codebase│  │ (learned │          │  │
+                  │  │  │  context)│  │ patterns)│          │  │
+                  │  │  └──────────┘  └──────────┘          │  │
+                  │  └───────────────────────────────────────┘  │
+                  │                                             │
+                  │  ┌───────────────────────────────────────┐  │
+                  │  │  Archival Memory (vector DB)          │  │
+                  │  │  Unlimited long-term knowledge store  │  │
+                  │  └───────────────────────────────────────┘  │
+                  │                                             │
+                  │  ┌───────────────────────────────────────┐  │
+                  │  │  Recall Memory (conversation log)     │  │
+                  │  │  Searchable past messages             │  │
+                  │  └───────────────────────────────────────┘  │
+                  └──────────────────┬──────────────────────────┘
+                                     │
+            ┌────────────────────────┼────────────────────────┐
+            │                        │                        │
+     Session 1 ──────────────────────┤                        │
+     Session 2 ──────────────────────┤                        │
+     Session 3 ──────────────────────┘                        │
+                                                              │
+     All sessions share the SAME persistent state.            │
+     Agent actively updates its own memory blocks.            │
+     Skills compound over time across every session.          │
+     └────────────────────────────────────────────────────────┘</div>
+
+<div class="key-finding">
+    <h4>Key Finding: The Memory Spectrum</h4>
+    <p>Memory approaches fall on a spectrum from <strong>fully ephemeral</strong> to <strong>fully persistent</strong>. Most agents cluster at the ephemeral end, relying on static configuration files (CLAUDE.md, AGENTS.md, replit.md) for cross-session continuity. Letta Code is the only agent that implements true persistent memory with agent-managed updates. Hybrid approaches&mdash;Replit&rsquo;s trajectory compression, Qwen Code&rsquo;s <code>save_memory</code> tool, Warp&rsquo;s model-aligned summarization&mdash;represent a middle ground where the industry is likely converging.</p>
+    <ul>
+        <li><strong>Ephemeral:</strong> Codex CLI, Cline, Goose, Droid, Warp, OpenManus</li>
+        <li><strong>Static context files:</strong> Claude Code (CLAUDE.md), OpenCode (AGENTS.md), Replit (replit.md)</li>
+        <li><strong>Cross-session save:</strong> Qwen Code (save_memory tool), Vibe CLI (history/ directory)</li>
+        <li><strong>Trajectory compression:</strong> Replit Agent (compressed checkpoints)</li>
+        <li><strong>Full persistence:</strong> Letta Code (memory blocks + archival + recall)</li>
+    </ul>
+</div>
+
+<h3>1.1 Letta Memory Block Structure</h3>
+
+<p>Letta Code implements the most sophisticated memory architecture of any coding agent. Based on the MemGPT research paper, it treats memory as a first-class primitive: the agent has explicit tools to read and write its own memory blocks, which are embedded directly into the system prompt. This creates a self-modifying agent that learns and adapts across sessions without any user intervention.</p>
+
+<pre>
+SYSTEM PROMPT LAYOUT (agent-modifiable via memory() tool):
++============================================================+
+| CORE MEMORY (BLOCKS)                                       |
+|                                                            |
+| &lt;persona&gt;                                                  |
+|   I am a coding assistant that prefers functional          |
+|   programming patterns. I always run tests before          |
+|   committing. I use TypeScript strict mode.                |
+|   I prefer small, focused commits with clear messages.     |
+| &lt;/persona&gt;                                                 |
+|                                                            |
+| &lt;human&gt;                                                    |
+|   User prefers TypeScript over JavaScript.                 |
+|   Works on an e-commerce platform (Next.js 14).            |
+|   Senior engineer, prefers concise explanations.           |
+|   Uses pnpm as package manager.                            |
+|   Testing: Jest + React Testing Library.                   |
+| &lt;/human&gt;                                                   |
+|                                                            |
+| &lt;project&gt;                                                  |
+|   Framework: Next.js 14 (App Router)                       |
+|   Database: PostgreSQL via Prisma ORM                      |
+|   Auth: NextAuth.js v5                                     |
+|   Deployment: Vercel                                       |
+|   Monorepo: Turborepo with apps/ and packages/             |
+| &lt;/project&gt;                                                 |
+|                                                            |
+| &lt;skills&gt;                                                   |
+|   Available skills:                                        |
+|   - api-migration: Migrate REST to GraphQL                 |
+|   - testing-patterns: TDD workflow                         |
+|   - prisma-relations: Complex Prisma relation patterns     |
+| &lt;/skills&gt;                                                  |
++============================================================+
+| CONVERSATION MESSAGES (scrolling window)                   |
+| * User msg -&gt; Assistant response -&gt; Tool calls             |
++============================================================+
+| ARCHIVAL MEMORY (overflow, vector-indexed)                 |
+| * Historical summaries, large code snippets, docs          |
++============================================================+
+
+MEMORY() TOOL API:
+  memory(action: "edit"|"read"|"append",
+         block:  "persona"|"human"|"project"|"skills",
+         updates: "string content to write/append")
+
+Example: Agent autonomously learns a preference:
+  memory(action: "edit", block: "human",
+         updates: "Add: User prefers kebab-case file names")
+</pre>
+
+<h3>1.2 Memory Approaches by Agent</h3>
+
+<table>
+    <tr>
+        <th>Agent</th>
+        <th>Memory Type</th>
+        <th>Mechanism</th>
+        <th>Cross-Session?</th>
+        <th>Capacity</th>
+    </tr>
+    <tr>
+        <td><strong>Claude Code</strong></td>
+        <td>File-based</td>
+        <td>CLAUDE.md, Memory blocks via <code>/memory</code></td>
+        <td>Partial (files persist)</td>
+        <td>Unlimited file storage</td>
+    </tr>
+    <tr>
+        <td><strong>Codex CLI</strong></td>
+        <td>Session-only</td>
+        <td>JSONL recorder (RolloutRecorder)</td>
+        <td>No (audit only)</td>
+        <td>Model-dependent</td>
+    </tr>
+    <tr>
+        <td><strong>Letta Code</strong></td>
+        <td>Server-persistent</td>
+        <td>Memory blocks + Archival DB + Recall</td>
+        <td>Yes (full)</td>
+        <td>Unlimited (server)</td>
+    </tr>
+    <tr>
+        <td><strong>Aider</strong></td>
+        <td>Session + repo map</td>
+        <td>tree-sitter AST map, on-demand <code>/add</code></td>
+        <td>No</td>
+        <td>~1024 tokens overview</td>
+    </tr>
+    <tr>
+        <td><strong>Cline</strong></td>
+        <td>Session + settings</td>
+        <td>VS Code workspace state, webview history</td>
+        <td>No</td>
+        <td>Model-dependent</td>
+    </tr>
+    <tr>
+        <td><strong>Goose</strong></td>
+        <td>Session-only</td>
+        <td>In-memory, MCP extension context</td>
+        <td>No</td>
+        <td>Model-dependent</td>
+    </tr>
+    <tr>
+        <td><strong>OpenCode</strong></td>
+        <td>File-based</td>
+        <td>AGENTS.md + session + LSP queries</td>
+        <td>Partial (files persist)</td>
+        <td>Model-dependent</td>
+    </tr>
+    <tr>
+        <td><strong>Vibe CLI</strong></td>
+        <td>File-based</td>
+        <td>history/ directory on disk</td>
+        <td>Partial (history)</td>
+        <td>256k (Devstral)</td>
+    </tr>
+    <tr>
+        <td><strong>Qwen Code</strong></td>
+        <td>File-based</td>
+        <td><code>save_memory</code> tool &rarr; ~/.qwen/settings.json</td>
+        <td>Partial (files persist)</td>
+        <td>Model-dependent</td>
+    </tr>
+    <tr>
+        <td><strong>OpenManus</strong></td>
+        <td>Agent-managed</td>
+        <td>Memory class within 4-level hierarchy</td>
+        <td>No</td>
+        <td>Model-dependent</td>
+    </tr>
+    <tr>
+        <td><strong>Droid</strong></td>
+        <td>Session-only</td>
+        <td>In-memory + HyperCode retrieval</td>
+        <td>No</td>
+        <td>Model-dependent</td>
+    </tr>
+    <tr>
+        <td><strong>Warp</strong></td>
+        <td>Session-only</td>
+        <td>In-memory + codebase embeddings</td>
+        <td>No</td>
+        <td>Model-dependent</td>
+    </tr>
+    <tr>
+        <td><strong>Replit</strong></td>
+        <td>Trajectory-based</td>
+        <td>Trajectory compression + checkpoints</td>
+        <td>Partial (compressed)</td>
+        <td>200-min sessions</td>
+    </tr>
+</table>
+
+<!-- ============================================================ -->
+<!-- SECTION 2: CONTEXT COMPACTION STRATEGIES -->
+<!-- ============================================================ -->
+<h2>2. Context Compaction Strategies</h2>
+
+<p>Every coding agent eventually fills its context window. The strategies they use to manage this constraint&mdash;compaction, summarization, offloading, structural mapping&mdash;reveal fundamental architectural trade-offs. Some agents summarize aggressively and risk losing detail. Others offload to external storage and risk retrieval latency. A few avoid the problem entirely by providing the agent with tools to query code on demand rather than storing it in context.</p>
+
+<h3>2.1 Claude Code Auto-Compaction</h3>
+
+<p>Claude Code uses a <span class="metric">200k token</span> context window and implements automatic compaction when usage approaches capacity. The compaction system is the most transparent among all agents analyzed, with a dedicated hook event (<code>PreCompact</code>) that allows external systems to intercept the process, and a <code>/compact</code> command for manual triggering.</p>
+
+<div class="diagram">CLAUDE CODE AUTO-COMPACTION ALGORITHM
+═══════════════════════════════════════════════════════════════════
+
+                  ┌─────────────────────────────┐
+                  │   Context Window (200k)      │
+                  │   ████████████████░░░░░░░░   │  ~80% full
+                  └──────────────┬──────────────┘
+                                 │
+                                 ▼
+                  ┌─────────────────────────────┐
+                  │  1. Monitor Context Usage    │
+                  │     Threshold: ~80% of max   │
+                  └──────────────┬──────────────┘
+                                 │ Threshold exceeded
+                                 ▼
+                  ┌─────────────────────────────┐
+                  │  2. Trigger PreCompact Hook  │◄── External systems can:
+                  │     (allows saving state)    │    - Save state to disk
+                  └──────────────┬──────────────┘    - Export conversation
+                                 │                    - Log metrics
+                                 ▼
+                  ┌─────────────────────────────┐
+                  │  3. Generate Summary         │
+                  │                              │
+                  │  COMPACTION PROMPT:           │
+                  │  "Summarize this              │
+                  │   conversation, preserving:   │
+                  │   - Key decisions made        │
+                  │   - Current task state        │
+                  │   - Unresolved issues         │
+                  │   - User preferences learned" │
+                  └──────────────┬──────────────┘
+                                 │
+                  ┌──────────────┴──────────────┐
+                  │                              │
+            ┌─────▼──────┐            ┌─────────▼────────┐
+            │  PRESERVE  │            │    DISCARD       │
+            │            │            │                  │
+            │ Recent     │            │ Old tool outputs │
+            │  messages  │            │ Resolved threads │
+            │  (5-10)    │            │ Redundant reads  │
+            │ Active     │            │ Stale search     │
+            │  file      │            │  results         │
+            │  contents  │            │ Superseded edits │
+            │ Todo list  │            │ Exploration that │
+            │  state     │            │  led nowhere     │
+            │ Error      │            │                  │
+            │  context   │            │                  │
+            └─────┬──────┘            └─────────┬────────┘
+                  │                              │
+                  └──────────────┬───────────────┘
+                                 │
+                                 ▼
+                  ┌─────────────────────────────┐
+                  │  Compacted Context           │
+                  │  ██████░░░░░░░░░░░░░░░░░░   │  ~30-40% full
+                  │                              │
+                  │  Summary + Recent messages   │
+                  │  + Active file state         │
+                  └─────────────────────────────┘</div>
+
+<pre>
+// .claude/settings.json - PreCompact Hook configuration
+{
+  "hooks": {
+    "PreCompact": [
+      {
+        "command": "node scripts/save-conversation-state.js",
+        "description": "Export conversation before compaction"
+      }
+    ]
+  }
+}
+
+// scripts/save-conversation-state.js
+// Receives conversation data via stdin
+// Can: save to file, send to analytics, update external state
+// Runs BEFORE compaction occurs, has access to full context
+// Exit 0 = proceed with compaction
+// Exit 2 = abort compaction (hook can block the operation)
+</pre>
+
+<div class="warning-box">
+    <h4>Compaction Pitfall: Information Loss</h4>
+    <p>Auto-compaction is lossy by design. When a complex debugging session is compacted, subtle details about failed approaches may be lost, causing the agent to retry strategies that already failed. The PreCompact hook mitigates this by allowing external systems to capture state before compaction. Teams building on Claude Code should implement PreCompact hooks that log key decisions and failed approaches to persistent storage, then inject this context via CLAUDE.md or session initialization. The <code>/compact</code> command also accepts a custom prompt, enabling targeted summaries: <code>/compact focus on the authentication refactoring decisions</code>.</p>
+</div>
+
+<h3>2.2 Aider Repository Map (tree-sitter)</h3>
+
+<p>Aider takes a fundamentally different approach to context management: instead of summarizing conversations, it builds an AST-aware map of the entire repository using <strong>tree-sitter</strong> parsers. This gives the agent a structural understanding of the codebase without loading full file contents, typically consuming only <span class="metric">~1024 tokens</span> for a complete repository overview.</p>
+
+<div class="diagram">AIDER REPOSITORY MAP PIPELINE
+═══════════════════════════════════════════════════════════════════
+
+┌──────────────┐    ┌──────────────┐    ┌──────────────────────┐
+│  Source Files │───▶│  tree-sitter │───▶│   AST Extraction     │
+│  (all in repo)│    │  Parsers     │    │                      │
+│               │    │              │    │  - Function sigs     │
+│  *.ts *.py    │    │  Language-   │    │  - Class definitions │
+│  *.js *.go    │    │  specific    │    │  - Import statements │
+│  *.rs *.java  │    │  grammars    │    │  - Type definitions  │
+└──────────────┘    └──────────────┘    └──────────┬───────────┘
+                                                    │
+                                                    ▼
+                                        ┌──────────────────────┐
+                                        │  Relationship Graph  │
+                                        │                      │
+                                        │  login() ──calls──▶  │
+                                        │    validateToken()   │
+                                        │                      │
+                                        │  UserService         │
+                                        │    ──imports──▶      │
+                                        │    login module      │
+                                        │                      │
+                                        │  Module dependencies │
+                                        │  Type hierarchies    │
+                                        └──────────┬───────────┘
+                                                    │
+                                                    ▼
+                                        ┌──────────────────────┐
+                                        │  Context Prioritizer │
+                                        │                      │
+                                        │  1. Files mentioned  │
+                                        │     in conversation  │
+                                        │  2. Files related    │
+                                        │     to active edits  │
+                                        │  3. Import chains    │
+                                        │  4. Remaining sigs   │
+                                        └──────────┬───────────┘
+                                                    │
+                                                    ▼
+                                        ┌──────────────────────┐
+                                        │  REPO MAP OUTPUT     │
+                                        │  (~1024 tokens)      │
+                                        │                      │
+                                        │  Signatures only,    │
+                                        │  not implementations │
+                                        └──────────────────────┘</pre>
+
+<p>Example repo map output injected into the agent&rsquo;s context:</p>
+
+<pre>
+src/auth/login.ts
+  export async function login(credentials: LoginCredentials): Promise&lt;AuthToken&gt;
+  export function validateToken(token: string): boolean
+  export function refreshToken(token: AuthToken): Promise&lt;AuthToken&gt;
+
+src/auth/middleware.ts
+  import { validateToken } from './login'
+  export function authMiddleware(req: Request, res: Response, next: NextFunction)
+
+src/api/users.ts
+  import { login } from '../auth/login'
+  export class UserService
+    async getUser(id: string): Promise&lt;User&gt;
+    async updateUser(id: string, data: Partial&lt;User&gt;): Promise&lt;User&gt;
+    async deleteUser(id: string): Promise&lt;void&gt;
+
+src/models/types.ts
+  export interface User { id: string; email: string; name: string; }
+  export interface AuthToken { token: string; expiresAt: Date; }
+  export interface Order { id: string; userId: string; items: OrderItem[]; }
+</pre>
+
+<div class="key-finding">
+    <h4>Key Finding: Structure vs Content Trade-off</h4>
+    <p>Aider&rsquo;s repo map demonstrates that <strong>structural understanding</strong>&mdash;knowing what functions exist and how they relate&mdash;is often more valuable per token than <strong>content understanding</strong>&mdash;knowing the implementation of each function. By spending only ~1024 tokens on a repo overview, Aider preserves the vast majority of the context window for actual conversation, file edits, and tool output. This is especially effective for large codebases where loading even a fraction of files would exhaust the context window. The map is regenerated each turn to reflect file changes and conversation focus, with full file content loaded only when the user explicitly adds files via <code>/add</code>.</p>
+</div>
+
+<h3>2.3 Replit Trajectory Compression</h3>
+
+<p>Replit Agent handles long-running autonomous sessions (up to <span class="metric">200 minutes</span>) that would quickly exhaust any context window. Its solution is <strong>trajectory compression</strong>: using an LLM to condense long action histories into compact summaries, preserving key decision points while discarding redundant intermediate states.</p>
+
+<div class="diagram">REPLIT TRAJECTORY COMPRESSION
+═══════════════════════════════════════════════════════════════════
+
+Raw Trajectory (growing unbounded during 200-min session):
+┌─────────────────────────────────────────────────────────────┐
+│ Step 1:  Read package.json                                  │
+│ Step 2:  Analyze dependencies                               │
+│ Step 3:  Create src/index.ts with Express server            │
+│ Step 4:  Install express, typescript, ts-node               │
+│ Step 5:  Configure tsconfig.json                            │
+│ Step 6:  Write first route handler                          │
+│ Step 7:  Test with curl - got 404 error                     │
+│ Step 8:  Fix route path typo                                │
+│ Step 9:  Test again - success (200 OK)                      │
+│ Step 10: Add middleware for JSON parsing                     │
+│ Step 11: Create database connection module                  │
+│ ... (continues for 100+ steps)                              │
+└──────────────────────────┬──────────────────────────────────┘
+                           │ LLM Compression
+                           ▼
+Compressed Trajectory:
+┌─────────────────────────────────────────────────────────────┐
+│ PRESERVES:                    │ DISCARDS:                   │
+│ - File changes (what was      │ - Redundant file reads      │
+│   created/modified)           │ - Intermediate states       │
+│ - Test results (pass/fail)    │ - Exploratory dead-ends     │
+│ - Error encounters + fixes    │ - Verbose tool outputs      │
+│ - Key decisions               │ - Unchanged re-reads        │
+│                               │                             │
+│ COMPRESSED SUMMARY:           │                             │
+│ "Set up Express/TypeScript    │                             │
+│  project. Fixed route bug     │                             │
+│  (step 8). 5 API endpoints   │                             │
+│  working. Auth pending.       │                             │
+│  Decisions: Prisma ORM,       │                             │
+│  JWT auth planned."           │                             │
+└───────────────────────────────┴─────────────────────────────┘</pre>
+
+<p>Complementing trajectory compression, Replit&rsquo;s checkpoints capture a full snapshot of the workspace state at key moments, enabling the user to roll back to any previous state. Each checkpoint includes the workspace files, compressed conversation, database state, environment variables, and running process state.</p>
+
+<h3>2.4 Letta Archival Memory</h3>
+
+<p>Letta Code&rsquo;s archival memory acts as an unbounded overflow layer backed by a vector database. When information exceeds what the core memory blocks can hold, the agent can explicitly store it in archival memory using the <code>archival_memory_insert</code> tool, and later retrieve it using <code>archival_memory_search</code> with semantic similarity queries.</p>
+
+<pre>
+LETTA ARCHIVAL MEMORY SYSTEM:
+┌───────────────────────────────────────────────────────┐
+│  archival_memory_insert(content: string)              │
+│  ─► Embeds content into vector DB                     │
+│  ─► Content survives beyond context window limits     │
+│  ─► Unlimited storage capacity                        │
+│                                                       │
+│  archival_memory_search(query: string, n: int)        │
+│  ─► Semantic similarity search over all stored data   │
+│  ─► Returns top-n most relevant entries               │
+│  ─► Agent decides when to search and what to query    │
+│                                                       │
+│  USE CASES:                                           │
+│  - Store large code review findings                   │
+│  - Save historical conversation summaries             │
+│  - Cache project documentation excerpts               │
+│  - Record detailed debugging session outcomes         │
+│                                                       │
+│  EXAMPLE:                                             │
+│  archival_memory_insert(                              │
+│    "Auth migration: Changed from session-based to     │
+│     JWT. Files modified: auth.ts, middleware.ts,      │
+│     config.ts. Key decision: chose RS256 over HS256   │
+│     for token signing due to microservice arch."      │
+│  )                                                    │
+│                                                       │
+│  archival_memory_search("JWT token signing", n=3)     │
+│  ─► Returns the auth migration entry above            │
+└───────────────────────────────────────────────────────┘
+</pre>
+
+<!-- ============================================================ -->
+<!-- SECTION 3: CONTEXT WINDOW COMPARISON -->
+<!-- ============================================================ -->
+<h2>3. Context Window Comparison</h2>
+
+<p>The following table provides a comprehensive comparison of how each agent manages its finite context window. Strategies range from no management at all (relying on the model&rsquo;s native window) to sophisticated multi-tier memory systems with automatic offloading.</p>
+
+<table>
+    <tr>
+        <th>Agent</th>
+        <th>Context Size</th>
+        <th>Compaction Strategy</th>
+        <th>Warning Mechanism</th>
+    </tr>
+    <tr>
+        <td><strong>Claude Code</strong></td>
+        <td>200k tokens</td>
+        <td>Auto-compact at ~80%, preserve recent + todos; PreCompact hook for external state save</td>
+        <td><code>/context</code> command, status line</td>
+    </tr>
+    <tr>
+        <td><strong>Codex CLI</strong></td>
+        <td>Model-dependent</td>
+        <td>Manual context management; RolloutRecorder for audit replay</td>
+        <td>Token count display</td>
+    </tr>
+    <tr>
+        <td><strong>Letta Code</strong></td>
+        <td>Model-dependent</td>
+        <td>Archival memory offload to vector DB; memory blocks always loaded in system prompt</td>
+        <td>Server-side monitoring</td>
+    </tr>
+    <tr>
+        <td><strong>Vibe CLI</strong></td>
+        <td>256k (Devstral)</td>
+        <td>Architecture-level context prioritization; large native window reduces compaction need</td>
+        <td>N/A</td>
+    </tr>
+    <tr>
+        <td><strong>Aider</strong></td>
+        <td>Model-dependent</td>
+        <td>Repo map (~1024 tokens via tree-sitter); add files on demand via <code>/add</code></td>
+        <td>Token usage display</td>
+    </tr>
+    <tr>
+        <td><strong>Qwen Code</strong></td>
+        <td>Model-dependent</td>
+        <td>Auto-compaction (forked from Gemini CLI); <code>save_memory</code> for cross-session persistence</td>
+        <td>Token usage display</td>
+    </tr>
+    <tr>
+        <td><strong>OpenCode</strong></td>
+        <td>Model-dependent</td>
+        <td>AGENTS.md context + LSP real-time queries reduce need for full file loads</td>
+        <td>Token usage display</td>
+    </tr>
+    <tr>
+        <td><strong>Cline</strong></td>
+        <td>Model-dependent</td>
+        <td>Per-action shadow git checkpoints; VS Code extension state persistence</td>
+        <td>VS Code status bar</td>
+    </tr>
+    <tr>
+        <td><strong>Goose</strong></td>
+        <td>Model-dependent</td>
+        <td>MCP extension-based context; <code>disabledMcpServers</code> to reclaim space</td>
+        <td>N/A</td>
+    </tr>
+    <tr>
+        <td><strong>OpenManus</strong></td>
+        <td>Model-dependent</td>
+        <td>Planning-based context management; <code>max_messages</code> bounded buffer</td>
+        <td>N/A</td>
+    </tr>
+    <tr>
+        <td><strong>Droid</strong></td>
+        <td>Proprietary</td>
+        <td>HyperCode multi-resolution retrieval reduces context needs; ByteRank relevance scoring</td>
+        <td>Managed</td>
+    </tr>
+    <tr>
+        <td><strong>Warp</strong></td>
+        <td>Model-dependent</td>
+        <td>Model-aligned summarization; codebase embeddings for navigation; TODO state protection</td>
+        <td>Managed</td>
+    </tr>
+    <tr>
+        <td><strong>Replit</strong></td>
+        <td>Model-dependent</td>
+        <td>Trajectory compression via LLM; checkpoints for state snapshots</td>
+        <td>Session timer (200 min)</td>
+    </tr>
+</table>
+
+<div class="warning-box">
+    <h4>Context Budget Trap: MCP Server Overhead</h4>
+    <p>Each MCP server adds tool definitions to the context window. Goose, with its 3,000+ extension ecosystem, is particularly vulnerable: enabling too many MCP servers can shrink usable context from 200k to ~70k tokens. The rule of thumb: <strong>every MCP server costs 500&ndash;2,000 tokens</strong> of context just for its tool definitions. Use <code>disabledMcpServers</code> to selectively disable unused servers per project. Claude Code&rsquo;s <code>/context</code> command helps monitor this overhead in real time.</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 4: SKILL LEARNING & KNOWLEDGE PERSISTENCE -->
+<!-- ============================================================ -->
+<h2>4. Skill Learning &amp; Knowledge Persistence</h2>
+
+<p>Beyond session-level memory, a handful of agents implement mechanisms for the agent to learn reusable skills and persist knowledge across its entire lifetime. This transforms an agent from a stateless tool into a progressively improving collaborator. The approaches vary dramatically&mdash;from Letta Code&rsquo;s structured skill lifecycle to Claude Code&rsquo;s simple but effective Markdown files.</p>
+
+<h3>4.1 Letta Code Skill System</h3>
+
+<pre>
+SKILL LIFECYCLE:
+1. EXPERIENCE ──► Work through a complex task with user coaching
+2. REFLECT   ──► /skill command triggers agent self-reflection
+3. EXTRACT   ──► Agent identifies reusable patterns and steps
+4. STORE     ──► Skill saved as .md file in .skills/ directory
+5. LOAD      ──► Future sessions load skill via skill tool
+
+SKILL FILE STRUCTURE (.skills/api-migration/SKILL.md):
+───────────────────────────────────────────────────────
+---
+name: API Migration Pattern
+description: Migrate REST APIs to GraphQL
+triggers: ["migrate", "graphql", "api upgrade"]
+---
+# API Migration Skill
+
+## Prerequisites
+- Identify all REST endpoints
+- Map to GraphQL schema types
+
+## Steps
+1. Create GraphQL schema from REST response types
+2. Implement resolvers that call existing services
+3. Add deprecation notices to REST endpoints
+4. Write integration tests for GraphQL layer
+5. Update client code to use GraphQL queries
+
+## Gotchas
+- N+1 query problem: use DataLoader
+- Nested resolvers need explicit type definitions
+- Pagination: prefer cursor-based over offset
+
+SKILL MEMORY BLOCK (in &lt;skills&gt; section of system prompt):
+───────────────────────────────────────────────────────
+&lt;skills&gt;
+  Available skills:
+  - api-migration: Migrate REST to GraphQL (3 uses, last: Jan 28)
+  - testing-patterns: TDD workflow for React components (5 uses)
+  - prisma-relations: Complex Prisma relation patterns (2 uses)
+  - nextjs-middleware: Auth middleware for App Router (1 use)
+&lt;/skills&gt;
+</pre>
+
+<p>The skill system creates a compounding advantage: the agent becomes measurably more efficient on repeated task types. After learning the <code>api-migration</code> skill, Letta Code can execute the pattern in future sessions without step-by-step coaching, referencing its stored skill file for the exact procedure and known pitfalls.</p>
+
+<h3>4.2 Claude Code CLAUDE.md System</h3>
+
+<p>Claude Code uses a hierarchical Markdown file system for persistent project context. While simpler than Letta&rsquo;s memory blocks, CLAUDE.md is the most widely adopted cross-session persistence mechanism due to its simplicity and git-friendliness.</p>
+
+<pre>
+CLAUDE.MD HIERARCHY:
+───────────────────────────────────────────────────────
+~/.claude/CLAUDE.md            ← Global (all projects)
+~/projects/CLAUDE.md           ← Parent directory
+~/projects/myapp/CLAUDE.md     ← Project root (shared, git-committed)
+~/projects/myapp/CLAUDE.local.md  ← Personal (gitignored)
+~/projects/myapp/src/CLAUDE.md    ← Subdirectory-specific
+
+INHERITANCE: Child inherits parent. All levels merged at session start.
+
+/memory COMMAND:
+  User: /memory "Always use pnpm, never npm"
+  ──► Appends to CLAUDE.md memory section
+  ──► Persists across all future sessions
+  ──► Can also be edited manually like any file
+
+MEMORY BLOCKS (added via /memory):
+───────────────────────────────────────────────────────
+## Memory
+
+- User prefers pnpm over npm
+- Run tests before committing: pnpm test
+- Use conventional commits: feat/fix/chore prefix
+- Database migrations require review before applying
+- Always check TypeScript strict mode after edits
+</pre>
+
+<h3>4.3 Qwen Code save_memory Tool</h3>
+
+<p>Qwen Code (Alibaba, forked from Gemini CLI) adds a <code>save_memory</code> tool that allows the agent to explicitly persist information across sessions. Memories are stored per-project in the user&rsquo;s home directory at <code>~/.qwen/settings.json</code>.</p>
+
+<pre>
+QWEN CODE MEMORY SYSTEM:
+───────────────────────────────────────────────────────
+Tool: save_memory
+Trigger: Agent detects information worth persisting
+Storage: ~/.qwen/settings.json (per-project keys)
+
+EXAMPLE FLOW:
+  Session 1:
+  User: "This project uses pnpm, not npm"
+  Agent: *calls save_memory*
+    save_memory({
+      key: "package_manager",
+      value: "pnpm",
+      project: "/home/user/my-project"
+    })
+
+  Session 2 (next day):
+  Agent: *reads ~/.qwen/settings.json on startup*
+  Agent: "I'll use pnpm since that's your project's package manager."
+
+SETTINGS FILE STRUCTURE:
+{
+  "memories": {
+    "/home/user/my-project": {
+      "package_manager": "pnpm",
+      "test_command": "pnpm test",
+      "preferred_style": "functional"
+    }
+  },
+  "global_preferences": {
+    "commit_style": "conventional",
+    "explanation_level": "concise"
+  }
+}
+</pre>
+
+<h3>4.4 OpenCode AGENTS.md</h3>
+
+<p>OpenCode uses an <code>AGENTS.md</code> file analogous to Claude Code&rsquo;s <code>CLAUDE.md</code>&mdash;a project-specific configuration file that persists across sessions via the file system. It is loaded at session start and provides the agent with project conventions, build commands, and architectural context. Combined with OpenCode&rsquo;s LSP integration, AGENTS.md provides static knowledge while LSP provides dynamic, real-time code intelligence.</p>
+
+<pre>
+# AGENTS.md (OpenCode project configuration)
+Project: API Gateway Service
+Language: Go 1.22
+Build: make build
+Test: go test ./...
+Key packages: cmd/, internal/, pkg/
+
+Conventions:
+- Use context.Context for all handler functions
+- Errors wrap with fmt.Errorf("operation: %w", err)
+- Table-driven tests preferred
+- Run golangci-lint before committing
+
+Architecture:
+- cmd/gateway/main.go is the entrypoint
+- internal/handlers/ contains HTTP handlers
+- internal/middleware/ contains auth and logging
+- pkg/client/ contains external API clients
+</pre>
+
+<!-- ============================================================ -->
+<!-- SECTION 5: THE MEMORY GAP -->
+<!-- ============================================================ -->
+<h2>5. The Memory Gap &mdash; Industry Challenge</h2>
+
+<div class="key-finding">
+    <h4>Key Finding: Memory Is the Least Mature Capability</h4>
+    <p>Memory is the least mature capability across all coding agents. Only Letta Code provides true persistent memory with self-modifying memory blocks and vector-based archival storage. Most agents start every session from scratch, relying on file-based workarounds (CLAUDE.md, AGENTS.md) or session replay. This means that today, even the most sophisticated agents cannot genuinely <em>learn</em> from weeks of collaboration&mdash;they can only reference static files that the user or agent has manually maintained. The gap between what is architecturally possible (Letta&rsquo;s full memory stack) and what is commonly deployed (session-based with config files) represents the single largest opportunity for differentiation in the coding agent market.</p>
+</div>
+
+<div class="insight-box">
+    <h4>The Memory Hierarchy Opportunity</h4>
+    <p>Future coding agents will likely adopt a tiered memory approach, analogous to CPU cache hierarchies. Each tier trades capacity for access speed and relevance. No single agent implements all four tiers today, but the trajectory across the 13 agents analyzed points clearly toward convergence on this model:</p>
+    <ul>
+        <li><strong>L1 &mdash; Working Memory (context window):</strong> Current session messages, tool outputs, active file contents. Fastest access, most limited capacity. Every agent has this.</li>
+        <li><strong>L2 &mdash; Short-term Memory (compacted summaries):</strong> Recent session summaries, compressed trajectories. Survives compaction but not session boundaries. Claude Code, Replit, and Warp implement this.</li>
+        <li><strong>L3 &mdash; Long-term Memory (memory blocks):</strong> Persistent facts about the user, project, and agent identity. Survives across all sessions. Only Letta Code fully implements this; Claude Code and Qwen Code approximate it with files.</li>
+        <li><strong>L4 &mdash; Archival Memory (vector DB):</strong> Unlimited searchable storage for historical context, large documents, and past experiences. Only Letta Code implements this via its archival memory system.</li>
+    </ul>
+</div>
+
+<div class="diagram">THE MEMORY HIERARCHY (Future Coding Agent Architecture)
+═══════════════════════════════════════════════════════════════════
+
+          ┌─────────────────────────────────────┐
+          │  L1: WORKING MEMORY                 │  Fastest
+          │  (Context Window)                   │  ~200k tokens
+          │                                     │
+          │  Current messages, tool output,     │
+          │  active file contents               │
+          │                                     │
+          │  ALL 13 agents have this            │
+          ├─────────────────────────────────────┤
+          │  L2: SHORT-TERM MEMORY              │  Fast
+          │  (Compacted Summaries)              │  ~10-50k tokens
+          │                                     │
+          │  Session summaries, compressed      │
+          │  trajectories, recent decisions     │
+          │                                     │
+          │  Claude Code, Replit, Warp          │
+          ├─────────────────────────────────────┤
+          │  L3: LONG-TERM MEMORY               │  Medium
+          │  (Memory Blocks / Persistent Files) │  ~5-20k tokens
+          │                                     │
+          │  User preferences, project facts,   │
+          │  agent identity, learned skills     │
+          │                                     │
+          │  Letta Code (full), Claude Code     │
+          │  (CLAUDE.md), Qwen Code (save_mem)  │
+          ├─────────────────────────────────────┤
+          │  L4: ARCHIVAL MEMORY                │  Slowest
+          │  (Vector DB)                        │  Unlimited
+          │                                     │
+          │  Historical conversations, large    │
+          │  code reviews, documentation,       │
+          │  past debugging sessions            │
+          │                                     │
+          │  Only Letta Code (archival_memory)  │  Capacity
+          └─────────────────────────────────────┘
+
+     Access Speed ▲                          ▼ Storage Capacity
+
+CURRENT STATE OF ADOPTION:
+──────────────────────────────────────────────────────────────
+  L1 only:        Codex CLI, Goose, Droid, Warp, OpenManus
+  L1 + L2:        Replit (trajectory), Warp (summarization)
+  L1 + L3:        Claude Code (CLAUDE.md), OpenCode (AGENTS.md),
+                  Qwen Code (save_memory), Vibe CLI (history/)
+  L1 + L2 + L3:  (No agent fully implements this yet)
+  L1-L4 (full):  Letta Code (only agent with all 4 tiers)</div>
+
+<p>The implication is clear: an agent that implements all four memory tiers&mdash;fast working memory, compacted short-term memory, persistent long-term blocks, and unlimited archival search&mdash;would have a substantial advantage over today&rsquo;s session-based agents. It would never re-learn what it already knows, never retry approaches that already failed in previous sessions, and progressively build a deep, personalized understanding of the user and their codebase. The engineering challenge lies in managing the complexity of four memory tiers while maintaining reliability. Letta Code proves the concept is viable; the question is whether mainstream agents like Claude Code and Codex CLI will adopt similar architectures.</p>
+
+<!-- ============================================================ -->
+<!-- CONCLUSION -->
+<!-- ============================================================ -->
+<div class="conclusion-box">
+    <h4>Summary: Memory &amp; Context Management</h4>
+    <p>Memory architecture is the most consequential and least converged design decision in coding agent engineering. Across the 13 agents analyzed, the fundamental tension is between <strong>simplicity</strong> (session-based, no state to corrupt) and <strong>capability</strong> (persistent memory, compounding intelligence). Key takeaways:</p>
+    <ul>
+        <li><strong>Letta Code</strong> is the only agent with true persistent, agent-managed memory blocks and vector-based archival storage&mdash;the most ambitious architecture but also the most complex to operate.</li>
+        <li><strong>Claude Code&rsquo;s</strong> auto-compaction with PreCompact hooks provides the best within-session memory management, complemented by the CLAUDE.md hierarchy for cross-session persistence.</li>
+        <li><strong>Aider&rsquo;s</strong> tree-sitter repo map achieves remarkable context efficiency&mdash;~1024 tokens for a full repository structural overview&mdash;by trading content for structure.</li>
+        <li><strong>Replit&rsquo;s</strong> trajectory compression solves the unique challenge of very long autonomous sessions (200 minutes), condensing histories to key decision points.</li>
+        <li><strong>Qwen Code&rsquo;s</strong> <code>save_memory</code> tool and <strong>OpenCode&rsquo;s</strong> AGENTS.md represent pragmatic middle-ground approaches to cross-session persistence.</li>
+        <li>The <strong>Memory Hierarchy</strong> (L1&ndash;L4) framework maps the industry trajectory: from today&rsquo;s mostly-L1 agents toward full four-tier memory systems that learn, persist, and retrieve across unlimited sessions.</li>
+    </ul>
+</div>
+
+<!-- SOURCE BOX -->
+<div class="source-box">
+    <h4>Sources &amp; References</h4>
+    <p><strong>Memory Systems:</strong> <a href="https://docs.letta.com" target="_blank">Letta Documentation</a>, <a href="https://docs.anthropic.com/en/docs/claude-code" target="_blank">Claude Code Documentation</a></p>
+    <p><strong>Context Management:</strong> <a href="https://arxiv.org/abs/2310.06770" target="_blank">SWE-agent (observation collapsing)</a>, <a href="https://aider.chat/docs/repomap.html" target="_blank">Aider Repository Map</a></p>
+    <p><strong>Agent Repositories:</strong> <a href="https://github.com/paul-gauthier/aider" target="_blank">Aider</a>, <a href="https://github.com/openai/codex" target="_blank">Codex CLI</a>, <a href="https://github.com/QwenLM/qwen-code" target="_blank">Qwen Code</a>, <a href="https://github.com/opencode-ai/opencode" target="_blank">OpenCode</a>, <a href="https://github.com/FoundationAgents/OpenManus" target="_blank">OpenManus</a></p>
+    <p><strong>Platforms:</strong> <a href="https://warp.dev" target="_blank">Warp</a>, <a href="https://replit.com" target="_blank">Replit</a>, <a href="https://factory.ai" target="_blank">Factory.ai (Droid)</a>, <a href="https://letta.com" target="_blank">Letta</a>, <a href="https://mistral.ai" target="_blank">Mistral (Vibe CLI)</a></p>
+    <p><em>Part 3 of 6 &middot; Coding Agent Engineering Analysis &middot; January 2026</em></p>
+</div>
+
+<!-- SERIES NAV BOTTOM -->
+<div class="series-nav">
+    <a href="coding_agents_extensions.html">&larr; Part 2: Extensions</a>
+    <span>Part 3 of 6</span>
+    <a href="coding_agents_deepdives.html">Next: Agent Deep-Dives A&ndash;L &rarr;</a>
+</div>
+
+<!-- FOOTER NAVIGATION -->
+<div class="navigation">
+    <a href="../index.html">&larr; Home</a>
+    <a href="../agent/index.html">Agent Reliability</a>
+    <a href="../rag/index.html">RAG Patterns</a>
+    <a href="index.html">Research Papers</a>
+    <a href="https://join.maxpool.dev" target="_blank">Join Community &rarr;</a>
+</div>
+
+</body>
+</html>

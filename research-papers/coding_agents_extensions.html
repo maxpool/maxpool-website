@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Part 2: Hooks, MCP &amp; Security - Coding Agent Engineering Analysis</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Georgia', 'Times New Roman', serif; font-size: 16px; line-height: 1.7; color: #1a1a1a; background: #fff; max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        h1 { font-size: 28px; text-align: center; margin-bottom: 10px; padding-bottom: 15px; border-bottom: 2px solid #DC8850; }
+        h2 { font-size: 22px; color: #DC8850; margin-top: 40px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #DC8850; }
+        h3 { font-size: 18px; color: #555; margin-top: 25px; margin-bottom: 10px; font-weight: 600; }
+        h4 { font-size: 16px; font-weight: bold; margin-top: 15px; margin-bottom: 8px; }
+        p { margin-bottom: 1em; text-align: justify; }
+        a { color: #DC8850; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        ul, ol { margin-left: 1.5em; margin-bottom: 1em; }
+        li { margin-bottom: 0.4em; }
+        .navigation { display: flex; justify-content: center; gap: 20px; padding: 15px 0; margin-bottom: 30px; border-bottom: 1px solid #eee; flex-wrap: wrap; }
+        .navigation a { color: #DC8850; text-decoration: none; font-size: 14px; font-weight: 500; }
+        .navigation a:hover { text-decoration: underline; }
+        .authors { text-align: center; font-style: italic; color: #666; margin-bottom: 30px; font-size: 15px; }
+        .abstract { background: #f8f8f8; padding: 20px 25px; border-left: 4px solid #DC8850; margin: 25px 0; border-radius: 0 5px 5px 0; }
+        .abstract h2 { margin-top: 0; border: none; padding: 0; margin-bottom: 10px; }
+        .key-finding { background: #fff8f0; padding: 20px 25px; border-left: 4px solid #DC8850; margin: 20px 0; border-radius: 0 5px 5px 0; }
+        .eli5-box { background: #e8f5e9; padding: 20px 25px; border-left: 4px solid #4caf50; margin: 25px 0; border-radius: 0 5px 5px 0; }
+        .insight-box { background: #fffbf0; padding: 20px 25px; border: 2px solid #DC8850; margin: 20px 0; border-radius: 8px; }
+        .warning-box { background: #fff3e0; padding: 20px 25px; border-left: 4px solid #f39c12; margin: 20px 0; border-radius: 0 5px 5px 0; }
+        .conclusion-box { background: #f0f0f0; padding: 20px 25px; border-radius: 5px; margin: 20px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; vertical-align: top; }
+        th { background: #DC8850; color: #fff; font-weight: bold; }
+        tr:nth-child(even) { background: #f9f9f9; }
+        pre { font-family: 'Courier New', monospace; font-size: 13px; background: #f8f8f8; border: 1px solid #ddd; padding: 15px; margin: 15px 0; overflow-x: auto; line-height: 1.4; border-radius: 5px; }
+        code { font-family: 'Courier New', monospace; font-size: 13px; background: #f0f0f0; padding: 2px 6px; border-radius: 3px; }
+        .diagram { font-family: 'Courier New', monospace; font-size: 12px; background: #fafafa; border: 2px solid #eee; padding: 20px; margin: 20px 0; overflow-x: auto; white-space: pre; line-height: 1.3; border-radius: 8px; }
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 3px; font-size: 12px; font-weight: bold; }
+        .badge-primary { background: #DC8850; color: #fff; }
+        .badge-success { background: #27ae60; color: #fff; }
+        .badge-warning { background: #f39c12; color: #fff; }
+        .badge-danger { background: #e74c3c; color: #fff; }
+        .metric { font-weight: bold; color: #DC8850; }
+        .performance-improvement { font-weight: bold; color: #27ae60; }
+        .performance-decline { font-weight: bold; color: #e74c3c; }
+        .part-nav { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; margin: 30px 0; }
+        .part-card { display: block; background: #fff; border: 2px solid #eee; border-radius: 8px; padding: 20px; text-decoration: none; color: #1a1a1a; transition: all 0.2s; }
+        .part-card:hover { border-color: #DC8850; box-shadow: 0 4px 12px rgba(220,136,80,0.15); transform: translateY(-2px); text-decoration: none; }
+        .part-card h3 { color: #DC8850; margin: 0 0 8px 0; font-size: 16px; }
+        .part-card p { margin: 0; font-size: 14px; color: #666; text-align: left; }
+        .part-card .part-num { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .source-box { background: #f8f8f8; padding: 20px; border-radius: 5px; margin: 30px 0; font-size: 14px; }
+        .series-nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; margin: 30px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; font-size: 14px; }
+        .series-nav a { color: #DC8850; }
+        @media (max-width: 768px) {
+            body { padding: 20px 15px; font-size: 15px; }
+            h1 { font-size: 22px; }
+            h2 { font-size: 18px; }
+            table { font-size: 12px; }
+            th, td { padding: 6px; }
+            .part-nav { grid-template-columns: 1fr; }
+            pre, .diagram { font-size: 11px; padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="navigation">
+    <a href="../index.html">&larr; Home</a>
+    <a href="../agent/index.html">Agent Reliability</a>
+    <a href="../rag/index.html">RAG Patterns</a>
+    <a href="index.html">Research Papers</a>
+    <a href="https://join.maxpool.dev" target="_blank">Join Community &rarr;</a>
+</div>
+
+<h1>Part 2: Hooks, MCP &amp; Security</h1>
+<div class="authors">
+    Coding Agent Engineering Analysis<br>
+    <em>Deep-Dive Series &middot; January 2026 &middot; 13 Agents Analyzed</em>
+</div>
+
+<!-- ABSTRACT -->
+<div class="abstract">
+    <h2>Section Overview</h2>
+    <p>This section examines the extension and security architectures that differentiate production-grade coding agents from prototypes. We cover Claude Code's <span class="metric">8-event hook lifecycle</span>, the Model Context Protocol (MCP) ecosystem with <span class="metric">3,000+ servers</span> now governed by the Linux Foundation, OS-level sandboxing approaches ranging from Codex CLI's Seatbelt/Landlock to Warp's cloud sandboxes, and the approval workflow patterns that balance developer velocity with safety.</p>
+    <p>The key insight: extensibility and security are not trade-offs but complementary layers. The most competitive agents provide hooks for automation, MCP for tool integration, OS-level sandboxing for isolation, and configurable approval workflows for human oversight.</p>
+</div>
+
+<!-- ================================================================== -->
+<!-- SECTION 1: CLAUDE CODE HOOKS ARCHITECTURE -->
+<!-- ================================================================== -->
+<h2>1. Claude Code Hooks Architecture</h2>
+
+<p>Claude Code provides the most comprehensive hook system in the coding agent market, enabling deterministic automation at <span class="metric">8 key lifecycle points</span>. Hooks are external commands or prompts that execute at defined events, giving developers the ability to validate, enrich, block, or redirect agent behavior without modifying the agent itself.</p>
+
+<h3>1.1 Hook Event Lifecycle</h3>
+
+<p>The lifecycle covers the full span of a coding session, from initialization through prompt processing, tool execution, and termination. Each hook receives a JSON payload via stdin and can influence the agent through structured JSON output on stdout.</p>
+
+<div class="diagram">CLAUDE CODE HOOK LIFECYCLE (8 Events)
+================================================================
+
+  SessionStart                      Notification
+  (init scripts,                    (async alerts,
+   env setup)                        CI notifications)
+       |                                  ^
+       v                                  |
+  UserPromptSubmit -----> PreToolUse ---> [EXECUTE TOOL] ---> PostToolUse
+       |                     |                                    |
+       |                     |  matcher: tool name               |
+       |                     |  decision: allow/deny/ask         |
+       |                     |  updatedInput: modify params      |
+       |                     |                                    |
+       |                     +--- PreCompact                     |
+       |                          (fires before context          |
+       |                           window compaction)            |
+       v                                                         v
+  +-----------------------------------------------------------------+
+  |                           Stop                                  |
+  |   - Prompt-based hooks: LLM evaluates completion criteria       |
+  |   - SubagentStop: fires when a dispatched subagent completes    |
+  |   - continue: true/false to force continuation or stop          |
+  +-----------------------------------------------------------------+
+
+EVENT FLOW:
+  SessionStart -> UserPromptSubmit -> PreToolUse -> [Execute] ->
+  PostToolUse -> ... (loop) ... -> Stop / SubagentStop
+
+HOOK TYPES:
+  "command"  - Execute external script/binary
+  "prompt"   - LLM evaluates a prompt at the hook point</div>
+
+<h4>All 8 Hook Events</h4>
+<table>
+    <tr>
+        <th>Event</th>
+        <th>Fires When</th>
+        <th>Key Capabilities</th>
+        <th>Exit Code Behavior</th>
+    </tr>
+    <tr>
+        <td><strong>SessionStart</strong></td>
+        <td>Session initializes</td>
+        <td>Environment setup, inject system context, load configs</td>
+        <td>Non-zero: warning only</td>
+    </tr>
+    <tr>
+        <td><strong>UserPromptSubmit</strong></td>
+        <td>Before Claude processes a prompt</td>
+        <td>Validate, enrich, or block prompts; inject additionalContext via stdout</td>
+        <td>Exit 2: block prompt</td>
+    </tr>
+    <tr>
+        <td><strong>PreToolUse</strong></td>
+        <td>Before a tool executes</td>
+        <td>Approve, deny, or modify tool calls; matcher filters by tool name</td>
+        <td>Decision: allow/deny/ask</td>
+    </tr>
+    <tr>
+        <td><strong>PostToolUse</strong></td>
+        <td>After a tool returns</td>
+        <td>React to results, add feedback, audit logging</td>
+        <td>"block" to provide feedback</td>
+    </tr>
+    <tr>
+        <td><strong>Stop</strong></td>
+        <td>Agent decides to stop</td>
+        <td>Evaluate completion, force continuation if tasks remain</td>
+        <td>continue: true/false</td>
+    </tr>
+    <tr>
+        <td><strong>SubagentStop</strong></td>
+        <td>A dispatched subagent completes</td>
+        <td>Validate subagent output, aggregate results</td>
+        <td>continue: true/false</td>
+    </tr>
+    <tr>
+        <td><strong>PreCompact</strong></td>
+        <td>Before context window compaction</td>
+        <td>Preserve critical context, inject summaries</td>
+        <td>Non-zero: warning only</td>
+    </tr>
+    <tr>
+        <td><strong>Notification</strong></td>
+        <td>Agent emits a notification</td>
+        <td>Custom alerts, CI integration, Slack/email notifications</td>
+        <td>Async, non-blocking</td>
+    </tr>
+</table>
+
+<h3>1.2 Hook Configuration</h3>
+
+<p>Hooks are configured in <code>.claude/settings.json</code> at the project or user level. Each event contains an array of hook groups, and each group can include a <code>matcher</code> (for tool-specific hooks) and an array of hooks to execute.</p>
+
+<pre>
+// .claude/settings.json
+{
+  "hooks": {
+    "SessionStart": [{
+      "hooks": [{
+        "type": "command",
+        "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/setup-env.sh"
+      }]
+    }],
+    "UserPromptSubmit": [{
+      "hooks": [{
+        "type": "command",
+        "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/validate-prompt.sh"
+      }]
+    }],
+    "PreToolUse": [{
+      "matcher": "Write|Edit",
+      "hooks": [{
+        "type": "command",
+        "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/check-style.js"
+      }]
+    },
+    {
+      "matcher": "Bash",
+      "hooks": [{
+        "type": "command",
+        "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/validate-command.sh"
+      }]
+    }],
+    "PostToolUse": [{
+      "matcher": "Bash",
+      "hooks": [{
+        "type": "command",
+        "command": "echo '{\"tool\": \"'$TOOL_NAME'\", \"ts\": \"'$(date -u)'\"}' >> ~/.claude/audit.log"
+      }]
+    }],
+    "Stop": [{
+      "hooks": [{
+        "type": "prompt",
+        "prompt": "Evaluate if all tasks are complete. Check todo list status. If tasks remain, set continue: true."
+      }]
+    }],
+    "PreCompact": [{
+      "hooks": [{
+        "type": "command",
+        "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/save-critical-context.sh"
+      }]
+    }],
+    "Notification": [{
+      "hooks": [{
+        "type": "command",
+        "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/notify-slack.sh"
+      }]
+    }]
+  }
+}
+</pre>
+
+<h3>1.3 Hook Decision Control Output</h3>
+
+<p>Hooks communicate back to Claude Code via structured JSON on stdout. The schema varies by event type, but the core fields are consistent: <code>hookSpecificOutput</code> for event-specific data, <code>systemMessage</code> for injecting context, and <code>continue</code> for flow control.</p>
+
+<pre>
+// PreToolUse hook response - APPROVE with modification
+{
+  "hookSpecificOutput": {
+    "permissionDecision": "allow",
+    "updatedInput": {
+      "file_path": "/src/components/Button.tsx",
+      "content": "// Auto-formatted by hook\nimport React from 'react';\n..."
+    }
+  },
+  "systemMessage": "Path corrected to match project structure. Content auto-formatted.",
+  "continue": true
+}
+
+// PreToolUse hook response - DENY with explanation
+{
+  "hookSpecificOutput": {
+    "permissionDecision": "deny",
+    "reason": "Cannot write to /etc directory. Use project-local configs instead."
+  },
+  "systemMessage": "Write blocked by security policy. Suggest alternative path.",
+  "continue": true
+}
+
+// PostToolUse hook response - BLOCK with feedback
+{
+  "decision": "block",
+  "reason": "ESLint errors detected in output",
+  "hookSpecificOutput": {
+    "additionalContext": "Fix: Remove unused import on line 5, add missing semicolon on line 12"
+  }
+}
+
+// UserPromptSubmit hook response - ENRICH with context
+{
+  "hookSpecificOutput": {
+    "additionalContext": "Current sprint: AUTH-2024. Branch: feature/oauth-flow. Test suite: 94% passing."
+  },
+  "continue": true
+}
+</pre>
+
+<div class="key-finding">
+    <h4>Key Insight: Hooks Enable Enterprise Governance</h4>
+    <p>The hook system transforms Claude Code from a developer tool into an enterprise-governable platform. Organizations can enforce coding standards (PreToolUse), maintain audit trails (PostToolUse), prevent context loss during long sessions (PreCompact), and integrate with existing CI/CD pipelines (Notification) -- all without forking the agent. No other coding agent provides this level of lifecycle control.</p>
+</div>
+
+<!-- ================================================================== -->
+<!-- SECTION 2: MCP INTEGRATION PATTERNS -->
+<!-- ================================================================== -->
+<h2>2. MCP Integration Patterns</h2>
+
+<p>The Model Context Protocol (MCP) has become the universal standard for tool integration in AI coding agents. Originally developed by Anthropic, MCP is now governed by the <strong>Linux Foundation's Agentic AI Foundation (AAIF)</strong>, with an ecosystem of <span class="metric">3,000+ servers</span> providing access to external services, APIs, and data sources.</p>
+
+<h3>2.1 MCP Architecture</h3>
+
+<div class="diagram">MCP ARCHITECTURE
+==========================================================================
+
+  +-----------------+         +----------------+
+  |    AI Host      |         |   MCP Client   |
+  |  (Claude, GPT,  |&lt;-------&gt;|   (embedded    |
+  |   Qwen, etc.)   |  stdio  |    in agent)   |
+  +-----------------+  or SSE +-------+--------+
+                              |       |        |
+                    +---------+   +---+---+  +-+----------+
+                    |             |         |              |
+              +-----v-----+ +----v----+ +--v-------+ +----v-----+
+              |  GitHub    | |Playwright| |  Slack   | | Custom   |
+              |  MCP       | |  MCP     | |  MCP     | | MCP      |
+              |  Server    | |  Server  | |  Server  | | Server   |
+              +-----+------+ +----+----+ +----+-----+ +----+-----+
+                    |              |           |             |
+              +-----v------+ +----v----+ +----v-----+ +-----v-----+
+              | GitHub API | | Browser | | Slack API| | Your API  |
+              +------------+ +---------+ +----------+ +-----------+
+
+TRANSPORT PROTOCOLS:
+  - stdio:  Local process communication (most common)
+  - SSE:    Server-Sent Events over HTTP (remote servers)
+  - HTTP:   Streamable HTTP (emerging standard)
+
+TOOL NAMING CONVENTION:
+  mcp__&lt;server_name&gt;__&lt;tool_name&gt;
+  Examples:
+    mcp__github__search_repositories
+    mcp__playwright__navigate
+    mcp__slack__send_message
+    mcp__filesystem__read_file</div>
+
+<h3>2.2 MCP Server Configuration</h3>
+
+<p>MCP servers are configured per-project or globally. The configuration specifies the server command, arguments, and environment variables. Servers are launched as child processes using stdio transport by default.</p>
+
+<pre>
+// ~/.claude.json (global) or .mcp.json (project-level)
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_TOKEN": "${GITHUB_TOKEN}"
+      }
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"]
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/allowed/path"]
+    },
+    "slack": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-server-slack"],
+      "env": {
+        "SLACK_BOT_TOKEN": "${SLACK_BOT_TOKEN}"
+      }
+    },
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
+    }
+  }
+}
+</pre>
+
+<pre>
+// Goose: MCP-first configuration (extensions.yaml)
+extensions:
+  github:
+    type: builtin
+    name: github
+    env:
+      GITHUB_TOKEN: "${GITHUB_TOKEN}"
+  jira:
+    type: mcp
+    command: npx
+    args: ["-y", "@anthropic/mcp-server-jira"]
+    env:
+      JIRA_URL: "${JIRA_URL}"
+      JIRA_TOKEN: "${JIRA_TOKEN}"
+  custom_api:
+    type: mcp
+    url: "http://localhost:3001/sse"  # Remote SSE transport
+</pre>
+
+<div class="warning-box">
+    <h4>Warning: MCP Context Window Impact</h4>
+    <p>Each MCP server adds its tool definitions to the context window. A single server can consume <span class="metric">2,000-10,000 tokens</span> for tool schemas alone. With 10+ servers active, usable context can shrink from <span class="metric">200k to ~70k tokens</span>. Mitigation strategies:</p>
+    <ul>
+        <li>Use <code>disabledMcpServers</code> to selectively disable unused servers per project</li>
+        <li>Monitor token usage with the <code>/context</code> command in Claude Code</li>
+        <li>Prefer servers with minimal tool counts over "kitchen sink" servers</li>
+        <li>Use project-level <code>.mcp.json</code> to scope servers to projects that need them</li>
+    </ul>
+</div>
+
+<!-- ================================================================== -->
+<!-- SECTION 3: MCP ECOSYSTEM -->
+<!-- ================================================================== -->
+<h2>3. MCP Ecosystem</h2>
+
+<p>The MCP ecosystem has grown rapidly since its open-source release. With governance now under the Linux Foundation's AAIF, the protocol has achieved broad adoption across all major coding agents and a growing catalogue of community and vendor-maintained servers.</p>
+
+<h3>3.1 Popular MCP Servers</h3>
+
+<table>
+    <tr>
+        <th>MCP Server</th>
+        <th>Provider</th>
+        <th>Key Tools Exposed</th>
+        <th>Token Overhead</th>
+        <th>Use Case</th>
+    </tr>
+    <tr>
+        <td><strong>GitHub</strong></td>
+        <td>Anthropic / Official</td>
+        <td>search_repos, create_issue, create_pr, get_file_contents, list_commits</td>
+        <td>~3,500 tokens</td>
+        <td>Repository management, code review, issue tracking</td>
+    </tr>
+    <tr>
+        <td><strong>Playwright</strong></td>
+        <td>Microsoft / Official</td>
+        <td>navigate, click, fill, screenshot, evaluate</td>
+        <td>~4,200 tokens</td>
+        <td>Browser automation, E2E testing, web scraping</td>
+    </tr>
+    <tr>
+        <td><strong>Slack</strong></td>
+        <td>Anthropic / Official</td>
+        <td>send_message, list_channels, search_messages, upload_file</td>
+        <td>~2,800 tokens</td>
+        <td>Team notifications, deployment alerts, status updates</td>
+    </tr>
+    <tr>
+        <td><strong>Filesystem</strong></td>
+        <td>Anthropic / Official</td>
+        <td>read_file, write_file, list_directory, search_files, move_file</td>
+        <td>~2,200 tokens</td>
+        <td>Sandboxed file access beyond agent's native tools</td>
+    </tr>
+    <tr>
+        <td><strong>Jira</strong></td>
+        <td>Anthropic / Official</td>
+        <td>create_issue, search_issues, update_issue, get_project, add_comment</td>
+        <td>~3,100 tokens</td>
+        <td>Sprint management, ticket creation, project tracking</td>
+    </tr>
+    <tr>
+        <td><strong>Linear</strong></td>
+        <td>Community</td>
+        <td>create_issue, list_issues, update_status, get_project, search</td>
+        <td>~2,600 tokens</td>
+        <td>Issue tracking, sprint planning, workflow automation</td>
+    </tr>
+    <tr>
+        <td><strong>PostgreSQL</strong></td>
+        <td>Community</td>
+        <td>query, list_tables, describe_table, execute</td>
+        <td>~1,800 tokens</td>
+        <td>Database exploration, data analysis, migrations</td>
+    </tr>
+    <tr>
+        <td><strong>Memory</strong></td>
+        <td>Anthropic / Official</td>
+        <td>store, retrieve, search, delete</td>
+        <td>~1,500 tokens</td>
+        <td>Persistent key-value memory across sessions</td>
+    </tr>
+</table>
+
+<h3>3.2 Agent MCP Support Matrix</h3>
+
+<table>
+    <tr>
+        <th>Agent</th>
+        <th>MCP Support</th>
+        <th>Transport</th>
+        <th>Config Location</th>
+        <th>Notes</th>
+    </tr>
+    <tr>
+        <td><strong>Claude Code</strong></td>
+        <td><span class="badge badge-success">Full</span></td>
+        <td>stdio, SSE</td>
+        <td><code>.mcp.json</code>, <code>~/.claude.json</code></td>
+        <td>Native MCP client; project + global config</td>
+    </tr>
+    <tr>
+        <td><strong>Codex CLI</strong></td>
+        <td><span class="badge badge-success">Full</span></td>
+        <td>stdio</td>
+        <td><code>codex.json</code></td>
+        <td>Launched via sandbox; respects network policy</td>
+    </tr>
+    <tr>
+        <td><strong>Cline</strong></td>
+        <td><span class="badge badge-success">Full</span></td>
+        <td>stdio, SSE</td>
+        <td>VS Code settings / <code>.mcp.json</code></td>
+        <td>MCP marketplace in VS Code extension</td>
+    </tr>
+    <tr>
+        <td><strong>Goose</strong></td>
+        <td><span class="badge badge-success">Full (MCP-first)</span></td>
+        <td>stdio, SSE</td>
+        <td><code>extensions.yaml</code></td>
+        <td>Architecture built around MCP; 3,000+ extensions</td>
+    </tr>
+    <tr>
+        <td><strong>Qwen Code</strong></td>
+        <td><span class="badge badge-success">Full</span></td>
+        <td>stdio</td>
+        <td><code>.mcp.json</code></td>
+        <td>Forked from Gemini CLI; inherited MCP support</td>
+    </tr>
+    <tr>
+        <td><strong>OpenCode</strong></td>
+        <td><span class="badge badge-success">Full</span></td>
+        <td>stdio, SSE</td>
+        <td><code>opencode.json</code></td>
+        <td>Go-based MCP client implementation</td>
+    </tr>
+    <tr>
+        <td><strong>Aider</strong></td>
+        <td><span class="badge badge-success">Full</span></td>
+        <td>stdio</td>
+        <td><code>.aider.mcp.json</code></td>
+        <td>Added in 2025; complements repo-map tools</td>
+    </tr>
+    <tr>
+        <td><strong>Droid</strong></td>
+        <td><span class="badge badge-success">Full</span></td>
+        <td>stdio</td>
+        <td>CLI config</td>
+        <td>Selectively exposes MCP tools to reduce token overhead</td>
+    </tr>
+    <tr>
+        <td><strong>Warp</strong></td>
+        <td><span class="badge badge-success">Full</span></td>
+        <td>stdio (sandboxed)</td>
+        <td>Agent config</td>
+        <td>MCP servers run inside cloud sandbox</td>
+    </tr>
+    <tr>
+        <td><strong>OpenManus</strong></td>
+        <td><span class="badge badge-success">Full</span></td>
+        <td>stdio, SSE</td>
+        <td>Framework config</td>
+        <td>MCP integrated into tool orchestration layer</td>
+    </tr>
+    <tr>
+        <td><strong>Letta Code</strong></td>
+        <td><span class="badge badge-success">Full</span></td>
+        <td>stdio</td>
+        <td>Letta server config</td>
+        <td>MCP tools alongside persistent memory tools</td>
+    </tr>
+    <tr>
+        <td><strong>Vibe CLI</strong></td>
+        <td><span class="badge badge-success">Full</span></td>
+        <td>stdio</td>
+        <td><code>.mcp.json</code></td>
+        <td>Mistral's agent supports standard MCP config</td>
+    </tr>
+    <tr>
+        <td><strong>Replit Agent</strong></td>
+        <td><span class="badge badge-warning">Partial</span></td>
+        <td>Internal</td>
+        <td>Platform-managed</td>
+        <td>Cloud-hosted; MCP servers managed by platform</td>
+    </tr>
+</table>
+
+<div class="key-finding">
+    <h4>Key Finding: MCP Is Universal</h4>
+    <p>As of January 2026, <strong>every major coding agent supports MCP</strong>. This represents a remarkable convergence: the protocol went from Anthropic-specific to Linux Foundation-governed industry standard in under 18 months. The practical implication is that tool integrations (GitHub, Jira, databases, browsers) are now write-once, run-anywhere across agents. Goose's MCP-first architecture, where the entire extension system is built on MCP, represents the most committed adoption.</p>
+</div>
+
+<!-- ================================================================== -->
+<!-- SECTION 4: OS-LEVEL SANDBOXING -->
+<!-- ================================================================== -->
+<h2>4. OS-Level Sandboxing</h2>
+
+<p>Sandboxing is the most architecturally divergent area across coding agents. Approaches range from OS-kernel enforcement (Codex CLI) to cloud isolation (Warp) to real-time static analysis (Droid) to permission-based workflows (Claude Code, Cline). The right choice depends on the threat model: protecting from accidental damage vs. defending against prompt injection vs. meeting compliance requirements.</p>
+
+<h3>4.1 Sandboxing Comparison Matrix</h3>
+
+<table>
+    <tr>
+        <th>Agent</th>
+        <th>macOS</th>
+        <th>Linux</th>
+        <th>Windows</th>
+        <th>Network Control</th>
+    </tr>
+    <tr>
+        <td><strong>Codex CLI</strong></td>
+        <td>Seatbelt (sandbox-exec)</td>
+        <td>Landlock + seccomp</td>
+        <td>Restricted tokens / WSL</td>
+        <td><span class="performance-decline">Disabled by default</span></td>
+    </tr>
+    <tr>
+        <td><strong>Claude Code</strong></td>
+        <td>Permission workflow</td>
+        <td>Permission workflow</td>
+        <td>Permission workflow</td>
+        <td>Enabled</td>
+    </tr>
+    <tr>
+        <td><strong>Cline</strong></td>
+        <td>Human-in-loop approval</td>
+        <td>Human-in-loop approval</td>
+        <td>Human-in-loop approval</td>
+        <td>Enabled</td>
+    </tr>
+    <tr>
+        <td><strong>Goose</strong></td>
+        <td>Local execution trust</td>
+        <td>Local execution trust</td>
+        <td>Local execution trust</td>
+        <td>Enabled</td>
+    </tr>
+    <tr>
+        <td><strong>Warp</strong></td>
+        <td colspan="3">Cloud sandbox (Namespace) -- host OS irrelevant</td>
+        <td><span class="performance-decline">Isolated by default</span></td>
+    </tr>
+    <tr>
+        <td><strong>Droid</strong></td>
+        <td colspan="3">DroidShield real-time static analysis</td>
+        <td>Configurable</td>
+    </tr>
+    <tr>
+        <td><strong>Qwen Code</strong></td>
+        <td colspan="3">Docker sandbox (<code>--sandbox</code> flag)</td>
+        <td>Container-isolated</td>
+    </tr>
+    <tr>
+        <td><strong>Replit Agent</strong></td>
+        <td colspan="3">Cloud sandbox with checkpoints</td>
+        <td><span class="performance-decline">Isolated by default</span></td>
+    </tr>
+</table>
+
+<h3>4.2 Codex CLI Sandbox Implementation</h3>
+
+<p>Codex CLI implements the most comprehensive OS-native sandboxing, using platform-specific kernel features to restrict file system access and network connectivity at the operating system level.</p>
+
+<h4>Seatbelt Profile (macOS)</h4>
+<pre>
+;; Seatbelt Profile - Scheme-like syntax
+;; Applied via sandbox-exec before spawning the agent shell
+(version 1)
+(deny default)                                    ;; Deny everything by default
+
+;; Allow reading system libraries and tools
+(allow file-read* (subpath "/usr"))
+(allow file-read* (subpath "/System"))
+(allow file-read* (subpath "/Library"))
+(allow file-read* (subpath "/private/var/tmp"))
+
+;; Allow read/write only in workspace directory
+(allow file-read* file-write* (subpath "/workspace"))
+
+;; Allow process execution (needed for build tools)
+(allow process-exec* (subpath "/usr/bin"))
+(allow process-exec* (subpath "/workspace/node_modules/.bin"))
+
+;; CRITICAL: Network disabled by default
+(deny network*)
+
+;; Allow specific network if --full-auto enables it
+;; (deny network-outbound (remote tcp "*:*"))
+</pre>
+
+<h4>Landlock + seccomp (Linux)</h4>
+<pre>
+// Rust implementation from Codex CLI source
+pub fn apply_sandbox_policy_to_current_thread(
+    policy: &amp;SandboxPolicy,
+    cwd: &amp;Path
+) -&gt; Result&lt;()&gt; {
+    // Step 1: Create Landlock ruleset for filesystem access
+    let ruleset = Ruleset::new()
+        .handle_access(AccessFs::Execute)?
+        .handle_access(AccessFs::WriteFile)?
+        .handle_access(AccessFs::ReadFile)?
+        .handle_access(AccessFs::ReadDir)?;
+
+    // Step 2: Add read-only paths
+    for path in &amp;policy.readable_roots {
+        ruleset.add_rule(PathBeneath::new(
+            path,
+            AccessFs::ReadFile | AccessFs::ReadDir | AccessFs::Execute
+        ))?;
+    }
+
+    // Step 3: Add writable paths (workspace only)
+    for path in &amp;policy.writable_roots {
+        ruleset.add_rule(PathBeneath::new(
+            path,
+            AccessFs::ReadFile | AccessFs::ReadDir |
+            AccessFs::WriteFile | AccessFs::Execute
+        ))?;
+    }
+
+    // Step 4: Block network via seccomp if policy requires
+    if !policy.network_access {
+        apply_seccomp_network_filter()?;
+        // Uses seccomp BPF to block socket(), connect(), bind()
+        // syscalls, preventing all network I/O
+    }
+
+    // Step 5: Enforce -- irreversible after this point
+    ruleset.restrict_self()?;
+    Ok(())
+}
+
+fn apply_seccomp_network_filter() -&gt; Result&lt;()&gt; {
+    // BPF filter blocks: socket(), connect(), bind(), listen(), accept()
+    let filter = SeccompFilter::new(vec![
+        SeccompRule::new(libc::SYS_socket, SeccompAction::Errno(libc::EPERM)),
+        SeccompRule::new(libc::SYS_connect, SeccompAction::Errno(libc::EPERM)),
+        SeccompRule::new(libc::SYS_bind, SeccompAction::Errno(libc::EPERM)),
+    ])?;
+    filter.apply()?;
+    Ok(())
+}
+</pre>
+
+<div class="key-finding">
+    <h4>Key Insight: Kernel-Level Irreversibility</h4>
+    <p>Codex CLI's sandboxing is <strong>irreversible after application</strong>. Once <code>restrict_self()</code> is called, even root cannot lift the restrictions for that process. This is fundamentally stronger than permission-based workflows where a sufficiently persuasive prompt injection could convince an agent to bypass its own rules. The trade-off: agents cannot install packages or access APIs that require network unless explicitly enabled with <code>--full-auto</code> mode.</p>
+</div>
+
+<!-- ================================================================== -->
+<!-- SECTION 5: ADDITIONAL SANDBOXING APPROACHES -->
+<!-- ================================================================== -->
+<h2>5. Additional Sandboxing Approaches</h2>
+
+<p>Beyond Codex CLI's OS-native approach, several agents have developed novel sandboxing strategies tailored to their deployment models. These range from cloud-native isolation to AI-powered static analysis.</p>
+
+<h3>5.1 Warp: Cloud Sandboxes via Namespace</h3>
+
+<p>Warp takes a fundamentally different approach by running agent tasks in ephemeral cloud sandboxes provided by <strong>Namespace</strong>, eliminating the need for local OS sandboxing entirely.</p>
+
+<div class="diagram">WARP CLOUD SANDBOX ARCHITECTURE
+================================================================
+
+  Developer Machine                Namespace Cloud
+  +--------------+                +---------------------------+
+  |  Warp Client |   gRPC/TLS    |    Ephemeral Sandbox      |
+  |  (GPU-render |&lt;-------------&gt;|  +---------------------+  |
+  |   Rust UI)   |                |  | Short-lived creds   |  |
+  +--------------+                |  | (expire per-task)   |  |
+                                  |  +---------------------+  |
+                                  |                           |
+                                  |  +---------------------+  |
+                                  |  | Sidecar Volume      |  |
+                                  |  | Architecture:       |  |
+                                  |  |  /workspace (rw)    |  |
+                                  |  |  /cache (shared)    |  |
+                                  |  |  /tools (ro)        |  |
+                                  |  +---------------------+  |
+                                  |                           |
+                                  |  +---------------------+  |
+                                  |  | Shared Cache Vols   |  |
+                                  |  | (node_modules,      |  |
+                                  |  |  pip cache, etc.)   |  |
+                                  |  +---------------------+  |
+                                  |                           |
+                                  |  SOC 2 Compliant         |
+                                  +---------------------------+</pre></div>
+
+<h4>Key Properties</h4>
+<ul>
+    <li><strong>Short-lived credentials:</strong> Each sandbox receives credentials that expire when the task completes. No persistent secrets on disk.</li>
+    <li><strong>Sidecar volume architecture:</strong> Workspace is mounted read-write; tools and system libraries are read-only sidecars. Prevents system modification.</li>
+    <li><strong>Shared cache volumes:</strong> Package caches (<code>node_modules</code>, pip, cargo) are shared across sandboxes to avoid redundant downloads, reducing cold-start from minutes to seconds.</li>
+    <li><strong>Network isolation:</strong> Outbound network is isolated by default; allowlists can be configured per-task.</li>
+    <li><strong>SOC 2 compliant:</strong> Full audit trail of all sandbox operations for enterprise compliance.</li>
+</ul>
+
+<h3>5.2 Droid: DroidShield Real-Time Static Analysis</h3>
+
+<p>Factory.ai's Droid takes a unique AI-powered approach to security: rather than sandboxing execution, DroidShield performs <strong>real-time static analysis</strong> on every code change before it is applied, catching unsafe patterns before they execute.</p>
+
+<table>
+    <tr>
+        <th>Property</th>
+        <th>Detail</th>
+    </tr>
+    <tr>
+        <td><strong>Approach</strong></td>
+        <td>AI-powered real-time static analysis of generated code</td>
+    </tr>
+    <tr>
+        <td><strong>Timing</strong></td>
+        <td>Pre-execution: analyzes code before it runs, not after</td>
+    </tr>
+    <tr>
+        <td><strong>Coverage</strong></td>
+        <td>Detects unsafe system calls, data exfiltration, credential exposure, supply chain attacks</td>
+    </tr>
+    <tr>
+        <td><strong>Certifications</strong></td>
+        <td><span class="badge badge-success">ISO 42001</span> <span class="badge badge-success">SOC 2</span> <span class="badge badge-success">ISO 27001</span> <span class="badge badge-primary">GDPR</span> <span class="badge badge-primary">CCPA</span></td>
+    </tr>
+    <tr>
+        <td><strong>Advantage</strong></td>
+        <td>Does not restrict legitimate operations (no sandbox overhead); catches semantic threats that sandboxing cannot</td>
+    </tr>
+    <tr>
+        <td><strong>Limitation</strong></td>
+        <td>Static analysis can have false positives; cannot prevent runtime exploits in existing code</td>
+    </tr>
+</table>
+
+<h3>5.3 Qwen Code: Docker-Based Sandbox</h3>
+
+<p>Qwen Code provides an opt-in Docker sandbox activated via the <code>--sandbox</code> CLI flag. This runs the agent's shell commands inside a <code>qwen-code-sandbox</code> container image, providing filesystem and network isolation through standard container boundaries.</p>
+
+<pre>
+# Launch Qwen Code with Docker sandbox
+$ qwen-code --sandbox
+
+# Under the hood:
+# 1. Pulls/builds qwen-code-sandbox image
+# 2. Mounts workspace as /workspace (rw)
+# 3. All Bash tool calls execute inside container
+# 4. Network access controlled by Docker network policy
+
+# Docker sandbox configuration
+docker run --rm \
+  -v "$(pwd):/workspace" \
+  -w /workspace \
+  --network=none \          # Network disabled by default
+  --memory=4g \             # Memory limit
+  --cpus=2 \                # CPU limit
+  qwen-code-sandbox \
+  /bin/bash -c "$COMMAND"
+</pre>
+
+<h3>5.4 Replit Agent: Cloud Sandbox with Checkpoints</h3>
+
+<p>Replit Agent runs entirely in Replit's cloud environment, providing sandbox isolation by default. Its unique contribution is the <strong>checkpoint system</strong> that captures snapshots of the entire environment state, enabling rollback to any previous point.</p>
+
+<div class="diagram">REPLIT CHECKPOINT ARCHITECTURE
+================================================================
+
+  Task Execution Timeline
+  ═══════════════════════════════════════════════════════════
+
+  CP-1          CP-2          CP-3          CP-4 (current)
+   |             |             |             |
+   v             v             v             v
+  +-------+    +-------+    +-------+    +-------+
+  | Snap  |    | Snap  |    | Snap  |    | Snap  |
+  | - code|    | - code|    | - code|    | - code|
+  | - conv|    | - conv|    | - conv|    | - conv|
+  | - db  |    | - db  |    | - db  |    | - db  |
+  | - env |    | - env |    | - env |    | - env |
+  +-------+    +-------+    +-------+    +-------+
+
+  Checkpoint includes:
+  +-- Workspace snapshot (all files)
+  +-- Conversation state (full agent memory)
+  +-- Database state (Replit DB / PostgreSQL)
+  +-- Environment variables and config
+  +-- Running process state
+
+  ROLLBACK: Instant restore to any checkpoint
+  BRANCHING: Fork from any checkpoint to explore alternatives</div>
+
+<div class="insight-box">
+    <h4>Sandbox Philosophy Spectrum</h4>
+    <p>The five approaches represent a spectrum of trust models:</p>
+    <ul>
+        <li><strong>Codex CLI (Kernel):</strong> "Trust nothing" -- OS prevents all unauthorized actions. Strongest isolation, most restrictive.</li>
+        <li><strong>Warp (Cloud):</strong> "Trust the infrastructure" -- ephemeral environments make damage impossible to persist. Best for CI/CD.</li>
+        <li><strong>Droid (Analysis):</strong> "Trust but verify" -- AI analyzes code before execution. Best for catching semantic threats.</li>
+        <li><strong>Qwen Code (Container):</strong> "Trust with boundaries" -- Docker provides familiar isolation. Easy to adopt.</li>
+        <li><strong>Replit (Checkpoint):</strong> "Trust with undo" -- anything can be rolled back. Best for exploration and prototyping.</li>
+    </ul>
+</div>
+
+<!-- ================================================================== -->
+<!-- SECTION 6: APPROVAL WORKFLOWS -->
+<!-- ================================================================== -->
+<h2>6. Approval Workflows</h2>
+
+<p>For agents that do not use OS-level sandboxing, the approval workflow is the primary safety mechanism. These range from per-action human approval (Cline) to configurable permission rules (Claude Code) to full bypass ("YOLO") modes for trusted environments.</p>
+
+<h3>6.1 Cline's Checkpoint System</h3>
+
+<p>Cline implements a shadow git repository that runs alongside the user's actual git repo, creating a checkpoint after every tool call. This enables granular rollback without affecting the user's commit history.</p>
+
+<div class="diagram">CLINE CHECKPOINT ARCHITECTURE (Shadow Git)
+================================================================
+
+  User's Git Repository          Shadow Git Repository
+  =====================          ======================
+  (normal commits)               (per-tool-call commits)
+
+                                 +-----------+
+                                 |Checkpoint |
+                                 |   #1      |
+  User Action                    | (file     |
+      |                          |  write)   |
+      v                          +-----+-----+
+  [Cline starts task]                  |
+      |                          +-----v-----+
+      +-- Write file ----------&gt;|Checkpoint |
+      |                          |   #2      |
+      +-- Run terminal --------&gt;| (terminal |
+      |                          |  command) |
+      +-- Browser action ------&gt;+-----+-----+
+      |                                |
+      v                          +-----v-----+
+  [Task complete]                |Checkpoint |
+                                 |   #3      |
+                                 | (browser  |
+                                 |  action)  |
+                                 +-----+-----+
+                                       |
+  ROLLBACK:                            v
+  git reset --hard &lt;checkpoint_sha&gt;
+
+  ADVANTAGES:
+  - Granular rollback (per tool call, not per prompt)
+  - Does not affect user's git history
+  - Can restore both workspace and task state
+  - Visual diff between any two checkpoints</div>
+
+<h3>6.2 Auto-Approval Configurations</h3>
+
+<h4>Cline Auto-Approval Settings</h4>
+<pre>
+// VS Code settings.json (Cline extension)
+{
+  "cline.autoApprove": {
+    "readOperations": true,       // File reads: auto-approved
+    "writeOperations": false,     // File writes: require human approval
+    "terminalCommands": false,    // Shell commands: require approval
+    "browserActions": false,      // Web automation: require approval
+    "mcpTools": false            // MCP server tools: require approval
+  },
+  "cline.yoloMode": false        // Bypass ALL approvals (dangerous)
+}
+
+// YOLO Mode - bypasses all approval checks
+// WARNING: Only use in disposable environments (containers, VMs)
+{
+  "cline.yoloMode": true,
+  "cline.yoloModeAllowList": [
+    "npm test",
+    "npm run build",
+    "git status",
+    "git diff"
+  ]
+  // Commands not in allowList still blocked even in YOLO mode
+}
+</pre>
+
+<h4>Claude Code Permission Levels</h4>
+<pre>
+// .claude/settings.json
+{
+  "permissions": {
+    "allow": [
+      "Read(*)",                  // All file reads: auto-approved
+      "Bash(git:*)",              // All git commands: auto-approved
+      "Bash(npm:test)",           // npm test: auto-approved
+      "Bash(npm:run build)",      // npm build: auto-approved
+      "Bash(npx:prettier *)",     // Prettier formatting: auto-approved
+      "Write(.claude/*)",         // Writing to .claude dir: auto-approved
+      "mcp__github__get_*"        // GitHub read operations: auto-approved
+    ],
+    "deny": [
+      "Bash(rm -rf *)",           // Destructive commands: always blocked
+      "Write(/etc/*)",            // System files: always blocked
+      "Bash(curl *)",             // Network commands: blocked
+      "Bash(wget *)",             // Network commands: blocked
+      "Bash(sudo *)",             // Privilege escalation: blocked
+      "Bash(chmod 777 *)"         // Dangerous permissions: blocked
+    ]
+  }
+}
+
+// Pattern matching supports:
+// - Wildcards: * matches any sequence
+// - Tool prefixes: Read, Write, Bash, Edit, mcp__*
+// - Nested patterns: Bash(git:push origin *)
+</pre>
+
+<div class="warning-box">
+    <h4>Warning: Permission Bypass Risk</h4>
+    <p>Permission-based approval workflows are <strong>advisory, not enforceable</strong>. A sophisticated prompt injection could potentially convince the agent to reinterpret or circumvent permission rules. For high-security environments, combine approval workflows with OS-level sandboxing (Codex CLI pattern) or cloud isolation (Warp pattern). The defense-in-depth approach uses hooks (PreToolUse) + permissions + sandboxing together.</p>
+</div>
+
+<!-- ================================================================== -->
+<!-- SECTION 7: SECURITY COMPARISON MATRIX -->
+<!-- ================================================================== -->
+<h2>7. Security Comparison Matrix</h2>
+
+<p>The following matrix compares the security posture of all 13 analyzed coding agents across four dimensions: sandbox type, network control, approval model, and compliance certifications.</p>
+
+<table>
+    <tr>
+        <th>Agent</th>
+        <th>Sandbox Type</th>
+        <th>Network Control</th>
+        <th>Approval Model</th>
+        <th>Certifications</th>
+    </tr>
+    <tr>
+        <td><strong>Aider</strong></td>
+        <td>None (local trust)</td>
+        <td>Unrestricted</td>
+        <td>CLI confirmation prompts</td>
+        <td>--</td>
+    </tr>
+    <tr>
+        <td><strong>Claude Code</strong></td>
+        <td>Permission workflow + hooks</td>
+        <td>Unrestricted (configurable via hooks)</td>
+        <td>Allow/deny rules, PreToolUse hooks, 3 permission tiers</td>
+        <td>SOC 2 (Anthropic)</td>
+    </tr>
+    <tr>
+        <td><strong>Cline</strong></td>
+        <td>Shadow git checkpoints</td>
+        <td>Unrestricted</td>
+        <td>Human-in-loop per action, auto-approve config, YOLO mode</td>
+        <td>--</td>
+    </tr>
+    <tr>
+        <td><strong>Codex CLI</strong></td>
+        <td><span class="badge badge-success">OS-native</span> (Seatbelt / Landlock / seccomp)</td>
+        <td><span class="performance-decline">Blocked by default</span> (kernel-enforced)</td>
+        <td>3 modes: suggest / auto-edit / full-auto</td>
+        <td>SOC 2 (OpenAI)</td>
+    </tr>
+    <tr>
+        <td><strong>Droid</strong></td>
+        <td><span class="badge badge-primary">DroidShield</span> (real-time static analysis)</td>
+        <td>Configurable</td>
+        <td>AI-verified before execution</td>
+        <td><span class="badge badge-success">ISO 42001</span> <span class="badge badge-success">SOC 2</span> <span class="badge badge-success">ISO 27001</span> <span class="badge badge-primary">GDPR</span> <span class="badge badge-primary">CCPA</span></td>
+    </tr>
+    <tr>
+        <td><strong>Goose</strong></td>
+        <td>Local execution trust</td>
+        <td>Unrestricted</td>
+        <td>Approval prompts for sensitive operations</td>
+        <td>--</td>
+    </tr>
+    <tr>
+        <td><strong>Letta Code</strong></td>
+        <td>None (Letta server isolation)</td>
+        <td>Unrestricted</td>
+        <td>Server-side tool approval</td>
+        <td>--</td>
+    </tr>
+    <tr>
+        <td><strong>OpenCode</strong></td>
+        <td>None (local trust)</td>
+        <td>Unrestricted</td>
+        <td>CLI confirmation prompts</td>
+        <td>--</td>
+    </tr>
+    <tr>
+        <td><strong>OpenManus</strong></td>
+        <td>None (framework trust)</td>
+        <td>Unrestricted</td>
+        <td>Planning approval, tool-level hooks</td>
+        <td>--</td>
+    </tr>
+    <tr>
+        <td><strong>Qwen Code</strong></td>
+        <td><span class="badge badge-warning">Docker</span> (opt-in via <code>--sandbox</code>)</td>
+        <td>Container-isolated (when sandboxed)</td>
+        <td>CLI confirmation, auto-approve for reads</td>
+        <td>--</td>
+    </tr>
+    <tr>
+        <td><strong>Replit Agent</strong></td>
+        <td><span class="badge badge-success">Cloud sandbox</span> + checkpoints</td>
+        <td><span class="performance-decline">Isolated by default</span></td>
+        <td>Platform-managed, checkpoint rollback</td>
+        <td>SOC 2 (Replit)</td>
+    </tr>
+    <tr>
+        <td><strong>Vibe CLI</strong></td>
+        <td>None (local trust)</td>
+        <td>Unrestricted</td>
+        <td>CLI confirmation prompts</td>
+        <td>--</td>
+    </tr>
+    <tr>
+        <td><strong>Warp</strong></td>
+        <td><span class="badge badge-success">Cloud sandbox</span> (Namespace)</td>
+        <td><span class="performance-decline">Isolated by default</span> (allowlist configurable)</td>
+        <td>Sandbox-enforced, short-lived credentials</td>
+        <td><span class="badge badge-success">SOC 2</span></td>
+    </tr>
+</table>
+
+<div class="key-finding">
+    <h4>Security Maturity Tiers</h4>
+    <p>Based on this analysis, coding agents fall into three security maturity tiers:</p>
+    <ol>
+        <li><strong>Tier 1 -- Kernel/Cloud Enforced</strong> (Codex CLI, Warp, Replit): Security is enforced by infrastructure that the agent cannot override. Suitable for enterprise and compliance-sensitive environments.</li>
+        <li><strong>Tier 2 -- Analysis + Certification</strong> (Droid, Claude Code): Security combines AI analysis or hook-based governance with organizational certifications. Suitable for regulated industries with compliance requirements.</li>
+        <li><strong>Tier 3 -- Trust-Based</strong> (Aider, Goose, OpenCode, Vibe CLI, Letta Code, OpenManus, Cline, Qwen Code): Security relies on developer approval or opt-in sandboxing. Suitable for individual developers and trusted environments. Cline's shadow git provides recovery but not prevention.</li>
+    </ol>
+</div>
+
+<!-- CONCLUSION -->
+<div class="conclusion-box">
+    <h4>Summary: Building Secure, Extensible Coding Agents</h4>
+    <p>The extension and security landscape reveals three architectural imperatives for competitive coding agents:</p>
+    <ol>
+        <li><strong>Hook-based extensibility is table stakes.</strong> Claude Code's 8-event lifecycle sets the standard. Without hooks, organizations cannot enforce governance, maintain audit trails, or integrate with existing workflows.</li>
+        <li><strong>MCP is the universal tool protocol.</strong> All 13 agents now support MCP, making it the only viable standard for third-party tool integration. The main challenge is context window management, not adoption.</li>
+        <li><strong>Security must be infrastructure-enforced.</strong> Permission workflows alone are insufficient for enterprise deployment. The recommended defense-in-depth stack combines OS sandboxing (Codex pattern) or cloud isolation (Warp pattern) with hook-based governance (Claude Code pattern) and checkpoint recovery (Cline pattern).</li>
+    </ol>
+</div>
+
+<!-- SOURCES -->
+<div class="source-box">
+    <h4>Sources &amp; References</h4>
+    <p><strong>Hook Systems:</strong> <a href="https://docs.anthropic.com/en/docs/claude-code/hooks" target="_blank">Claude Code Hooks Documentation</a></p>
+    <p><strong>MCP Protocol:</strong> <a href="https://modelcontextprotocol.io" target="_blank">Model Context Protocol Specification</a>, <a href="https://www.linuxfoundation.org/" target="_blank">Linux Foundation AAIF</a></p>
+    <p><strong>Sandboxing:</strong> <a href="https://github.com/openai/codex" target="_blank">Codex CLI (sandbox implementation)</a>, <a href="https://docs.namespace.so" target="_blank">Namespace (Warp cloud sandbox)</a>, <a href="https://factory.ai/blog/droidshield" target="_blank">DroidShield (Factory.ai)</a></p>
+    <p><strong>Agents:</strong> <a href="https://github.com/cline/cline" target="_blank">Cline</a>, <a href="https://github.com/QwenLM/qwen-code" target="_blank">Qwen Code</a>, <a href="https://replit.com" target="_blank">Replit Agent</a>, <a href="https://warp.dev" target="_blank">Warp</a>, <a href="https://github.com/block/goose" target="_blank">Goose</a></p>
+    <p><em>Part 2 of 6 &middot; Coding Agent Engineering Analysis &middot; January 2026</em></p>
+</div>
+
+<!-- SERIES NAVIGATION -->
+<div class="series-nav">
+    <a href="coding_agents_tools.html">&larr; Part 1: Tools</a>
+    <span>Part 2 of 6</span>
+    <a href="coding_agents_memory.html">Next: Memory &amp; Context &rarr;</a>
+</div>
+
+<!-- FOOTER NAVIGATION -->
+<div class="navigation">
+    <a href="../index.html">&larr; Home</a>
+    <a href="../agent/index.html">Agent Reliability</a>
+    <a href="../rag/index.html">RAG Patterns</a>
+    <a href="index.html">Research Papers</a>
+    <a href="https://join.maxpool.dev" target="_blank">Join Community &rarr;</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Part 4: Agent Deep-Dives — Aider to Letta | Coding Agent Engineering Analysis</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Georgia', 'Times New Roman', serif; font-size: 16px; line-height: 1.7; color: #1a1a1a; background: #fff; max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        h1 { font-size: 28px; text-align: center; margin-bottom: 10px; padding-bottom: 15px; border-bottom: 2px solid #DC8850; }
+        h2 { font-size: 22px; color: #DC8850; margin-top: 40px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #DC8850; }
+        h3 { font-size: 18px; color: #555; margin-top: 25px; margin-bottom: 10px; font-weight: 600; }
+        h4 { font-size: 16px; font-weight: bold; margin-top: 15px; margin-bottom: 8px; }
+        p { margin-bottom: 1em; text-align: justify; }
+        a { color: #DC8850; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        ul, ol { margin-left: 1.5em; margin-bottom: 1em; }
+        li { margin-bottom: 0.4em; }
+        .navigation { display: flex; justify-content: center; gap: 20px; padding: 15px 0; margin-bottom: 30px; border-bottom: 1px solid #eee; flex-wrap: wrap; }
+        .navigation a { color: #DC8850; text-decoration: none; font-size: 14px; font-weight: 500; }
+        .navigation a:hover { text-decoration: underline; }
+        .authors { text-align: center; font-style: italic; color: #666; margin-bottom: 30px; font-size: 15px; }
+        .abstract { background: #f8f8f8; padding: 20px 25px; border-left: 4px solid #DC8850; margin: 25px 0; border-radius: 0 5px 5px 0; }
+        .abstract h2 { margin-top: 0; border: none; padding: 0; margin-bottom: 10px; }
+        .key-finding { background: #fff8f0; padding: 20px 25px; border-left: 4px solid #DC8850; margin: 20px 0; border-radius: 0 5px 5px 0; }
+        .eli5-box { background: #e8f5e9; padding: 20px 25px; border-left: 4px solid #4caf50; margin: 25px 0; border-radius: 0 5px 5px 0; }
+        .insight-box { background: #fffbf0; padding: 20px 25px; border: 2px solid #DC8850; margin: 20px 0; border-radius: 8px; }
+        .warning-box { background: #fff3e0; padding: 20px 25px; border-left: 4px solid #f39c12; margin: 20px 0; border-radius: 0 5px 5px 0; }
+        .conclusion-box { background: #f0f0f0; padding: 20px 25px; border-radius: 5px; margin: 20px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; vertical-align: top; }
+        th { background: #DC8850; color: #fff; font-weight: bold; }
+        tr:nth-child(even) { background: #f9f9f9; }
+        pre { font-family: 'Courier New', monospace; font-size: 13px; background: #f8f8f8; border: 1px solid #ddd; padding: 15px; margin: 15px 0; overflow-x: auto; line-height: 1.4; border-radius: 5px; }
+        code { font-family: 'Courier New', monospace; font-size: 13px; background: #f0f0f0; padding: 2px 6px; border-radius: 3px; }
+        .diagram { font-family: 'Courier New', monospace; font-size: 12px; background: #fafafa; border: 2px solid #eee; padding: 20px; margin: 20px 0; overflow-x: auto; white-space: pre; line-height: 1.3; border-radius: 8px; }
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 3px; font-size: 12px; font-weight: bold; }
+        .badge-primary { background: #DC8850; color: #fff; }
+        .badge-success { background: #27ae60; color: #fff; }
+        .badge-warning { background: #f39c12; color: #fff; }
+        .badge-danger { background: #e74c3c; color: #fff; }
+        .metric { font-weight: bold; color: #DC8850; }
+        .performance-improvement { font-weight: bold; color: #27ae60; }
+        .performance-decline { font-weight: bold; color: #e74c3c; }
+        .part-nav { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; margin: 30px 0; }
+        .part-card { display: block; background: #fff; border: 2px solid #eee; border-radius: 8px; padding: 20px; text-decoration: none; color: #1a1a1a; transition: all 0.2s; }
+        .part-card:hover { border-color: #DC8850; box-shadow: 0 4px 12px rgba(220,136,80,0.15); transform: translateY(-2px); text-decoration: none; }
+        .part-card h3 { color: #DC8850; margin: 0 0 8px 0; font-size: 16px; }
+        .part-card p { margin: 0; font-size: 14px; color: #666; text-align: left; }
+        .part-card .part-num { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .source-box { background: #f8f8f8; padding: 20px; border-radius: 5px; margin: 30px 0; font-size: 14px; }
+        @media (max-width: 768px) {
+            body { padding: 20px 15px; font-size: 15px; }
+            h1 { font-size: 22px; }
+            h2 { font-size: 18px; }
+            table { font-size: 12px; }
+            th, td { padding: 6px; }
+            .part-nav { grid-template-columns: 1fr; }
+            pre, .diagram { font-size: 11px; padding: 10px; }
+        }
+        .series-nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; margin: 30px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; font-size: 14px; }
+        .series-nav a { color: #DC8850; }
+    </style>
+</head>
+<body>
+
+<div class="navigation">
+    <a href="../index.html">&larr; Home</a>
+    <a href="../agent/index.html">Agent Reliability</a>
+    <a href="../rag/index.html">RAG Patterns</a>
+    <a href="index.html">Research Papers</a>
+    <a href="https://join.maxpool.dev" target="_blank">Join Community &rarr;</a>
+</div>
+
+<h1>Part 4: Agent Deep-Dives &mdash; Aider to Letta</h1>
+<div class="authors">
+    Coding Agent Engineering Analysis<br>
+    <em>January 2026 &middot; 7 Agents &middot; Architecture Diagrams &amp; Implementation Details</em>
+</div>
+
+<div class="series-nav">
+    <a href="coding_agents_memory.html">&larr; Part 3: Memory</a>
+    <span>Part 4 of 6</span>
+    <a href="coding_agents_deepdives_2.html">Next: Deep-Dives O&ndash;W &rarr;</a>
+</div>
+
+<!-- OVERVIEW -->
+<div class="abstract">
+    <h2>Overview</h2>
+    <p>This section provides detailed architecture diagrams, implementation analysis, and special considerations for seven coding agents in the A&ndash;L alphabetical range: <strong>Aider</strong>, <strong>Claude Code</strong>, <strong>Cline</strong>, <strong>Codex CLI</strong>, <strong>Droid</strong>, <strong>Goose</strong>, and <strong>Letta Code</strong>. Each profile covers the agent's core architecture, unique technical contributions, tool implementations, and edge-case behaviors that matter for production deployment.</p>
+    <p>These agents span the full spectrum of design philosophies: open-source CLI tools (Aider, Codex CLI), proprietary platforms (Claude Code, Droid), IDE extensions (Cline), MCP-first frameworks (Goose), and memory-first architectures (Letta Code). Understanding their differences is essential for choosing the right tool&mdash;or synthesizing the best patterns into a new one.</p>
+</div>
+
+<div class="key-finding">
+    <h4>Quick Reference: Agents at a Glance</h4>
+    <table>
+        <tr>
+            <th>Agent</th>
+            <th>Type</th>
+            <th>License</th>
+            <th>Key Differentiator</th>
+        </tr>
+        <tr>
+            <td><strong>Aider</strong></td>
+            <td>CLI (Python)</td>
+            <td>Apache-2.0</td>
+            <td>Architect/Editor dual-model, repo map via tree-sitter</td>
+        </tr>
+        <tr>
+            <td><strong>Claude Code</strong></td>
+            <td>CLI (TS)</td>
+            <td>Proprietary</td>
+            <td>8-event hook system, 18 tools, 4 subagent types</td>
+        </tr>
+        <tr>
+            <td><strong>Cline</strong></td>
+            <td>VS Code Ext</td>
+            <td>Apache-2.0</td>
+            <td>Shadow git, Puppeteer browser, 33+ providers</td>
+        </tr>
+        <tr>
+            <td><strong>Codex CLI</strong></td>
+            <td>CLI (Rust)</td>
+            <td>Apache-2.0</td>
+            <td>OS-native sandbox (Seatbelt/Landlock/seccomp)</td>
+        </tr>
+        <tr>
+            <td><strong>Droid</strong></td>
+            <td>CLI</td>
+            <td>Proprietary</td>
+            <td>HyperCode/ByteRank retrieval, Terminal-Bench #1</td>
+        </tr>
+        <tr>
+            <td><strong>Goose</strong></td>
+            <td>CLI + Desktop</td>
+            <td>Apache-2.0</td>
+            <td>MCP-first architecture, 3000+ extensions</td>
+        </tr>
+        <tr>
+            <td><strong>Letta Code</strong></td>
+            <td>CLI</td>
+            <td>Apache-2.0</td>
+            <td>Persistent memory blocks, archival vector DB, skill learning</td>
+        </tr>
+    </table>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- AGENT 1: AIDER -->
+<!-- ============================================================ -->
+<h2 id="aider">1. Aider</h2>
+
+<h3>Architecture Overview</h3>
+
+<p>Aider is an open-source, terminal-based AI pair-programming tool that pioneered the <strong>Architect/Editor dual-model pattern</strong> and repository-aware context via tree-sitter AST parsing. It operates as a conversational CLI that deeply integrates with git, auto-committing every AI change with descriptive messages for easy review and rollback.</p>
+
+<div class="diagram">AIDER ARCHITECTURE
+================================================================
+
+                        ┌───────────────────────────┐
+                        │        USER INPUT          │
+                        │  (text, voice, images,     │
+                        │   URLs, /commands)         │
+                        └─────────────┬─────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────┐
+│                       AIDER CLI                              │
+├──────────────┬──────────────┬──────────────┬────────────────┤
+│              │              │              │                │
+│  ┌───────────▼──────────┐  │  ┌───────────▼──────────┐     │
+│  │     CHAT MODES       │  │  │    EDIT FORMATS      │     │
+│  │  ┌────────────────┐  │  │  │  ┌────────────────┐  │     │
+│  │  │  /code         │  │  │  │  │  diff (default)│  │     │
+│  │  │  (edits only)  │  │  │  │  │  unified diff  │  │     │
+│  │  ├────────────────┤  │  │  │  ├────────────────┤  │     │
+│  │  │  /architect    │  │  │  │  │  whole         │  │     │
+│  │  │  (plan → edit) │  │  │  │  │  full file     │  │     │
+│  │  ├────────────────┤  │  │  │  ├────────────────┤  │     │
+│  │  │  /ask          │  │  │  │  │  editor-diff   │  │     │
+│  │  │  (Q&A only)    │  │  │  │  │  editor merge  │  │     │
+│  │  └────────────────┘  │  │  │  └────────────────┘  │     │
+│  └──────────────────────┘  │  └──────────────────────┘     │
+│              │              │              │                │
+│  ┌───────────▼──────────────▼──────────────▼──────────┐    │
+│  │              REPO MAP (tree-sitter)                 │    │
+│  │  - Parse all tracked files for AST structure        │    │
+│  │  - Extract: function sigs, class defs, imports      │    │
+│  │  - Build cross-file relationship graph              │    │
+│  │  - Prioritize files relevant to current chat        │    │
+│  │  - Budget: ~1024 tokens for repo overview           │    │
+│  └────────────────────────┬───────────────────────────┘    │
+│                            │                                │
+│  ┌─────────────────────────▼─────────────────────────┐     │
+│  │              GIT INTEGRATION                       │     │
+│  │  - Auto-commit every AI change                     │     │
+│  │  - Descriptive commit messages (LLM-generated)     │     │
+│  │  - /diff, /undo for easy review/rollback           │     │
+│  │  - Respects .gitignore                             │     │
+│  └───────────────────────────────────────────────────┘     │
+│                                                              │
+└──────────────────────────────────────────────────────────────┘</div>
+
+<h3>Architect/Editor Dual-Model Pattern</h3>
+
+<p>Aider's most significant contribution is the <strong>Architect/Editor separation</strong>, which decouples reasoning from code generation. A reasoning-optimized model (the "Architect") analyzes the problem and produces a natural-language solution plan. A code-generation model (the "Editor") then translates that plan into precise file edits. This division of labor consistently outperforms single-model approaches.</p>
+
+<div class="diagram">ARCHITECT/EDITOR PATTERN
+================================================================
+
+  User Request: "Add JWT authentication to the API"
+         │
+         ▼
+  ┌──────────────────────────────────────────────┐
+  │           ARCHITECT MODEL                     │
+  │           (Reasoning-optimized)               │
+  │                                               │
+  │  Models:  o1-preview, DeepSeek Reasoner,      │
+  │           Claude Opus, Gemini Pro             │
+  │                                               │
+  │  Output:  Natural-language solution plan      │
+  │  ┌─────────────────────────────────────────┐  │
+  │  │ "1. Install jsonwebtoken package.       │  │
+  │  │  2. Create middleware/auth.ts with      │  │
+  │  │     verifyToken() function.             │  │
+  │  │  3. Add auth middleware to protected    │  │
+  │  │     routes in routes/api.ts.            │  │
+  │  │  4. Create /login endpoint that issues  │  │
+  │  │     JWT tokens in controllers/auth.ts." │  │
+  │  └─────────────────────────────────────────┘  │
+  └──────────────────────┬────────────────────────┘
+                         │
+                         ▼
+  ┌──────────────────────────────────────────────┐
+  │           EDITOR MODEL                        │
+  │           (Code-generation)                   │
+  │                                               │
+  │  Models:  Claude Sonnet, DeepSeek Coder,      │
+  │           GPT-4o, Codestral                   │
+  │                                               │
+  │  Output:  Formatted file edits (diff/whole)   │
+  │  ┌─────────────────────────────────────────┐  │
+  │  │ --- a/middleware/auth.ts                 │  │
+  │  │ +++ b/middleware/auth.ts                 │  │
+  │  │ @@ -0,0 +1,18 @@                        │  │
+  │  │ +import jwt from 'jsonwebtoken';         │  │
+  │  │ +export function verifyToken(req, ...)   │  │
+  │  │ +  ...                                   │  │
+  │  └─────────────────────────────────────────┘  │
+  └──────────────────────────────────────────────┘
+
+  BENCHMARK RESULTS (Aider Polyglot Leaderboard):
+  ┌────────────────────────────────────┬─────────┐
+  │ Configuration                      │ Score   │
+  ├────────────────────────────────────┼─────────┤
+  │ o1-preview (Architect) + DeepSeek  │  85%    │
+  │ o1-preview (Architect) + o1-mini   │  85%    │
+  │ Claude Sonnet solo                 │  72%    │
+  │ GPT-4o solo                        │  66%    │
+  └────────────────────────────────────┴─────────┘</div>
+
+<h3>Repository Map via tree-sitter</h3>
+
+<p>Aider builds a compact, AST-aware map of the repository using tree-sitter parsers. This map provides the LLM with a structural overview of the codebase&mdash;function signatures, class definitions, import relationships&mdash;without consuming the full file contents. The map is dynamically weighted toward files most relevant to the current conversation.</p>
+
+<pre>REPO MAP STRATEGY:
+1. Parse all tracked files via tree-sitter AST:
+   - Function signatures (name, params, return type)
+   - Class definitions (name, methods, inheritance)
+   - Import/export statements (module graph)
+
+2. Build relationship graph:
+   - Which functions call which
+   - Module dependency chains
+   - Type hierarchies
+
+3. Include in context (~1024 tokens budget):
+   - Only signatures, not implementations
+   - Prioritize files referenced in chat
+   - Dynamically expand on-demand with /add
+
+Example repo map output:
+┌─────────────────────────────────────────┐
+│ src/auth/login.ts                       │
+│   export async function login(creds)    │
+│   export function validateToken(token)  │
+│                                         │
+│ src/api/users.ts                        │
+│   import { login } from '../auth/login' │
+│   export class UserService              │
+│     async getUser(id: string)           │
+│     async updateUser(id, data)          │
+│                                         │
+│ src/middleware/cors.ts                   │
+│   export function corsMiddleware(opts)   │
+└─────────────────────────────────────────┘</pre>
+
+<h3>Special Considerations</h3>
+<ul>
+    <li><strong>--watch-files Mode:</strong> Aider monitors files for AI-comment markers (e.g., <code>// AI: fix this bug</code>), enabling IDE integration without a dedicated extension. Changes trigger Aider to read the comment, implement the request, and auto-commit.</li>
+    <li><strong>Voice Input:</strong> Built-in speech-to-text allows speaking requests directly. Aider transcribes, interprets, and implements code changes from voice commands.</li>
+    <li><strong>Image &amp; Web Support:</strong> Screenshots and URLs can be added to the chat context. Aider fetches web content and processes images as part of the conversation, useful for implementing designs from mockups.</li>
+    <li><strong>Prompt Caching:</strong> Integrates with providers that support prompt caching (Anthropic, DeepSeek) to reduce costs and latency for repeated context windows. Particularly effective given the repo map is largely static across turns.</li>
+    <li><strong>Browser Mode:</strong> A streamlined paste-optimized output mode designed for web-based chat UIs. Outputs are formatted for easy copy-paste into web interfaces when the CLI is not available.</li>
+    <li><strong>Edit Format Selection:</strong> Automatically selects the optimal edit format (diff, whole, editor-diff) based on the model's capabilities. Weaker models get whole-file output; stronger models use diff format for token efficiency.</li>
+</ul>
+
+<div class="insight-box">
+    <h4>Architectural Insight: Why Architect/Editor Wins</h4>
+    <p>The Architect/Editor pattern succeeds because it aligns model strengths with task requirements. Reasoning models (o1-preview, Opus) excel at planning and understanding complex requirements but produce verbose, sometimes imprecise code. Code models (Sonnet, DeepSeek) excel at precise syntax and formatting but can struggle with high-level architectural decisions. By separating concerns, Aider achieves <span class="performance-improvement">85% on its polyglot benchmark</span>&mdash;a 13-point improvement over the best single-model approach (72%). This pattern has since been adopted by Cline (Architect mode) and influenced Claude Code's subagent design.</p>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- AGENT 2: CLAUDE CODE -->
+<!-- ============================================================ -->
+<h2 id="claude-code">2. Claude Code</h2>
+
+<h3>Architecture Overview</h3>
+
+<p>Claude Code is Anthropic's official CLI agent, distinguished by its <strong>multi-client architecture</strong>, <strong>8-event hook system</strong>, <strong>18 built-in tools</strong>, and <strong>4 subagent types</strong>. It supports a 200k-token context window with automatic compaction, parallel tool execution, and a layered configuration system designed for both individual developers and enterprise deployment via MDM.</p>
+
+<div class="diagram">CLAUDE CODE ARCHITECTURE
+================================================================
+
+┌─────────────────────────────────────────────────────────────┐
+│                  MULTI-CLIENT INTERFACE                       │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐    │
+│  │   CLI    │  │ VS Code  │  │ JetBrains│  │  GitHub  │    │
+│  │ Terminal │  │Extension │  │  Plugin  │  │  Action  │    │
+│  │  (TUI)   │  │          │  │          │  │  (CI/CD) │    │
+│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘    │
+│       └──────────────┴──────┬─────┴──────────────┘          │
+└─────────────────────────────┼───────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                     CORE AGENT ENGINE                         │
+│                                                               │
+│  ┌───────────────────────────────────────────────────────┐   │
+│  │  SYSTEM PROMPT (110+ parts, dynamically assembled)    │   │
+│  │  - Base instructions       - Tool definitions         │   │
+│  │  - CLAUDE.md content       - MCP server tools         │   │
+│  │  - Hook configurations     - Permission rules         │   │
+│  │  - Subagent definitions    - Active context           │   │
+│  └───────────────────────────────────────────────────────┘   │
+│                                                               │
+│  ┌───────────────────────────────────────────────────────┐   │
+│  │  TOOL ORCHESTRATOR (18 built-in tools)                │   │
+│  │  ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐         │   │
+│  │  │  Read  │ │ Write  │ │  Edit  │ │Notebook│         │   │
+│  │  │        │ │        │ │        │ │  Edit  │         │   │
+│  │  └────────┘ └────────┘ └────────┘ └────────┘         │   │
+│  │  ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐         │   │
+│  │  │  Glob  │ │  Grep  │ │  Bash  │ │Computer│         │   │
+│  │  │        │ │(ripgrep│ │(shell) │ │(Chrome)│         │   │
+│  │  └────────┘ └────────┘ └────────┘ └────────┘         │   │
+│  │  ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐         │   │
+│  │  │  Task  │ │WebFetch│ │  Web   │ │  Todo  │         │   │
+│  │  │(subagt)│ │        │ │ Search │ │ Write  │         │   │
+│  │  └────────┘ └────────┘ └────────┘ └────────┘         │   │
+│  │  ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐         │   │
+│  │  │ Enter  │ │  Exit  │ │ Skill  │ │ Memory │         │   │
+│  │  │PlanMode│ │PlanMode│ │(.md)   │ │(blocks)│         │   │
+│  │  └────────┘ └────────┘ └────────┘ └────────┘         │   │
+│  │  ┌────────┐ ┌────────┐                                │   │
+│  │  │ Slash  │ │  LSP   │  + MCP server tools            │   │
+│  │  │Command │ │        │  (dynamically loaded)           │   │
+│  │  └────────┘ └────────┘                                │   │
+│  └───────────────────────────────────────────────────────┘   │
+│                                                               │
+│  ┌───────────────────────────────────────────────────────┐   │
+│  │  SUBAGENT DISPATCHER                                  │   │
+│  │  ┌────────────┐ ┌────────────┐ ┌────────────┐        │   │
+│  │  │   Task     │ │  Explore   │ │    Plan    │        │   │
+│  │  │ (parallel, │ │ (read-only │ │ (structured│        │   │
+│  │  │  isolated  │ │  research) │ │  design)   │        │   │
+│  │  │  context)  │ │            │ │            │        │   │
+│  │  └────────────┘ └────────────┘ └────────────┘        │   │
+│  │  ┌─────────────────────────────────────────────┐      │   │
+│  │  │  Custom (.claude/agents/*.md)                │      │   │
+│  │  │  User-defined subagents with custom tools,   │      │   │
+│  │  │  model selection, and system prompts          │      │   │
+│  │  └─────────────────────────────────────────────┘      │   │
+│  └───────────────────────────────────────────────────────┘   │
+│                                                               │
+│  ┌───────────────────────────────────────────────────────┐   │
+│  │  HOOK SYSTEM (8 lifecycle events)                     │   │
+│  │  SessionStart → UserPromptSubmit → PreToolUse →       │   │
+│  │  [Execute] → PostToolUse → Stop / SubagentStop        │   │
+│  │  PreCompact, Notification                             │   │
+│  └───────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+                              │
+┌─────────────────────────────┼───────────────────────────────┐
+│              CONFIGURATION LAYERS                             │
+│  ┌─────────────────────────────────────────────────────┐     │
+│  │  ~/.claude/settings.json       (user global)        │     │
+│  │  .claude/settings.json         (project, committed) │     │
+│  │  .claude/settings.local.json   (personal, ignored)  │     │
+│  │  CLAUDE.md / CLAUDE.local.md   (context files)      │     │
+│  │  .claude/agents/*.md           (custom subagents)   │     │
+│  │  Enterprise MDM config         (managed policies)   │     │
+│  └─────────────────────────────────────────────────────┘     │
+└─────────────────────────────────────────────────────────────┘</div>
+
+<h3>Subagent System</h3>
+
+<p>Claude Code's subagent system enables delegation of work to specialized child agents, each running in its own context window with configurable tool access. This is critical for complex tasks that exceed what a single context window can handle, or where parallel execution improves throughput.</p>
+
+<pre>SUBAGENT TYPES:
+
+1. TASK SUBAGENT (parallel, isolated context)
+   ─────────────────────────────────────────────────
+   - Spawns a new Claude instance with limited context
+   - Can run multiple Task subagents in parallel
+   - Configurable tool access per subagent
+   - Reports results back to parent agent
+   - Use: Complex subtasks, parallel file processing
+
+   Example: "Refactor auth module" spawns Task subagents for:
+     - Task 1: Update authentication middleware
+     - Task 2: Update user service
+     - Task 3: Update test files
+
+2. EXPLORE SUBAGENT (read-only research)
+   ─────────────────────────────────────────────────
+   - Read-only access: Read, Grep, Glob, Bash(readonly)
+   - Cannot modify files or run destructive commands
+   - Use: Codebase research, documentation lookup
+
+3. PLAN SUBAGENT (structured design)
+   ─────────────────────────────────────────────────
+   - EnterPlanMode / ExitPlanMode flow
+   - Produces structured implementation plan
+   - User approval required before execution
+   - Use: Architecture decisions, large refactors
+
+4. CUSTOM SUBAGENT (.claude/agents/*.md)
+   ─────────────────────────────────────────────────
+   File: .claude/agents/reviewer.md
+   ---
+   name: code-reviewer
+   description: Reviews code for quality and security
+   tools: ["Read", "Grep", "Glob", "Bash"]
+   model: opus
+   ---
+   You are a senior code reviewer. Analyze changes for:
+   1. Security vulnerabilities (injection, auth bypass)
+   2. Performance issues (N+1 queries, memory leaks)
+   3. Code style violations (project conventions)
+   ...</pre>
+
+<h3>Configuration Hierarchy</h3>
+
+<pre>CONFIGURATION PRECEDENCE (highest → lowest):
+┌──────────────────────────────────────────────────────────┐
+│  Enterprise MDM Config                                    │  ← Cannot be overridden
+│  (managed by organization, deployed via MDM)              │
+├──────────────────────────────────────────────────────────┤
+│  .claude/settings.json (project)                          │  ← Committed to repo
+│  Shared team settings: hooks, permissions, MCP servers    │
+├──────────────────────────────────────────────────────────┤
+│  .claude/settings.local.json (personal)                   │  ← .gitignored
+│  User-specific overrides: API keys, model preferences     │
+├──────────────────────────────────────────────────────────┤
+│  ~/.claude/settings.json (global)                         │  ← User defaults
+│  Cross-project defaults: theme, behavior preferences      │
+└──────────────────────────────────────────────────────────┘
+
+CLAUDE.md CONTEXT FILES (loaded into system prompt):
+- CLAUDE.md           → Project root instructions
+- CLAUDE.local.md     → Personal instructions (.gitignored)
+- Parent dir CLAUDE.md files also loaded (monorepo support)
+- Imported via @path references for modular configs</pre>
+
+<h3>Special Considerations</h3>
+<ul>
+    <li><strong>200k Context Window:</strong> Largest context of any CLI agent. Auto-compaction triggers at ~80% usage, preserving recent messages, active files, todo state, and error context while discarding old tool outputs.</li>
+    <li><strong>Parallel Tool Calls:</strong> With Sonnet 4.5+, Claude Code executes multiple independent tool calls simultaneously (e.g., reading several files at once), significantly reducing round-trip latency.</li>
+    <li><strong>Git Safety Protocol:</strong> Hard-coded safety rules: never force push, never skip hooks (<code>--no-verify</code>), never amend without explicit permission, never run destructive git commands (<code>reset --hard</code>, <code>clean -f</code>) unless directly instructed.</li>
+    <li><strong>Session Resume:</strong> <code>claude --resume</code> restores the previous session's full conversation state, including tool outputs and context. Critical for long-running tasks interrupted by network issues or terminal closure.</li>
+    <li><strong>Hook Extensibility:</strong> The 8-event hook lifecycle (SessionStart, UserPromptSubmit, PreToolUse, PostToolUse, Stop, SubagentStop, PreCompact, Notification) enables deterministic automation at every lifecycle point. Hooks can approve/deny tool calls, inject context, audit actions, and force continuation.</li>
+    <li><strong>MCP Integration:</strong> Full MCP client support with server configuration in <code>.claude/settings.json</code>. Tool names follow the <code>mcp__&lt;server&gt;__&lt;tool&gt;</code> pattern. Supports stdio and HTTP transport.</li>
+</ul>
+
+<div class="insight-box">
+    <h4>Architectural Insight: System Prompt as Configuration</h4>
+    <p>Claude Code's system prompt is dynamically assembled from <span class="metric">110+ parts</span>, making it the most configurable system prompt in the market. The prompt includes base instructions, tool definitions, CLAUDE.md content, hook configurations, permission rules, MCP server tool definitions, and active session context. This "prompt as code" approach means that the agent's behavior can be extensively customized without modifying source code&mdash;a key advantage for enterprise deployment where different teams need different agent behaviors within the same organization.</p>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- AGENT 3: CLINE -->
+<!-- ============================================================ -->
+<h2 id="cline">3. Cline</h2>
+
+<h3>Architecture Overview</h3>
+
+<p>Cline is the most popular open-source VS Code AI extension, distinguished by its <strong>shadow git checkpoint system</strong>, <strong>native Puppeteer browser automation</strong>, and support for <strong>33+ LLM providers</strong>. It operates as a VS Code extension with a React-based webview UI, communicating with a backend Controller/Orchestrator that manages tool execution, approval workflows, and browser sessions.</p>
+
+<div class="diagram">CLINE ARCHITECTURE
+================================================================
+
+┌─────────────────────────────────────────────────────────────┐
+│                    VS CODE EXTENSION                         │
+├─────────────────────────────────────────────────────────────┤
+│                                                               │
+│  ┌────────────────────────┐   ┌────────────────────────────┐ │
+│  │     Controller         │   │      Webview (React)       │ │
+│  │    (Orchestrator)      │   │   ┌────────────────────┐   │ │
+│  │                        │◀─▶│   │    ChatView        │   │ │
+│  │  - Message routing     │   │   │    HistoryView     │   │ │
+│  │  - Tool dispatch       │   │   │    SettingsView    │   │ │
+│  │  - Approval gating     │   │   │    DiffView        │   │ │
+│  │  - State management    │   │   └────────────────────┘   │ │
+│  └───────────┬────────────┘   └────────────────────────────┘ │
+│              │                                                │
+│              ▼                                                │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │                  TOOL EXECUTOR                          │  │
+│  │  (Registration-based tool dispatch system)              │  │
+│  └───┬──────────┬──────────┬──────────┬──────────┬───────┘  │
+│      │          │          │          │          │          │
+│      ▼          ▼          ▼          ▼          ▼          │
+│  ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐ ┌──────────┐ │
+│  │  File  │ │Terminal│ │Browser │ │  MCP   │ │  Auto    │ │
+│  │Handler │ │Manager │ │Session │ │ Client │ │ Approve  │ │
+│  │        │ │        │ │(Puppe- │ │        │ │ System   │ │
+│  │-read   │ │-execute│ │ teer)  │ │-stdio  │ │          │ │
+│  │-write  │ │-stream │ │        │ │-HTTP   │ │-per tool │ │
+│  │-search │ │-bg proc│ │-launch │ │-SSE    │ │-per mode │ │
+│  │-diff   │ │        │ │-nav    │ │        │ │-yolo     │ │
+│  │        │ │        │ │-click  │ │        │ │          │ │
+│  │        │ │        │ │-type   │ │        │ │          │ │
+│  │        │ │        │ │-screen │ │        │ │          │ │
+│  └────────┘ └────────┘ └────────┘ └────────┘ └──────────┘ │
+│                                                               │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │              MODES                                      │  │
+│  │  ┌──────┐  ┌──────┐  ┌──────┐  ┌───────────┐          │  │
+│  │  │ Plan │  │ Act  │  │ Ask  │  │ Architect │          │  │
+│  │  │(R/O) │  │(R/W) │  │(Q&A) │  │ (Design)  │          │  │
+│  │  └──────┘  └──────┘  └──────┘  └───────────┘          │  │
+│  └────────────────────────────────────────────────────────┘  │
+│                                                               │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │              SHADOW GIT (Checkpoint System)             │  │
+│  │  - Separate from user's .git                            │  │
+│  │  - Checkpoint created per tool call                     │  │
+│  │  - Granular rollback to any point                       │  │
+│  │  - git reset --hard &lt;checkpoint_sha&gt;                    │  │
+│  └────────────────────────────────────────────────────────┘  │
+│                                                               │
+└─────────────────────────────────────────────────────────────┘</div>
+
+<h3>Browser Automation (Puppeteer)</h3>
+
+<p>Cline includes native browser automation via a <code>BrowserSession</code> class built on Puppeteer. Unlike other agents that rely on MCP servers for browser access, Cline's browser support is built in, enabling visual verification of web application changes without leaving the IDE.</p>
+
+<pre>BROWSER SESSION CLASS (Puppeteer-based):
+┌─────────────────────────────────────────────────────────┐
+│  BrowserSession                                          │
+├─────────────────────────────────────────────────────────┤
+│                                                           │
+│  doAction(action) → {screenshot, consoleLog, result}     │
+│                                                           │
+│  SUPPORTED ACTIONS:                                       │
+│  ┌──────────────┬───────────────────────────────────────┐ │
+│  │ launch       │ Start browser (local headless or      │ │
+│  │              │ connect to remote instance)            │ │
+│  ├──────────────┼───────────────────────────────────────┤ │
+│  │ navigate     │ Go to URL, wait for load              │ │
+│  ├──────────────┼───────────────────────────────────────┤ │
+│  │ click        │ Click at (x, y) coordinates           │ │
+│  ├──────────────┼───────────────────────────────────────┤ │
+│  │ type         │ Enter text into focused element       │ │
+│  ├──────────────┼───────────────────────────────────────┤ │
+│  │ screenshot   │ Capture viewport as base64 PNG        │ │
+│  ├──────────────┼───────────────────────────────────────┤ │
+│  │ close        │ End session, cleanup resources        │ │
+│  └──────────────┴───────────────────────────────────────┘ │
+│                                                           │
+│  SCREENSHOT FEEDBACK LOOP:                                │
+│  1. Agent performs action (e.g., click button)            │
+│  2. Screenshot captured automatically                     │
+│  3. Screenshot sent to LLM as base64 image               │
+│  4. LLM verifies result visually                          │
+│  5. Decides next action based on visual state             │
+│                                                           │
+│  MODES:                                                    │
+│  - Local:  Headless Chromium, isolated environment        │
+│  - Remote: Connect to existing browser (DevTools)         │
+└─────────────────────────────────────────────────────────┘</pre>
+
+<h3>Shadow Git Checkpoint System</h3>
+
+<pre>CHECKPOINT ARCHITECTURE:
+┌───────────────────────────────────────────────────────────┐
+│              Shadow Git Repository                         │
+│  (Separate .git, runs alongside user's actual git repo)   │
+├───────────────────────────────────────────────────────────┤
+│                                                             │
+│  Tool Call #1 (file write)                                  │
+│       │                                                     │
+│       ▼                                                     │
+│   Checkpoint ──▶ Checkpoint ──▶ Checkpoint ──▶ ...         │
+│      #1             #2             #3                       │
+│   (write to       (terminal      (browser                   │
+│    auth.ts)       command)       navigate)                   │
+│                                                             │
+│   USER CONTROL:                                             │
+│   - "Undo last change" → revert to Checkpoint #2           │
+│   - "Start over" → revert to Checkpoint #1                 │
+│   - Granular per-tool-call rollback                        │
+│                                                             │
+│   IMPLEMENTATION:                                           │
+│   - git add -A &amp;&amp; git commit (shadow repo)                │
+│   - Rollback: git reset --hard &lt;checkpoint_sha&gt;           │
+│   - Does NOT affect user's actual git history              │
+│   - Restores both workspace files and Cline task state     │
+└───────────────────────────────────────────────────────────┘</pre>
+
+<h3>Special Considerations</h3>
+<ul>
+    <li><strong>XML Tool Calling Fallback:</strong> For models without native JSON function calling (e.g., older local models via Ollama), Cline falls back to XML-formatted tool calls parsed from the model's text output. This enables compatibility with virtually any LLM.</li>
+    <li><strong>Generative Streaming UI:</strong> Real-time visualization of diffs, terminal output, and browser screenshots as the agent works. The React webview updates live, showing the agent's "thought process" in real time.</li>
+    <li><strong>33+ LLM Providers:</strong> Supports OpenRouter, Anthropic, OpenAI, Google, AWS Bedrock, Azure, Ollama, LM Studio, vLLM, and many more. Provider-specific optimizations for token counting and feature support.</li>
+    <li><strong>Shadow Git:</strong> Every tool execution creates a checkpoint in a separate git repository. Users can roll back to any specific tool call, not just the last prompt. This granularity is unmatched by other agents.</li>
+    <li><strong>Multi-Workspace:</strong> <code>@workspace:path</code> syntax enables working across multiple directories in a monorepo. Cline tracks context across workspace boundaries.</li>
+    <li><strong>Auto-Approve System:</strong> Configurable per-tool approval: read operations can be auto-approved while write operations require confirmation. "YOLO mode" bypasses all approvals for trusted environments.</li>
+</ul>
+
+<div class="key-finding">
+    <h4>Implementation Detail: XML Tool Calling</h4>
+    <p>Cline's XML fallback mechanism works by wrapping tool invocations in XML tags within the model's text stream: <code>&lt;tool_use&gt;&lt;name&gt;write_to_file&lt;/name&gt;&lt;path&gt;src/app.ts&lt;/path&gt;&lt;content&gt;...&lt;/content&gt;&lt;/tool_use&gt;</code>. The parser extracts these tags in real-time from the streaming response, enabling tool execution to begin before the full response completes. This approach makes Cline compatible with models that only support text completion, not function calling&mdash;a critical advantage for local/self-hosted model deployments.</p>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- AGENT 4: CODEX CLI -->
+<!-- ============================================================ -->
+<h2 id="codex-cli">4. Codex CLI</h2>
+
+<h3>Architecture Overview</h3>
+
+<p>Codex CLI is OpenAI's open-source Rust-based coding agent, distinguished by its <strong>OS-native sandboxing</strong> (Seatbelt on macOS, Landlock+seccomp on Linux, restricted tokens on Windows), <strong>Op/Event protocol</strong> separating frontend from core logic, and <strong>network-disabled-by-default</strong> security posture. The Rust crate architecture enables maximum code reuse across CLI, TUI, exec, and MCP server modes.</p>
+
+<div class="diagram">CODEX CLI ARCHITECTURE
+================================================================
+
+┌─────────────────────────────────────────────────────────────┐
+│                   codex-rs/ CRATE STRUCTURE                   │
+├──────────────┬──────────────────────────────────────────────┤
+│              │                                                │
+│  FRONTEND    │   ┌─────────┐  ┌─────────┐  ┌─────────┐      │
+│  LAYER       │   │  cli/   │  │  tui/   │  │  exec/  │      │
+│              │   │ (REPL)  │  │ (Bubble │  │ (non-   │      │
+│              │   │         │  │  Tea UI) │  │interact)│      │
+│              │   └────┬────┘  └────┬────┘  └────┬────┘      │
+│              │        └────────────┼────────────┘           │
+├──────────────┤                     │ Op / Event Protocol     │
+│              │                     ▼                         │
+│  CORE        │   ┌─────────────────────────────────────┐    │
+│  LAYER       │   │              core/                   │    │
+│              │   │  ┌──────────────────────────────┐    │    │
+│              │   │  │  ThreadManager               │    │    │
+│              │   │  │  (conversation state)         │    │    │
+│              │   │  ├──────────────────────────────┤    │    │
+│              │   │  │  ModelClient                  │    │    │
+│              │   │  │  (OpenAI API comms)           │    │    │
+│              │   │  ├──────────────────────────────┤    │    │
+│              │   │  │  ToolOrchestrator             │    │    │
+│              │   │  │  (sandboxed execution)        │    │    │
+│              │   │  └──────────────────────────────┘    │    │
+│              │   └─────────────────────────────────────┘    │
+├──────────────┤                     │                         │
+│              │                     ▼                         │
+│  SECURITY    │   ┌──────────────────────────────────────┐   │
+│  LAYER       │   │  ┌────────────┐  ┌─────────────────┐ │   │
+│              │   │  │linux-sandbox│  │windows-sandbox- │ │   │
+│              │   │  │(Landlock +  │  │rs (Restricted   │ │   │
+│              │   │  │ seccomp)    │  │ Tokens + Jobs)  │ │   │
+│              │   │  └────────────┘  └─────────────────┘ │   │
+│              │   │  ┌────────────┐  ┌─────────────────┐ │   │
+│              │   │  │ execpolicy │  │  Seatbelt       │ │   │
+│              │   │  │ (approval  │  │  (macOS sandbox │ │   │
+│              │   │  │  engine)   │  │   profiles)     │ │   │
+│              │   │  └────────────┘  └─────────────────┘ │   │
+│              │   └──────────────────────────────────────┘   │
+├──────────────┤                     │                         │
+│              │                     ▼                         │
+│  SERVICES    │   ┌────────────┐ ┌────────────┐ ┌──────────┐ │
+│              │   │mcp-server/ │ │file-search/│ │   otel/  │ │
+│              │   │(MCP proto) │ │(repo search│ │(OpenTele-│ │
+│              │   │            │ │ indexing)  │ │ metry)   │ │
+│              │   └────────────┘ └────────────┘ └──────────┘ │
+│              │   ┌────────────┐                              │
+│              │   │keyring-    │                              │
+│              │   │store/      │                              │
+│              │   │(credential │                              │
+│              │   │ storage)   │                              │
+│              │   └────────────┘                              │
+└──────────────┴──────────────────────────────────────────────┘</div>
+
+<h3>Op/Event Protocol</h3>
+
+<p>Codex CLI separates the frontend (CLI, TUI, exec) from the core agent via a typed message protocol. Frontends send <strong>Ops</strong> (requests) and receive <strong>Events</strong> (responses). This enables the same agent core to be driven by different UIs, automated scripts, or even MCP servers.</p>
+
+<pre>OP/EVENT PROTOCOL:
+
+┌──────────────────┐              ┌──────────────────┐
+│    FRONTEND      │   Op (Req)   │      CORE        │
+│                  │ ────────────▶│                  │
+│  CLI / TUI /     │              │  ThreadManager   │
+│  exec / MCP      │              │  ModelClient     │
+│                  │ ◀────────────│  ToolOrchestrator│
+│                  │  Event (Res)  │                  │
+└──────────────────┘              └──────────────────┘
+
+Op Types:
+  - UserMessage(text)          → Submit user prompt
+  - ApproveToolCall(id)        → Approve pending tool
+  - DenyToolCall(id, reason)   → Deny pending tool
+  - Cancel()                   → Abort current operation
+
+Event Types:
+  - AgentMessage(text)         → Agent response text
+  - ToolCallRequested(id, fn)  → Needs approval
+  - ToolCallExecuting(id)      → Approved, running
+  - ToolCallResult(id, output) → Execution complete
+  - SessionComplete()          → Agent done
+  - Error(message)             → Error occurred</pre>
+
+<h3>Sandbox Implementation Details</h3>
+
+<pre>SANDBOX MODES:
+┌──────────────────────────────────────────────────────────────┐
+│ read-only          │ Read anywhere, write NOWHERE             │
+│                    │ Network: blocked                          │
+│                    │ Use: Code review, analysis                │
+├────────────────────┼──────────────────────────────────────────┤
+│ workspace-write    │ Read anywhere, write to workspace + /tmp │
+│ (DEFAULT)          │ Network: blocked by default              │
+│                    │ Use: Normal development                   │
+├────────────────────┼──────────────────────────────────────────┤
+│ danger-full-access │ No restrictions whatsoever                │
+│                    │ Network: enabled                          │
+│                    │ Use: Isolated VMs / CI containers only    │
+└────────────────────┴──────────────────────────────────────────┘
+
+PLATFORM IMPLEMENTATIONS:
+
+macOS (Seatbelt):
+  - sandbox-exec with Scheme-like profile
+  - (version 1) (deny default)
+  - (allow file-read* (subpath "/usr"))
+  - (allow file-read* file-write* (subpath "/workspace"))
+  - (deny network*)
+
+Linux (Landlock + seccomp):
+  - Kernel 5.13+ required for Landlock
+  - Filesystem rules: per-path read/write/execute
+  - seccomp: syscall-level filtering (blocks network syscalls)
+  - codex-linux-sandbox: separate setuid binary
+  - Falls back to Docker if kernel too old
+
+Windows:
+  - CreateRestrictedToken() API
+  - Job objects for process resource limits
+  - WSL preferred for full Linux sandboxing semantics
+  - windows-sandbox-rs crate handles token creation</pre>
+
+<h3>Special Considerations</h3>
+<ul>
+    <li><strong>Network Disabled by Default:</strong> The most aggressive security posture of any agent. Prevents prompt injection via malicious URLs, exfiltration of code, and supply-chain attacks. Network can be explicitly enabled with <code>--network</code> flag when needed (e.g., <code>npm install</code>).</li>
+    <li><strong>JSONL Session Format:</strong> <code>RolloutRecorder</code> writes every conversation turn, tool call, and result to a JSONL file. Enables complete session replay, audit trails, and debugging. Sessions can be replayed for testing or compliance review.</li>
+    <li><strong>OpenTelemetry Integration:</strong> Enterprise audit logging via OTLP exporter. Traces every tool call, model request, and approval decision without weakening the security sandbox. Configurable to exclude user prompts for privacy.</li>
+    <li><strong>Code Review Mode:</strong> <code>codex review</code> analyzes PRs in read-only sandbox mode. Reviews code changes, identifies issues, and provides feedback without any write access&mdash;ideal for automated PR review in CI pipelines.</li>
+    <li><strong>Crate Reuse:</strong> The Rust crate architecture (core, cli, tui, exec, mcp-server) means new frontends can be built by implementing the Op/Event protocol against the core crate. This is why Codex supports CLI, TUI, exec, and MCP server modes from the same codebase.</li>
+</ul>
+
+<div class="insight-box">
+    <h4>Architectural Insight: Security Through Architecture</h4>
+    <p>Codex CLI's approach to security is fundamentally different from every other agent. While Claude Code, Cline, and Goose rely on <em>permission workflows</em> (asking the user before dangerous actions), Codex uses <em>OS-level enforcement</em> (the kernel blocks unauthorized actions regardless of what the agent attempts). This means even a prompt-injected agent cannot escape the sandbox. The trade-off is reduced flexibility: operations like <code>npm install</code> require explicitly enabling network access, adding friction to the development workflow. For high-security environments (financial services, healthcare, government), this trade-off is strongly favorable.</p>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- AGENT 5: DROID -->
+<!-- ============================================================ -->
+<h2 id="droid">5. Droid (Factory.ai)</h2>
+
+<h3>Architecture Overview</h3>
+
+<p>Droid by Factory.ai is a proprietary, <strong>LLM-agnostic multi-model agent</strong> that holds the <strong>#1 position on Terminal-Bench</strong> (<span class="performance-improvement">58.8%</span> with Opus 4.1). Its key differentiators are the proprietary <strong>HyperCode &amp; ByteRank</strong> codebase retrieval system, <strong>specialized Droid variants</strong> for different tasks, and the <strong>DroidShield</strong> compliance layer with ISO 42001/SOC 2 certifications. Droid uses hierarchical prompting with model-specific optimizations.</p>
+
+<div class="diagram">DROID ARCHITECTURE (Factory.ai)
+================================================================
+
+┌─────────────────────────────────────────────────────────────┐
+│                     USER INTERFACES                          │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐    │
+│  │   CLI    │  │   IDE    │  │ Droid    │  │  CI/CD   │    │
+│  │ Terminal │  │Extensions│  │   Exec   │  │ (GitHub  │    │
+│  │          │  │          │  │(headless)│  │  Action) │    │
+│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘    │
+│       └──────────────┴──────┬─────┴──────────────┘          │
+└─────────────────────────────┼───────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                 MULTI-MODEL COMPOSITION                       │
+│                                                               │
+│  ┌─────────────────────────────────────────────────────┐     │
+│  │  HIERARCHICAL PROMPTING                              │     │
+│  │                                                       │     │
+│  │  Layer 1: Tool Descriptions                           │     │
+│  │     └─ What tools are available and how to use them  │     │
+│  │  Layer 2: System Prompts                              │     │
+│  │     └─ Agent persona, project context, AGENTS.md     │     │
+│  │  Layer 3: System Notifications                        │     │
+│  │     └─ Runtime events, errors, status updates        │     │
+│  └─────────────────────────────────────────────────────┘     │
+│                                                               │
+│  ┌─────────────────────────────────────────────────────┐     │
+│  │  MODEL-SPECIFIC OPTIMIZATIONS                        │     │
+│  │  ┌───────────────┐  ┌───────────────┐               │     │
+│  │  │ Claude Opus/  │  │ GPT-5         │               │     │
+│  │  │ Sonnet        │  │               │               │     │
+│  │  │ - XML edits   │  │ - JSON edits  │               │     │
+│  │  │ - Extended    │  │ - Structured  │               │     │
+│  │  │   thinking    │  │   outputs     │               │     │
+│  │  └───────────────┘  └───────────────┘               │     │
+│  │  ┌───────────────┐  ┌───────────────┐               │     │
+│  │  │ Gemini        │  │ GLM 4.6       │               │     │
+│  │  │               │  │               │               │     │
+│  │  │ - Long ctx    │  │ - Chinese     │               │     │
+│  │  │   optimized   │  │   codebase    │               │     │
+│  │  └───────────────┘  └───────────────┘               │     │
+│  └─────────────────────────────────────────────────────┘     │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│              HYPERCODE &amp; BYTERANK RETRIEVAL                  │
+│                                                               │
+│  ┌─────────────────────────────────────────────────────┐     │
+│  │  MULTI-RESOLUTION CODEBASE REPRESENTATION            │     │
+│  │                                                       │     │
+│  │  ┌──────────────────────┐  ┌──────────────────────┐  │     │
+│  │  │  EXPLICIT GRAPH      │  │  IMPLICIT LATENT     │  │     │
+│  │  │  RELATIONSHIPS       │  │  SPACE SIMILARITY    │  │     │
+│  │  │                      │  │                      │  │     │
+│  │  │  - AST structure     │  │  - Code embeddings   │  │     │
+│  │  │  - Call graphs       │  │  - Semantic search   │  │     │
+│  │  │  - Import chains     │  │  - Pattern matching  │  │     │
+│  │  │  - Type hierarchy    │  │  - Fuzzy retrieval   │  │     │
+│  │  └──────────────────────┘  └──────────────────────┘  │     │
+│  │                                                       │     │
+│  │  Combined: Multi-hop retrieval across both            │     │
+│  │  representations for comprehensive context            │     │
+│  └─────────────────────────────────────────────────────┘     │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│              SPECIALIZED DROIDS                               │
+│                                                               │
+│  ┌─────────────┐ ┌──────────────┐ ┌──────────────────────┐  │
+│  │  Code Droid │ │Knowledge     │ │  Reliability Droid   │  │
+│  │             │ │Droid         │ │                      │  │
+│  │ - Features  │ │ - Research   │ │ - Incident response  │  │
+│  │ - Bug fixes │ │ - Docs      │ │ - Root cause         │  │
+│  │ - Refactors │ │ - Wikis     │ │ - Monitoring fixes   │  │
+│  └─────────────┘ └──────────────┘ └──────────────────────┘  │
+│  ┌──────────────────────────────────────────────────────┐    │
+│  │  Product Droid                                        │    │
+│  │  - Backlog management    - Spec generation            │    │
+│  │  - Story breakdown       - Acceptance criteria        │    │
+│  └──────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│              DROIDSHIELD (Compliance &amp; Security)             │
+│                                                               │
+│  ┌──────────────────┐  ┌─────────────────────────────────┐  │
+│  │ Real-time Static │  │  Sandboxed Execution             │  │
+│  │ Analysis         │  │  - Isolated containers           │  │
+│  │ - Code scanning  │  │  - Resource limits               │  │
+│  │ - Vuln detection │  │  - Network policies              │  │
+│  └──────────────────┘  └─────────────────────────────────┘  │
+│                                                               │
+│  Certifications: ISO 42001 · SOC 2 · ISO 27001              │
+│  Compliance:     GDPR · CCPA                                  │
+└─────────────────────────────────────────────────────────────┘</div>
+
+<h3>HyperCode &amp; ByteRank</h3>
+
+<p>Factory.ai's proprietary codebase retrieval system combines two complementary approaches to achieve high-precision context retrieval. Unlike simpler approaches (tree-sitter maps, grep-based search), HyperCode operates on <strong>multi-resolution representations</strong> that capture both structural relationships and semantic similarity.</p>
+
+<pre>HYPERCODE &amp; BYTERANK:
+
+EXPLICIT GRAPH RELATIONSHIPS:
+  - Full AST parse of all repository files
+  - Call graph: which functions invoke which
+  - Import chains: module dependency resolution
+  - Type hierarchy: inheritance, interfaces, generics
+  - File-level dependency graph
+
+IMPLICIT LATENT SPACE SIMILARITY:
+  - Code embeddings (proprietary model)
+  - Semantic similarity search
+  - Pattern matching across codebases
+  - "This code is similar to..." retrieval
+
+COMBINED RETRIEVAL:
+  Query: "Fix the authentication bug in login flow"
+  1. Graph lookup: auth module → login function → dependencies
+  2. Semantic search: code related to "authentication" + "login"
+  3. Merge &amp; rank: ByteRank scores relevance across both
+  4. Return: Precise context with multi-hop dependencies
+
+ADVANTAGE OVER TREE-SITTER (Aider) / GREP (most agents):
+  - Understands semantic relationships, not just text
+  - Multi-hop: finds code 2-3 dependency levels away
+  - Learns codebase patterns over time
+  - Trade-off: proprietary, requires Factory infrastructure</pre>
+
+<h3>Droid Exec &amp; Integrations</h3>
+
+<pre>DROID EXEC (Headless Mode):
+  - Run Droid without interactive terminal
+  - Use cases: CI/CD pipelines, cron jobs, pre-commit hooks
+  - AGENTS.md: project-level configuration (similar to CLAUDE.md)
+  - Install: curl -fsSL https://app.factory.ai/cli | sh
+
+INTEGRATIONS:
+  ┌──────────────┬────────────────────────────────────────┐
+  │ Category     │ Services                                │
+  ├──────────────┼────────────────────────────────────────┤
+  │ VCS          │ GitHub, GitLab                          │
+  ├──────────────┼────────────────────────────────────────┤
+  │ Project Mgmt │ Jira, Notion                            │
+  ├──────────────┼────────────────────────────────────────┤
+  │ Communication│ Slack                                   │
+  ├──────────────┼────────────────────────────────────────┤
+  │ Observability│ Datadog, Sentry                         │
+  └──────────────┴────────────────────────────────────────┘
+
+PRICING:
+  Free:  BYOK (bring your own key)
+  Pro:   $20/month (includes credits)
+  Teams: $40 base + $10/user/month</pre>
+
+<h3>Special Considerations</h3>
+<ul>
+    <li><strong>Terminal-Bench #1:</strong> Droid achieves <span class="performance-improvement">58.8%</span> on Terminal-Bench (with Opus 4.1), the highest score on this comprehensive benchmark spanning coding, build/test, data/ML, systems, networking, security, and CLI workflows across 80 Dockerized tasks.</li>
+    <li><strong>SWE-bench Lite:</strong> <span class="metric">31.67%</span> pass@1 on SWE-bench Lite. Factory stopped running full SWE-bench Verified, citing its Python-only and debugging-only limitations as unrepresentative of real-world coding tasks.</li>
+    <li><strong>LLM-Agnostic:</strong> Supports Claude Opus/Sonnet, GPT-5, Gemini, and GLM 4.6 with model-specific edit format optimizations. Different models produce different edit formats for maximum accuracy.</li>
+    <li><strong>Specialized Droids:</strong> Code Droid (features/bugs), Knowledge Droid (research/docs), Reliability Droid (incident response), and Product Droid (backlog/specs) each have tailored prompts and tool access for their domain.</li>
+    <li><strong>AGENTS.md:</strong> Project-level context file (analogous to CLAUDE.md) that configures Droid's behavior, coding conventions, and project-specific instructions.</li>
+    <li><strong>DroidShield:</strong> Enterprise compliance layer with real-time static analysis, sandboxed execution, and certifications including ISO 42001 (AI management), SOC 2, ISO 27001, GDPR, and CCPA.</li>
+</ul>
+
+<div class="warning-box">
+    <h4>Benchmark Context</h4>
+    <p>Factory.ai actively argues against SWE-bench as a primary benchmark, noting it only tests Python debugging in open-source repositories. Terminal-Bench, where Droid excels, tests a much broader range of tasks across multiple languages and domains. When evaluating Droid's capabilities, Terminal-Bench scores are more representative of its real-world performance than SWE-bench Lite scores.</p>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- AGENT 6: GOOSE -->
+<!-- ============================================================ -->
+<h2 id="goose">6. Goose</h2>
+
+<h3>Architecture Overview</h3>
+
+<p>Goose is an <strong>MCP-first</strong> open-source agent from Block (the parent company of Square, Cash App, and TIDAL). Its defining characteristic is that <em>everything is an MCP extension</em>. Rather than building a large set of built-in tools, Goose delegates all functionality to MCP servers, making it the most extensible agent in the ecosystem with access to <strong>3,000+ MCP servers</strong>. It runs locally with a privacy-first design and supports both a desktop app (Electron) and CLI.</p>
+
+<div class="diagram">GOOSE ARCHITECTURE
+================================================================
+
+┌─────────────────────────────────────────────────────────────┐
+│                     USER INTERFACES                          │
+│  ┌──────────────────────┐   ┌──────────────────────┐        │
+│  │    Desktop App       │   │       CLI            │        │
+│  │    (Electron)        │   │    (Terminal)         │        │
+│  │                      │   │                      │        │
+│  │  - System tray       │   │  - goose session     │        │
+│  │  - GUI configuration │   │  - goose configure   │        │
+│  │  - Visual feedback   │   │  - goose run         │        │
+│  └──────────┬───────────┘   └──────────┬───────────┘        │
+│             └──────────────┬───────────┘                    │
+└────────────────────────────┼────────────────────────────────┘
+                             │
+                             ▼
+┌─────────────────────────────────────────────────────────────┐
+│                     CORE ENGINE                              │
+│                                                               │
+│  ┌─────────────────────────────────────────────────────┐     │
+│  │  MCP CLIENT (first-class citizen)                    │     │
+│  │                                                       │     │
+│  │  - All tools are MCP servers                          │     │
+│  │  - stdio and HTTP transport                           │     │
+│  │  - Dynamic server discovery                           │     │
+│  │  - Hot-reload on config change                        │     │
+│  └────────────────────┬────────────────────────────────┘     │
+│                        │                                      │
+│     ┌──────────┬───────┼───────┬──────────┬──────────┐       │
+│     │          │       │       │          │          │       │
+│     ▼          ▼       ▼       ▼          ▼          ▼       │
+│ ┌────────┐┌────────┐┌─────┐┌────────┐┌────────┐┌────────┐  │
+│ │ GitHub ││  Jira  ││Slack││Playwrt ││ File   ││ Custom │  │
+│ │  MCP   ││  MCP   ││ MCP ││  MCP   ││System  ││  MCP   │  │
+│ │        ││        ││     ││        ││  MCP   ││Servers │  │
+│ │-issues ││-ticket ││-msg ││-browse ││        ││        │  │
+│ │-PRs    ││-search ││-chan ││-click  ││-read   ││-any    │  │
+│ │-repos  ││-create ││-post││-type   ││-write  ││ tool   │  │
+│ └────────┘└────────┘└─────┘└────────┘└────────┘└────────┘  │
+│                                                               │
+│  ┌─────────────────────────────────────────────────────┐     │
+│  │  LLM ROUTING                                         │     │
+│  │  - Multi-model: route by task complexity              │     │
+│  │  - Cost optimization: cheap models for simple tasks   │     │
+│  │  - Provider agnostic: any model with tool calling     │     │
+│  └─────────────────────────────────────────────────────┘     │
+│                                                               │
+│  LOCAL-FIRST EXECUTION                                        │
+│  - All processing on your machine                             │
+│  - No cloud dependency for core functionality                 │
+│  - API calls only for LLM inference                           │
+│  - Privacy: code never leaves your machine                    │
+└─────────────────────────────────────────────────────────────┘</div>
+
+<h3>Extension System</h3>
+
+<p>Goose's extension system is built entirely on MCP. Extensions are configured via YAML and can be added interactively with <code>goose configure</code> or by editing the config file directly.</p>
+
+<pre>EXTENSION CONFIGURATION (~/.config/goose/config.yaml):
+
+extensions:
+  # Browser automation
+  playwright:
+    command: npx @playwright/mcp@latest
+    timeout: 300
+    description: Browser automation for web testing
+
+  # GitHub integration
+  github:
+    command: npx -y @modelcontextprotocol/server-github
+    env:
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
+
+  # Project management
+  jira:
+    command: npx -y @atlassian/mcp-jira
+    env:
+      JIRA_TOKEN: ${JIRA_TOKEN}
+      JIRA_URL: https://myteam.atlassian.net
+
+  # Database access
+  postgres:
+    command: npx -y @modelcontextprotocol/server-postgres
+    env:
+      DATABASE_URL: ${DATABASE_URL}
+
+ADDING EXTENSIONS INTERACTIVELY:
+$ goose configure
+&gt; Add Extension
+&gt; Command-line Extension
+&gt; Name: sentry
+&gt; Command: npx -y @sentry/mcp-server
+&gt; Timeout: 60
+&gt; Environment variables? Yes
+&gt; SENTRY_AUTH_TOKEN: ***
+&gt; Added successfully. Restart session to activate.</pre>
+
+<h3>Special Considerations</h3>
+<ul>
+    <li><strong>Block Origin:</strong> Built by Block, Inc. (formerly Square), the parent company of Square, Cash App, and TIDAL. This backing ensures long-term maintenance and enterprise-grade quality. Goose was originally an internal tool before being open-sourced.</li>
+    <li><strong>3,000+ MCP Servers:</strong> The largest extension ecosystem of any agent. Because everything is an MCP extension, Goose can integrate with any service that has an MCP server&mdash;from databases to monitoring tools to communication platforms.</li>
+    <li><strong>Multi-Model Routing:</strong> Goose can route different tasks to different models based on complexity. Simple file reads go to a cheap, fast model; complex architectural decisions go to a more capable (and expensive) model. This optimizes both cost and quality.</li>
+    <li><strong>Privacy-First:</strong> All execution happens locally on the user's machine. Code is never sent to Goose's servers. The only external calls are LLM inference requests to the configured model provider. This makes Goose suitable for proprietary codebases where data residency is a concern.</li>
+    <li><strong>Interactive Configuration:</strong> <code>goose configure</code> provides a guided setup experience for adding models, extensions, and environment variables. This lowers the barrier to entry compared to manual config file editing.</li>
+    <li><strong>Linux Foundation Governance:</strong> As an MCP-native agent, Goose benefits from MCP's move to the Linux Foundation's Agentic AI Foundation (AAIF) in December 2025, ensuring neutral governance and long-term protocol stability.</li>
+</ul>
+
+<div class="insight-box">
+    <h4>Architectural Insight: Everything is MCP</h4>
+    <p>Goose's "everything is MCP" philosophy is a bold architectural bet. The advantage is maximum extensibility: any new capability is just another MCP server away. The disadvantage is that core operations (file I/O, search, execution) have the overhead of MCP's protocol layer, and the agent's capabilities are bounded by the MCP ecosystem's quality. In practice, Goose excels in environments where integration breadth matters more than raw coding speed&mdash;for example, a developer who needs to read Jira tickets, check Datadog alerts, browse documentation, and write code in a single session. For pure code-generation tasks, purpose-built tools like Claude Code or Codex CLI may be faster.</p>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- AGENT 7: LETTA CODE -->
+<!-- ============================================================ -->
+<h2 id="letta-code">7. Letta Code</h2>
+
+<h3>Architecture Overview</h3>
+
+<p>Letta Code is the <strong>only agent with persistent, server-side memory</strong> that survives across sessions. Built on the Letta framework (formerly MemGPT), it treats memory as a first-class architectural component: agents maintain <strong>memory blocks</strong> (persona, human, project, skills) that are updated via a dedicated <code>memory()</code> tool, and <strong>archival memory</strong> backed by a vector database for long-term storage and retrieval. Letta Code is the <strong>#1 model-agnostic harness on Terminal-Bench</strong>.</p>
+
+<div class="diagram">LETTA CODE ARCHITECTURE
+================================================================
+
+┌─────────────────────────────────────────────────────────────┐
+│                     LETTA CODE CLI                           │
+│                                                               │
+│  Commands:                                                    │
+│    letta-code             → Start interactive session        │
+│    letta-code /init       → Deep research, populate memory   │
+│    letta-code /remember   → Extract learnings from session   │
+│    letta-code /clear      → Clear messages, KEEP memory      │
+│    letta-code /skill      → Trigger skill extraction         │
+└────────────────────────────┬────────────────────────────────┘
+                             │
+                             ▼
+┌─────────────────────────────────────────────────────────────┐
+│                  LETTA API SERVER                             │
+│           (cloud.letta.com or self-hosted)                   │
+│                                                               │
+│  ┌─────────────────────────────────────────────────────┐     │
+│  │              AGENT INSTANCES (stateful)              │     │
+│  │                                                       │     │
+│  │  ┌─────────────────┐    ┌─────────────────┐          │     │
+│  │  │  Agent "proj-A" │    │  Agent "proj-B" │   ...    │     │
+│  │  │                 │    │                 │          │     │
+│  │  │  ┌───────────┐  │    │  ┌───────────┐  │          │     │
+│  │  │  │  MEMORY   │  │    │  │  MEMORY   │  │          │     │
+│  │  │  │  BLOCKS   │  │    │  │  BLOCKS   │  │          │     │
+│  │  │  │           │  │    │  │           │  │          │     │
+│  │  │  │ persona:  │  │    │  │ persona:  │  │          │     │
+│  │  │  │ "I prefer │  │    │  │ "I focus  │  │          │     │
+│  │  │  │  TDD..."  │  │    │  │  on perf" │  │          │     │
+│  │  │  │           │  │    │  │           │  │          │     │
+│  │  │  │ human:    │  │    │  │ human:    │  │          │     │
+│  │  │  │ "Uses TS, │  │    │  │ "Uses Go, │  │          │     │
+│  │  │  │  Next.js" │  │    │  │  Postgres"│  │          │     │
+│  │  │  │           │  │    │  │           │  │          │     │
+│  │  │  │ project:  │  │    │  │ project:  │  │          │     │
+│  │  │  │ "E-comm   │  │    │  │ "Data     │  │          │     │
+│  │  │  │  platform"│  │    │  │  pipeline"│  │          │     │
+│  │  │  │           │  │    │  │           │  │          │     │
+│  │  │  │ skills:   │  │    │  │ skills:   │  │          │     │
+│  │  │  │ "API migr │  │    │  │ "ETL      │  │          │     │
+│  │  │  │  TDD wkfl"│  │    │  │  Bench"   │  │          │     │
+│  │  │  └───────────┘  │    │  └───────────┘  │          │     │
+│  │  └─────────────────┘    └─────────────────┘          │     │
+│  └─────────────────────────────────────────────────────┘     │
+│                                                               │
+│  ┌─────────────────────────────────────────────────────┐     │
+│  │              ARCHIVAL MEMORY                         │     │
+│  │         (Vector DB for long-term storage)            │     │
+│  │                                                       │     │
+│  │  - Conversations too old for context window           │     │
+│  │  - Code patterns and solutions encountered            │     │
+│  │  - Project documentation and decisions                │     │
+│  │  - Searchable via semantic similarity                  │     │
+│  │  - Agent can insert/search/delete entries              │     │
+│  └─────────────────────────────────────────────────────┘     │
+│                                                               │
+│  ┌─────────────────────────────────────────────────────┐     │
+│  │              TOOL SYSTEM                             │     │
+│  │  - memory(action, block, updates)  → self-edit      │     │
+│  │  - archival_insert(content)        → long-term save │     │
+│  │  - archival_search(query)          → recall         │     │
+│  │  - Standard coding tools (file, exec, search)       │     │
+│  └─────────────────────────────────────────────────────┘     │
+└─────────────────────────────────────────────────────────────┘</div>
+
+<h3>Memory Tool &amp; Self-Editing System Prompt</h3>
+
+<p>Letta Code's most innovative feature is the <code>memory()</code> tool, which allows the agent to <em>edit its own system prompt</em> in real time. Memory blocks are injected into the system prompt and persist across sessions on the Letta server. The agent decides when and what to remember&mdash;the user does not directly edit memory blocks.</p>
+
+<pre>MEMORY BLOCK STRUCTURE (injected into system prompt):
++========================================+
+| SYSTEM PROMPT                          |
++========================================+
+| CORE MEMORY (BLOCKS)                   |  ← Agent updates via memory() tool
+| - &lt;persona&gt;                            |    Persisted to Letta server
+|     I am a coding assistant that       |    Survives across sessions
+|     prefers functional programming.    |
+|     Always run tests before commits.   |
+|   &lt;/persona&gt;                           |
+| - &lt;human&gt;                              |
+|     User prefers TypeScript over JS.   |
+|     Works on e-commerce platform.      |
+|     Dislikes ORMs, prefers raw SQL.    |
+|   &lt;/human&gt;                             |
+| - &lt;project&gt;                            |
+|     Framework: Next.js 14              |
+|     Testing: Jest + React Testing Lib  |
+|     DB: PostgreSQL with Drizzle ORM    |
+|   &lt;/project&gt;                           |
++========================================+
+| MESSAGES                               |
+| * User → Assistant (recent only)       |
++========================================+
+
+MEMORY TOOL INVOCATION:
+memory(
+  action: "edit",
+  block: "human",
+  updates: "Add: User prefers Drizzle ORM over Prisma.
+            User runs on macOS with Homebrew."
+)
+
+memory(
+  action: "edit",
+  block: "project",
+  updates: "Update: Migrated from Jest to Vitest.
+            Add: Using Turborepo for monorepo."
+)</pre>
+
+<h3>Skill Learning System</h3>
+
+<pre>SKILL LIFECYCLE:
+┌─────────────────────────────────────────────────────────────┐
+│  1. EXPERIENCE                                               │
+│     Work through a complex task with user coaching           │
+│     Example: Migrate REST API to GraphQL                     │
+│                                                               │
+│  2. REFLECT (/skill command)                                 │
+│     Agent reviews the conversation for reusable patterns     │
+│     "What did I learn that could apply to future tasks?"     │
+│                                                               │
+│  3. EXTRACT                                                   │
+│     Agent identifies and formalizes reusable steps            │
+│     Creates structured skill definition                       │
+│                                                               │
+│  4. STORE                                                     │
+│     Skill saved as .md file in .skills/ directory             │
+│     Also recorded in "skills" memory block                    │
+│                                                               │
+│  5. LOAD                                                      │
+│     Future sessions load skill via skill tool                 │
+│     Agent applies learned patterns automatically              │
+└─────────────────────────────────────────────────────────────┘
+
+SKILL FILE (.skills/api-migration/SKILL.md):
+---
+name: API Migration Pattern
+description: Migrate REST APIs to GraphQL
+triggers: ["migrate", "graphql", "api upgrade"]
+---
+# API Migration Skill
+
+## Prerequisites
+- Identify all REST endpoints
+- Map to GraphQL schema types
+
+## Steps
+1. Create GraphQL schema from REST response types
+2. Implement resolvers that call existing services
+3. Add deprecation notices to REST endpoints
+4. Create integration tests for GraphQL endpoints
+5. Update client code to use GraphQL queries
+
+## Common Pitfalls
+- N+1 query problem: use DataLoader
+- Auth middleware: ensure GraphQL context includes auth
+- Error handling: map REST errors to GraphQL errors
+
+SKILLS MEMORY BLOCK (in system prompt):
+&lt;skills&gt;
+Available skills:
+- api-migration: Migrate REST to GraphQL (3 uses)
+- testing-patterns: TDD workflow for React (7 uses)
+- db-schema: Database migration best practices (2 uses)
+&lt;/skills&gt;</pre>
+
+<h3>Special Considerations</h3>
+<ul>
+    <li><strong>#1 Model-Agnostic Harness:</strong> Letta Code is the top-performing model-agnostic harness on Terminal-Bench, meaning it achieves the best results regardless of which underlying LLM is used. This validates the memory-first architecture as a universal performance booster.</li>
+    <li><strong>Server-Side State:</strong> All agent state (memory blocks, archival memory, conversation history) lives on the Letta API server, not the local filesystem. This enables accessing the same agent from different machines, sharing agents across teams, and centralized management.</li>
+    <li><strong>/init Command:</strong> Triggers a deep research phase where the agent explores the entire codebase, reads README files, analyzes project structure, and populates memory blocks with comprehensive project knowledge. This is the "onboarding" step for a new project.</li>
+    <li><strong>/remember Command:</strong> Explicitly triggers the agent to extract learnings from the current conversation and persist them to memory blocks. Use after completing a complex task to ensure the knowledge is retained for future sessions.</li>
+    <li><strong>/clear Preserves Memory:</strong> <code>/clear</code> only clears the conversation messages, not the memory blocks. This is a critical distinction: the agent retains all learned preferences, project knowledge, and skills even after clearing the chat. This enables fresh conversations that still benefit from accumulated knowledge.</li>
+    <li><strong>Self-Hosted Option:</strong> The Letta server can be self-hosted for organizations that cannot use cloud services. This provides full control over data residency while maintaining the persistent memory architecture.</li>
+</ul>
+
+<div class="insight-box">
+    <h4>Architectural Insight: Memory as a First-Class Citizen</h4>
+    <p>Letta Code represents a fundamentally different paradigm from session-based agents. In Claude Code or Codex CLI, each session starts from scratch (with only CLAUDE.md/config files providing continuity). In Letta Code, the agent <em>remembers</em>: your coding preferences, project conventions, past decisions, learned skills, and even mistakes to avoid. Over time, a Letta agent becomes increasingly tailored to its user and project. The trade-off is complexity (requires a running Letta server) and the risk of memory staleness (outdated preferences persisting). The <code>/clear</code> command's memory-preserving behavior is the key UX innovation: it gives users a fresh conversation context while maintaining the agent's accumulated knowledge&mdash;analogous to a human developer starting a new day but retaining their project experience.</p>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- CROSS-AGENT COMPARISON -->
+<!-- ============================================================ -->
+<h2 id="comparison">Cross-Agent Architecture Comparison</h2>
+
+<table>
+    <tr>
+        <th>Capability</th>
+        <th>Aider</th>
+        <th>Claude Code</th>
+        <th>Cline</th>
+        <th>Codex CLI</th>
+        <th>Droid</th>
+        <th>Goose</th>
+        <th>Letta</th>
+    </tr>
+    <tr>
+        <td><strong>Multi-Model</strong></td>
+        <td><span class="performance-improvement">Yes</span> (Architect/ Editor)</td>
+        <td>Single (Sonnet/ Opus)</td>
+        <td>Any (33+ providers)</td>
+        <td>Single (GPT)</td>
+        <td><span class="performance-improvement">Yes</span> (4+ models)</td>
+        <td><span class="performance-improvement">Yes</span> (routing)</td>
+        <td>Any (agnostic)</td>
+    </tr>
+    <tr>
+        <td><strong>Sandboxing</strong></td>
+        <td>None</td>
+        <td>Permission workflow</td>
+        <td>Shadow git + approval</td>
+        <td><span class="performance-improvement">OS-native</span></td>
+        <td>DroidShield</td>
+        <td>Local trust</td>
+        <td>Server-side</td>
+    </tr>
+    <tr>
+        <td><strong>Memory</strong></td>
+        <td>Repo map (session)</td>
+        <td>CLAUDE.md (file)</td>
+        <td>Session only</td>
+        <td>JSONL replay</td>
+        <td>AGENTS.md</td>
+        <td>Session only</td>
+        <td><span class="performance-improvement">Persistent blocks</span></td>
+    </tr>
+    <tr>
+        <td><strong>Browser</strong></td>
+        <td>URL fetch</td>
+        <td>Chrome (Computer)</td>
+        <td><span class="performance-improvement">Puppeteer native</span></td>
+        <td>None (network off)</td>
+        <td>Via integrations</td>
+        <td>Playwright MCP</td>
+        <td>Via tools</td>
+    </tr>
+    <tr>
+        <td><strong>MCP Support</strong></td>
+        <td>No</td>
+        <td>Yes (client)</td>
+        <td>Yes (client)</td>
+        <td>Yes (server)</td>
+        <td>No</td>
+        <td><span class="performance-improvement">Core arch</span></td>
+        <td>Yes</td>
+    </tr>
+    <tr>
+        <td><strong>Hooks/Events</strong></td>
+        <td>No</td>
+        <td><span class="performance-improvement">8 events</span></td>
+        <td>Auto-approve config</td>
+        <td>Op/Event protocol</td>
+        <td>Hierarchical prompts</td>
+        <td>MCP-based</td>
+        <td>Memory tool</td>
+    </tr>
+    <tr>
+        <td><strong>IDE Integration</strong></td>
+        <td>--watch-files</td>
+        <td>VS Code + JetBrains</td>
+        <td><span class="performance-improvement">VS Code native</span></td>
+        <td>Standalone</td>
+        <td>IDE extensions</td>
+        <td>Desktop + CLI</td>
+        <td>CLI only</td>
+    </tr>
+    <tr>
+        <td><strong>License</strong></td>
+        <td>Apache-2.0</td>
+        <td>Proprietary</td>
+        <td>Apache-2.0</td>
+        <td>Apache-2.0</td>
+        <td>Proprietary</td>
+        <td>Apache-2.0</td>
+        <td>Apache-2.0</td>
+    </tr>
+</table>
+
+<div class="conclusion-box">
+    <h4>Key Takeaways</h4>
+    <ul>
+        <li><strong>Best for security-sensitive environments:</strong> Codex CLI (OS-native sandboxing, network disabled by default)</li>
+        <li><strong>Best for long-running projects:</strong> Letta Code (persistent memory blocks, skill learning across sessions)</li>
+        <li><strong>Best for extensibility:</strong> Goose (MCP-first, 3,000+ extensions) or Claude Code (8-event hook system)</li>
+        <li><strong>Best for multi-model composition:</strong> Aider (Architect/Editor) or Droid (model-specific optimizations)</li>
+        <li><strong>Best for IDE integration:</strong> Cline (native VS Code, shadow git, browser automation)</li>
+        <li><strong>Best for enterprise compliance:</strong> Droid (ISO 42001, SOC 2, ISO 27001, GDPR, CCPA)</li>
+        <li><strong>Best for benchmark performance:</strong> Droid (Terminal-Bench #1) or Claude Code (200k context, parallel tools)</li>
+    </ul>
+</div>
+
+<!-- SERIES NAV (bottom) -->
+<div class="series-nav">
+    <a href="coding_agents_memory.html">&larr; Part 3: Memory</a>
+    <span>Part 4 of 6</span>
+    <a href="coding_agents_deepdives_2.html">Next: Deep-Dives O&ndash;W &rarr;</a>
+</div>
+
+<!-- SOURCE BOX -->
+<div class="source-box">
+    <h4>Sources &amp; References</h4>
+    <p><strong>GitHub Repositories:</strong> <a href="https://github.com/paul-gauthier/aider" target="_blank">Aider</a>, Claude Code (Anthropic), <a href="https://github.com/cline/cline" target="_blank">Cline</a>, <a href="https://github.com/openai/codex" target="_blank">Codex CLI</a>, <a href="https://github.com/Factory-AI/factory" target="_blank">Droid/Factory</a>, <a href="https://github.com/block/goose" target="_blank">Goose</a>, <a href="https://github.com/letta-ai/letta" target="_blank">Letta</a></p>
+    <p><strong>Benchmarks:</strong> <a href="https://www.swebench.com/" target="_blank">SWE-bench</a>, <a href="https://www.tbench.ai/" target="_blank">Terminal-Bench</a>, <a href="https://aider.chat/docs/leaderboards/" target="_blank">Aider Polyglot Leaderboard</a></p>
+    <p><strong>Platforms:</strong> <a href="https://factory.ai" target="_blank">Factory.ai</a>, <a href="https://letta.com" target="_blank">Letta</a>, <a href="https://modelcontextprotocol.io" target="_blank">Model Context Protocol</a></p>
+    <p><em>Part 4 of 6 &middot; Coding Agent Engineering Analysis &middot; January 2026</em></p>
+</div>
+
+<!-- FOOTER NAVIGATION -->
+<div class="navigation">
+    <a href="../index.html">&larr; Home</a>
+    <a href="../agent/index.html">Agent Reliability</a>
+    <a href="../rag/index.html">RAG Patterns</a>
+    <a href="index.html">Research Papers</a>
+    <a href="https://join.maxpool.dev" target="_blank">Join Community &rarr;</a>
+</div>
+
+</body>
+</html>
